@@ -1,8 +1,8 @@
-import json,glob,sys
+import json,glob,sys,re
 keys=json.load(open('/home/claude/startapp/i18n/keys_v1.json'))
 cur=json.load(open('/tmp/claude-0/-home-claude/7c4b8c98-30ad-58e2-a4c2-18a74673fefa/scratchpad/keys2.json'))
 T={}
-for f in sorted(glob.glob('/home/claude/startapp/i18n/t[0-9].json')):
+for f in sorted(glob.glob('/home/claude/startapp/i18n/t[0-9]*.json'), key=lambda f:int(re.search(r't(\d+)\.json',f).group(1))):
     for r in json.load(open(f)):
         k=r[0]; en = keys[k]['en'] if isinstance(k,int) else k
         if en in T: print('dup',k, file=sys.stderr)

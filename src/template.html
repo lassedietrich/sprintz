@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0A7A9F">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Sprintz">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Sprintz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
@@ -434,14 +440,14 @@ body.mode-eval #startbar,body.ev-finish #saveRow,body.ev-finish #saveForm,body.e
 .evopen b{display:block;font-size:1rem}.evopen small{color:var(--muted)}
 .evdel{border:0;background:transparent;color:var(--muted);font-size:1.3rem;padding:0 14px;cursor:pointer}.evdel.sure{color:var(--danger);font-size:.85rem;font-weight:700}
 .evhead{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
-.evren{border:0;background:transparent;color:var(--accent);cursor:pointer;font-size:1rem}
+.evren{border:0;background:transparent;color:var(--accent);cursor:pointer;font-size:1rem;white-space:nowrap}.evren small{font:400 .82rem var(--body);letter-spacing:0;text-transform:none;opacity:.85}
 .evnamein{font:700 1.1rem var(--body);padding:4px 8px;border:1px solid var(--line);border-radius:8px;width:80%}
 .evdesc{min-height:64px}
 .seg.big button small{display:block;font-size:.72rem;font-weight:500;opacity:.8}
 .seg.big button[disabled]{opacity:.45;cursor:default}
 .evvars{display:flex;flex-direction:column;gap:6px;margin:4px 0 6px}.evvars div{display:flex;gap:8px;align-items:flex-start;line-height:1.4}
 .evv{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:8px;font:700 .95rem var(--display);font-style:normal;color:#fff;flex:none}
-.evv.A{background:#1F7FB8}.evv.B{background:#C9762B}
+.evv.A{background:#1F7FB8}.evv.B{background:#C9762B}.evv.BL{background:#7A8B95;font-size:.72rem;letter-spacing:.02em}
 .evup{display:flex;justify-content:center;margin:4px 0}
 .evtl{list-style:none;margin:10px 0 0;padding:0 0 0 14px;border-left:3px solid var(--line);display:flex;flex-direction:column;gap:12px}
 .evt{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)}
@@ -550,6 +556,51 @@ p.everr{margin:6px 0 10px;line-height:1.4}
 .evsync .testbtn{margin:6px 0 0;flex:none}
 .evcloud{display:inline-flex;width:20px;height:20px;vertical-align:-4px;margin-right:7px;flex:none}
 .evcloud svg{width:100%;height:100%}
+.evstage{list-style:none;margin:8px 0 -4px -14px;padding:0 0 0 14px;display:flex;flex-direction:column;gap:2px}
+.evstage b{font:700 .9rem var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.evstage span{font-size:.84rem;color:var(--muted);line-height:1.4}
+.evaddst{margin:14px 0 0}
+.evaddc .testrow{margin-top:10px}
+.evinfo{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font:italic 700 .8rem/1 Georgia,serif;cursor:pointer;padding:0;display:inline-grid;place-items:center}
+.evinfo[aria-expanded="true"]{background:var(--accent);color:var(--accent-fg)}
+.evinfot{margin:6px 0 0;font-size:.84rem;color:var(--muted);line-height:1.45}
+.evq .seg{margin-left:auto}
+.evfootb{display:flex;flex-direction:column;gap:8px}
+.evbig.ghost{background:var(--surface);color:var(--accent);border:1.5px solid var(--accent)}
+.evh3{font:700 1.05rem var(--display);letter-spacing:.1em;text-transform:uppercase;margin:24px 0 8px}
+.evscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 8px;box-shadow:var(--shadow)}
+.evcmp{display:flex;flex-direction:column;gap:8px}
+.evcrow{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)}
+.evchd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.evchd .evverd{text-align:right}
+.evcg{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-top:8px;font-variant-numeric:tabular-nums}
+.evcg>div{display:grid;grid-template-columns:auto 1fr;column-gap:7px;align-items:center}
+.evcg .evv{grid-row:span 2;min-width:22px;height:22px;font-size:.78rem}
+.evcg small{font-size:.72rem;color:var(--muted)}
+.evcd{margin:8px 0 0;font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;line-height:1.45}
+.evcd b{color:var(--fg)}.nw{white-space:nowrap}
+.evexpl{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.evtab{border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.86rem;min-width:100%}
+.evtab th{font:600 .74rem var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 6px;border-bottom:1.5px solid var(--line);white-space:nowrap}
+.evtab td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.evtab .r{text-align:right;white-space:nowrap}
+.evtab td small{display:block;font-size:.72rem;color:var(--muted);font-weight:400}
+.evtab td:first-child small{display:inline;margin-left:4px}
+.evtab .evv{min-width:22px;height:22px;font-size:.8rem}
+.evverd{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.76rem;font-weight:600;line-height:1.3;background:var(--line);color:var(--fg)}
+.evverd.clear{background:#1F8A4C;color:#fff}.evverd.sig{background:#E8B44A;color:#2A1E00}.evverd.triv{background:var(--line)}.evverd.unc,.evverd.na{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
+.evfigs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:10px}
+.evfig{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow)}
+.evfig.wide{margin-top:10px}
+.evfig figcaption{font:600 .82rem var(--body);margin-bottom:4px}
+.evfig svg{width:100%;height:auto;display:block}
+.evfig .grid{stroke:var(--line);stroke-width:1}.evfig .axis{fill:var(--muted);font:500 10px var(--body)}
+.evleg{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;margin-top:6px}.evleg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.evchips{display:flex;flex-wrap:wrap;gap:6px}
+.evchips button{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:6px 11px;font:500 .8rem var(--body);cursor:pointer}
+.evchips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.evexpl{margin-top:10px;font-size:.86rem;line-height:1.5}.evexpl summary{cursor:pointer;color:var(--accent);font-weight:600}
+.evpill{display:inline-flex;align-items:center;gap:6px;margin:0 10px 6px 0;font-size:.88rem}
 .evcloud.ok{color:var(--accent)}
 .evcloud.no{color:var(--muted);opacity:.8}
 #lgOff{display:block;margin:10px auto 0}
@@ -2997,14 +3048,17 @@ function evalToS(){
   return o;
 }
 // Ausgewogene Reihenfolge: je Paar einmal A und einmal B, Reihenfolge im Paar zufällig
-function evPlan(n){ const t=[]; for(let k=0;k<n;k++){ const ab=Math.random()<0.5?["A","B"]:["B","A"]; ab.forEach(v=>t.push({i:t.length, v, rating:null, note:"", status:"open"})); } return t; }
+function evPlan(n,stage,i0){ const t=[]; for(let k=0;k<n;k++){ const ab=Math.random()<0.5?["A","B"]:["B","A"]; ab.forEach(v=>t.push({i:(i0||0)+t.length, v, stage:stage||1, rating:null, note:"", status:"open"})); } return t; }
+// Baseline: freie Versuche in der gewohnten Technik vor dem eigentlichen Vergleich
+const EV_NBASE=3;
+function evBase(i0){ return Array.from({length:EV_NBASE},(_,k)=>({i:(i0||0)+k, v:"BL", stage:0, rating:null, note:"", status:"open"})); }
 
 function evEnter(){
   $("modeSoon").hidden=true; $("spPage").hidden=true; $("evPage").hidden=false;
   if(EV.view==="plan" && EV.cur) evShow("plan"); else if(EV.view==="setup" && EV.cur) evShow("setup"); else evShow("list");
 }
 function evLeave(){ $("evPage").hidden=true; finishBack(); $("spAna").hidden=true; }
-function evShow(v){ EV.view=v; if(v!=="setup") finishBack(); $("evFinishSlot").hidden=true; ({list:evList, setup:evSetup, plan:evPlanView})[v](); scrollTo(0,0); }
+function evShow(v){ EV.view=v; if(v!=="setup") finishBack(); $("evFinishSlot").hidden=true; ({list:evList, setup:evSetup, plan:evPlanView, report:evReport})[v](); scrollTo(0,0); }
 
 /* --- Übersicht der Projekte --- */
 async function evList(){
@@ -3046,12 +3100,12 @@ function evSetup(){
   const p=EV.cur, top=$("evTop"), bot=$("evBottom"), locked=p.trials.some(t=>t.status!=="open");
   const segH=(id,q,opts,val)=>`<div class="q"><p class="qt">${q}</p><div class="seg big" id="${id}">${opts.map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${String(val)===String(v)}">${l}</button>`).join("")}</div></div>`;
   top.innerHTML=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Projekte","‹ Projects")}</button></div>
-    <h2 class="big"><span id="evName">${esc(p.name)}</span> <button type="button" class="evren" id="evRen" aria-label="${L("Umbenennen","Rename")}">✎</button></h2>
+    <h2 class="big"><span id="evName">${esc(p.name)}</span> <button type="button" class="evren" id="evRen">✎ <small>${L("Name ändern","Rename")}</small></button></h2>
     <p class="evlead">${evTechName(p.tech)}</p>
     ${segH("evStart",L("Wie startest du?","How do you start?"),[["block",L("Vom Startblock","From the block")],["back",L("Rückenstart","Backstroke start")]],p.start)}
     ${["A","B"].map(k=>`<div class="q evvarq"><p class="qt"><i class="evv ${k}">${k}</i> ${k==="A"?L("Variante A","Variant A"):L("Variante B","Variant B")}</p>
-      <input class="evvname" id="evN${k}" maxlength="24" placeholder="${k==="A"?L("Kurzname, z. B. Platte 3","Short name, e.g. Plate 3"):L("Kurzname, z. B. Platte 5","Short name, e.g. Plate 5")}" value="${esc(p["name"+k]||"")}">
-      <textarea class="note-in evdesc" id="ev${k}" maxlength="400" placeholder="${k==="A"?L("Genaue Beschreibung zur Standardisierung, z. B. Rückenplatte auf Position 3, vorderer Fuß an der Kante","Detailed description for standardisation, e.g. kick plate in position 3, front foot at the edge"):L("Genaue Beschreibung zur Standardisierung, z. B. Rückenplatte auf Position 5, vorderer Fuß an der Kante","Detailed description for standardisation, e.g. kick plate in position 5, front foot at the edge")}">${esc(p[k]||"")}</textarea></div>`).join("")}
+      <input class="evvname" id="evN${k}" maxlength="24" placeholder="${k==="A"?L("Kurzname, z. B. Hoher Ellbogen","Short name, e.g. High elbow"):L("Kurzname, z. B. Gerader Arm","Short name, e.g. Straight arm")}" value="${esc(p["name"+k]||"")}">
+      <textarea class="note-in evdesc" id="ev${k}" maxlength="400" placeholder="${k==="A"?L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit hohem Ellbogen, Unterarm früh senkrecht","Detailed description for standardisation, e.g. first arm pull with a high elbow, forearm vertical early"):L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit gestrecktem Arm unter dem Körper","Detailed description for standardisation, e.g. first arm pull with a straight arm under the body")}">${esc(p[k]||"")}</textarea></div>`).join("")}
     <div class="card" style="margin-top:14px"><div class="row"><div class="lbl"><b>${L("Versuche je Variante","Attempts per variant")}</b><small>${L("Am besten 5 oder mehr.","Ideally 5 or more.")}</small></div>
       <div class="num"><input id="evN" type="number" inputmode="numeric" min="2" max="20" step="1" value="${p.n||5}"${locked?" disabled":""}></div></div></div>
     ${segH("evMode",L("Wie nimmst du die Versuche auf?","How do you record the attempts?"),[["upload",L("Aufnahmen hochladen","Upload recordings")],["cam",L("In der App filmen","Film in the app")]],p.mode)}
@@ -3073,7 +3127,7 @@ function evSetup(){
   $("evMake").onclick=()=>{
     const miss=[]; if(!p.start) miss.push(L("Startart","start type")); if(!(p.nameA||"").trim()) miss.push(L("Name von Variante A","name of variant A")); if(!(p.nameB||"").trim()) miss.push(L("Name von Variante B","name of variant B")); if(!p.mode) miss.push(L("Aufnahmeart","recording method"));
     if(miss.length){ $("evMsg").textContent=L(`Es fehlt noch: ${miss.join(", ")}.`,`Still missing: ${miss.join(", ")}.`); return; }
-    if(!locked) p.trials=evPlan(p.n); evSave(); evShow("plan"); };
+    if(!locked){ p.trials=[...evBase(0), ...evPlan(p.n,1,EV_NBASE)]; } evSave(); evShow("plan"); };
 }
 /* --- Ablauf als Timeline --- */
 function evPlanView(){
@@ -3085,34 +3139,48 @@ function evPlanView(){
     <p class="evlead">${up ? L("Nimm die Versuche genau in dieser Reihenfolge mit der Kamera-App auf. Danach lädst du alle Videos gesammelt hoch.","Record the attempts in exactly this order with the camera app. Then upload all videos at once.")
       : L("Tippe auf einen Versuch, um ihn aufzunehmen. Die Reihenfolge ist ausgewogen und zufällig, damit Ermüdung und Gewöhnung beide Varianten gleich treffen.","Tap an attempt to record it. The order is balanced and random so that fatigue and familiarisation affect both variants equally.")}</p>
     ${up?`<label class="filebtn evup" id="evUpLbl">${L("Aufnahmen hochladen","Upload recordings")}<input type="file" id="evFiles" accept="video/*" multiple></label><p class="hint" id="evUpMsg"></p>`:""}
-    <ol class="evtl">${p.trials.map(t=>evTrialHTML(p,t)).join("")}</ol>`;
+    ${p.trials.some(t=>t.stage===0) ? "" : `<button type="button" class="testbtn small" id="evAddBase" style="margin:10px 0 0;flex:none">+ ${L("Baseline hinzufügen","Add baseline")}</button>`}
+    <ol class="evtl">${evOrd(p).map((t,k,a)=>{ const st=t.stage??1, pr=a[k-1], head = !pr || (pr.stage??1)!==st;
+      return (head ? `<li class="evstage">${st===0 ? `<b>Baseline</b><span>${L(`${EV_NBASE} freie Versuche in deiner gewohnten Technik, damit du Verbesserungen und Verschlechterungen direkt siehst.`,`${EV_NBASE} free attempts with your usual technique so you can see improvements and deteriorations directly.`)}</span>` : `<b>${L(`Teststufe ${st}`,`Test stage ${st}`)}</b>`}</li>` : "") + evTrialHTML(p,t,k+1); }).join("")}</ol>
+    <div class="evaddst" id="evAddSt"><button type="button" class="testbtn" id="evAddStB" style="flex:none">+ ${L("Teststufe hinzufügen","Add test stage")}</button></div>`;
   bot.innerHTML=`<div class="evfoot"><p class="hint">${L(`${withVid} von ${p.trials.length} Versuchen mit Video · ${done} ausgewertet`,`${withVid} of ${p.trials.length} attempts with video · ${done} analysed`)}</p>
-    <button type="button" class="evbig" id="evAna"${withVid?"":" disabled"}>${done&&done===withVid?L("Auswertung ansehen","View analysis"):L("Auswertung starten","Start analysis")}</button></div>`;
+    <div class="evfootb">${done&&done===withVid?"":`<button type="button" class="evbig" id="evAna"${withVid?"":" disabled"}>${done?L("Weiter auswerten","Continue analysis"):L("Videos auswerten","Analyse videos")}</button>`}
+    <button type="button" class="evbig${done&&done===withVid?"":" ghost"}" id="evRep"${done?"":" disabled"}>${L("Ergebnisse ansehen","View results")}</button></div></div>`;
   $("evBack").onclick=()=>evShow("list"); $("evEdit").onclick=()=>evShow("setup"); $("evDl").onclick=()=>evExport(p);
-  $("evAna").onclick=()=>{ const next=p.trials.find(t=>t.vid && t.status!=="done") || p.trials.find(t=>t.vid); if(next) evAnalyze(next); };
+  const an=$("evAna"); if(an) an.onclick=()=>{ const o=evOrd(p), next=o.find(t=>t.vid && t.status!=="done") || o.find(t=>t.vid); if(next) evAnalyze(next); };
+  $("evRep").onclick=()=>evShow("report");
+  const ab=$("evAddBase"); if(ab) ab.onclick=()=>{ p.trials.push(...evBase(p.trials.length)); evSave(); evPlanView(); };
+  $("evAddStB").onclick=()=>{ const box=$("evAddSt"); box.innerHTML=`<div class="card evaddc"><div class="row"><div class="lbl"><b>${L("Neue Teststufe","New test stage")}</b><small>${L("Versuche je Variante","Attempts per variant")}</small></div>
+      <div class="num"><input id="evAddN" type="number" inputmode="numeric" min="1" max="20" step="1" value="${p.n||5}"></div></div>
+      <div class="testrow"><button type="button" class="testbtn" id="evAddGo">${L("Hinzufügen","Add")}</button><button type="button" class="testbtn ghost" id="evAddNo">${L("Abbrechen","Cancel")}</button></div></div>`;
+    $("evAddNo").onclick=()=>evPlanView();
+    $("evAddGo").onclick=()=>{ const n=Math.max(1,Math.min(20,Math.round(+$("evAddN").value||1))), st=Math.max(1,...p.trials.map(t=>t.stage??1))+1;
+      p.trials.push(...evPlan(n,st,p.trials.length)); evSave(); evPlanView(); setTimeout(()=>{ const l=document.querySelectorAll(".evstage"); if(l.length) l[l.length-1].scrollIntoView({behavior:"smooth",block:"start"}); },60); }; };
   if(up){ $("evFiles").onchange=e=>evUpload([...e.target.files]); }
   top.querySelectorAll(".evrate").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{ const t=p.trials[+g.dataset.i]; t.rating = t.rating===+b.dataset.v ? null : +b.dataset.v;
     g.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.v===t.rating))); evSave(); }));
+  top.querySelectorAll(".evinfo").forEach(b=>b.onclick=()=>{ const x=b.closest(".evt").querySelector(".evinfot"); x.hidden=!x.hidden; b.setAttribute("aria-expanded",String(!x.hidden)); });
   top.querySelectorAll(".evnote").forEach(n=>n.oninput=()=>{ p.trials[+n.dataset.i].note=n.value; clearTimeout(EV.tN); EV.tN=setTimeout(evSave,500); });
   top.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>evRecord(+b.dataset.rec));
   top.querySelectorAll("[data-play]").forEach(b=>b.onclick=()=>evPlay(+b.dataset.play, b));
   top.querySelectorAll("[data-ana]").forEach(b=>b.onclick=()=>evAnalyze(p.trials[+b.dataset.ana]));
   top.querySelectorAll(".evpick").forEach(s=>s.onchange=()=>evAssign(+s.dataset.i, s.value));
 }
-function evTrialHTML(p,t){
+function evTrialHTML(p,t,no){
   const up=p.mode==="upload", m=t.m||{};
   const st = t.status==="done" ? `<span class="evst ok">${L("ausgewertet","analysed")}${m.t15!=null?` · 15 m ${ms3(m.t15)}`:""}${m.block!=null?` · ${L("Block","Block")} ${msx(m.block)}`:""}</span>`
     : t.vid ? `<span class="evst">${L("Video vorhanden","Video ready")}</span>` : `<span class="evst open">${L("offen","open")}</span>`;
   const files=Object.keys(EV.files);
   const pick = up && files.length ? `<select class="evpick" data-i="${t.i}" aria-label="${L("Video zuordnen","Assign video")}"><option value="">${L("– kein Video –","– no video –")}</option>${files.map(k=>`<option value="${k}"${t.vid&&t.vid.key===k?" selected":""}>${esc(EV.files[k].name)} · ${evTimeLbl(EV.files[k].t)}</option>`).join("")}</select>` : (t.vid&&up?`<small class="evfile">${esc(t.vid.name||"")}</small>`:"");
-  return `<li class="evt ${t.status}"><div class="evtrow"><span class="evno">${t.i+1}</span><i class="evv ${t.v}">${t.v}</i><b class="evtn">${esc(evVN(p,t.v))}</b>${st}
+  return `<li class="evt ${t.status}"><div class="evtrow"><span class="evno">${no||evPos(p,t)}</span><i class="evv ${t.v}">${t.v}</i><b class="evtn">${esc(evVN(p,t.v))}</b>${st}
       <span class="evbtns">${up?`<button type="button" class="testbtn small" data-play="${t.i}">▶ ${L("Startablauf","Start sequence")}</button>`:`<button type="button" class="testbtn small" data-rec="${t.i}">${t.vid?L("Neu aufnehmen","Record again"):L("Aufnehmen","Record")}</button>`}
       ${t.vid?`<button type="button" class="testbtn small" data-ana="${t.i}">${t.status==="done"?L("Ergebnis","Result"):L("Auswerten","Analyse")}</button>`:""}</span></div>
     ${pick}
-    <div class="evq"><span>${L("Umsetzung","Execution")}</span><div class="seg evrate" data-i="${t.i}">${[1,2,3,4,5].map(k=>`<button type="button" data-v="${k}" aria-pressed="${t.rating===k}">${k}</button>`).join("")}</div></div>
+    ${t.v==="BL" ? "" : `<div class="evq"><span>${L("Qualität des Testlaufs","Quality of the test run")}</span><button type="button" class="evinfo" aria-label="Info" aria-expanded="false">i</button><div class="seg evrate" data-i="${t.i}">${[1,2,3,4,5].map(k=>`<button type="button" data-v="${k}" aria-pressed="${t.rating===k}">${k}</button>`).join("")}</div></div>
+    <p class="evinfot" hidden>${L("Der Athlet bewertet die Qualität und Genauigkeit des Testlaufs nach subjektivem Empfinden von 1 (schlecht) bis 5 (sehr gut).","The athlete rates the quality and precision of the test run by subjective feel from 1 (poor) to 5 (very good).")}</p>`}
     <textarea class="note-in evnote" data-i="${t.i}" maxlength="300" rows="1" placeholder="${L("Bemerkung des Athleten","Athlete's remarks")}">${esc(t.note||"")}</textarea></li>`;
 }
-const evVN=(p,k)=> (p&&p['name'+k]) || k;
+const evVN=(p,k)=> k==="BL" ? "Baseline" : (p&&p['name'+k]) || k;
 const evTimeLbl=ms=> ms ? new Date(ms).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit",second:"2-digit"}) : "–";
 
 /* --- Aufnahme in der App --- */
@@ -3126,7 +3194,7 @@ async function evRecorded(blob){
   running=false; clearInterval(cdTimer); $("recEnd").hidden=true; $("run").hidden=true; $("run").classList.remove("camrun","compact");
   camStopStream(); $("cam").hidden=true; keepAlive(false); releaseWake(); CAM.busy=false;
   $("setup").hidden=false; $("fab").hidden=false; $("fabL").hidden=false;
-  if(t){ const k=evVidKey(p,t); t.vid={key:k, src:"cam", name:`${p.name} #${t.i+1} ${t.v}`, type:blob.type, size:blob.size, t:Date.now(), dev:DEVID};
+  if(t){ const k=evVidKey(p,t); const dur=CAM.recT0!=null && ctx ? Math.max(0,ctx.currentTime-CAM.recT0) : 0; t.vid={key:k, src:"cam", name:`${p.name} #${evPos(p,t)} ${evVN(p,t.v)}`, type:blob.type, size:blob.size, t:Date.now()-dur*1000, dur, dev:DEVID};
     t.sigEst=Math.max(0,(meta.hornT||0)-(CAM.recT0||0)); t.fps=CAM.fps||30; t.status="rec"; EV.files["cam-"+t.i]={blob, name:t.vid.name, t:t.vid.t};
     try{ await IDB.put(k, blob); t.vid.stored=true; }catch(e){ t.vid.stored=false; }
     evSave(); }
@@ -3152,7 +3220,12 @@ async function vidTime(f){
       if(size===1){ size=Number(h.getBigUint64(8)); hl=16; } else if(size===0) size=N-off;
       if(type==="moov"){ const b=new Uint8Array(await f.slice(off, off+Math.min(size, 4e6)).arrayBuffer());
         for(let i=0;i+20<b.length;i++){ if(b[i]===0x6d&&b[i+1]===0x76&&b[i+2]===0x68&&b[i+3]===0x64){ const d=new DataView(b.buffer, b.byteOffset+i+4); const v=d.getUint8(0);
-          const secs = v===1 ? Number(d.getBigUint64(4)) : d.getUint32(4); const ms=(secs-2082844800)*1000; if(ms>946684800000 && ms<Date.now()+864e5) return {t:ms, src:"meta"}; break; } } break; }
+          const secs = v===1 ? Number(d.getBigUint64(4)) : d.getUint32(4); const ms=(secs-2082844800)*1000;
+          const ts = v===1 ? d.getUint32(20) : d.getUint32(12), du = v===1 ? Number(d.getBigUint64(24)) : d.getUint32(16), dur = ts ? du/ts : 0;
+          // iPhone: Beginn der Aufnahme mit Zeitzone (com.apple.quicktime.creationdate), genauer als mvhd
+          let t0=null; try{ const txt=new TextDecoder("latin1").decode(b); const mm=txt.match(/(20\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?[+-]\d\d:?\d\d)/); if(mm){ const z=Date.parse(mm[1].replace(/([+-]\d\d)(\d\d)$/,"$1:$2")); if(z>946684800000) t0=z; } }catch(e){}
+          if(t0) return {t:t0, src:"meta", dur};
+          if(ms>946684800000 && ms<Date.now()+864e5) return {t:ms, src:"meta", dur}; break; } } break; }
       if(size<hl) break; off+=size; }
   }catch(e){}
   return {t:f.lastModified||0, src:"file"};
@@ -3160,7 +3233,7 @@ async function vidTime(f){
 async function evUpload(files){
   const p=EV.cur, msg=$("evUpMsg"); if(!files.length) return;
   msg.textContent=L("Videos werden gelesen …","Reading videos …");
-  const list=[]; for(const f of files){ const {t,src}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src}; list.push({key,t,src,f}); }
+  const list=[]; for(const f of files){ const {t,src,dur}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur}; list.push({key,t,src,f}); }
   list.sort((a,b)=>a.t-b.t);
   const noMeta=list.filter(x=>x.src!=="meta");
   if(noMeta.length){
@@ -3171,7 +3244,7 @@ async function evUpload(files){
           "This happens when the iPhone creates a converted copy when sending.<br><b>How to include all photo data:</b> select the videos in the Photos app → Share → tap “Options” at the top → turn on “All Photos Data” → AirDrop. Alternatively transfer them by cable with the Mac app “Image Capture”. Then upload the videos again. You can also assign the videos manually in each attempt's selection box.");
   } else {
     // Reihenfolge der Aufnahmen = Reihenfolge der Versuche; zuerst an Versuche ohne Video
-    const free=p.trials.filter(t=>!t.vid); const target = free.length>=list.length ? free : p.trials;
+    const free=evOrd(p).filter(t=>!t.vid); const target = free.length>=list.length ? free : evOrd(p);
     list.forEach((x,k)=>{ const t=target[k]; if(t) evSetVid(p,t,x.key); });
     evSave(); evPlanView();
     $("evUpMsg").textContent = L(`Nach Aufnahmezeit zugeordnet: ${list.length}. Prüf die Zuordnung und ändere sie notfalls im Auswahlfeld des Versuchs.`,
@@ -3181,7 +3254,7 @@ async function evUpload(files){
 }
 function evSetVid(p,t,key){ const f=EV.files[key]; if(!f){ t.vid=null; if(t.status!=="done") t.status="open"; return; }
   p.trials.forEach(o=>{ if(o!==t && o.vid && o.vid.key===key){ o.vid=null; if(o.status!=="done") o.status="open"; } });
-  t.vid={key, src:"upload", name:f.name, t:f.t, size:f.blob.size, dev:DEVID}; t.sigEst=null; t.fps=null; if(t.status!=="done") t.status="rec"; }
+  t.vid={key, src:"upload", name:f.name, t:f.t, dur:f.dur||null, size:f.blob.size, dev:DEVID}; t.sigEst=null; t.fps=null; if(t.status!=="done") t.status="rec"; }
 function evAssign(i,key){ const p=EV.cur; evSetVid(p,p.trials[i],key); evSave(); evPlanView(); }
 async function evBlob(t){
   if(!t.vid) return null; const k=t.vid.key;
@@ -3258,7 +3331,7 @@ function evMetrics(){
 function evSumHTML(){
   const o=evMetrics(), p=EV.cur, t=p.trials[EV.trial], u=U("m"), us=U("m/s"), row=spRow, hd=spHd;
   const res={clean:L("Sauber","Clean"),early:L("Zu früh","Too early")}[o.result]||"–";
-  let h=`<p class="evlead" style="margin:0 0 8px"><i class="evv ${t.v}">${t.v}</i> <b>${esc(evVN(p,t.v))}</b> · ${L(`Versuch ${t.i+1} von ${p.trials.length}`,`Attempt ${t.i+1} of ${p.trials.length}`)}</p>`;
+  let h=`<p class="evlead" style="margin:0 0 8px"><i class="evv ${t.v}">${t.v}</i> <b>${esc(evVN(p,t.v))}</b> · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)}</p>`;
   if((o.block!=null && o.block>1.6) || (o.rt!=null && o.rt>1.2)) h+=`<p class="everr evwarn">${L("Die Zeiten sind unrealistisch lang. Wahrscheinlich ist das Video eine umgewandelte Zeitlupe statt der Originaldatei. Sende das Video mit „Alle Fotodaten“ und lade es erneut hoch.","The times are unrealistically long. The video is probably a converted slow-motion copy instead of the original file. Send the video with “All Photos Data” and upload it again.")}</p>`;
   h+=`<table class="restbl">`;
   h+=hd(L("Start","Start"))+row(L("Ergebnis","Result"),res)+row(L("Reaktionszeit","Reaction time"),msx(o.rt))+(o.hands!=null?row(L("Hände lösen","Hands off"),msx(o.hands)):"")+row(p.start==="back"?L("Abstoß","Push-off"):L("Blockzeit","Block time"),msx(o.block));
@@ -3267,7 +3340,7 @@ function evSumHTML(){
   h+=hd(L("Zeiten","Times"))+row(L("5-m-Zeit","5 m time"),ms3(o.t5))+row(L("10-m-Zeit","10 m time"),ms3(o.t10))+row(L("15-m-Zeit","15 m time"),ms3(o.t15))
     +row(L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),n2(o.v510,us))+row(L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),n2(o.v1015,us))+row(L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),n2(o.v515,us));
   h+=`</table>`;
-  const nextT=p.trials.find(x=>x.i>t.i && x.vid && x.status!=="done") || p.trials.find(x=>x.i!==t.i && x.vid && x.status!=="done");
+  const od=evOrd(p), nextT=od.find(x=>evPos(p,x)>evPos(p,t) && x.vid && x.status!=="done") || od.find(x=>x!==t && x.vid && x.status!=="done");
   h+=`<div class="wrow"><button type="button" class="wbig" id="eSave">${nextT?L("Speichern & nächster Versuch","Save & next attempt"):L("Speichern & zur Übersicht","Save & back to overview")}</button></div>
     <div class="wrow"><button type="button" class="testbtn ghost" id="eBack">${L("Ohne Speichern zur Übersicht","Back to overview without saving")}</button></div>`;
   return h;
@@ -3275,11 +3348,11 @@ function evSumHTML(){
 function evSaveTrial(){
   const p=EV.cur, t=p.trials[EV.trial]; const o=evMetrics();
   t.m=o; t.raw={marks:Object.assign({},SA.marks), vals:Object.assign({},SA.vals)}; t.fps=SA.fps; t.status="done"; t.analysed=Date.now(); evSave();
-  const nextT=p.trials.find(x=>x.i>t.i && x.vid && x.status!=="done") || p.trials.find(x=>x.i!==t.i && x.vid && x.status!=="done");
+  const od=evOrd(p), nextT=od.find(x=>evPos(p,x)>evPos(p,t) && x.vid && x.status!=="done") || od.find(x=>x!==t && x.vid && x.status!=="done");
   evCloseAna(); if(nextT) evAnalyze(nextT); else evShow("plan");
 }
 function evAnaHead(){ const h=$("evAnaHead"), p=EV.cur, t=p&&p.trials[EV.trial]; if(!t){ h.hidden=true; return; } h.hidden=false;
-  h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${t.i+1} von ${p.trials.length}`,`Attempt ${t.i+1} of ${p.trials.length}`)}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
+  h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
   $("evAnaBack").onclick=()=>{ evCloseAna(); evShow("plan"); }; $("evAnaDl").onclick=()=>evExport(p); }
 function evCloseAna(){ SA.active=false; SA.mode=null; $("spAna").hidden=true; $("evAnaHead").hidden=true; document.body.classList.remove("reviewing"); try{ sVid.pause(); sVid.removeAttribute("src"); sVid.load(); }catch(e){} $("evPage").hidden=false; }
 function alertMsg(t){ const m=$("evUpMsg")||$("evMsg"); if(m) m.textContent=t; else { const b=$("evBottom"); if(b) b.insertAdjacentHTML("afterbegin",`<p class="hint">${t}</p>`); } }
@@ -3294,6 +3367,172 @@ function finishBack(){ const f=$("finish"); document.body.classList.remove("ev-f
 { const _env=envNote; envNote=function(){ if(appMode==="eval"){ renderTiming(); return; } _env(); }; }
 { const _sum=summary; summary=function(){ if(appMode==="eval") return; _sum(); }; }
 { const _ss=setSport; setSport=function(v){ _ss(v); if(appMode==="eval") setTimeout(()=>{ EV.view="list"; evEnter(); },0); }; }
+
+/* --- Ergebnisblatt der Technikevaluation: Baseline, Vergleich A/B, Verlauf, Boxplot, Pausen und Testtage --- */
+// Kennwerte: Schlüssel, Bezeichnung, Einheit/Format, bessere Richtung (low = kleiner ist besser, high = größer ist besser, null = neutral)
+const EVM=()=>[
+  ["rt",L("Reaktionszeit","Reaction time"),"ms","low"],
+  ["hands",L("Hände lösen","Hands off"),"ms","low"],
+  ["block",EV.cur&&EV.cur.start==="back"?L("Abstoß","Push-off"):L("Blockzeit","Block time"),"ms","low"],
+  ["flight",L("Flugzeit","Flight time"),"ms",null],
+  ["jump",L("Sprungweite","Start distance"),"m","high"],
+  ["flightV",L("Fluggeschwindigkeit","Flight velocity"),"m/s","high"],
+  ["uwT",L("Tauchzeit","Underwater time"),"s",null],
+  ["dive",L("Tauchweite","Underwater distance"),"m",null],
+  ["uwV",L("Tauchgeschwindigkeit","Underwater velocity"),"m/s","high"],
+  ["kicks",L("Beinschläge","Kicks"),"n",null],
+  ["kickF",L("Beinschlagfrequenz","Kick frequency"),"Hz",null],
+  ["t5",L("5-m-Zeit","5 m time"),"s","low"],
+  ["t10",L("10-m-Zeit","10 m time"),"s","low"],
+  ["t15",L("15-m-Zeit","15 m time"),"s","low"],
+  ["v510",L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),"m/s","high"],
+  ["v1015",L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),"m/s","high"],
+  ["v515",L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),"m/s","high"]];
+const EV_TIMEK=["rt","hands","block","flight","uwT","t5","t10","t15"];
+// Kleinste bedeutsame Veränderung: halbe Leistungsschwankung olympischer Schwimmer zwischen Wettkämpfen (CV 0,8 % → 0,4 %; Pyne, Trewin & Hopkins 2004)
+const EV_SWC=0.004;
+function evFmt(v,u,sd){ if(v==null || !isFinite(v)) return "–"; const dec=(x,n)=>LANG==="en"?x.toFixed(n):x.toFixed(n).replace(".",",");
+  if(u==="ms") return Math.round(v*1000)+(sd?"":" "+U("ms")); if(u==="s") return dec(v,2)+(sd?"":" "+U("s")); if(u==="n") return dec(v,1);
+  return dec(v,2)+(sd?"":" "+U(u)); }
+/* Statistik */
+const stM=a=>a.reduce((x,y)=>x+y,0)/a.length;
+const stSD=a=>{ if(a.length<2) return null; const m=stM(a); return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2,0)/(a.length-1)); };
+function lgam(x){ const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5]; let y=x, t=x+5.5; t-=(x+0.5)*Math.log(t); let s=1.000000000190015; for(const k of c) s+=k/++y; return -t+Math.log(2.5066282746310005*s/x); }
+function betacf(a,b,x){ let qab=a+b, qap=a+1, qam=a-1, c=1, d=1-qab*x/qap; if(Math.abs(d)<1e-30) d=1e-30; d=1/d; let h=d;
+  for(let m=1;m<=200;m++){ const m2=2*m; let aa=m*(b-m)*x/((qam+m2)*(a+m2)); d=1+aa*d; if(Math.abs(d)<1e-30) d=1e-30; c=1+aa/c; if(Math.abs(c)<1e-30) c=1e-30; d=1/d; h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2)); d=1+aa*d; if(Math.abs(d)<1e-30) d=1e-30; c=1+aa/c; if(Math.abs(c)<1e-30) c=1e-30; d=1/d; const del=d*c; h*=del; if(Math.abs(del-1)<3e-12) break; } return h; }
+function ibeta(a,b,x){ if(x<=0) return 0; if(x>=1) return 1; const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2) ? bt*betacf(a,b,x)/a : 1-bt*betacf(b,a,1-x)/b; }
+const tCdf=(t,df)=>{ const x=df/(df+t*t), p=0.5*ibeta(df/2,0.5,x); return t>0?1-p:p; };
+function tInv(p,df){ let lo=0, hi=1000; for(let k=0;k<100;k++){ const m=(lo+hi)/2; if(tCdf(m,df)<p) lo=m; else hi=m; } return (lo+hi)/2; }
+function stCI(a){ const n=a.length, m=stM(a); if(n<2) return {m,n,lo:null,hi:null,sd:null}; const s=stSD(a), h=tInv(0.975,n-1)*s/Math.sqrt(n); return {m,n,sd:s,lo:m-h,hi:m+h}; }
+function stWelch(a,b){ if(a.length<2||b.length<2) return null; const va=stSD(a)**2/a.length, vb=stSD(b)**2/b.length, se=Math.sqrt(va+vb), d=stM(b)-stM(a);
+  if(!(se>0)) return {d, lo:d, hi:d, p: d===0?1:0, df:a.length+b.length-2};
+  const df=(va+vb)**2/(va*va/(a.length-1)+vb*vb/(b.length-1)), t=d/se, h=tInv(0.975,df)*se; return {d, lo:d-h, hi:d+h, p:2*(1-tCdf(Math.abs(t),df)), df}; }
+function stQ(a,q){ const s=a.slice().sort((x,y)=>x-y), i=(s.length-1)*q, lo=Math.floor(i), hi=Math.ceil(i); return s[lo]+(s[hi]-s[lo])*(i-lo); }
+/* Reihenfolge, Zeitpunkte, Pausen, Testtage */
+const evOrd=p=>p.trials.slice().sort((a,b)=>((a.stage??1)-(b.stage??1)) || (a.i-b.i));
+const evPos=(p,t)=>evOrd(p).indexOf(t)+1;
+const evT0=t=>t.vid ? (t.vid.t||null) : null;
+function evTimeline(p){
+  const rows=p.trials.filter(t=>evT0(t)).map(t=>({t, t0:evT0(t), dur:t.vid.dur||0})).sort((a,b)=>a.t0-b.t0);
+  const days=[]; rows.forEach((r,k)=>{ const d=new Date(r.t0).toDateString(); if(!days.includes(d)) days.push(d); r.day=days.indexOf(d)+1;
+    const pr=rows[k-1]; r.pause = pr && pr.day===r.day ? Math.max(0,(r.t0-pr.t0)/1000-(pr.dur||0)) : null; });
+  return {rows, days:days.length};
+}
+const evDur=s=>{ if(s==null) return "–"; s=Math.round(s); const m=Math.floor(s/60), r=s%60; return m ? `${m}:${String(r).padStart(2,"0")} min` : `${r} s`; };
+/* Diagramme (SVG) */
+const EVC={BL:"#7A8B95", A:"#1F7FB8", B:"#C9762B"};
+function svgAxisY(lo,hi,Y,PL,W,u){ const st=(hi-lo)/3, dec = u==="ms" ? 0 : Math.max(u==="n"?1:2, Math.min(4, Math.ceil(-Math.log10(st||1))+1));
+  const f=v=> u==="ms" ? String(Math.round(v*1000)) : (LANG==="en"?v.toFixed(dec):v.toFixed(dec).replace(".",","));
+  return [0,1,2,3].map(k=>{ const v=lo+st*k; return `<line class="grid" x1="${PL}" x2="${W-8}" y1="${Y(v)}" y2="${Y(v)}"/><text class="axis" x="${PL-5}" y="${Y(v)+4}" text-anchor="end">${f(v)}</text>`; }).join(""); }
+function evRange(vals){ let lo=Math.min(...vals), hi=Math.max(...vals); const pad=(hi-lo)*0.15 || Math.abs(hi)*0.05 || 0.01; return [lo-pad, hi+pad]; }
+// kleine Grafik je Kennwert der Baseline: Einzelwerte, Mittelwert und ±1 SD
+function evBaseChart(vals,u,lab){
+  const W=300,H=130,PL=46,PT=10,PB=22, [lo,hi]=evRange(vals), Y=v=>PT+(H-PT-PB)*(1-(v-lo)/(hi-lo)), X=i=>PL+18+i*((W-PL-36)/Math.max(1,vals.length-1));
+  const m=stM(vals), s=stSD(vals);
+  return `<figure class="evfig"><figcaption>${lab}</figcaption><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${lab}">${svgAxisY(lo,hi,Y,PL,W,u)}
+    ${s!=null?`<rect x="${PL}" width="${W-8-PL}" y="${Y(m+s)}" height="${Math.max(1,Y(m-s)-Y(m+s))}" fill="${EVC.BL}" opacity=".14"/>`:""}
+    <line x1="${PL}" x2="${W-8}" y1="${Y(m)}" y2="${Y(m)}" stroke="${EVC.BL}" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <polyline fill="none" stroke="${EVC.BL}" stroke-width="2" points="${vals.map((v,i)=>`${X(i)},${Y(v)}`).join(" ")}"/>
+    ${vals.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="4.5" fill="${EVC.BL}"/><text class="axis" x="${X(i)}" y="${H-6}" text-anchor="middle">${i+1}</text>`).join("")}</svg></figure>`;
+}
+// Verlauf in der zeitlichen Reihenfolge: Baseline grau, A und B als eigene Linien, Trennlinien zwischen Testtagen
+function evLineChart(p,k,u){
+  const tl=evTimeline(p), byT=new Map(tl.rows.map(r=>[r.t,r]));
+  const pts=evOrd(p).filter(t=>t.status==="done" && t.m && t.m[k]!=null && isFinite(t.m[k])).map(t=>({t, v:t.m[k], r:byT.get(t)}));
+  if(pts.length<2) return `<p class="hint">${L("Für den Verlauf braucht es mindestens zwei ausgewertete Versuche.","The progression needs at least two analysed attempts.")}</p>`;
+  if(pts.every(x=>x.r)) pts.sort((a,b)=>a.r.t0-b.r.t0);
+  const W=340,H=200,PL=48,PT=12,PB=26, [lo,hi]=evRange(pts.map(x=>x.v)), Y=v=>PT+(H-PT-PB)*(1-(v-lo)/(hi-lo)), X=i=>PL+10+i*((W-PL-22)/Math.max(1,pts.length-1));
+  const line=v=>{ const q=pts.map((x,i)=>({x,i})).filter(o=>o.x.t.v===v); return q.length>1?`<polyline fill="none" stroke="${EVC[v]}" stroke-width="2" opacity=".85" points="${q.map(o=>`${X(o.i)},${Y(o.x.v)}`).join(" ")}"/>`:""; };
+  let sep=""; pts.forEach((x,i)=>{ const pr=pts[i-1]; if(pr && x.r && pr.r && x.r.day!==pr.r.day){ const xx=(X(i)+X(i-1))/2; sep+=`<line x1="${xx}" x2="${xx}" y1="${PT}" y2="${H-PB}" stroke="var(--fg)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/><text class="axis" x="${xx+3}" y="${PT+9}">${L("Tag","Day")} ${x.r.day}</text>`; } });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${L("Verlauf","Progression")}">${svgAxisY(lo,hi,Y,PL,W,u)}${sep}${line("BL")}${line("A")}${line("B")}
+    ${pts.map((x,i)=>`<circle cx="${X(i)}" cy="${Y(x.v)}" r="4.5" fill="${EVC[x.t.v]}"><title>${evPos(p,x.t)}. ${esc(evVN(p,x.t.v))}: ${evFmt(x.v,u)}</title></circle>`).join("")}
+    ${pts.map((x,i)=>(i%Math.max(1,Math.ceil(pts.length/12))===0)?`<text class="axis" x="${X(i)}" y="${H-7}" text-anchor="middle">${evPos(p,x.t)}</text>`:"").join("")}</svg>`;
+}
+// Boxplot: Median, Quartile, Spannweite (bis 1,5 × IQR), Einzelwerte und Mittelwert
+function evBoxChart(groups,u){
+  const all=groups.flatMap(g=>g.vals); if(!all.length) return "";
+  const W=340,H=210,PL=48,PT=12,PB=30, [lo,hi]=evRange(all), Y=v=>PT+(H-PT-PB)*(1-(v-lo)/(hi-lo)), bw=(W-PL-10)/groups.length;
+  let s=svgAxisY(lo,hi,Y,PL,W,u);
+  groups.forEach((g,gi)=>{ const cx=PL+bw*(gi+0.5), c=EVC[g.k], v=g.vals; s+=`<text class="axis" x="${cx}" y="${H-10}" text-anchor="middle">${g.k==="BL"?"Baseline":g.k} (n=${v.length})</text>`; if(!v.length) return;
+    const q1=stQ(v,.25), q2=stQ(v,.5), q3=stQ(v,.75), iq=q3-q1, wl=Math.min(...v.filter(x=>x>=q1-1.5*iq)), wh=Math.max(...v.filter(x=>x<=q3+1.5*iq)), w=Math.min(56,bw*0.45);
+    if(v.length>=3) s+=`<line x1="${cx}" x2="${cx}" y1="${Y(wh)}" y2="${Y(wl)}" stroke="${c}" stroke-width="1.5"/><line x1="${cx-w/4}" x2="${cx+w/4}" y1="${Y(wh)}" y2="${Y(wh)}" stroke="${c}" stroke-width="1.5"/><line x1="${cx-w/4}" x2="${cx+w/4}" y1="${Y(wl)}" y2="${Y(wl)}" stroke="${c}" stroke-width="1.5"/>
+      <rect x="${cx-w/2}" width="${w}" y="${Y(q3)}" height="${Math.max(1,Y(q1)-Y(q3))}" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="1.5" rx="3"/><line x1="${cx-w/2}" x2="${cx+w/2}" y1="${Y(q2)}" y2="${Y(q2)}" stroke="${c}" stroke-width="2.5"/>`;
+    v.forEach((x,i)=>{ const j=((i*37)%11-5)/5*w*0.32; s+=`<circle cx="${cx+j}" cy="${Y(x)}" r="3.4" fill="${c}" opacity=".75"/>`; });
+    s+=`<path d="M${cx-5},${Y(stM(v))} l5,-5 l5,5 l-5,5z" fill="#fff" stroke="${c}" stroke-width="1.5"><title>${L("Mittelwert","Mean")} ${evFmt(stM(v),u)}</title></path>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Boxplot">${s}</svg>`;
+}
+/* Bewertung eines Unterschieds gegen die kleinste bedeutsame Veränderung */
+function evVerdict(w,thr,better){
+  if(!w) return {c:"na", t:L("zu wenig Daten","not enough data")};
+  const sign = better==="low" ? -1 : better==="high" ? 1 : 0, nm=k=>esc(evVN(EV.cur,k));
+  const winner = d => sign===0 ? (d>0?L(`${nm("B")} größer`,`${nm("B")} higher`):L(`${nm("A")} größer`,`${nm("A")} higher`)) : (d*sign>0?L(`${nm("B")} besser`,`${nm("B")} better`):L(`${nm("A")} besser`,`${nm("A")} better`));
+  if(thr!=null && (w.lo>thr || w.hi<-thr)) return {c:"clear", t:winner(w.d)+" – "+L("bedeutsam","meaningful")};
+  if(thr!=null && w.lo>-thr && w.hi<thr) return {c:"triv", t:L("kein bedeutsamer Unterschied","no meaningful difference")};
+  if(w.p<0.05) return {c:"sig", t:winner(w.d)+" – "+(thr!=null?L("signifikant, Bedeutsamkeit unsicher","significant, relevance uncertain"):L("signifikant","significant"))};
+  return {c:"unc", t:L("unklar – mehr Versuche nötig","unclear – more attempts needed")};
+}
+function evReport(){
+  const p=EV.cur, top=$("evTop"), bot=$("evBottom"); bot.innerHTML=""; finishBack();
+  const done=p.trials.filter(t=>t.status==="done" && t.m), grp=v=>done.filter(t=>t.v===v), M=EVM();
+  const vals=(ts,k)=>ts.map(t=>t.m[k]).filter(x=>x!=null && isFinite(x));
+  const have=M.filter(([k])=>done.some(t=>t.m[k]!=null && isFinite(t.m[k])));
+  const BL=grp("BL"), A=grp("A"), B=grp("B"), tl=evTimeline(p), fps=Math.max(...done.map(t=>t.fps||0),0);
+  const sel = EV.repK && have.some(x=>x[0]===EV.repK) ? EV.repK : (have.find(x=>x[0]==="t15")||have.find(x=>x[0]==="block")||have[0]||[null])[0];
+  let h=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Ablauf","‹ Sequence")}</button><span class="evhr"><button type="button" class="testbtn ghost small" id="evDl">${L("Projekt herunterladen","Download project")}</button></span></div>
+    <h2 class="big">${L("Ergebnisse","Results")}</h2><p class="evlead">${esc(p.name)} · ${evTechName(p.tech)}</p>
+    <div class="evvars">${["A","B"].map(k=>`<div><i class="evv ${k}">${k}</i><span><b>${esc(evVN(p,k))}</b>${p[k]?` – ${esc(p[k])}`:""}</span></div>`).join("")}</div>
+    <p class="hint">${L(`Ausgewertet: Baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`,`Analysed: baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`)}${tl.days>1?" · "+L(`${tl.days} Testtage`,`${tl.days} test days`):""}</p>`;
+  if(!done.length){ top.innerHTML=h+`<p class="hint">${L("Noch keine ausgewerteten Versuche.","No analysed attempts yet.")}</p>`; $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); return; }
+  // 1) Baseline
+  h+=`<h3 class="evh3">${L("Baseline","Baseline")}</h3>`;
+  if(BL.length){
+    const bh=have.filter(([k])=>vals(BL,k).length);
+    h+=`<div class="evscroll"><table class="evtab"><thead><tr><th>${L("Kennwert","Parameter")}</th>${BL.map((t,i)=>`<th class="r">${i+1}</th>`).join("")}<th class="r">M</th><th class="r">SD</th><th class="r">CV</th></tr></thead><tbody>
+      ${bh.map(([k,lab,u])=>{ const v=vals(BL,k), m=stM(v), s=stSD(v); return `<tr><td>${lab}</td>${BL.map(t=>`<td class="r">${evFmt(t.m[k],u,true)}</td>`).join("")}<td class="r"><b>${evFmt(m,u,true)}</b></td><td class="r">${evFmt(s,u,true)}</td><td class="r">${s!=null&&m?(LANG==="en"?(s/Math.abs(m)*100).toFixed(1):(s/Math.abs(m)*100).toFixed(1).replace(".",","))+" %":"–"}</td></tr>`; }).join("")}</tbody></table></div>
+      <p class="hint">${L("Einheiten: Zeiten bis zum Abheben in ms, übrige Zeiten in s, Strecken in m, Geschwindigkeiten in m/s. CV = Variationskoeffizient (SD in % des Mittelwerts): Je kleiner, desto gleichmäßiger startest du.","Units: times up to take-off in ms, other times in s, distances in m, velocities in m/s. CV = coefficient of variation (SD as % of the mean): the smaller, the more consistent your starts.")}</p>
+      <div class="evfigs">${bh.filter(([k])=>["rt","block","jump","t5","t10","t15","uwT","flight"].includes(k)).map(([k,lab,u])=>evBaseChart(vals(BL,k),u,lab)).join("")}</div>`;
+  } else h+=`<p class="hint">${L("Keine Baseline ausgewertet. Ohne Baseline fehlt der Bezug zu deiner gewohnten Technik.","No baseline analysed. Without a baseline there is no reference to your usual technique.")}</p>`;
+  // 2) Vergleich A/B
+  h+=`<h3 class="evh3">${L("Vergleich","Comparison")} ${esc(evVN(p,"A"))} – ${esc(evVN(p,"B"))}</h3><div class="evcmp">`;
+  have.forEach(([k,lab,u,better])=>{ const a=vals(A,k), b=vals(B,k); if(!a.length && !b.length) return; const ca=a.length?stCI(a):null, cb=b.length?stCI(b):null, w=stWelch(a,b);
+    const bl=vals(BL,k), ref=bl.length?stM(bl):stM([...a,...b]);
+    let thr=null; if(u!=="n" && ref){ thr=Math.abs(ref)*EV_SWC; if(EV_TIMEK.includes(k) && fps) thr=Math.max(thr, 1/fps); }
+    const v=evVerdict(w,thr,better), ci=c=>c?`<b>${evFmt(c.m,u)}</b>${c.lo!=null?`<small>${L("KI","CI")} [${evFmt(c.lo,u,true)}; ${evFmt(c.hi,u,true)}]</small>`:`<small>n = 1</small>`}`:"–";
+    const pf=w?(w.p<0.001?(LANG==="en"?"<0.001":"<0,001"):(LANG==="en"?w.p.toFixed(3):w.p.toFixed(3).replace(".",","))):"–";
+    h+=`<div class="evcrow"><div class="evchd"><b>${lab}</b><span class="evverd ${v.c}">${v.t}</span></div>
+      <div class="evcg"><div><i class="evv A">A</i>${ci(ca)}</div><div><i class="evv B">B</i>${ci(cb)}</div>${bl.length?`<div><i class="evv BL">BL</i><b>${evFmt(stM(bl),u)}</b><small>n = ${bl.length}</small></div>`:""}</div>
+      <p class="evcd">Δ B−A ${w?`<b>${(w.d>0?"+":"")+evFmt(w.d,u)}</b> <span class="nw">${L("KI","CI")} [${evFmt(w.lo,u,true)}; ${evFmt(w.hi,u,true)}]</span> · p = ${pf}`:"–"}${thr!=null?` · ${L("Schwelle","threshold")} ±${evFmt(thr,u)}`:""}</p></div>`; });
+  h+=`</div>
+    <details class="evexpl"><summary>${L("So liest du den Vergleich","How to read the comparison")}</summary>
+    <p>${L("KI ist das 95-%-Konfidenzintervall: In diesem Bereich liegt der wahre Mittelwert mit 95 % Sicherheit. Δ B−A ist der Unterschied der Mittelwerte mit seinem 95-%-Konfidenzintervall (Welch-t-Test, ungleiche Varianzen). p ist die Wahrscheinlichkeit, einen mindestens so großen Unterschied rein zufällig zu sehen, wenn es keinen echten gibt.","CI is the 95 % confidence interval: the true mean lies in this range with 95 % certainty. Δ B−A is the difference of the means with its 95 % confidence interval (Welch's t-test, unequal variances). p is the probability of seeing a difference at least this large purely by chance if there is no real one.")}</p>
+    <p>${L("Die Schwelle ist die kleinste bedeutsame Veränderung: 0,4 % des Baseline-Mittelwerts. Das entspricht der halben Leistungsschwankung olympischer Schwimmer zwischen zwei Wettkämpfen (Variationskoeffizient 0,8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). Bei Zeiten gilt mindestens ein Videobild als Schwelle, weil kleinere Unterschiede nicht messbar sind.","The threshold is the smallest worthwhile change: 0.4 % of the baseline mean. This equals half the performance variation of Olympic swimmers between two competitions (coefficient of variation 0.8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). For times, at least one video frame is used, because smaller differences can't be measured.")}</p>
+    <p>${L("„Bedeutsam“: Das ganze Konfidenzintervall liegt jenseits der Schwelle. „Kein bedeutsamer Unterschied“: Das ganze Intervall liegt innerhalb der Schwelle. „Signifikant, Bedeutsamkeit unsicher“: p < 0,05, aber das Intervall reicht in den Bereich unterhalb der Schwelle. „Unklar“: Die Daten reichen für keine Aussage, mehr Versuche helfen.","“Meaningful”: the whole confidence interval lies beyond the threshold. “No meaningful difference”: the whole interval lies within the threshold. “Significant, relevance uncertain”: p < 0.05, but the interval reaches below the threshold. “Unclear”: the data don't support a conclusion; more attempts help.")}</p></details>`;
+  // 3) Grafiken für einen gewählten Kennwert
+  if(sel){ const [k,lab,u]=M.find(x=>x[0]===sel);
+    h+=`<h3 class="evh3">${L("Grafiken","Charts")}</h3><div class="evchips" id="evRepK">${have.map(([kk,ll])=>`<button type="button" data-k="${kk}" aria-pressed="${kk===sel}">${ll}</button>`).join("")}</div>
+      <figure class="evfig wide"><figcaption>${L("Verlauf in der Reihenfolge der Versuche","Progression in the order of attempts")}: ${lab}</figcaption>${evLineChart(p,k,u)}
+        <div class="evleg"><span><i style="background:${EVC.BL}"></i>Baseline</span><span><i style="background:${EVC.A}"></i>${esc(evVN(p,"A"))}</span><span><i style="background:${EVC.B}"></i>${esc(evVN(p,"B"))}</span></div>
+        <p class="hint">${L("Steigen oder fallen die Linien über die Versuche, spielen Ermüdung, Aufwärmen oder Gewöhnung mit. Die ausgewogene Reihenfolge verteilt diese Effekte gleich auf beide Varianten.","If the lines rise or fall over the attempts, fatigue, warm-up or familiarisation play a role. The balanced order spreads these effects equally across both variants.")}</p></figure>
+      <figure class="evfig wide"><figcaption>Boxplot: ${lab}</figcaption>${evBoxChart([{k:"BL",lab:"Baseline",vals:vals(BL,k)},{k:"A",lab:evVN(p,"A"),vals:vals(A,k)},{k:"B",lab:evVN(p,"B"),vals:vals(B,k)}].filter(g=>g.k!=="BL"||g.vals.length),u)}
+        <p class="hint">${L("Box: mittlere 50 % der Werte, Strich: Median, Raute: Mittelwert, Punkte: einzelne Versuche.","Box: middle 50 % of values, line: median, diamond: mean, dots: individual attempts.")}</p></figure>`; }
+  // 4) Subjektive Qualität
+  const rq=v=>p.trials.filter(t=>t.v===v && t.rating).map(t=>t.rating);
+  if(rq("A").length||rq("B").length) h+=`<h3 class="evh3">${L("Qualität der Testläufe","Quality of the test runs")}</h3><p>${["A","B"].map(v=>{ const r=rq(v); return `<i class="evv ${v}">${v}</i> ${r.length?(LANG==="en"?stM(r).toFixed(1):stM(r).toFixed(1).replace(".",","))+" / 5 (n="+r.length+")":"–"}`; }).join(" &nbsp; ")}</p>`;
+  // 5) Ablauf, Pausen und Testtage
+  if(tl.rows.length){
+    const pa=v=>tl.rows.filter(r=>r.t.v===v && r.pause!=null).map(r=>r.pause);
+    h+=`<h3 class="evh3">${L("Ablauf, Pausen und Testtage","Sequence, rests and test days")}</h3>
+      <p class="hint">${L("Die Pausen berechnet Sprintz aus den Aufnahmezeiten und der Länge der Videos (Ende einer Aufnahme bis Beginn der nächsten). Sie sind deshalb Näherungswerte.","Sprintz calculates the rests from the recording times and lengths of the videos (end of one recording to the start of the next), so they are approximations.")}</p>
+      <p>${["BL","A","B"].map(v=>{ const x=pa(v); return x.length?`<span class="evpill"><i class="evv ${v}">${v}</i> Ø ${L("Pause","rest")} ${evDur(stM(x))}</span>`:""; }).join(" ")}</p>
+      <div class="evscroll"><table class="evtab"><thead><tr><th>Nr.</th><th>${L("Variante","Variant")}</th>${tl.days>1?`<th>${L("Testtag","Test day")}</th>`:""}<th class="r">${L("Uhrzeit","Time")}</th><th class="r">${L("Pause davor","Rest before")}</th><th class="r">${sel?M.find(x=>x[0]===sel)[1]:""}</th></tr></thead><tbody>
+      ${tl.rows.map(r=>{ const u=sel?M.find(x=>x[0]===sel)[2]:"s"; return `<tr><td>${evPos(p,r.t)}</td><td><i class="evv ${r.t.v}">${r.t.v}</i></td>${tl.days>1?`<td>${r.day}</td>`:""}<td class="r">${new Date(r.t0).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"})}</td><td class="r">${r.pause!=null?evDur(r.pause):"–"}</td><td class="r">${sel&&r.t.m&&r.t.m[sel]!=null?evFmt(r.t.m[sel],u):"–"}</td></tr>`; }).join("")}</tbody></table></div>`;
+  }
+  top.innerHTML=h;
+  $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p);
+  const ch=$("evRepK"); if(ch) ch.querySelectorAll("button").forEach(b=>b.onclick=()=>{ EV.repK=b.dataset.k; const y=scrollY; evReport(); scrollTo(0,y); });
+}
 
 /* --- Projektdatei (.sprintz.json): zum Weitergeben an andere Konten ---
    Inhalt: Format-Kennung und Version, Einrichtung, Ablauf, Bewertungen, Bemerkungen, Markierungen und Kennwerte.
