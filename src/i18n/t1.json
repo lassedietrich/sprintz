@@ -1,0 +1,656 @@
+[
+[
+0,
+"Start atışı",
+"Выстрел",
+"Startschot"
+],
+[
+1,
+"Start sinyali",
+"Стартовый сигнал",
+"Startsignaal"
+],
+[
+2,
+"start atışını",
+"выстрел",
+"het startschot"
+],
+[
+3,
+"start sinyalini",
+"стартовый сигнал",
+"het startsignaal"
+],
+[
+4,
+"start atışında",
+"по выстрелу",
+"bij het startschot"
+],
+[
+5,
+"start sinyalinde",
+"по стартовому сигналу",
+"bij het startsignaal"
+],
+[
+6,
+"Startını yandan filme al; uygulamanın çaldığı {0} videoda net duyabilmelisin. En iyisi 120 veya 240 fps ile çek. {1} uygulamaya buldur, −1/+1 ile kare kare ilerle ve reaksiyonunu (ilk hareket), isteğe bağlı olarak ellerin bırakmasını ve kalkışı (ayakların bloktan ayrıldığı an) işaretle. Her start için bir değerlendirme ve not kaydedebilirsin.",
+"Сними свой старт сбоку: {0} из приложения должен быть слышен на видео. Лучше всего снимать с частотой 120 или 240 кадров/с. Пусть приложение само найдёт {1}, затем пройди видео по кадрам кнопками −1/+1 и отметь реакцию (первое движение), при желании отрыв рук и отталкивание (ноги отрываются от опоры). Для каждого старта можно сохранить оценку и заметку.",
+"Film je start van opzij; {0} uit de app moet op de video te horen zijn. Film bij voorkeur met 120 of 240 fps. Laat de app {1} vinden, ga met −1/+1 beeld voor beeld door de video en markeer je reactie (eerste beweging), optioneel het loslaten van de handen en de afzet (je voeten verlaten het blok). Per start kun je een beoordeling en een notitie opslaan."
+],
+[
+7,
+"Telefonlar ses ve görüntüyü çoğu zaman hafif kaymış kaydeder. Bu kaymayı her telefon için bir kez ölç: Yüksek sesli bir alkışı filme al, ses izinde patlama anını “{0}” olarak, ellerinin birleştiği kareyi “Kalkış” olarak işaretle. Ardından “Mevcut ölçümü ses-görüntü kayması olarak kullan” düğmesine dokun.",
+"Телефоны часто записывают звук и изображение с небольшим смещением. Измерь это смещение один раз для каждого телефона: сними громкий хлопок, отметь «{0}» на хлопке в звуковой дорожке и «Отталкивание» на кадре, где сомкнулись ладони. Затем нажми «Принять текущее измерение как смещение звука и видео».",
+"Telefoons nemen beeld en geluid vaak iets verschoven op. Meet deze verschuiving één keer per telefoon: film een harde klap, markeer “{0}” op de knal in het geluidsspoor en “Afzet” op het beeld waarin je handen elkaar raken. Tik daarna op “Huidige meting als beeld-geluidverschuiving gebruiken”."
+],
+[
+8,
+"Tüm süreler start sinyalinden itibaren ölçülür. Reaksiyon süresi: görünür ilk hareketine kadar. Eller: ellerin bırakana kadar. Blok süresi: kalkışa, yani ayakların bloktan ayrılana kadar.",
+"Все времена отсчитываются от стартового сигнала. Время реакции: до первого видимого движения. Руки: до отрыва рук. Время отталкивания: до момента, когда ноги отрываются от опоры.",
+"Alle tijden worden gemeten vanaf het startsignaal. Reactietijd: tot je eerste zichtbare beweging. Handen: tot je handen loslaten. Bloktijd: tot de afzet, dus tot je voeten het startblok verlaten."
+],
+[
+9,
+"Sadece reaksiyon",
+"Только реакция",
+"Alleen reactie"
+],
+[
+10,
+"Kuru alan",
+"На суше",
+"Droogtraining"
+],
+[
+11,
+"Pist",
+"Дорожка",
+"Baan"
+],
+[
+12,
+"Suda",
+"В воде",
+"In het water"
+],
+[
+13,
+"Bloktan start",
+"Старт с колодок",
+"Blokstart"
+],
+[
+14,
+"Suya start",
+"Старт в воду",
+"Start in het water"
+],
+[
+15,
+"Bloksuz",
+"Без колодок",
+"Zonder startblokken"
+],
+[
+16,
+"Kuru alanda sıçrama",
+"Прыжок на суше",
+"Droge sprong"
+],
+[
+17,
+"▶ Start atışını dinle",
+"▶ Прослушать выстрел",
+"▶ Startschot beluisteren"
+],
+[
+18,
+"▶ Start sinyalini dinle",
+"▶ Прослушать стартовый сигнал",
+"▶ Startsignaal beluisteren"
+],
+[
+19,
+"{0}: otomatik bul",
+"Найти {0} автоматически",
+"{0} automatisch vinden"
+],
+[
+20,
+"{0}: burada işaretle",
+"Отметить {0} здесь",
+"{0} hier markeren"
+],
+[
+21,
+"Kalkış burada<br><small>{0}</small>",
+"Отталкивание здесь<br><small>{0}</small>",
+"Afzet hier<br><small>{0}</small>"
+],
+[
+22,
+"Süre ölçümlü reaksiyon",
+"Реакция с замером",
+"Reactie met tijdmeting"
+],
+[
+23,
+"Süre ölçümsüz reaksiyon",
+"Реакция без замера",
+"Reactie zonder tijdmeting"
+],
+[
+24,
+"Süre ölçümlü kuru alan",
+"Суша с замером",
+"Droogtraining met tijdmeting"
+],
+[
+25,
+"Süre ölçümsüz kuru alan",
+"Суша без замера",
+"Droogtraining zonder tijdmeting"
+],
+[
+26,
+"Sırtüstü",
+"На спине",
+"Rugslag"
+],
+[
+27,
+"{0} × {1} sn dinlenmeyle",
+"{0} × с отдыхом {1} с",
+"{0} × met {1} s rust"
+],
+[
+28,
+"Tek start",
+"Одиночный старт",
+"Enkele start"
+],
+[
+29,
+"Yanıltıcı sinyal %{0} (en fazla {1})",
+"Ложный сигнал {0} % (до {1})",
+"Stoorsignaal {0}% (max. {1})"
+],
+[
+31,
+"{0} sil",
+"Удалить {0}",
+"{0} verwijderen"
+],
+[
+32,
+"Starttan önce yanıltıcı sinyal: {0}",
+"Ложных сигналов перед стартом: {0}",
+"Stoorsignalen voor de start: {0}"
+],
+[
+33,
+"Yanıltıcı sinyal yok",
+"Без ложного сигнала",
+"Geen stoorsignaal"
+],
+[
+34,
+"Sonraki start",
+"Следующий старт",
+"Volgende start"
+],
+[
+35,
+"Tekrar",
+"Ещё раз",
+"Opnieuw"
+],
+[
+37,
+"{0} tekrar",
+"{0} повт.",
+"{0} herhalingen"
+],
+[
+38,
+"{0} geçerli · en iyi {1} ms · SS {2} ms · hata {3}/{4}",
+"{0} засчитано · лучшая {1} мс · СО {2} мс · ошибки {3}/{4}",
+"{0} geldig · beste {1} ms · SD {2} ms · fouten {3}/{4}"
+],
+[
+39,
+"Geçerli reaksiyon yok · hata {0}/{1}",
+"Нет засчитанных реакций · ошибки {0}/{1}",
+"Geen geldige reactie · fouten {0}/{1}"
+],
+[
+40,
+"{0} tekrar · {1} kayıtlı",
+"{0} повт. · {1} записано",
+"{0} herhalingen · {1} vastgelegd"
+],
+[
+41,
+"Tekrar {0}",
+"Повтор {0}",
+"Herhaling {0}"
+],
+[
+42,
+"Tekrar {0} / {1}",
+"Повтор {0} / {1}",
+"Herhaling {0} / {1}"
+],
+[
+43,
+"Sıradaki: tekrar {0} / {1}",
+"Далее: повтор {0} / {1}",
+"Volgende: herhaling {0} / {1}"
+],
+[
+44,
+"{0} · Sıradaki: tekrar {1} / {2}",
+"{0} · Далее: повтор {1} / {2}",
+"{0} · Volgende: herhaling {1} / {2}"
+],
+[
+45,
+"Yanıltıcı sinyale tepki verdin",
+"Ты отреагировал на ложный сигнал",
+"Je reageerde op een stoorsignaal"
+],
+[
+46,
+"{0} ms · hatalı çıkış (100 ms altı)",
+"{0} мс · фальстарт (меньше 100 мс)",
+"{0} ms · valse start (onder 100 ms)"
+],
+[
+47,
+"Hatalı çıkış – çok erken çıktın",
+"Фальстарт – ты стартовал слишком рано",
+"Valse start – je was te vroeg"
+],
+[
+48,
+"Bırakmadın",
+"Ты не отпустил",
+"Je hebt niet losgelaten"
+],
+[
+49,
+"Dokunmadın",
+"Ты не нажал",
+"Je hebt niet getikt"
+],
+[
+50,
+"Temiz · ",
+"Чисто · ",
+"Correct · "
+],
+[
+51,
+"tr-TR",
+"ru-RU",
+"nl-NL"
+],
+[
+52,
+"Yanıltıcı sinyalli startlar",
+"Старты с ложными сигналами",
+"Starts met stoorsignalen"
+],
+[
+53,
+"Yanıltıcı sinyale direnildi",
+"Ложный сигнал выдержан",
+"Stoorsignaal weerstaan"
+],
+[
+54,
+"Yanıltıcı sinyale tepki verildi",
+"Реакция на ложный сигнал",
+"Gereageerd op stoorsignaal"
+],
+[
+55,
+"Yanıltıcı sinyal sonrası Ø reaksiyon süresi",
+"Ø время реакции после ложных сигналов",
+"Ø reactietijd na stoorsignalen"
+],
+[
+56,
+"Yanıltıcı sinyal sonrası Ø blok süresi (video)",
+"Ø время отталкивания после ложных сигналов (видео)",
+"Ø bloktijd na stoorsignalen (video)"
+],
+[
+57,
+"Gelişim: günlük yanıltıcı sinyale direnme",
+"Динамика: выдержанные ложные сигналы по дням",
+"Verloop: stoorsignalen weerstaan per dag"
+],
+[
+58,
+"{0}: {2} startın {1} tanesinde direnildi",
+"{0}: выдержано {1} из {2}",
+"{0}: {1} van {2} weerstaan"
+],
+[
+59,
+"{0}: yanıltıcı sinyalli start yok",
+"{0}: нет стартов с ложными сигналами",
+"{0}: geen starts met stoorsignalen"
+],
+[
+60,
+"Yanıltıcı sinyalsiz startlar",
+"Старты без ложных сигналов",
+"Starts zonder stoorsignalen"
+],
+[
+61,
+"Temiz",
+"Чисто",
+"Correct"
+],
+[
+62,
+"Çok erken",
+"Слишком рано",
+"Te vroeg"
+],
+[
+63,
+"Blok süresi değişkenliği (video)",
+"Разброс времени отталкивания (видео)",
+"Spreiding bloktijd (video)"
+],
+[
+64,
+"Ø reaksiyon süresi (video)",
+"Ø время реакции (видео)",
+"Ø reactietijd (video)"
+],
+[
+65,
+"Ø blok süresi (video)",
+"Ø время отталкивания (видео)",
+"Ø bloktijd (video)"
+],
+[
+66,
+"En iyi blok süresi",
+"Лучшее время отталкивания",
+"Beste bloktijd"
+],
+[
+67,
+"Videolu startlar",
+"Старты с видео",
+"Starts met video"
+],
+[
+68,
+"Gelişim: günlük temiz startlar",
+"Динамика: чистые старты по дням",
+"Verloop: correcte starts per dag"
+],
+[
+69,
+"{0}: {2} startın {1} tanesi temiz",
+"{0}: чистых {1} из {2}",
+"{0}: {1} van {2} correct"
+],
+[
+70,
+"{0}: sadece yanıltıcı sinyalli startlar",
+"{0}: только старты с ложными сигналами",
+"{0}: alleen starts met stoorsignalen"
+],
+[
+71,
+"Gelişim: günlük Ø blok süresi (ms)",
+"Динамика: Ø время отталкивания по дням (мс)",
+"Verloop: Ø bloktijd per dag (ms)"
+],
+[
+72,
+"{0}: video yok",
+"{0}: нет видео",
+"{0}: geen video"
+],
+[
+73,
+"{0}: Ø {1} ms ({2} video)",
+"{0}: Ø {1} мс (видео: {2})",
+"{0}: Ø {1} ms ({2} video’s)"
+],
+[
+74,
+"Videosuz günler boşluk olarak gösterilir. Yanıltıcı sinyalli startlar aşağıda ayrı listelenir.",
+"Дни без видео показаны пропусками. Старты с ложными сигналами перечислены ниже отдельно.",
+"Dagen zonder video worden als onderbreking getoond. Starts met stoorsignalen staan hieronder apart."
+],
+[
+75,
+"Tarih",
+"Дата",
+"Datum"
+],
+[
+76,
+"Start",
+"Старты",
+"Starts"
+],
+[
+77,
+"temiz",
+"чисто",
+"correct"
+],
+[
+78,
+"Ø reak.",
+"Ø реакц.",
+"Ø react."
+],
+[
+79,
+"Ø blok",
+"Ø отталк.",
+"Ø blok"
+],
+[
+80,
+"Video",
+"Видео",
+"Video"
+],
+[
+81,
+"Antrenmanı sil",
+"Удалить тренировку",
+"Training verwijderen"
+],
+[
+82,
+"Henüz antrenman kaydetmedin.",
+"Ты ещё не сохранил ни одной тренировки.",
+"Je hebt nog geen trainingen opgeslagen."
+],
+[
+83,
+"Henüz video yok. Video bölümünde videoları analiz edip bir starta atayabilirsin.",
+"Видео пока нет. В разделе «Видео» ты можешь их проанализировать и привязать к старту.",
+"Nog geen video’s. In het onderdeel Video kun je ze analyseren en aan een start koppelen."
+],
+[
+84,
+"Gelişim: günlük Ø reaksiyon süresi (ms)",
+"Динамика: Ø время реакции по дням (мс)",
+"Verloop: Ø reactietijd per dag (ms)"
+],
+[
+85,
+"Medyan reaksiyon süresi",
+"Медиана времени реакции",
+"Mediane reactietijd"
+],
+[
+86,
+"Henüz video yok. Videoları Video bölümünde analiz edebilirsin.",
+"Видео пока нет. Их можно проанализировать в разделе «Видео».",
+"Nog geen video’s. Je kunt ze analyseren in het onderdeel Video."
+],
+[
+87,
+"İki değer olunca gelişimin burada görünür.",
+"Динамика появится здесь, когда будет хотя бы два значения.",
+"Je verloop verschijnt hier zodra er twee waarden zijn."
+],
+[
+88,
+"Gelişim",
+"Динамика",
+"Verloop"
+],
+[
+89,
+"Panoya kopyalandı ✓",
+"Скопировано в буфер обмена ✓",
+"Gekopieerd naar klembord ✓"
+],
+[
+90,
+"Antrenman verilerini dışa aktar",
+"Экспортировать данные тренировок",
+"Trainingsgegevens exporteren"
+],
+[
+91,
+"İçe aktarıldı: {0} antrenman, {1} video, {2} ön ayar. Mevcut verilerin korundu.",
+"Импортировано: тренировок {0}, видео {1}, пресетов {2}. Твои прежние данные сохранены.",
+"Geïmporteerd: {0} trainingen, {1} video’s, {2} voorinstellingen. Je bestaande gegevens zijn behouden."
+],
+[
+92,
+"İyi",
+"Удачно",
+"Goed"
+],
+[
+93,
+"İdare eder",
+"Нормально",
+"Oké"
+],
+[
+94,
+"Kötü",
+"Неудачно",
+"Slecht"
+],
+[
+95,
+"Start blokları",
+"Колодки",
+"Startblokken"
+],
+[
+96,
+"Havuz",
+"Бассейн",
+"Zwembad"
+],
+[
+97,
+"Algılanıyor …",
+"Определяется …",
+"Wordt herkend …"
+],
+[
+98,
+"Otomatik algılandı.",
+"Определено автоматически.",
+"Automatisch herkend."
+],
+[
+99,
+"Kameradan alındı.",
+"Взято из камеры.",
+"Overgenomen van de camera."
+],
+[
+100,
+"Algılanamadı – lütfen kendin ayarla.",
+"Не определено – пожалуйста, установи вручную.",
+"Niet herkend – stel het zelf in."
+],
+[
+101,
+"“{0}: otomatik bul” düğmesine dokun ya da {1} elle işaretle.",
+"Нажми «Найти {0} автоматически» или отметь {1} вручную.",
+"Tik op “{0} automatisch vinden” of markeer {1} handmatig."
+],
+[
+102,
+"Bu tarayıcı ses izini okuyamadı. {0} elle işaretle: {1} duyduğun yere kadar videoyu ilerlet, sonra “{2}: burada işaretle” düğmesine dokun.",
+"Этот браузер не смог прочитать звуковую дорожку. Отметь {0} вручную: перемотай видео до места, где слышен {1}, затем нажми «Отметить {2} здесь».",
+"Deze browser kon het geluidsspoor niet lezen. Markeer {0} handmatig: spoel de video door tot je {1} hoort en tik dan op “{2} hier markeren”."
+],
+[
+103,
+"ilk hareket",
+"первое движение",
+"eerste beweging"
+],
+[
+104,
+"isteğe bağlı",
+"по желанию",
+"optioneel"
+],
+[
+105,
+"Süre {0} · ▶ ile yavaş oynatırsın",
+"Длина {0} · ▶ воспроизводит замедленно",
+"Lengte {0} · met ▶ speel je de video vertraagd af"
+],
+[
+106,
+"{0} işaretlendi: {1}.",
+"{0} отмечен на {1}.",
+"{0} gemarkeerd op {1}."
+],
+[
+107,
+"Sprintz sinyali",
+"Сигнал Sprintz",
+"Sprintz-signaal"
+],
+[
+108,
+"Düdük",
+"Свисток",
+"Fluitsignaal"
+],
+[
+109,
+"Alkış / atış",
+"Хлопок / выстрел",
+"Klap / schot"
+],
+[
+110,
+"Korna / bip sesi",
+"Гудок / писк",
+"Toeter / pieptoon"
+]
+]

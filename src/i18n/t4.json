@@ -1,0 +1,662 @@
+[
+[
+336,
+"Start duvarı, duvardan 5 m uzaktaki sırtüstü bayrakları ve 15 m işareti kadrajda olmalı. Havuzunda bir yerde işaret yoksa, önceden o noktaya havuz kenarına ör. bir su şişesi koy.",
+"В кадре должны быть стартовая стенка, флажки для плавания на спине в 5 м от стенки и отметка 15 м. Если в твоём бассейне где-то нет разметки, заранее поставь в этом месте на бортик, например, бутылку с водой.",
+"De startwand, de rugslagvlaggetjes op 5 m van de wand en de 15-m-markering moeten in beeld zijn. Ontbreekt er in je bad ergens een markering, zet dan vooraf bijv. een waterfles op die plek op de badrand."
+],
+[
+337,
+"start bloklarına",
+"к колодкам",
+"bij de startblokken"
+],
+[
+338,
+"sana",
+"к тебе",
+"naast je"
+],
+[
+339,
+"duvara",
+"к стенке",
+"bij de wand"
+],
+[
+340,
+"start bloğuna",
+"к тумбочке",
+"bij het startblok"
+],
+[
+341,
+"ayakların bloklardan ayrıldığında",
+"ноги отрываются от колодок",
+"je voeten de startblokken verlaten"
+],
+[
+342,
+"ayakların yerden ayrıldığında",
+"ноги отрываются от земли",
+"je voeten de grond verlaten"
+],
+[
+343,
+"ayakların duvardan ayrıldığında",
+"ноги отрываются от стенки",
+"je voeten de wand verlaten"
+],
+[
+344,
+"ayağın bloktan ayrıldığında",
+"нога отрывается от тумбочки",
+"je voet het startblok verlaat"
+],
+[
+345,
+"Telefonunu yan tarafa, {0} yaklaşık 3–5 m mesafede ve ayak hizasında yerleştir.",
+"Поставь телефон сбоку ({0}), примерно в 3–5 м и на уровне ног.",
+"Zet je telefoon opzij {0}, op ongeveer 3–5 m afstand en op voethoogte."
+],
+[
+346,
+"En iyisi yatay çekmektir. Ayakların net görünmeli ki {0} bunu görebilesin.",
+"Лучше снимать горизонтально. Ноги должны быть хорошо видны, чтобы было понятно, когда {0}.",
+"Liggend filmen werkt het best. Je voeten moeten goed te zien zijn, zodat je ziet wanneer {0}."
+],
+[
+347,
+"En iyisi hoparlörü telefonun hemen yanına koy; böylece ses ve görüntü tam olarak örtüşür.",
+"Лучше всего поставь динамик прямо рядом с телефоном – тогда звук и изображение точно совпадут.",
+"Zet de luidspreker het liefst direct naast de telefoon, dan lopen geluid en beeld precies gelijk."
+],
+[
+348,
+"Telefonu sağlam yerleştir, ör. bir tripoda veya bir su şişesine dayayarak.",
+"Установи телефон устойчиво, например на штатив или прислонив к бутылке с водой.",
+"Zet de telefoon stevig neer, bijv. op een statief of tegen een waterfles."
+],
+[
+349,
+"Kamera açılıyor …",
+"Открываю камеру …",
+"Camera wordt geopend …"
+],
+[
+350,
+"Kamera erişimi reddedildi. Bu site için kamera ve mikrofona izin ver (iPhone: Ayarlar → Uygulamalar → Safari → Kamera / Mikrofon; Android: adresin yanındaki kilit simgesi) ve tekrar dene.",
+"Доступ к камере запрещён. Разреши камеру и микрофон для этого сайта (iPhone: Настройки → Приложения → Safari → Камера / Микрофон; Android: значок замка рядом с адресом) и попробуй снова.",
+"Toegang tot de camera is geweigerd. Sta camera en microfoon toe voor deze site (iPhone: Instellingen → Apps → Safari → Camera / Microfoon; Android: slotje naast het adres) en probeer het opnieuw."
+],
+[
+351,
+"Uygun bir kamera bulunamadı.",
+"Подходящая камера не найдена.",
+"Er is geen geschikte camera gevonden."
+],
+[
+352,
+"Kamera başka bir uygulama tarafından kullanılıyor. O uygulamayı kapat ve tekrar dene.",
+"Камера занята другим приложением. Закрой его и попробуй снова.",
+"De camera wordt door een andere app gebruikt. Sluit die app en probeer het opnieuw."
+],
+[
+353,
+"Kamera açılamadı ({0}). Sprintz’i başka bir uygulamanın içinde değil, doğrudan Safari veya Chrome’da aç.",
+"Не удалось открыть камеру ({0}). Открой Sprintz напрямую в Safari или Chrome, а не внутри другого приложения.",
+"De camera kon niet worden geopend ({0}). Open Sprintz direct in Safari of Chrome, niet binnen een andere app."
+],
+[
+354,
+"Videoyu nasıl çekeceksin",
+"Как снимать видео",
+"Zo neem je de video op"
+],
+[
+355,
+"Kamerayı nasıl yerleştireceksin",
+"Как установить камеру",
+"Zo zet je de camera neer"
+],
+[
+356,
+"Mikrofon kullanılamıyor. Start sinyalinin yeri bu durumda komut akışından hesaplanır ve biraz daha az hassastır.",
+"Микрофон недоступен. Тогда положение стартового сигнала рассчитывается по ходу команды и будет менее точным.",
+"De microfoon is niet beschikbaar. De plek van het startsignaal wordt dan berekend uit het startprotocol en is iets minder nauwkeurig."
+],
+[
+357,
+"Tarayıcın kamerayı burada en fazla {0} fps ile veriyor (kare başına ±{1} ms). iPhone’daki tarayıcılar 120 veya 240 fps ağır çekime izin vermez. En yüksek hassasiyet için komutları ikinci bir cihazda çal, kamera uygulamasıyla ağır çekimde filme al ve videoyu Video bölümünde içe aktar.",
+"Здесь браузер даёт Sprintz доступ к камере максимум с {0} кадр/с (±{1} мс на кадр). Браузеры на iPhone не позволяют снимать замедленно с 120 или 240 кадр/с. Для максимальной точности воспроизведи стартовую команду на втором устройстве, сними замедленное видео приложением «Камера» и импортируй его в разделе «Видео».",
+"Je browser geeft Sprintz hier de camera met maximaal {0} fps (±{1} ms per beeld). Browsers op de iPhone staan geen slow motion met 120 of 240 fps toe. Speel voor de hoogste nauwkeurigheid het startprotocol af op een tweede apparaat, film in slow motion met de camera-app en importeer de video in het onderdeel Video."
+],
+[
+358,
+"Start {0}",
+"Старт {0}",
+"Start {0}"
+],
+[
+359,
+"Start {0} / {1}",
+"Старт {0} / {1}",
+"Start {0} / {1}"
+],
+[
+360,
+"Kamera sabit – başlıyor …",
+"Камера неподвижна – начинаем …",
+"Camera staat stil – het begint …"
+],
+[
+361,
+"Kamera sabit durunca komutlar başlar.",
+"Стартовая команда начнётся, как только камера будет неподвижна.",
+"Het startprotocol begint zodra de camera stilstaat."
+],
+[
+362,
+"Kamera yerleşince Start’a dokun.",
+"Нажми «Старт», когда камера будет установлена.",
+"Tik op Start zodra de camera staat."
+],
+[
+363,
+"Hazırlık",
+"Подготовка",
+"Aanloop"
+],
+[
+364,
+"Startı analiz et {0} / {1}",
+"Анализ старта {0} / {1}",
+"Start analyseren {0} / {1}"
+],
+[
+365,
+"Startını analiz et",
+"Проанализируй старт",
+"Analyseer je start"
+],
+[
+366,
+"Starttan önce yanıltıcı sinyal çalmadı.",
+"Перед стартом ложного сигнала не было.",
+"Er klonk geen stoorsignaal voor de start."
+],
+[
+367,
+"Starttan önce bir yanıltıcı sinyal çaldı.",
+"Перед стартом прозвучал один ложный сигнал.",
+"Er klonk één stoorsignaal voor de start."
+],
+[
+368,
+"Starttan önce {0} yanıltıcı sinyal çaldı.",
+"Перед стартом прозвучало ложных сигналов: {0}.",
+"Er klonken {0} stoorsignalen voor de start."
+],
+[
+369,
+"Süreler olmadan kaydet",
+"Сохранить без времени",
+"Opslaan zonder tijden"
+],
+[
+370,
+"{0}, komut akışına göre {1} konumuna yerleştirildi. Ses izinde kontrol et ve gerekirse düzelt.",
+"{0}: установлен на {1} по ходу стартовой команды. Проверь в звуковой дорожке и при необходимости исправь.",
+"{0} op {1} gezet op basis van het startprotocol. Controleer het in het geluidsspoor en corrigeer indien nodig."
+],
+[
+371,
+"Start bloğuna yaklaş",
+"Подойди к тумбочке",
+"Naar het startblok stappen"
+],
+[
+372,
+"Suya gir",
+"Войди в воду",
+"Het water in"
+],
+[
+373,
+"Start bloğuna çık",
+"Встань на тумбочку",
+"Op het startblok stappen"
+],
+[
+374,
+"Start bloklarına yerleş",
+"Займи место в колодках",
+"In de startblokken"
+],
+[
+375,
+"Start pozisyonunu al",
+"Займи стартовое положение",
+"Startpositie innemen"
+],
+[
+376,
+"Hatalı çıkış: start atışından {0} ms sonra reaksiyon (100 ms altı)",
+"Фальстарт: реакция через {0} мс после выстрела (меньше 100 мс)",
+"Valse start: reactie {0} ms na het startschot (onder 100 ms)"
+],
+[
+377,
+"Temiz – reaksiyon {0} ms ({1})",
+"Чисто – реакция {0} мс ({1})",
+"Correct – reactie {0} ms na het {1}"
+],
+[
+378,
+"Tepki: {0} – {1} ms sonra",
+"Реакция: {0} – через {1} мс",
+"Gereageerd op {0} – {1} ms later"
+],
+[
+379,
+"Çok erken – {1} öncesinde {0} ms hareket",
+"Слишком рано – движение за {0} мс до сигнала ({1})",
+"Te vroeg – {0} ms voor het {1} bewogen"
+],
+[
+380,
+"Sonuç işaretlerinden belirlenir",
+"Результат определяется по твоим отметкам",
+"Het resultaat volgt uit je markeringen"
+],
+[
+381,
+"Videodaki işaretlerinden belirlendi.",
+"Определено по твоим отметкам на видео.",
+"Bepaald aan de hand van je markeringen in de video."
+],
+[
+382,
+"Videoda reaksiyonu veya kalkışı işaretle. Sprintz startın temiz mi, çok erken mi yoksa yanıltıcı sinyale tepki mi olduğunu hesaplar.",
+"Отметь на видео реакцию или отталкивание. Sprintz сам определит, был ли старт чистым, слишком ранним или реакцией на ложный сигнал.",
+"Markeer de reactie of de afzet in de video. Sprintz bepaalt dan of de start correct, te vroeg of een reactie op een stoorsignaal was."
+],
+[
+383,
+"Startın nasıldı?",
+"Как прошёл твой старт?",
+"Hoe was je start?"
+],
+[
+384,
+"Videoda işaret olmadan Sprintz sonucu bilemez. Burada seç.",
+"Без отметки на видео Sprintz не может определить результат. Выбери его здесь.",
+"Zonder markering in de video kan Sprintz het resultaat niet bepalen. Kies het hier."
+],
+[
+385,
+"Önce yukarıda startın nasıl geçtiğini seç.",
+"Сначала выбери вверху, как прошёл старт.",
+"Kies eerst hierboven hoe de start ging."
+],
+[
+386,
+"Önce {0} ve kalkışı işaretle – ya da süreler olmadan kaydet.",
+"Сначала отметь {0} и отталкивание – или сохрани без времени.",
+"Markeer eerst {0} en de afzet – of sla op zonder tijden."
+],
+[
+387,
+"Videolu",
+"С видео",
+"Met video"
+],
+[
+388,
+"{0} video kaydettin. Sprintz yalnızca ölçüm değerlerini saklar. Videoları kaydetmezsen bu pencereyi kapattığında silinirler.",
+"Записано видео: {0}. Sprintz сохраняет только результаты измерений. Если не сохранить видео, они будут удалены при закрытии окна.",
+"Je hebt {0} video’s opgenomen. Sprintz bewaart alleen je meetwaarden. De video’s worden verwijderd zodra je dit venster sluit, tenzij je ze opslaat."
+],
+[
+389,
+"İndirme başladı ✓",
+"Загрузка началась ✓",
+"Download gestart ✓"
+],
+[
+390,
+"(start akışları),",
+"(стартовые команды),",
+"(startprotocollen),"
+],
+[
+391,
+"(startını kare kare analiz et).",
+"(разбор старта по кадрам).",
+"(analyseer je start beeld voor beeld)."
+],
+[
+392,
+"(verilerin ve gelişimin) ve",
+"(твои данные и динамика) и",
+"(je gegevens en verloop) en"
+],
+[
+393,
+"+ Bu ayarları ön ayar olarak kaydet",
+"+ Сохранить эти настройки как пресет",
+"+ Deze instellingen als voorinstelling opslaan"
+],
+[
+394,
+"İptal",
+"Отмена",
+"Annuleren"
+],
+[
+395,
+"Start öncesi akış",
+"Ход стартовой команды",
+"Startprotocol"
+],
+[
+396,
+"Gönder",
+"Отправить",
+"Versturen"
+],
+[
+397,
+"Sinyaller arası süre",
+"Интервал между сигналами",
+"Tijd tussen signalen"
+],
+[
+398,
+"Mevcut ölçümü ses-görüntü kayması olarak kullan",
+"Принять текущее измерение как смещение звука и видео",
+"Huidige meting als beeld-geluidverschuiving gebruiken"
+],
+[
+399,
+"Tüm verileri sil",
+"Удалить все данные",
+"Alle gegevens verwijderen"
+],
+[
+400,
+"CSV olarak kopyala",
+"Копировать как CSV",
+"Als CSV kopiëren"
+],
+[
+401,
+"Kuru alan:",
+"На суше:",
+"Droogtraining:"
+],
+[
+402,
+"Başka video seç",
+"Выбрать другое видео",
+"Andere video kiezen"
+],
+[
+403,
+"Pistte",
+"На дорожке",
+"Op de baan"
+],
+[
+404,
+"Pistte:",
+"На дорожке:",
+"Op de baan:"
+],
+[
+405,
+"Kayıt",
+"Запись",
+"Opname"
+],
+[
+406,
+"Analiz",
+"Анализ",
+"Analyse"
+],
+[
+407,
+"Orijinal video için 1 gir. Bir iPhone ağır çekimini normal video olarak kaydettiysen daha yavaş oynar. O zaman katsayıyı gir, ör. 240 fps görüntü 30 fps ile oynatılıyorsa 8.",
+"Для оригинального видео введи 1. Если ты сохранил замедленное видео iPhone как обычное, оно воспроизводится медленнее. Тогда введи коэффициент, например 8, если запись 240 кадр/с воспроизводится с 30 кадр/с.",
+"Voer 1 in voor een originele video. Heb je een iPhone-slowmotion als normale video opgeslagen, dan speelt die langzamer af. Voer dan de factor in, bijv. 8 als beelden van 240 fps met 30 fps worden afgespeeld."
+],
+[
+408,
+"Saniyedeki kare sayısı",
+"Кадров в секунду",
+"Beelden per seconde"
+],
+[
+409,
+"İlk sinyale kadar",
+"До первого сигнала",
+"Tot het eerste signaal"
+],
+[
+410,
+"Lütfen talebini kısaca açıkla.",
+"Пожалуйста, коротко опиши свой вопрос.",
+"Beschrijf je vraag kort."
+],
+[
+411,
+"Yanıt alabilmen için lütfen geçerli bir e-posta adresi gir.",
+"Пожалуйста, укажи действующий e-mail, чтобы мы могли ответить.",
+"Vul een geldig e-mailadres in, zodat we je kunnen antwoorden."
+],
+[
+412,
+"Blok süresi (kalkış)",
+"Время отталкивания",
+"Bloktijd (afzet)"
+],
+[
+413,
+"Böylece −1 / +1 tam olarak bir kare atlar.",
+"Тогда −1 / +1 переходит ровно на один кадр.",
+"Zo springt −1 / +1 precies één beeld verder."
+],
+[
+414,
+"İletişim formu henüz hazırlanıyor. Lütfen daha sonra tekrar dene.",
+"Форма обратной связи ещё настраивается. Пожалуйста, попробуй позже.",
+"Het contactformulier wordt nog ingericht. Probeer het later opnieuw."
+],
+[
+415,
+"Gönderilemedi. İnternet bağlantını kontrol et ve tekrar dene.",
+"Не удалось отправить. Проверь подключение к интернету и попробуй снова.",
+"Versturen is mislukt. Controleer je internetverbinding en probeer het opnieuw."
+],
+[
+416,
+"Video çok kısa.",
+"Видео слишком короткое.",
+"De video is te kort."
+],
+[
+417,
+"Bunlar geçerli antrenman verileri değil. Lütfen dışa aktarılan metnin tamamını yapıştır.",
+"Это не данные тренировок. Пожалуйста, вставь экспортированный текст целиком.",
+"Dit zijn geen geldige trainingsgegevens. Plak de volledige geëxporteerde tekst."
+],
+[
+418,
+"Veriler",
+"Данные",
+"Gegevens"
+],
+[
+419,
+"Mesajın",
+"Твоё сообщение",
+"Je bericht"
+],
+[
+420,
+"Verilerin yalnızca bu cihazdaki bu tarayıcıda saklanır. “Antrenman verilerini dışa aktar” ve “Antrenman verilerini içe aktar” ile onları başka bir cihaza veya uygulamanın başka bir sürümüne taşırsın. CSV verilerini Excel veya R ile analiz edebilirsin.",
+"Твои данные хранятся только в этом браузере на этом устройстве. С помощью «Экспортировать данные тренировок» и «Импортировать данные тренировок» ты перенесёшь их на другое устройство или в другую версию приложения. Данные CSV можно анализировать в Excel или R.",
+"Je gegevens staan alleen in deze browser op dit apparaat. Met “Trainingsgegevens exporteren” en “Trainingsgegevens importeren” neem je ze mee naar een ander apparaat of een andere versie van de app. De CSV-gegevens kun je in Excel of R analyseren."
+],
+[
+421,
+"E-posta adresin",
+"Твой e-mail",
+"Je e-mailadres"
+],
+[
+422,
+"Geliştirici",
+"Разработчик",
+"De ontwikkelaar"
+],
+[
+423,
+"En fazla yanıltıcı sinyal sayısı. Bu, bu kadar ya da hiç sinyal çalacağı anlamına gelmez.",
+"Максимальное число ложных сигналов. Это не значит, что прозвучит именно столько – или вообще хоть один.",
+"Het maximale aantal stoorsignalen. Dat betekent niet dat er precies zoveel – of überhaupt – klinken."
+],
+[
+424,
+"Özelliği: Sprintz ile tek başına profesyonel gibi çalışabilirsin – starter veya antrenman partneri gerekmez.",
+"Особенность: со Sprintz ты можешь тренироваться профессионально и в одиночку – без стартера и партнёра по тренировке.",
+"Het bijzondere: met Sprintz train je ook alleen als een prof – zonder starter of trainingspartner."
+],
+[
+425,
+"Fikir",
+"Идея",
+"Het idee"
+],
+[
+426,
+"Bu dosya bir Sprintz yedeği değil.",
+"Этот файл не является резервной копией Sprintz.",
+"Dit bestand is geen Sprintz-back-up."
+],
+[
+427,
+"Doğrudan ölçüldü",
+"Измерено напрямую",
+"Direct gemeten"
+],
+[
+428,
+"Önce suya girer, ardından sırtüstü start pozisyonundan başlarsın. Suya giriş start akışının bir parçasıdır.",
+"Сначала ты входишь в воду, а затем стартуешь из положения для старта на спине. Вход в воду – часть стартовой команды.",
+"Je gaat eerst het water in en start dan vanuit de rugslagstartpositie. Het water ingaan hoort bij het startprotocol."
+],
+[
+429,
+"Henüz bir ön ayar kaydetmedin. Tüm soruları yanıtladıktan sonra ayarlarını Start düğmesinin altında kaydedebilirsin.",
+"Ты ещё не сохранил ни одного пресета. Ответив на все вопросы, ты сможешь сохранить настройки под кнопкой «Старт».",
+"Je hebt nog geen voorinstelling opgeslagen. Zodra je alle vragen hebt beantwoord, kun je je instellingen onder de startknop opslaan."
+],
+[
+430,
+"Start bloğundan suya atlarsın.",
+"Ты прыгаешь в воду с тумбочки.",
+"Je springt vanaf het startblok het water in."
+],
+[
+431,
+"Pistte start bloklarından, tam start akışıyla başlarsın.",
+"Ты стартуешь с колодок на дорожке с полным ходом стартовых команд.",
+"Je start vanuit de startblokken op de baan, met het volledige startprotocol."
+],
+[
+432,
+"Bloğun üzerinde ayakta başlarsın, ör. kurbağalama, kelebek ve serbest stil için.",
+"Ты стартуешь стоя на тумбочке, например в брассе, баттерфляе и вольном стиле.",
+"Je start staand op het startblok, bijv. voor schoolslag, vlinderslag en vrije slag."
+],
+[
+433,
+"Start sinyalinde ekrana dokunursun ve uygulama reaksiyon süreni anında gösterir.",
+"Ты касаешься экрана по стартовому сигналу, и приложение сразу показывает время реакции.",
+"Je tikt bij het startsignaal op het scherm en de app laat meteen je reactietijd zien."
+],
+[
+434,
+"Start atışında ekrana dokunursun. Uygulama reaksiyon süreni anında gösterir.",
+"Ты касаешься экрана по выстрелу. Приложение сразу показывает время реакции.",
+"Je tikt bij het startschot op het scherm. De app laat meteen je reactietijd zien."
+],
+[
+435,
+"Sadece reaksiyonunu çalışırsın, ör. otururken. Reaksiyon süreni doğrudan da ölçebilirsin.",
+"Ты тренируешь только реакцию, например сидя. Время реакции можно сразу измерять.",
+"Je traint alleen je reactie, bijv. zittend. Je kunt je reactietijd ook direct meten."
+],
+[
+436,
+"Kuru alanda çalışırsın, ör. otururken veya sıçramalarla.",
+"Ты тренируешься на суше, например сидя или с прыжками.",
+"Je oefent op het droge, bijv. zittend of met sprongen."
+],
+[
+437,
+"Antrenmanlar",
+"Тренировки",
+"Trainingen"
+],
+[
+438,
+"Tek start veya seri",
+"Одиночный старт или серия",
+"Enkele start of serie"
+],
+[
+439,
+"Tek start:",
+"Одиночный старт:",
+"Enkele start:"
+],
+[
+440,
+"Açıklamayı göster",
+"Показать пояснение",
+"Uitleg tonen"
+],
+[
+441,
+"Gelişmiş ayarlar",
+"Расширенные настройки",
+"Geavanceerde instellingen"
+],
+[
+442,
+"Gelişmiş ayarları aç",
+"Открыть расширенные настройки",
+"Geavanceerde instellingen openen"
+],
+[
+443,
+"Start sinyali hemen çalar.",
+"Стартовый сигнал звучит сразу.",
+"Het startsignaal klinkt meteen."
+],
+[
+444,
+"Bitti",
+"Готово",
+"Klaar"
+],
+[
+445,
+"ayaklar bloktan ayrılır",
+"ноги отрываются от тумбочки",
+"voeten verlaten het startblok"
+]
+]

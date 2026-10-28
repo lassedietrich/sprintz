@@ -1,0 +1,692 @@
+[
+[
+111,
+"Videoda hangi start sinyali var?",
+"Какой стартовый сигнал на видео?",
+"Welk startsignaal zit in de video?"
+],
+[
+112,
+"Start komutları Sprintz ile çalındı. Sprintz tam olarak kendi sesini arar.",
+"Стартовая команда воспроизводилась Sprintz. Sprintz ищет именно свой звук.",
+"Het startprotocol werd door Sprintz afgespeeld. Sprintz zoekt precies zijn eigen geluid."
+],
+[
+113,
+"Antrenörün veya starterın düdüğü. Süre, düdüğün başladığı andan itibaren ölçülür.",
+"Свисток тренера или стартера. Время отсчитывается от начала свистка.",
+"Een fluitsignaal van de trainer of starter. De tijd loopt vanaf het begin van het fluitsignaal."
+],
+[
+114,
+"Alkış, start tahtası veya atış. Süre patlama anından itibaren ölçülür.",
+"Хлопок, хлопушка или выстрел. Время отсчитывается от хлопка.",
+"Een klap, klapper of schot. De tijd loopt vanaf de knal."
+],
+[
+115,
+"Elektronik start kornası veya bip sesi, ör. bir zaman ölçüm sisteminden.",
+"Электронный стартовый гудок или писк, например от системы хронометража.",
+"Een elektronische starttoeter of pieptoon, bijv. van een tijdwaarneemsysteem."
+],
+[
+116,
+"Sinyali otomatik bul",
+"Найти сигнал автоматически",
+"Signaal automatisch vinden"
+],
+[
+117,
+"Sinyali burada işaretle",
+"Отметить сигнал здесь",
+"Signaal hier markeren"
+],
+[
+118,
+"Diğer eşleşmeler – doğru olana dokun:",
+"Другие совпадения – выбери правильное:",
+"Andere treffers – tik op de juiste:"
+],
+[
+119,
+"Sinyal {0} konumuna yerleştirildi. Ses izindeki yeri kontrol et.",
+"Сигнал установлен на {0}. Проверь это место в звуковой дорожке.",
+"Signaal gezet op {0}. Controleer de plek in het geluidsspoor."
+],
+[
+120,
+"Okunabilir ses izi olmadan sinyali yalnızca elle işaretleyebilirsin.",
+"Без читаемой звуковой дорожки сигнал можно отметить только вручную.",
+"Zonder leesbaar geluidsspoor kun je het signaal alleen handmatig markeren."
+],
+[
+121,
+"Sinyal aranıyor …",
+"Ищу сигнал …",
+"Signaal wordt gezocht …"
+],
+[
+122,
+"Uygun sinyal bulunamadı. Sinyal türünü kontrol et ya da sinyali elle işaretle.",
+"Подходящий сигнал не найден. Проверь тип сигнала или отметь его вручную.",
+"Geen passend signaal gevonden. Controleer het type signaal of markeer het handmatig."
+],
+[
+123,
+"Sinyal {0} konumunda bulundu. Ses izindeki yeri kontrol et, sonra reaksiyonu, ellerin bırakmasını ve kalkışı işaretle.",
+"Сигнал найден на {0}. Проверь это место в звуковой дорожке, затем отметь реакцию, отрыв рук и отталкивание.",
+"Signaal gevonden op {0}. Controleer de plek in het geluidsspoor en markeer dan reactie, loslaten van de handen en afzet."
+],
+[
+124,
+"En olası eşleşme {0}. Benzer yerler var. Aşağıdaki eşleşmeleri kontrol et ve doğru olana dokun.",
+"Наиболее вероятное совпадение на {0}. Есть похожие места. Проверь совпадения ниже и выбери правильное.",
+"Meest waarschijnlijke treffer op {0}. Er zijn vergelijkbare plekken. Controleer de treffers hieronder en tik op de juiste."
+],
+[
+125,
+"Okunabilir ses izi olmadan {0} yalnızca elle işaretleyebilirsin.",
+"Без читаемой звуковой дорожки {0} можно отметить только вручную.",
+"Zonder leesbaar geluidsspoor kun je {0} alleen handmatig markeren."
+],
+[
+126,
+"{0} arıyorum …",
+"Ищу {0} …",
+"Zoeken naar {0} …"
+],
+[
+127,
+"{0} {1} konumunda bulundu. Şimdi −1 / +1 ile kare kare ilerle ve reaksiyonu, ellerin bırakmasını ve kalkışı işaretle.",
+"{0}: найден на {1}. Теперь пройди по кадрам кнопками −1 / +1 и отметь реакцию, отрыв рук и отталкивание.",
+"{0} gevonden op {1}. Ga nu met −1 / +1 beeld voor beeld verder en markeer reactie, loslaten van de handen en afzet."
+],
+[
+128,
+"Algılama belirsiz ({0}). Ses izindeki yeri kontrol et ve gerekirse {1} elle işaretle.",
+"Распознавание неуверенное ({0}). Проверь это место в звуковой дорожке и при необходимости отметь {1} вручную.",
+"De herkenning is onzeker ({0}). Controleer de plek in het geluidsspoor en markeer {1} zo nodig handmatig."
+],
+[
+129,
+"Henüz {0} işaretlemedin.",
+"Ты ещё не отметил {0}.",
+"Je hebt {0} nog niet gemarkeerd."
+],
+[
+130,
+"Henüz kalkışı işaretlemedin.",
+"Ты ещё не отметил отталкивание.",
+"Je hebt de afzet nog niet gemarkeerd."
+],
+[
+131,
+"Ölçümün yaklaşık ±{0} ms (1 kare) hassasiyettedir. Reaksiyon ve eller isteğe bağlıdır.",
+"Точность измерения около ±{0} мс (1 кадр). Реакция и руки – по желанию.",
+"Je meting is tot op ongeveer ±{0} ms (1 beeld) nauwkeurig. Reactie en handen zijn optioneel."
+],
+[
+132,
+"Önce patlamayı {0} olarak, ellerinin birleştiği kareyi kalkış olarak işaretle.",
+"Сначала отметь хлопок как «{0}», а кадр с ладонями – как отталкивание.",
+"Markeer eerst de knal als {0} en het beeld van je handen als afzet."
+],
+[
+133,
+"{0} ms kayma uygulandı ve kaydedildi.",
+"Смещение {0} мс применено и сохранено.",
+"Verschuiving van {0} ms toegepast en opgeslagen."
+],
+[
+134,
+"Yanıltıcı sinyale tepki",
+"Реакция на ложный сигнал",
+"Gereageerd op stoorsignaal"
+],
+[
+135,
+"Kaçırıldı",
+"Пропущено",
+"Gemist"
+],
+[
+136,
+"Start",
+"Старт",
+"Start"
+],
+[
+137,
+"videolu",
+"есть видео",
+"met video"
+],
+[
+138,
+"Yeni start (kayıtlı değil)",
+"Новый старт (не записан)",
+"Nieuwe start (niet vastgelegd)"
+],
+[
+139,
+"Önce {0} ve kalkışı işaretle.",
+"Сначала отметь {0} и отталкивание.",
+"Markeer eerst {0} en de afzet."
+],
+[
+140,
+"Bu videonun hangi starta ait olduğunu seç.",
+"Выбери, к какому старту относится это видео.",
+"Kies bij welke start deze video hoort."
+],
+[
+141,
+"Startın nasıl geçtiğini ve yanıltıcı sinyal olup olmadığını gir.",
+"Укажи, как прошёл старт и были ли ложные сигналы.",
+"Geef aan hoe de start ging en of er stoorsignalen waren."
+],
+[
+142,
+"Kaydedildi ✓",
+"Сохранено ✓",
+"Opgeslagen ✓"
+],
+[
+143,
+"Ölçümü kaydet",
+"Сохранить измерение",
+"Meting opslaan"
+],
+[
+144,
+"Üç antrenman alanı",
+"Три раздела тренировок",
+"Drie trainingsonderdelen"
+],
+[
+145,
+"Sprintz’in üç antrenman alanı var: sprint antrenmanı, kuvvet antrenmanı ile start ve reaksiyon antrenmanı. Buradan nereden başlamak istediğini seç.<br><br>Menünün en altından spor dalını istediğin zaman değiştirebilirsin: yüzme veya atletizm.",
+"В Sprintz три раздела тренировок: спринт, силовая тренировка, а также старт и реакция. Выбери здесь, с чего начать.<br><br>В самом низу меню ты в любой момент можешь сменить вид спорта: плавание или лёгкая атлетика.",
+"Sprintz heeft drie trainingsonderdelen: sprinttraining, krachttraining en start- en reactietraining. Kies hier waarmee je wilt beginnen.<br><br>Helemaal onderaan in het menu wissel je op elk moment van sport: zwemmen of atletiek."
+],
+[
+146,
+"Gerçek start sinyalinden önce yanıltıcı sinyaller gelebilir – bunlara tepki verme. Kullanıp kullanmayacağına ve en fazla kaç tane olacağına sen karar verirsin.",
+"Перед настоящим стартовым сигналом могут звучать ложные сигналы – на них нельзя реагировать. Ты сам решаешь, использовать ли их и сколько максимум.",
+"Voor het echte startsignaal kunnen stoorsignalen klinken – reageer daar niet op. Jij bepaalt of je ze gebruikt en hoeveel er maximaal komen."
+],
+[
+147,
+"Ne hakkında?",
+"О чём это?",
+"Waar gaat het om?"
+],
+[
+148,
+"Hadi başlayalım",
+"Поехали",
+"Aan de slag"
+],
+[
+149,
+"Adım {0} / {1}",
+"Шаг {0} из {1}",
+"Stap {0} van {1}"
+],
+[
+150,
+"Menüyü aç",
+"Открыть меню",
+"Menu openen"
+],
+[
+151,
+"Çömelerek start",
+"Низкий старт",
+"Lage start"
+],
+[
+152,
+"Ayakta start",
+"Высокий старт",
+"Staande start"
+],
+[
+153,
+"Bloktan",
+"С тумбочки",
+"Vanaf het startblok"
+],
+[
+154,
+"Sırtüstü start",
+"Старт на спине",
+"Rugslagstart"
+],
+[
+155,
+"Duvardan itiş",
+"Старт толчком от стенки",
+"Afzetten van de wand"
+],
+[
+156,
+"Sudan yüzer pozisyonda start",
+"Старт с воды лёжа",
+"Start drijvend in het water"
+],
+[
+157,
+"Kelebek",
+"Баттерфляй",
+"Vlinderslag"
+],
+[
+158,
+"Kurbağalama",
+"Брасс",
+"Schoolslag"
+],
+[
+159,
+"Serbest stil",
+"Вольный стиль",
+"Vrije slag"
+],
+[
+160,
+"Sadece start",
+"Только старт",
+"Alleen start"
+],
+[
+161,
+"Diğer",
+"Другое",
+"Anders"
+],
+[
+162,
+"Antrenmana başla",
+"Начать тренировку",
+"Training starten"
+],
+[
+163,
+"Sprint antrenmanı",
+"Спринт",
+"Sprinttraining"
+],
+[
+164,
+"Nasıl başlıyorsun?",
+"Как ты стартуешь?",
+"Hoe start je?"
+],
+[
+165,
+"Hangi stilde yüzüyorsun?",
+"Каким способом ты плывёшь?",
+"Welke slag zwem je?"
+],
+[
+166,
+"Ne kadar sprint atıyorsun?",
+"Какую дистанцию ты бежишь?",
+"Hoe ver sprint je?"
+],
+[
+167,
+"Ne kadar yüzüyorsun?",
+"Какую дистанцию ты плывёшь?",
+"Hoe ver zwem je?"
+],
+[
+168,
+"Mesafe",
+"Дистанция",
+"Afstand"
+],
+[
+169,
+"Havuzun kaç metre?",
+"Какой длины твой бассейн?",
+"Hoe lang is je zwembad?"
+],
+[
+170,
+"Bir kez mi yoksa birkaç kez mi start alıyorsun?",
+"Ты стартуешь один раз или несколько?",
+"Start je één keer of meerdere keren?"
+],
+[
+171,
+"Seri",
+"Серия",
+"Serie"
+],
+[
+172,
+"Tekrar sayısı",
+"Повторения",
+"Herhalingen"
+],
+[
+173,
+"Henüz bilmiyorsan boş bırak.",
+"Оставь пустым, если ещё не знаешь.",
+"Laat leeg als je het nog niet weet."
+],
+[
+174,
+"açık",
+"не задано",
+"open"
+],
+[
+175,
+"Dinlenme",
+"Отдых",
+"Rust"
+],
+[
+176,
+"Startların arasında ne kadar zamanın var.",
+"Сколько времени у тебя между стартами.",
+"Zoveel tijd heb je tussen je starts."
+],
+[
+177,
+"Yanıltıcı sinyaller",
+"Ложные сигналы",
+"Stoorsignalen"
+],
+[
+178,
+"Yanıltıcı sinyal eklemek ister misin?",
+"Добавить ложные сигналы?",
+"Wil je stoorsignalen toevoegen?"
+],
+[
+179,
+"Evet",
+"Да",
+"Ja"
+],
+[
+180,
+"Hayır",
+"Нет",
+"Nee"
+],
+[
+181,
+"En fazla kaç yanıltıcı sinyal olsun?",
+"Сколько ложных сигналов максимум?",
+"Hoeveel stoorsignalen wil je maximaal?"
+],
+[
+182,
+"Ön ayarlar",
+"Пресеты",
+"Voorinstellingen"
+],
+[
+183,
+"Yeni ad",
+"Новое название",
+"Nieuwe naam"
+],
+[
+184,
+"Adı kaydet",
+"Сохранить название",
+"Naam opslaan"
+],
+[
+185,
+"{0} yeniden adlandır",
+"Переименовать {0}",
+"{0} hernoemen"
+],
+[
+186,
+"Henüz bir ön ayar kaydetmedin. Tüm soruları yanıtladıktan sonra ayarlarını Start düğmesinin altında kaydedebilirsin.",
+"Ты ещё не сохранил ни одного пресета. Ответив на все вопросы, ты сможешь сохранить настройки под кнопкой «Старт».",
+"Je hebt nog geen voorinstelling opgeslagen. Zodra je alle vragen hebt beantwoord, kun je je instellingen onder de startknop opslaan."
+],
+[
+187,
+"Özel {0}",
+"Мой пресет {0}",
+"Eigen {0}"
+],
+[
+188,
+"Blok",
+"Тумбочка",
+"Startblok"
+],
+[
+189,
+"sadece start",
+"только старт",
+"alleen start"
+],
+[
+190,
+"en fazla {0} yanıltıcı sinyal",
+"до {0} ложных сигналов",
+"max. {0} stoorsignalen"
+],
+[
+191,
+"yanıltıcı sinyal yok",
+"без ложных сигналов",
+"geen stoorsignalen"
+],
+[
+192,
+"Sprintz ses izinde start sinyalini aradı. Yeri kontrol et ve onayla ya da kendin belirle.",
+"Sprintz искал стартовый сигнал в звуковой дорожке. Проверь место и подтверди его или установи сам.",
+"Sprintz heeft het startsignaal in het geluidsspoor gezocht. Controleer de plek en bevestig die of zet hem zelf."
+],
+[
+193,
+"İlk hareket",
+"Первое движение",
+"Eerste beweging"
+],
+[
+194,
+"Görünür şekilde hareket ettiğin ilk kare, genellikle ilk kol çekişi veya ilk ayak vuruşu.",
+"Первый кадр, в котором ты заметно двигаешься, обычно первый гребок или удар ногами.",
+"Het eerste beeld waarin je zichtbaar beweegt, meestal de eerste armslag of beenslag."
+],
+[
+195,
+"İlk reaksiyon",
+"Первая реакция",
+"Eerste reactie"
+],
+[
+196,
+"Görünür şekilde hareket ettiğin ilk kare.",
+"Первый кадр, в котором ты заметно двигаешься.",
+"Het eerste beeld waarin je zichtbaar beweegt."
+],
+[
+197,
+"Ellerin bırakması",
+"Отрыв рук",
+"Handen los"
+],
+[
+198,
+"Ellerinin bloktan veya tutamaklardan ayrıldığı kare. İsteğe bağlı.",
+"Кадр, в котором руки отрываются от тумбочки или поручней. По желанию.",
+"Het beeld waarin je handen het startblok of de handgrepen loslaten. Optioneel."
+],
+[
+199,
+"Blok süresi",
+"Время отталкивания",
+"Bloktijd"
+],
+[
+200,
+"Ayağının bloktan ayrıldığı kare.",
+"Кадр, в котором нога отрывается от тумбочки.",
+"Het beeld waarin je voet het startblok verlaat."
+],
+[
+201,
+"Duvardan itiş",
+"Отталкивание от стенки",
+"Afzet"
+],
+[
+202,
+"Ayaklarının duvardan ayrıldığı kare.",
+"Кадр, в котором ноги отрываются от стенки.",
+"Het beeld waarin je voeten de wand verlaten."
+],
+[
+203,
+"Suya giriş",
+"Вход в воду",
+"Inzwemmen"
+],
+[
+204,
+"Ellerinin suya girdiği kare.",
+"Кадр, в котором руки входят в воду.",
+"Het beeld waarin je handen het water raken."
+],
+[
+205,
+"Start mesafesi",
+"Дальность стартового прыжка",
+"Sprongafstand"
+],
+[
+206,
+"Duvardan ellerinin suya girdiği noktaya kadar olan mesafe. En doğru ölçüm doğrudan videoda yapılır.",
+"Расстояние от стенки до места входа рук в воду. Точнее всего измерить его прямо на видео.",
+"Afstand van de wand tot de plek waar je handen het water raakten. Het nauwkeurigst meet je dit direct in de video."
+],
+[
+207,
+"start duvarına",
+"стартовую стенку",
+"de startwand"
+],
+[
+208,
+"sırtüstü bayraklarına (5 m)",
+"флажки для плавания на спине (5 м)",
+"de rugslagvlaggetjes (5 m)"
+],
+[
+209,
+"ellerinin suya girdiği noktaya",
+"место входа рук в воду",
+"de plek waar je handen het water raken"
+],
+[
+210,
+"5 {0} işareti",
+"Отметка 5 {0}",
+"5-{0}-markering"
+],
+[
+211,
+"Ellerinin sırtüstü bayraklarının altından 5 {0} işaretini geçtiği kare.",
+"Кадр, в котором руки проходят отметку 5 {0} под флажками для плавания на спине.",
+"Het beeld waarin je handen onder de rugslagvlaggetjes de 5-{0}-markering passeren."
+],
+[
+212,
+"Su yüzüne çıkış",
+"Выход на поверхность",
+"Boven komen"
+],
+[
+213,
+"Başının su yüzeyini kırdığı kare.",
+"Кадр, в котором голова показывается над водой.",
+"Het beeld waarin je hoofd door het wateroppervlak komt."
+],
+[
+214,
+"Su altı mesafesi",
+"Длина подводной части",
+"Onderwaterafstand"
+],
+[
+215,
+"Duvardan başının su yüzüne çıktığı noktaya kadar olan mesafe.",
+"Расстояние от стенки до места, где голова вышла на поверхность.",
+"Afstand van de wand tot de plek waar je hoofd boven kwam."
+],
+[
+216,
+"sırtüstü bayraklarına (5 {0})",
+"флажки для плавания на спине (5 {0})",
+"de rugslagvlaggetjes (5 {0})"
+],
+[
+217,
+"15 {0} işaretine",
+"отметку 15 {0}",
+"de 15-{0}-markering"
+],
+[
+218,
+"başının su yüzüne çıktığı noktaya",
+"место, где голова вышла на поверхность",
+"de plek waar je hoofd boven komt"
+],
+[
+219,
+"Su altı dolfin vuruşları",
+"Подводные удары дельфином",
+"Onderwater dolfijnkicks"
+],
+[
+220,
+"Su yüzüne çıkana kadar kaç dolfin vuruşu yaptın?",
+"Сколько ударов дельфином ты сделал до выхода на поверхность?",
+"Hoeveel dolfijnkicks heb je gemaakt voordat je boven kwam?"
+],
+[
+221,
+"Bir döngü bir kol çekişidir.",
+"Один цикл – это один гребок.",
+"Eén cyclus is één armslag."
+],
+[
+222,
+"Bir döngü iki kol çekişidir: bir sol, bir sağ.",
+"Один цикл – это два гребка: левой и правой рукой.",
+"Eén cyclus is twee armslagen: één links en één rechts."
+],
+[
+223,
+"{0} {1}’de dönüş",
+"Поворот на {0} {1}",
+"Keerpunt bij {0} {1}"
+],
+[
+224,
+"Bitiş",
+"Финиш",
+"Finish"
+],
+[
+225,
+"Elinin duvara dokunduğu kare.",
+"Кадр, в котором рука касается стенки.",
+"Het beeld waarin je hand de wand aantikt."
+]
+]

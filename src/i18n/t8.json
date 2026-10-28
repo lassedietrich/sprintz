@@ -1,0 +1,188 @@
+[
+[
+"Please log in again.",
+"Lütfen tekrar giriş yap.",
+"Пожалуйста, войди снова.",
+"Log opnieuw in."
+],
+[
+"Detected:",
+"Algılanan:",
+"Распознано:",
+"Herkend:"
+],
+[
+"No start signal found. Set it manually at the right spot.",
+"Start sinyali bulunamadı. Doğru yere elle yerleştir.",
+"Стартовый сигнал не найден. Отметь его вручную в нужном месте.",
+"Geen startsignaal gevonden. Zet het zelf op de juiste plek."
+],
+[
+"Offline: projects are only saved on this device.",
+"Çevrimdışı: projeler yalnızca bu cihaza kaydedilir.",
+"Офлайн: проекты сохраняются только на этом устройстве.",
+"Offline: projecten worden alleen op dit apparaat opgeslagen."
+],
+[
+"No connection to the server. Changes stay on this device and are uploaded next time.",
+"Sunucuya bağlanılamadı. Değişiklikler bu cihazda kalır ve bir sonraki sefere yüklenir.",
+"Нет соединения с сервером. Изменения остаются на этом устройстве и будут загружены в следующий раз.",
+"Geen verbinding met de server. Wijzigingen blijven op dit apparaat en worden de volgende keer geüpload."
+],
+[
+"Test two variants of a technique against each other.",
+"Bir tekniğin iki varyantını birbirine karşı test et.",
+"Сравни два варианта техники между собой.",
+"Test twee varianten van een techniek tegen elkaar."
+],
+[
+"Upload project",
+"Proje yükle",
+"Загрузить проект",
+"Project uploaden"
+],
+[
+"Short name, e.g. Plate 3",
+"Kısa ad, ör. Plaka 3",
+"Краткое название, напр. Упор 3",
+"Korte naam, bijv. Plaat 3"
+],
+[
+"Detailed description for standardisation, e.g. kick plate in position 3, front foot at the edge",
+"Standartlaştırma için ayrıntılı açıklama, ör. arka ayak plakası 3. konumda, öndeki ayak blok kenarında",
+"Подробное описание для стандартизации, напр. упор на позиции 3, передняя нога на краю тумбочки",
+"Uitgebreide beschrijving voor standaardisatie, bijv. afzetplaat op stand 3, voorste voet aan de rand"
+],
+[
+"Detailed description for standardisation, e.g. kick plate in position 5, front foot at the edge",
+"Standartlaştırma için ayrıntılı açıklama, ör. arka ayak plakası 5. konumda, öndeki ayak blok kenarında",
+"Подробное описание для стандартизации, напр. упор на позиции 5, передняя нога на краю тумбочки",
+"Uitgebreide beschrijving voor standaardisatie, bijv. afzetplaat op stand 5, voorste voet aan de rand"
+],
+[
+"Ideally 5 or more.",
+"İdeali 5 veya daha fazla.",
+"Лучше всего 5 или больше.",
+"Het liefst 5 of meer."
+],
+[
+"Sprintz plays the start sequence and films each attempt directly. Browsers usually only allow 30 to 60 frames per second; uploaded slow-motion videos are more precise.",
+"Sprintz start komutlarını çalar ve her denemeyi doğrudan çeker. Tarayıcılar genelde yalnızca saniyede 30–60 kareye izin verir; yüklenen ağır çekim videolar daha hassastır.",
+"Sprintz воспроизводит стартовые команды и сразу снимает каждую попытку. Браузеры обычно дают только 30–60 кадров в секунду; загруженные замедленные видео точнее.",
+"Sprintz speelt de startprocedure af en filmt elke poging direct. Browsers halen meestal maar 30 tot 60 beelden per seconde; geüploade slow-motionvideo's zijn nauwkeuriger."
+],
+[
+"Recommended: film all runs in slow motion. This makes the calculated times and values more precise.",
+"Önerilen: tüm denemeleri ağır çekimde çek. Böylece hesaplanan süreler ve değerler daha hassas olur.",
+"Рекомендуем снимать все попытки в режиме замедленной съёмки — так рассчитанные времена и значения будут точнее.",
+"Aanbevolen: film alle pogingen in slow motion. Zo worden de berekende tijden en waarden nauwkeuriger."
+],
+[
+"name of variant A",
+"A varyantının adı",
+"название варианта A",
+"naam van variant A"
+],
+[
+"name of variant B",
+"B varyantının adı",
+"название варианта B",
+"naam van variant B"
+],
+[
+"Download project",
+"Projeyi indir",
+"Скачать проект",
+"Project downloaden"
+],
+[
+"The videos can't be assigned.",
+"Videolar eşleştirilemiyor.",
+"Не удаётся сопоставить видео.",
+"De video's kunnen niet worden toegewezen."
+],
+[
+"The videos lack a recording time.",
+"Videolarda çekim zamanı bilgisi yok.",
+"В видео нет времени съёмки.",
+"De video's missen een opnametijdstip."
+],
+[
+"{0} of {1} videos lack a recording time.",
+"{1} videodan {0} tanesinde çekim zamanı bilgisi yok.",
+"В {0} из {1} видео нет времени съёмки.",
+"{0} van de {1} video's missen een opnametijdstip."
+],
+[
+"This happens when the iPhone creates a converted copy when sending.<br><b>How to include all photo data:</b> select the videos in the Photos app → Share → tap “Options” at the top → turn on “All Photos Data” → AirDrop. Alternatively transfer them by cable with the Mac app “Image Capture”. Then upload the videos again. You can also assign the videos manually in each attempt's selection box.",
+"Bu, iPhone gönderirken dönüştürülmüş bir kopya oluşturduğunda olur.<br><b>Tüm fotoğraf verilerini birlikte göndermek için:</b> Fotoğraflar uygulamasında videoları seç → Paylaş → üstte “Seçenekler” → “Tüm Fotoğraf Verileri”ni aç → AirDrop. Alternatif olarak kabloyla Mac’teki “Görüntü Yakalama” uygulamasıyla aktar. Ardından videoları yeniden yükle. Videoları her denemenin seçim kutusundan elle de eşleştirebilirsin.",
+"Так бывает, когда iPhone при отправке создаёт преобразованную копию.<br><b>Как отправить все данные фото:</b> выбери видео в приложении «Фото» → «Поделиться» → вверху «Параметры» → включи «Все данные фото» → AirDrop. Или перенеси их по кабелю через приложение Mac «Захват изображений». Затем загрузи видео снова. Видео также можно сопоставить вручную в поле выбора каждой попытки.",
+"Dit gebeurt als de iPhone bij het versturen een omgezette kopie maakt.<br><b>Zo stuur je alle fotogegevens mee:</b> selecteer de video's in de Foto's-app → Deel → bovenaan op ‘Opties’ → zet ‘Alle fotogegevens’ aan → AirDrop. Of zet ze via een kabel over met de Mac-app ‘Fotolader’. Upload de video's daarna opnieuw. Je kunt de video's ook zelf toewijzen in het keuzeveld van elke poging."
+],
+[
+"Assigned by recording time: {0}. Check the assignment and change it in the attempt's selection box if needed.",
+"Çekim zamanına göre eşleştirildi: {0}. Eşleştirmeyi kontrol et, gerekirse denemenin seçim kutusundan değiştir.",
+"Сопоставлено по времени съёмки: {0}. Проверь сопоставление и при необходимости измени его в поле выбора попытки.",
+"Toegewezen op opnametijd: {0}. Controleer de toewijzing en pas die zo nodig aan in het keuzeveld van de poging."
+],
+[
+"The times are unrealistically long. The video is probably a converted slow-motion copy instead of the original file. Send the video with “All Photos Data” and upload it again.",
+"Süreler gerçekçi olmayacak kadar uzun. Video büyük olasılıkla orijinal dosya değil, dönüştürülmüş bir ağır çekim kopyası. Videoyu “Tüm Fotoğraf Verileri” ile gönder ve yeniden yükle.",
+"Времена нереально большие. Скорее всего, это преобразованная копия замедленного видео, а не исходный файл. Отправь видео со «Всеми данными фото» и загрузи его снова.",
+"De tijden zijn onrealistisch lang. Waarschijnlijk is de video een omgezette slow-motionkopie in plaats van het originele bestand. Stuur de video met ‘Alle fotogegevens’ en upload hem opnieuw."
+],
+[
+"“{0}” was added.",
+"“{0}” eklendi.",
+"«{0}» добавлен.",
+"‘{0}’ is toegevoegd."
+],
+[
+"This project file is from a newer version of Sprintz.",
+"Bu proje dosyası Sprintz’in daha yeni bir sürümünden.",
+"Этот файл проекта создан в более новой версии Sprintz.",
+"Dit projectbestand komt uit een nieuwere versie van Sprintz."
+],
+[
+"This is not a valid Sprintz project file.",
+"Bu geçerli bir Sprintz proje dosyası değil.",
+"Это не файл проекта Sprintz.",
+"Dit is geen geldig Sprintz-projectbestand."
+],
+[
+"Continue offline",
+"Çevrimdışı devam et",
+"Продолжить офлайн",
+"Offline doorgaan"
+],
+[
+"{0} · offline",
+"{0} · çevrimdışı",
+"{0} · офлайн",
+"{0} · offline"
+],
+[
+"Logging in …",
+"Giriş yapılıyor …",
+"Вход …",
+"Inloggen …"
+],
+[
+"Server not reachable. Check your internet connection or continue offline; your projects then stay on this device only.",
+"Sunucuya ulaşılamıyor. İnternet bağlantını kontrol et ya da çevrimdışı devam et; projelerin o zaman yalnızca bu cihazda kalır.",
+"Сервер недоступен. Проверь подключение к интернету или продолжай офлайн — тогда проекты останутся только на этом устройстве.",
+"Server niet bereikbaar. Controleer je internetverbinding of ga offline verder; je projecten blijven dan alleen op dit apparaat."
+],
+[
+"Login failed ({0}).",
+"Giriş başarısız ({0}).",
+"Не удалось войти ({0}).",
+"Inloggen mislukt ({0})."
+],
+[
+"Short name, e.g. Plate 5",
+"Kısa ad, ör. Plaka 5",
+"Краткое название, напр. Упор 5",
+"Korte naam, bijv. Plaat 5"
+]
+]
