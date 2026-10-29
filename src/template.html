@@ -601,6 +601,13 @@ p.everr{margin:6px 0 10px;line-height:1.4}
 .evchips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 .evexpl{margin-top:10px;font-size:.86rem;line-height:1.5}.evexpl summary{cursor:pointer;color:var(--accent);font-weight:600}
 .evpill{display:inline-flex;align-items:center;gap:6px;margin:0 10px 6px 0;font-size:.88rem}
+.evfigs.one{grid-template-columns:1fr}
+.evtab tr.evtot td{font-weight:700;border-top:1.5px solid var(--line)}
+.evpdfk{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px;max-height:46vh;overflow:auto;padding:4px 0}
+.evpdfk label{display:flex;gap:8px;align-items:center;font-size:.92rem;cursor:pointer}
+.evpdfk input{width:18px;height:18px;accent-color:var(--accent)}
+.evpdfall{display:flex;gap:8px}
+#evPdfDlg{z-index:60}
 .evcloud.ok{color:var(--accent)}
 .evcloud.no{color:var(--muted);opacity:.8}
 #lgOff{display:block;margin:10px auto 0}
@@ -3473,65 +3480,283 @@ function evVerdict(w,thr,better){
   if(w.p<0.05) return {c:"sig", t:winner(w.d)+" – "+(thr!=null?L("signifikant, Bedeutsamkeit unsicher","significant, relevance uncertain"):L("signifikant","significant"))};
   return {c:"unc", t:L("unklar – mehr Versuche nötig","unclear – more attempts needed")};
 }
+// Daten des Projekts für Ergebnisblatt und PDF
+function evData(p){
+  const done=p.trials.filter(t=>t.status==="done" && t.m), grp=v=>done.filter(t=>t.v===v), M=EVM();
+  const have=M.filter(([k])=>done.some(t=>t.m[k]!=null && isFinite(t.m[k])));
+  const stages=[...new Set(done.filter(t=>t.v!=="BL").map(t=>t.stage??1))].sort((a,b)=>a-b);
+  const prim=(have.find(x=>x[0]==="t15")||have.find(x=>x[0]==="block")||have[0]||[null])[0];
+  return {done, M, have, BL:grp("BL"), A:grp("A"), B:grp("B"), stages, prim, tl:evTimeline(p), fps:Math.max(...done.map(t=>t.fps||0),0)};
+}
+const evVals=(ts,k)=>ts.map(t=>t.m[k]).filter(x=>x!=null && isFinite(x));
+// Vergleich A/B für einen Kennwert (beliebige Teilmenge der Versuche)
+function evCmp(D,k,A,B){
+  const [,lab,u,better]=D.M.find(x=>x[0]===k), a=evVals(A,k), b=evVals(B,k), bl=evVals(D.BL,k);
+  const ca=a.length?stCI(a):null, cb=b.length?stCI(b):null, w=stWelch(a,b), ref=bl.length?stM(bl):(a.length||b.length?stM([...a,...b]):0);
+  let thr=null; if(u!=="n" && ref){ thr=Math.abs(ref)*EV_SWC; if(EV_TIMEK.includes(k) && D.fps) thr=Math.max(thr, 1/D.fps); }
+  return {k, lab, u, a, b, bl, ca, cb, w, thr, v:evVerdict(w,thr,better)};
+}
+const evP=w=> !w ? "–" : w.p<0.001 ? (LANG==="en"?"<0.001":"<0,001") : (LANG==="en"?w.p.toFixed(3):w.p.toFixed(3).replace(".",","));
+const evPct=x=> x==null || !isFinite(x) ? "–" : (LANG==="en"?x.toFixed(1):x.toFixed(1).replace(".",","))+" %";
+const evStageName=s=> s===0 ? "Baseline" : L(`Teststufe ${s}`,`Test stage ${s}`);
+// Schaltflächen zum Wechseln des Kennwerts (je Tabelle bzw. Grafik eigener Zustand)
+function evChips(id, D, sel, all){
+  return `<div class="evchips" data-chip="${id}">${all?`<button type="button" data-k="all" aria-pressed="${sel==="all"}">${L("Alle","All")}</button>`:""}${D.have.map(([k,l])=>`<button type="button" data-k="${k}" aria-pressed="${k===sel}">${l}</button>`).join("")}</div>`;
+}
+function evRK(id, D, all){ EV.rk=EV.rk||{}; const v=EV.rk[id]; if(v==="all" && all) return "all"; if(v && D.have.some(x=>x[0]===v)) return v; return all ? "all" : D.prim; }
+function evCmpCard(c){
+  const ci=x=>x?`<b>${evFmt(x.m,c.u)}</b>${x.lo!=null?`<small>${L("KI","CI")} [${evFmt(x.lo,c.u,true)}; ${evFmt(x.hi,c.u,true)}] · n = ${x.n}</small>`:`<small>n = 1</small>`}`:"–";
+  return `<div class="evcrow"><div class="evchd"><b>${c.lab}</b><span class="evverd ${c.v.c}">${c.v.t}</span></div>
+    <div class="evcg"><div><i class="evv A">A</i>${ci(c.ca)}</div><div><i class="evv B">B</i>${ci(c.cb)}</div>${c.bl.length?`<div><i class="evv BL">BL</i><b>${evFmt(stM(c.bl),c.u)}</b><small>n = ${c.bl.length}</small></div>`:""}</div>
+    <p class="evcd">Δ B−A ${c.w?`<b>${(c.w.d>0?"+":"")+evFmt(c.w.d,c.u)}</b> <span class="nw">${L("KI","CI")} [${evFmt(c.w.lo,c.u,true)}; ${evFmt(c.w.hi,c.u,true)}]</span> · p = ${evP(c.w)}`:"–"}${c.thr!=null?` · ${L("Schwelle","threshold")} ±${evFmt(c.thr,c.u)}`:""}</p></div>`;
+}
 function evReport(){
   const p=EV.cur, top=$("evTop"), bot=$("evBottom"); bot.innerHTML=""; finishBack();
-  const done=p.trials.filter(t=>t.status==="done" && t.m), grp=v=>done.filter(t=>t.v===v), M=EVM();
-  const vals=(ts,k)=>ts.map(t=>t.m[k]).filter(x=>x!=null && isFinite(x));
-  const have=M.filter(([k])=>done.some(t=>t.m[k]!=null && isFinite(t.m[k])));
-  const BL=grp("BL"), A=grp("A"), B=grp("B"), tl=evTimeline(p), fps=Math.max(...done.map(t=>t.fps||0),0);
-  const sel = EV.repK && have.some(x=>x[0]===EV.repK) ? EV.repK : (have.find(x=>x[0]==="t15")||have.find(x=>x[0]==="block")||have[0]||[null])[0];
+  const D=evData(p), {BL,A,B,tl,M}=D, lab=k=>M.find(x=>x[0]===k)[1], unit=k=>M.find(x=>x[0]===k)[2];
   let h=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Ablauf","‹ Sequence")}</button><span class="evhr"><button type="button" class="testbtn ghost small" id="evDl">${L("Projekt herunterladen","Download project")}</button></span></div>
     <h2 class="big">${L("Ergebnisse","Results")}</h2><p class="evlead">${esc(p.name)} · ${evTechName(p.tech)}</p>
     <div class="evvars">${["A","B"].map(k=>`<div><i class="evv ${k}">${k}</i><span><b>${esc(evVN(p,k))}</b>${p[k]?` – ${esc(p[k])}`:""}</span></div>`).join("")}</div>
     <p class="hint">${L(`Ausgewertet: Baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`,`Analysed: baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`)}${tl.days>1?" · "+L(`${tl.days} Testtage`,`${tl.days} test days`):""}</p>`;
-  if(!done.length){ top.innerHTML=h+`<p class="hint">${L("Noch keine ausgewerteten Versuche.","No analysed attempts yet.")}</p>`; $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); return; }
-  // 1) Baseline
+  if(!D.done.length){ top.innerHTML=h+`<p class="hint">${L("Noch keine ausgewerteten Versuche.","No analysed attempts yet.")}</p>`; $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); return; }
+  h+=`<button type="button" class="evbig" id="evPdf" style="margin-top:6px">${L("Ergebnisblatt als PDF","Results sheet as PDF")}</button>`;
+  // 1) Baseline: Tabelle und Grafik, jeweils mit eigener Kennwert-Auswahl
   h+=`<h3 class="evh3">${L("Baseline","Baseline")}</h3>`;
   if(BL.length){
-    const bh=have.filter(([k])=>vals(BL,k).length);
-    h+=`<div class="evscroll"><table class="evtab"><thead><tr><th>${L("Kennwert","Parameter")}</th>${BL.map((t,i)=>`<th class="r">${i+1}</th>`).join("")}<th class="r">M</th><th class="r">SD</th><th class="r">CV</th></tr></thead><tbody>
-      ${bh.map(([k,lab,u])=>{ const v=vals(BL,k), m=stM(v), s=stSD(v); return `<tr><td>${lab}</td>${BL.map(t=>`<td class="r">${evFmt(t.m[k],u,true)}</td>`).join("")}<td class="r"><b>${evFmt(m,u,true)}</b></td><td class="r">${evFmt(s,u,true)}</td><td class="r">${s!=null&&m?(LANG==="en"?(s/Math.abs(m)*100).toFixed(1):(s/Math.abs(m)*100).toFixed(1).replace(".",","))+" %":"–"}</td></tr>`; }).join("")}</tbody></table></div>
-      <p class="hint">${L("Einheiten: Zeiten bis zum Abheben in ms, übrige Zeiten in s, Strecken in m, Geschwindigkeiten in m/s. CV = Variationskoeffizient (SD in % des Mittelwerts): Je kleiner, desto gleichmäßiger startest du.","Units: times up to take-off in ms, other times in s, distances in m, velocities in m/s. CV = coefficient of variation (SD as % of the mean): the smaller, the more consistent your starts.")}</p>
-      <div class="evfigs">${bh.filter(([k])=>["rt","block","jump","t5","t10","t15","uwT","flight"].includes(k)).map(([k,lab,u])=>evBaseChart(vals(BL,k),u,lab)).join("")}</div>`;
+    const sT=evRK("blT",D,true), rows=D.have.filter(([k])=>evVals(BL,k).length && (sT==="all"||k===sT));
+    h+=evChips("blT",D,sT,true)+`<div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>${L("Kennwert","Parameter")}</th>${BL.map((t,i)=>`<th class="r">${i+1}</th>`).join("")}<th class="r">M</th><th class="r">SD</th><th class="r">CV</th></tr></thead><tbody>
+      ${rows.length?rows.map(([k,l,u])=>{ const v=evVals(BL,k), m=stM(v), s=stSD(v); return `<tr><td>${l}<small>${u==="n"?"":U(u)}</small></td>${BL.map(t=>`<td class="r">${evFmt(t.m[k],u,true)}</td>`).join("")}<td class="r"><b>${evFmt(m,u,true)}</b></td><td class="r">${evFmt(s,u,true)}</td><td class="r">${s!=null&&m?evPct(s/Math.abs(m)*100):"–"}</td></tr>`; }).join(""):`<tr><td colspan="${BL.length+4}">–</td></tr>`}</tbody></table></div>
+      <p class="hint">${L("CV = Variationskoeffizient (SD in % des Mittelwerts): Je kleiner, desto gleichmäßiger startest du.","CV = coefficient of variation (SD as % of the mean): the smaller, the more consistent your starts.")}</p>`;
+    const sG=evRK("blG",D,false), bv=evVals(BL,sG);
+    h+=evChips("blG",D,sG,false)+(bv.length?`<div class="evfigs one">${evBaseChart(bv,unit(sG),L("Baseline-Versuche","Baseline attempts")+": "+lab(sG))}</div>`:`<p class="hint">${L("Für diesen Kennwert gibt es keine Baseline-Werte.","There are no baseline values for this parameter.")}</p>`);
   } else h+=`<p class="hint">${L("Keine Baseline ausgewertet. Ohne Baseline fehlt der Bezug zu deiner gewohnten Technik.","No baseline analysed. Without a baseline there is no reference to your usual technique.")}</p>`;
-  // 2) Vergleich A/B
-  h+=`<h3 class="evh3">${L("Vergleich","Comparison")} ${esc(evVN(p,"A"))} – ${esc(evVN(p,"B"))}</h3><div class="evcmp">`;
-  have.forEach(([k,lab,u,better])=>{ const a=vals(A,k), b=vals(B,k); if(!a.length && !b.length) return; const ca=a.length?stCI(a):null, cb=b.length?stCI(b):null, w=stWelch(a,b);
-    const bl=vals(BL,k), ref=bl.length?stM(bl):stM([...a,...b]);
-    let thr=null; if(u!=="n" && ref){ thr=Math.abs(ref)*EV_SWC; if(EV_TIMEK.includes(k) && fps) thr=Math.max(thr, 1/fps); }
-    const v=evVerdict(w,thr,better), ci=c=>c?`<b>${evFmt(c.m,u)}</b>${c.lo!=null?`<small>${L("KI","CI")} [${evFmt(c.lo,u,true)}; ${evFmt(c.hi,u,true)}]</small>`:`<small>n = 1</small>`}`:"–";
-    const pf=w?(w.p<0.001?(LANG==="en"?"<0.001":"<0,001"):(LANG==="en"?w.p.toFixed(3):w.p.toFixed(3).replace(".",","))):"–";
-    h+=`<div class="evcrow"><div class="evchd"><b>${lab}</b><span class="evverd ${v.c}">${v.t}</span></div>
-      <div class="evcg"><div><i class="evv A">A</i>${ci(ca)}</div><div><i class="evv B">B</i>${ci(cb)}</div>${bl.length?`<div><i class="evv BL">BL</i><b>${evFmt(stM(bl),u)}</b><small>n = ${bl.length}</small></div>`:""}</div>
-      <p class="evcd">Δ B−A ${w?`<b>${(w.d>0?"+":"")+evFmt(w.d,u)}</b> <span class="nw">${L("KI","CI")} [${evFmt(w.lo,u,true)}; ${evFmt(w.hi,u,true)}]</span> · p = ${pf}`:"–"}${thr!=null?` · ${L("Schwelle","threshold")} ±${evFmt(thr,u)}`:""}</p></div>`; });
-  h+=`</div>
-    <details class="evexpl"><summary>${L("So liest du den Vergleich","How to read the comparison")}</summary>
-    <p>${L("KI ist das 95-%-Konfidenzintervall: In diesem Bereich liegt der wahre Mittelwert mit 95 % Sicherheit. Δ B−A ist der Unterschied der Mittelwerte mit seinem 95-%-Konfidenzintervall (Welch-t-Test, ungleiche Varianzen). p ist die Wahrscheinlichkeit, einen mindestens so großen Unterschied rein zufällig zu sehen, wenn es keinen echten gibt.","CI is the 95 % confidence interval: the true mean lies in this range with 95 % certainty. Δ B−A is the difference of the means with its 95 % confidence interval (Welch's t-test, unequal variances). p is the probability of seeing a difference at least this large purely by chance if there is no real one.")}</p>
-    <p>${L("Die Schwelle ist die kleinste bedeutsame Veränderung: 0,4 % des Baseline-Mittelwerts. Das entspricht der halben Leistungsschwankung olympischer Schwimmer zwischen zwei Wettkämpfen (Variationskoeffizient 0,8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). Bei Zeiten gilt mindestens ein Videobild als Schwelle, weil kleinere Unterschiede nicht messbar sind.","The threshold is the smallest worthwhile change: 0.4 % of the baseline mean. This equals half the performance variation of Olympic swimmers between two competitions (coefficient of variation 0.8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). For times, at least one video frame is used, because smaller differences can't be measured.")}</p>
-    <p>${L("„Bedeutsam“: Das ganze Konfidenzintervall liegt jenseits der Schwelle. „Kein bedeutsamer Unterschied“: Das ganze Intervall liegt innerhalb der Schwelle. „Signifikant, Bedeutsamkeit unsicher“: p < 0,05, aber das Intervall reicht in den Bereich unterhalb der Schwelle. „Unklar“: Die Daten reichen für keine Aussage, mehr Versuche helfen.","“Meaningful”: the whole confidence interval lies beyond the threshold. “No meaningful difference”: the whole interval lies within the threshold. “Significant, relevance uncertain”: p < 0.05, but the interval reaches below the threshold. “Unclear”: the data don't support a conclusion; more attempts help.")}</p></details>`;
-  // 3) Grafiken für einen gewählten Kennwert
-  if(sel){ const [k,lab,u]=M.find(x=>x[0]===sel);
-    h+=`<h3 class="evh3">${L("Grafiken","Charts")}</h3><div class="evchips" id="evRepK">${have.map(([kk,ll])=>`<button type="button" data-k="${kk}" aria-pressed="${kk===sel}">${ll}</button>`).join("")}</div>
-      <figure class="evfig wide"><figcaption>${L("Verlauf in der Reihenfolge der Versuche","Progression in the order of attempts")}: ${lab}</figcaption>${evLineChart(p,k,u)}
-        <div class="evleg"><span><i style="background:${EVC.BL}"></i>Baseline</span><span><i style="background:${EVC.A}"></i>${esc(evVN(p,"A"))}</span><span><i style="background:${EVC.B}"></i>${esc(evVN(p,"B"))}</span></div>
-        <p class="hint">${L("Steigen oder fallen die Linien über die Versuche, spielen Ermüdung, Aufwärmen oder Gewöhnung mit. Die ausgewogene Reihenfolge verteilt diese Effekte gleich auf beide Varianten.","If the lines rise or fall over the attempts, fatigue, warm-up or familiarisation play a role. The balanced order spreads these effects equally across both variants.")}</p></figure>
-      <figure class="evfig wide"><figcaption>Boxplot: ${lab}</figcaption>${evBoxChart([{k:"BL",lab:"Baseline",vals:vals(BL,k)},{k:"A",lab:evVN(p,"A"),vals:vals(A,k)},{k:"B",lab:evVN(p,"B"),vals:vals(B,k)}].filter(g=>g.k!=="BL"||g.vals.length),u)}
-        <p class="hint">${L("Box: mittlere 50 % der Werte, Strich: Median, Raute: Mittelwert, Punkte: einzelne Versuche.","Box: middle 50 % of values, line: median, diamond: mean, dots: individual attempts.")}</p></figure>`; }
-  // 4) Subjektive Qualität
+  // 2) Vergleich A/B gesamt
+  const sC=evRK("cmp",D,true);
+  h+=`<h3 class="evh3">${L("Vergleich","Comparison")} ${esc(evVN(p,"A"))} – ${esc(evVN(p,"B"))}</h3>${evChips("cmp",D,sC,true)}<div class="evcmp" style="margin-top:8px">`;
+  D.have.filter(([k])=>sC==="all"||k===sC).forEach(([k])=>{ const c=evCmp(D,k,A,B); if(c.a.length||c.b.length) h+=evCmpCard(c); });
+  h+=`</div>${evExplHTML()}`;
+  // 3) Vergleich je Teststufe
+  if(D.stages.length>1){
+    const sS=evRK("stg",D,false), un=unit(sS);
+    h+=`<h3 class="evh3">${L("Vergleich je Teststufe","Comparison by test stage")}</h3>${evChips("stg",D,sS,false)}
+      <div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>${L("Stufe","Stage")}</th><th class="r"><i class="evv A">A</i></th><th class="r"><i class="evv B">B</i></th><th class="r">Δ B−A</th><th class="r">p</th><th>${L("Bewertung","Verdict")}</th></tr></thead><tbody>
+      ${[...D.stages.map(s=>[evStageName(s), A.filter(t=>(t.stage??1)===s), B.filter(t=>(t.stage??1)===s)]), [L("Gesamt","Overall"),A,B]].map(([nm,a,b],ix,arr)=>{ const c=evCmp(D,sS,a,b);
+        const ci=x=>x?`${evFmt(x.m,un,true)}<small>${x.lo!=null?`[${evFmt(x.lo,un,true)}; ${evFmt(x.hi,un,true)}]`:""} n = ${x.n}</small>`:"–";
+        return `<tr${ix===arr.length-1?' class="evtot"':""}><td>${nm}</td><td class="r">${ci(c.ca)}</td><td class="r">${ci(c.cb)}</td><td class="r">${c.w?`${(c.w.d>0?"+":"")+evFmt(c.w.d,un,true)}<small>[${evFmt(c.w.lo,un,true)}; ${evFmt(c.w.hi,un,true)}]</small>`:"–"}</td><td class="r">${evP(c.w)}</td><td><span class="evverd ${c.v.c}">${c.v.t}</span></td></tr>`; }).join("")}</tbody></table></div>
+      <p class="hint">${L(`Werte in ${un==="n"?L("Anzahl","count"):U(un)}. Pro Stufe gibt es weniger Versuche, deshalb sind die Intervalle breiter als im Gesamtvergleich.`,`Values in ${un==="n"?L("Anzahl","count"):U(un)}. Each stage has fewer attempts, so the intervals are wider than in the overall comparison.`)}</p>`;
+  }
+  // 4) Verlauf und Boxplot, jeweils eigene Auswahl
+  const sL=evRK("line",D,false), sB=evRK("box",D,false);
+  h+=`<h3 class="evh3">${L("Grafiken","Charts")}</h3>${evChips("line",D,sL,false)}
+    <figure class="evfig wide"><figcaption>${L("Verlauf in der Reihenfolge der Versuche","Progression in the order of attempts")}: ${lab(sL)}</figcaption>${evLineChart(p,sL,unit(sL))}
+      <div class="evleg"><span><i style="background:${EVC.BL}"></i>Baseline</span><span><i style="background:${EVC.A}"></i>${esc(evVN(p,"A"))}</span><span><i style="background:${EVC.B}"></i>${esc(evVN(p,"B"))}</span></div>
+      <p class="hint">${L("Steigen oder fallen die Linien über die Versuche, spielen Ermüdung, Aufwärmen oder Gewöhnung mit. Die ausgewogene Reihenfolge verteilt diese Effekte gleich auf beide Varianten.","If the lines rise or fall over the attempts, fatigue, warm-up or familiarisation play a role. The balanced order spreads these effects equally across both variants.")}</p></figure>
+    <div style="margin-top:14px">${evChips("box",D,sB,false)}</div>
+    <figure class="evfig wide"><figcaption>Boxplot: ${lab(sB)}</figcaption>${evBoxChart(evBoxGroups(D,sB,p),unit(sB))}
+      <p class="hint">${L("Box: mittlere 50 % der Werte, Strich: Median, Raute: Mittelwert, Punkte: einzelne Versuche.","Box: middle 50 % of values, line: median, diamond: mean, dots: individual attempts.")}</p></figure>`;
+  // 5) Subjektive Qualität
   const rq=v=>p.trials.filter(t=>t.v===v && t.rating).map(t=>t.rating);
   if(rq("A").length||rq("B").length) h+=`<h3 class="evh3">${L("Qualität der Testläufe","Quality of the test runs")}</h3><p>${["A","B"].map(v=>{ const r=rq(v); return `<i class="evv ${v}">${v}</i> ${r.length?(LANG==="en"?stM(r).toFixed(1):stM(r).toFixed(1).replace(".",","))+" / 5 (n="+r.length+")":"–"}`; }).join(" &nbsp; ")}</p>`;
-  // 5) Ablauf, Pausen und Testtage
+  // 6) Ablauf, Pausen und Testtage
   if(tl.rows.length){
-    const pa=v=>tl.rows.filter(r=>r.t.v===v && r.pause!=null).map(r=>r.pause);
+    const sQ=evRK("seq",D,false), uq=unit(sQ), pa=v=>tl.rows.filter(r=>r.t.v===v && r.pause!=null).map(r=>r.pause);
     h+=`<h3 class="evh3">${L("Ablauf, Pausen und Testtage","Sequence, rests and test days")}</h3>
       <p class="hint">${L("Die Pausen berechnet Sprintz aus den Aufnahmezeiten und der Länge der Videos (Ende einer Aufnahme bis Beginn der nächsten). Sie sind deshalb Näherungswerte.","Sprintz calculates the rests from the recording times and lengths of the videos (end of one recording to the start of the next), so they are approximations.")}</p>
-      <p>${["BL","A","B"].map(v=>{ const x=pa(v); return x.length?`<span class="evpill"><i class="evv ${v}">${v}</i> Ø ${L("Pause","rest")} ${evDur(stM(x))}</span>`:""; }).join(" ")}</p>
-      <div class="evscroll"><table class="evtab"><thead><tr><th>Nr.</th><th>${L("Variante","Variant")}</th>${tl.days>1?`<th>${L("Testtag","Test day")}</th>`:""}<th class="r">${L("Uhrzeit","Time")}</th><th class="r">${L("Pause davor","Rest before")}</th><th class="r">${sel?M.find(x=>x[0]===sel)[1]:""}</th></tr></thead><tbody>
-      ${tl.rows.map(r=>{ const u=sel?M.find(x=>x[0]===sel)[2]:"s"; return `<tr><td>${evPos(p,r.t)}</td><td><i class="evv ${r.t.v}">${r.t.v}</i></td>${tl.days>1?`<td>${r.day}</td>`:""}<td class="r">${new Date(r.t0).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"})}</td><td class="r">${r.pause!=null?evDur(r.pause):"–"}</td><td class="r">${sel&&r.t.m&&r.t.m[sel]!=null?evFmt(r.t.m[sel],u):"–"}</td></tr>`; }).join("")}</tbody></table></div>`;
+      <p>${["BL","A","B"].map(v=>{ const x=pa(v); return x.length?`<span class="evpill"><i class="evv ${v}">${v}</i> Ø ${L("Pause","rest")} ${evDur(stM(x))}</span>`:""; }).join(" ")}</p>${evChips("seq",D,sQ,false)}
+      <div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>Nr.</th><th>${L("Variante","Variant")}</th>${D.stages.length>1?`<th>${L("Stufe","Stage")}</th>`:""}${tl.days>1?`<th>${L("Tag","Day")}</th>`:""}<th class="r">${L("Uhrzeit","Time")}</th><th class="r">${L("Pause davor","Rest before")}</th><th class="r">${lab(sQ)}</th></tr></thead><tbody>
+      ${tl.rows.map(r=>`<tr><td>${evPos(p,r.t)}</td><td><i class="evv ${r.t.v}">${r.t.v}</i></td>${D.stages.length>1?`<td>${(r.t.stage??1)||"BL"}</td>`:""}${tl.days>1?`<td>${r.day}</td>`:""}<td class="r">${new Date(r.t0).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"})}</td><td class="r">${r.pause!=null?evDur(r.pause):"–"}</td><td class="r">${r.t.m&&r.t.m[sQ]!=null?evFmt(r.t.m[sQ],uq):"–"}</td></tr>`).join("")}</tbody></table></div>`;
   }
   top.innerHTML=h;
-  $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p);
-  const ch=$("evRepK"); if(ch) ch.querySelectorAll("button").forEach(b=>b.onclick=()=>{ EV.repK=b.dataset.k; const y=scrollY; evReport(); scrollTo(0,y); });
+  $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); $("evPdf").onclick=()=>evPdfAsk(p);
+  top.querySelectorAll("[data-chip]").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{ EV.rk=EV.rk||{}; EV.rk[g.dataset.chip]=b.dataset.k; const y=scrollY; evReport(); scrollTo(0,y); }));
+}
+function evBoxGroups(D,k,p){ return [{k:"BL",lab:"Baseline",vals:evVals(D.BL,k)},{k:"A",lab:evVN(p,"A"),vals:evVals(D.A,k)},{k:"B",lab:evVN(p,"B"),vals:evVals(D.B,k)}].filter(g=>g.k!=="BL"||g.vals.length); }
+const EVX=()=>[
+  L("KI ist das 95-%-Konfidenzintervall: In diesem Bereich liegt der wahre Mittelwert mit 95 % Sicherheit. Δ B−A ist der Unterschied der Mittelwerte mit seinem 95-%-Konfidenzintervall (Welch-t-Test, ungleiche Varianzen). p ist die Wahrscheinlichkeit, einen mindestens so großen Unterschied rein zufällig zu sehen, wenn es keinen echten gibt.","CI is the 95 % confidence interval: the true mean lies in this range with 95 % certainty. Δ B−A is the difference of the means with its 95 % confidence interval (Welch's t-test, unequal variances). p is the probability of seeing a difference at least this large purely by chance if there is no real one."),
+  L("Die Schwelle ist die kleinste bedeutsame Veränderung: 0,4 % des Baseline-Mittelwerts. Das entspricht der halben Leistungsschwankung olympischer Schwimmer zwischen zwei Wettkämpfen (Variationskoeffizient 0,8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). Bei Zeiten gilt mindestens ein Videobild als Schwelle, weil kleinere Unterschiede nicht messbar sind.","The threshold is the smallest worthwhile change: 0.4 % of the baseline mean. This equals half the performance variation of Olympic swimmers between two competitions (coefficient of variation 0.8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). For times, at least one video frame is used, because smaller differences can't be measured."),
+  L("„Bedeutsam“: Das ganze Konfidenzintervall liegt jenseits der Schwelle. „Kein bedeutsamer Unterschied“: Das ganze Intervall liegt innerhalb der Schwelle. „Signifikant, Bedeutsamkeit unsicher“: p < 0,05, aber das Intervall reicht in den Bereich unterhalb der Schwelle. „Unklar“: Die Daten reichen für keine Aussage, mehr Versuche helfen.","“Meaningful”: the whole confidence interval lies beyond the threshold. “No meaningful difference”: the whole interval lies within the threshold. “Significant, relevance uncertain”: p < 0.05, but the interval reaches below the threshold. “Unclear”: the data don't support a conclusion; more attempts help.")];
+function evExplHTML(){ return `<details class="evexpl"><summary>${L("So liest du den Vergleich","How to read the comparison")}</summary>${EVX().map(x=>`<p>${x}</p>`).join("")}</details>`; }
+
+/* --- Datei an den Nutzer geben: Claude-Vorschau, Teilen-Menü oder Download --- */
+async function evSaveFile(blob, name, title){
+  const file=new File([blob], name, {type:blob.type});
+  if(window.claude && window.claude.use){ try{ const dl=await window.claude.use("downloads"); if(dl){ try{ await dl.save({filename:name, data:blob}); }catch(e){} return; } }catch(e){} }
+  try{ if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:title||name}); return; } }catch(e){ if(e && e.name==="AbortError") return; }
+  const a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),8000);
+}
+
+/* --- Ergebnisblatt als PDF: zuerst die Kennwerte wählen --- */
+function evPdfAsk(p){
+  const D=evData(p); let d=$("evPdfDlg"); if(!d){ d=document.createElement("div"); d.id="evPdfDlg"; d.className="dlg"; d.setAttribute("role","dialog"); d.setAttribute("aria-modal","true"); document.body.appendChild(d); }
+  const pre=new Set(EV.pdfK && EV.pdfK.length ? EV.pdfK : D.have.map(x=>x[0]));
+  d.innerHTML=`<div class="dlgbox"><h2>${L("Ergebnisblatt erstellen","Create results sheet")}</h2>
+    <p style="margin:0;line-height:1.45">${L("Welche Kennwerte sollen ins Ergebnisblatt? Für jeden gewählten Kennwert kommen Tabellen und Grafiken ins PDF, dazu eine Tabelle und Beschreibung aller Versuche.","Which parameters should go into the results sheet? Each selected parameter gets tables and charts in the PDF, plus a table and description of all attempts.")}</p>
+    <div class="evpdfk">${D.have.map(([k,l])=>`<label><input type="checkbox" value="${k}"${pre.has(k)?" checked":""}> ${l}</label>`).join("")}</div>
+    <div class="evpdfall"><button type="button" class="testbtn ghost small" id="evPdfAll">${L("Alle","All")}</button><button type="button" class="testbtn ghost small" id="evPdfNone">${L("Keine","None")}</button></div>
+    <p class="hint" id="evPdfMsg" aria-live="polite"></p>
+    <div class="testrow"><button type="button" class="testbtn" id="evPdfGo">${L("PDF erstellen","Create PDF")}</button><button type="button" class="testbtn ghost" id="evPdfNo">${L("Abbrechen","Cancel")}</button></div></div>`;
+  d.hidden=false;
+  const boxes=()=>[...d.querySelectorAll(".evpdfk input")];
+  $("evPdfAll").onclick=()=>boxes().forEach(b=>b.checked=true); $("evPdfNone").onclick=()=>boxes().forEach(b=>b.checked=false);
+  $("evPdfNo").onclick=()=>{ d.hidden=true; };
+  d.onclick=e=>{ if(e.target===d) d.hidden=true; };
+  $("evPdfGo").onclick=async()=>{ const ks=boxes().filter(b=>b.checked).map(b=>b.value); if(!ks.length){ $("evPdfMsg").textContent=L("Wähle mindestens einen Kennwert.","Choose at least one parameter."); return; }
+    EV.pdfK=ks; const go=$("evPdfGo"); go.disabled=true; $("evPdfMsg").textContent=L("PDF wird erstellt …","Creating PDF …");
+    try{ const blob=await evPdfBuild(p,ks); const slug=(p.name||"projekt").replace(/[^\w\-äöüÄÖÜß]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60)||"projekt";
+      d.hidden=true; await evSaveFile(blob, `${slug}-${L("ergebnisblatt","results")}.pdf`, p.name); }
+    catch(e){ console.error(e); $("evPdfMsg").textContent=L("Das PDF konnte nicht erstellt werden.","The PDF could not be created."); }
+    finally{ go.disabled=false; } };
+}
+
+/* --- Kleiner PDF-Schreiber: A4, eingebettete Schrift (DejaVu Sans Condensed, Latein/Türkisch/Kyrillisch), JPEG-Bilder --- */
+const PDFF = __FONTS__;
+class PdfDoc{
+  constructor(){ this.W=595.28; this.H=841.89; this.pages=[]; this.imgs=[]; this.pg=null; }
+  addPage(){ this.pg={c:[]}; this.pages.push(this.pg); return this.pg; }
+  enc(str,f){ const F=PDFF[f]; let hex="", w=0; for(const ch of String(str)){ const cp=ch.codePointAt(0); let g=F.gid[cp]; if(g==null) g=F.gid[cp===0x2009||cp===0x202f?32:63]||0; hex+=g.toString(16).padStart(4,"0"); w+=F.w[g]||0; } return {hex,w}; }
+  tw(str,size,f){ return this.enc(str,f||"r").w*size/1000; }
+  static n(x){ return (Math.round(x*100)/100).toString(); }
+  static col(c){ if(!c) return "0 0 0"; const h=c.replace("#",""); return [0,2,4].map(i=>(parseInt(h.slice(i,i+2),16)/255).toFixed(3)).join(" "); }
+  text(x,y,str,o={}){ const size=o.size||10, f=o.f||"r", e=this.enc(str,f); let xx=x; const w=e.w*size/1000; if(o.align==="right") xx=x-w; else if(o.align==="center") xx=x-w/2;
+    this.pg.c.push(`BT ${PdfDoc.col(o.color)} rg /F${f} ${size} Tf ${PdfDoc.n(xx)} ${PdfDoc.n(this.H-y)} Td <${e.hex}> Tj ET`); return w; }
+  rect(x,y,w,h,o={}){ const n=PdfDoc.n; let s=""; if(o.fill) s+=`${PdfDoc.col(o.fill)} rg `; if(o.stroke) s+=`${PdfDoc.col(o.stroke)} RG ${n(o.lw||0.5)} w `;
+    s+=`${n(x)} ${n(this.H-y-h)} ${n(w)} ${n(h)} re ${o.fill&&o.stroke?"B":o.fill?"f":"S"}`; this.pg.c.push(s); }
+  line(x1,y1,x2,y2,o={}){ const n=PdfDoc.n; this.pg.c.push(`${PdfDoc.col(o.color||"#000000")} RG ${n(o.lw||0.5)} w ${n(x1)} ${n(this.H-y1)} m ${n(x2)} ${n(this.H-y2)} l S`); }
+  addJpeg(bytes,w,h){ this.imgs.push({bytes,w,h}); return this.imgs.length-1; }
+  image(id,x,y,w,h){ const n=PdfDoc.n; this.pg.c.push(`q ${n(w)} 0 0 ${n(h)} ${n(x)} ${n(this.H-y-h)} cm /Im${id} Do Q`); }
+  async output(){
+    const enc=new TextEncoder(), parts=[], offs=[]; let len=0;
+    const push=x=>{ const b = typeof x==="string" ? Uint8Array.from(x, c=>c.charCodeAt(0)&255) : x; parts.push(b); len+=b.length; };
+    const objs=[]; const obj=()=>{ objs.push(null); return objs.length; }; const set=(id,body)=>{ objs[id-1]=body; };
+    const deflate=async b=>{ if(typeof CompressionStream==="undefined") return null; try{ const cs=new Blob([b]).stream().pipeThrough(new CompressionStream("deflate")); return new Uint8Array(await new Response(cs).arrayBuffer()); }catch(e){ return null; } };
+    const stream=async(dict,data,compress)=>{ let b = typeof data==="string" ? enc.encode(data) : data, f=""; if(compress){ const z=await deflate(b); if(z){ b=z; f="/Filter /FlateDecode "; } } return {dict:`<< ${dict} ${f}/Length ${b.length} >>`, data:b}; };
+    const cat=obj(), pagesId=obj(), fontIds={};
+    for(const f of ["r","b"]){ const F=PDFF[f], ttf=Uint8Array.from(atob(F.ttf), c=>c.charCodeAt(0));
+      const ff=obj(), fd=obj(), cid=obj(), tu=obj(), t0=obj(); fontIds[f]=t0; const nm="SPRZ"+(f==="b"?"B":"R")+"+"+F.name;
+      set(ff, await stream(`/Length1 ${ttf.length}`, ttf, true));
+      set(fd, `<< /Type /FontDescriptor /FontName /${nm} /Flags 32 /FontBBox [${F.bbox.join(" ")}] /ItalicAngle 0 /Ascent ${F.asc} /Descent ${F.desc} /CapHeight ${F.cap} /StemV ${f==="b"?120:80} /FontFile2 ${ff} 0 R >>`);
+      set(cid, `<< /Type /Font /Subtype /CIDFontType2 /BaseFont /${nm} /CIDSystemInfo << /Registry (Adobe) /Ordering (Identity) /Supplement 0 >> /FontDescriptor ${fd} 0 R /W [0 [${F.w.join(" ")}]] /CIDToGIDMap /Identity >>`);
+      const pairs=Object.entries(F.gid).map(([cp,g])=>[g,+cp]).sort((a,b)=>a[0]-b[0]); let cm="/CIDInit /ProcSet findresource begin 12 dict begin begincmap /CIDSystemInfo << /Registry (Adobe) /Ordering (UCS) /Supplement 0 >> def /CMapName /Adobe-Identity-UCS def /CMapType 2 def 1 begincodespacerange <0000> <FFFF> endcodespacerange\n";
+      for(let i=0;i<pairs.length;i+=100){ const ch=pairs.slice(i,i+100); cm+=`${ch.length} beginbfchar\n`+ch.map(([g,cp])=>`<${g.toString(16).padStart(4,"0")}> <${cp.toString(16).padStart(4,"0")}>`).join("\n")+"\nendbfchar\n"; }
+      cm+="endcmap CMapName currentdict /CMap defineresource pop end end"; set(tu, await stream("", cm, true));
+      set(t0, `<< /Type /Font /Subtype /Type0 /BaseFont /${nm} /Encoding /Identity-H /DescendantFonts [${cid} 0 R] /ToUnicode ${tu} 0 R >>`); }
+    const imgIds=[]; for(const im of this.imgs){ const id=obj(); imgIds.push(id); set(id, {dict:`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.bytes.length} >>`, data:im.bytes}); }
+    const res=`<< /Font << /Fr ${fontIds.r} 0 R /Fb ${fontIds.b} 0 R >> /XObject << ${imgIds.map((id,i)=>`/Im${i} ${id} 0 R`).join(" ")} >> >>`;
+    const kids=[]; for(const pg of this.pages){ const pid=obj(), cid=obj(); kids.push(pid); set(cid, await stream("", pg.c.join("\n"), true));
+      set(pid, `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${this.W} ${this.H}] /Resources ${res} /Contents ${cid} 0 R >>`); }
+    set(pagesId, `<< /Type /Pages /Kids [${kids.map(k=>k+" 0 R").join(" ")}] /Count ${kids.length} >>`);
+    set(cat, `<< /Type /Catalog /Pages ${pagesId} 0 R >>`);
+    push("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+    objs.forEach((o,i)=>{ offs[i]=len; push(`${i+1} 0 obj\n`); if(typeof o==="string") push(o+"\n"); else { push(o.dict+"\nstream\n"); push(o.data); push("\nendstream\n"); } push("endobj\n"); });
+    const xref=len; push(`xref\n0 ${objs.length+1}\n0000000000 65535 f \n`+offs.map(o=>String(o).padStart(10,"0")+" 00000 n \n").join(""));
+    push(`trailer\n<< /Size ${objs.length+1} /Root ${cat} 0 R >>\nstartxref\n${xref}\n%%EOF`);
+    return new Blob(parts, {type:"application/pdf"});
+  }
+}
+// Fließtext-Layout mit Seitenumbruch
+class PdfFlow{
+  constructor(doc, foot){ this.d=doc; this.M=42; this.top=48; this.bottom=doc.H-48; this.cw=doc.W-2*this.M; this.foot=foot; this.newPage(); }
+  newPage(){ this.d.addPage(); this.y=this.top; }
+  need(h){ if(this.y+h>this.bottom){ this.newPage(); return true; } return false; }
+  wrap(str,size,f,width){ const out=[]; String(str).split("\n").forEach(par=>{ let line=""; par.split(/ +/).forEach(w=>{
+      while(this.d.tw(w,size,f)>width && w.length>1){ let k=w.length-1; while(k>1 && this.d.tw(w.slice(0,k)+"-",size,f)>width) k--; const head=w.slice(0,k)+"-"; if(line){ out.push(line); line=""; } out.push(head); w=w.slice(k); }
+      const t=line?line+" "+w:w; if(this.d.tw(t,size,f)<=width || !line) line=t; else { out.push(line); line=w; } }); out.push(line); }); return out; }
+  para(str,o={}){ const size=o.size||9.5, f=o.f||"r", lh=size*1.38, x=this.M+(o.indent||0), lines=this.wrap(str,size,f,this.cw-(o.indent||0));
+    lines.forEach(l=>{ this.need(lh); this.d.text(x,this.y+size,l,{size,f,color:o.color}); this.y+=lh; }); this.y+=o.after??4; }
+  h1(str){ this.need(40); this.d.text(this.M,this.y+20,str,{size:20,f:"b",color:"#0D2230"}); this.y+=30; }
+  h2(str){ this.need(48); this.y+=8; this.d.text(this.M,this.y+12,str.toUpperCase(),{size:11.5,f:"b",color:"#0A7A9F"}); this.y+=16; this.d.line(this.M,this.y,this.M+this.cw,this.y,{color:"#C9D8E0",lw:0.8}); this.y+=8; }
+  h3(str){ this.need(34); this.y+=4; this.d.text(this.M,this.y+10,str,{size:10,f:"b",color:"#0D2230"}); this.y+=16; }
+  // Tabelle: cols=[{h, w (Anteil), a:"l"|"r"}], rows=[[zelle]], zelle = Text oder {t, f, c}
+  table(cols,rows,o={}){ const size=o.size||8, lh=size*1.3, pad=3.2, tot=cols.reduce((a,c)=>a+c.w,0), W=cols.map(c=>c.w/tot*this.cw);
+    const cell=c=> typeof c==="object" && c!==null ? c : {t:c==null?"–":String(c)};
+    const lay=(row,f0)=>row.map((c,i)=>{ const x=cell(c); return {...x, lines:this.wrap(x.t,size,x.f||f0,W[i]-2*pad)}; });
+    const head=lay(cols.map(c=>c.h),"b"), hh=Math.max(...head.map(c=>c.lines.length))*lh+2*pad;
+    const drawRow=(cs,h,isHead,zebra)=>{ if(isHead) this.d.rect(this.M,this.y,this.cw,h,{fill:"#E8F0F4"}); else if(zebra) this.d.rect(this.M,this.y,this.cw,h,{fill:"#F7FAFB"});
+      let x=this.M; cs.forEach((c,i)=>{ c.lines.forEach((l,k)=>{ const al=cols[i].a==="r"; this.d.text(al?x+W[i]-pad:x+pad, this.y+pad+size*0.95+k*lh, l, {size, f:isHead?"b":(c.f||"r"), color:isHead?"#355262":(c.c||"#0D2230"), align:al?"right":"left"}); }); x+=W[i]; });
+      this.y+=h; this.d.line(this.M,this.y,this.M+this.cw,this.y,{color:"#D3E0E7",lw:0.5}); };
+    this.need(hh+lh+2*pad); drawRow(head,hh,true);
+    rows.forEach((r,ri)=>{ const cs=lay(r,"r"), h=Math.max(...cs.map(c=>c.lines.length))*lh+2*pad; if(this.need(h)){ drawRow(head,hh,true); } drawRow(cs,h,false,ri%2===1); });
+    this.y+=o.after??10; }
+  img(id,w,h,x){ this.d.image(id, x??this.M, this.y, w, h); }
+  footer(){ const n=this.d.pages.length; this.d.pages.forEach((pg,i)=>{ this.d.pg=pg; this.d.line(this.M,this.d.H-34,this.M+this.cw,this.d.H-34,{color:"#D3E0E7",lw:0.5});
+    this.d.text(this.M,this.d.H-22,this.foot,{size:7.5,color:"#557080"}); this.d.text(this.M+this.cw,this.d.H-22,L(`Seite ${i+1} von ${n}`,`Page ${i+1} of ${n}`),{size:7.5,color:"#557080",align:"right"}); }); }
+}
+// SVG-Grafik für den Druck in ein JPEG umwandeln (feste Farben, weißer Hintergrund)
+async function evSvgJpeg(svg, scale){
+  const vb=(svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/)||[0,340,200]).slice(1).map(Number), W=vb[0], H=vb[1];
+  svg=svg.replace(/<svg /,`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" `).replace(/<title>[\s\S]*?<\/title>/g,"")
+    .replace(/class="grid"/g,'stroke="#D3E0E7" stroke-width="1"').replace(/class="axis"/g,'fill="#557080" font-size="10" font-family="Helvetica, Arial, sans-serif"')
+    .replace(/var\(--fg\)/g,"#0D2230").replace(/var\(--[\w-]+\)/g,"#557080");
+  const img=new Image(); img.decoding="sync"; const url="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+  await new Promise((res,rej)=>{ img.onload=res; img.onerror=rej; img.src=url; });
+  const c=document.createElement("canvas"); c.width=Math.round(W*scale); c.height=Math.round(H*scale); const g=c.getContext("2d"); g.fillStyle="#fff"; g.fillRect(0,0,c.width,c.height); g.drawImage(img,0,0,c.width,c.height);
+  const b64=c.toDataURL("image/jpeg",0.9).split(",")[1]; return {bytes:Uint8Array.from(atob(b64),ch=>ch.charCodeAt(0)), w:c.width, h:c.height, ar:H/W};
+}
+async function evPdfBuild(p, keys){
+  const D=evData(p), {BL,A,B,tl,M}=D, info=k=>M.find(x=>x[0]===k), ks=keys.filter(k=>D.have.some(x=>x[0]===k));
+  const fmtU=(v,u)=>evFmt(v,u,true), uL=u=>u==="n"?"":" ("+U(u)+")", dt=new Date();
+  const doc=new PdfDoc(), F=new PdfFlow(doc, `Sprintz · ${p.name} · ${dt.toLocaleDateString(L("de-DE","en-GB"))}`);
+  const tm=ms=>new Date(ms).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"}), dy=ms=>new Date(ms).toLocaleDateString(L("de-DE","en-GB"));
+  // Kopf
+  F.h1(L("Ergebnisblatt Technikevaluation","Technique evaluation results sheet"));
+  F.para(`${p.name} · ${evTechName(p.tech)} · ${p.start==="back"?L("Rückenstart","Backstroke start"):L("Start vom Block","Start from the block")}`,{size:11,f:"b",after:2});
+  const tdays=tl.rows.length?[...new Set(tl.rows.map(r=>new Date(r.t0).toDateString()))].map(s=>dy(Date.parse(s))):[];
+  const dts=dt.toLocaleDateString(L("de-DE","en-GB")), tds=tdays.join(", ");
+  F.para(L(`Erstellt am ${dts}`,`Created on ${dts}`)+(tdays.length?" · "+L(`Testtage: ${tds}`,`Test days: ${tds}`):""),{color:"#557080",after:8});
+  F.table([{h:L("Variante","Variant"),w:1.1},{h:L("Name","Name"),w:2},{h:L("Beschreibung zur Standardisierung","Description for standardisation"),w:5}],
+    [["A",evVN(p,"A"),p.A||"–"],["B",evVN(p,"B"),p.B||"–"]].map(r=>[{t:r[0],f:"b",c:r[0]==="A"?EVC.A:EVC.B},{t:r[1],f:"b"},r[2]]));
+  // Beschreibung des Vorgehens
+  F.h2(L("Vorgehen","Procedure"));
+  const nb=p.trials.filter(t=>t.v==="BL").length, st=[...new Set(p.trials.filter(t=>t.v!=="BL").map(t=>t.stage??1))].sort((a,b)=>a-b), perSt=st.map(x=>`${evStageName(x)}: ${p.trials.filter(t=>(t.stage??1)===x&&t.v==="A").length}`).join(", "), nd=D.done.length, nt=p.trials.length, fps=D.fps;
+  F.para(L(`Ablauf: ${nb} Baseline-Versuche in der gewohnten Technik, danach Teststufen mit Versuchen je Variante (${perSt}).`,`Procedure: ${nb} baseline attempts with the usual technique, followed by test stages with attempts per variant (${perSt}).`)+" "
+    +L("Die Reihenfolge von A und B war innerhalb jedes Paares zufällig (AB oder BA), damit Ermüdung, Aufwärmen und Gewöhnung beide Varianten gleich treffen.","The order of A and B was random within each pair (AB or BA) so that fatigue, warm-up and familiarisation affect both variants equally.")+" "
+    +L(`Ausgewertet wurden ${nd} von ${nt} Versuchen, Bild für Bild im Video.`,`${nd} of ${nt} attempts were analysed frame by frame in the video.`)+(fps?" "+L(`Höchste Bildrate: ${fps} Bilder pro Sekunde.`,`Highest frame rate: ${fps} frames per second.`):"")+" "+L("Alle Zeiten beziehen sich auf das Startsignal.","All times refer to the start signal."));
+  EVX().forEach(x=>F.para(x,{size:8.5,color:"#355262"}));
+  // Baseline
+  if(BL.length){
+    F.h2(L("Baseline","Baseline"));
+    F.table([{h:L("Kennwert","Parameter"),w:3.2},...BL.map((t,i)=>({h:String(i+1),w:1,a:"r"})),{h:"M",w:1.1,a:"r"},{h:"SD",w:1,a:"r"},{h:"CV",w:1,a:"r"}],
+      ks.filter(k=>evVals(BL,k).length).map(k=>{ const [,l,u]=info(k), v=evVals(BL,k), m=stM(v), s=stSD(v); return [l+uL(u), ...BL.map(t=>fmtU(t.m[k],u)), {t:fmtU(m,u),f:"b"}, fmtU(s,u), s!=null&&m?evPct(s/Math.abs(m)*100):"–"]; }));
+  }
+  // Vergleich gesamt und je Teststufe
+  const cmpTable=(a,b)=>F.table([{h:L("Kennwert","Parameter"),w:2.3},{h:"Baseline",w:1.2,a:"r"},{h:"A  M [KI]".replace("KI",L("KI","CI")),w:1.9,a:"r"},{h:"B  M [KI]".replace("KI",L("KI","CI")),w:1.9,a:"r"},{h:"Δ B−A [KI]".replace("KI",L("KI","CI")),w:1.9,a:"r"},{h:"p",w:0.8,a:"r"},{h:L("Schwelle","Threshold"),w:1.2,a:"r"},{h:L("Bewertung","Verdict"),w:3.1}],
+    ks.map(k=>{ const c=evCmp(D,k,a,b), ci=x=>x?`${fmtU(x.m,c.u)}${x.lo!=null?` [${fmtU(x.lo,c.u)}; ${fmtU(x.hi,c.u)}]`:""} n=${x.n}`:"–";
+      const vc={clear:"#1F8A4C",sig:"#A86F00",triv:"#355262"}[c.v.c]||"#557080";
+      return [c.lab+uL(c.u), c.bl.length?fmtU(stM(c.bl),c.u):"–", ci(c.ca), ci(c.cb), c.w?`${(c.w.d>0?"+":"")+fmtU(c.w.d,c.u)} [${fmtU(c.w.lo,c.u)}; ${fmtU(c.w.hi,c.u)}]`:"–", evP(c.w), c.thr!=null?"±"+fmtU(c.thr,c.u):"–", {t:c.v.t.replace(/<[^>]+>/g,"").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">"),f:"b",c:vc}]; }),{size:7.4});
+  F.h2(`${L("Vergleich","Comparison")} A (${evVN(p,"A")}) – B (${evVN(p,"B")})`); cmpTable(A,B);
+  if(D.stages.length>1) D.stages.forEach(s=>{ F.h3(evStageName(s)); cmpTable(A.filter(t=>(t.stage??1)===s), B.filter(t=>(t.stage??1)===s)); });
+  // Grafiken je Kennwert: Verlauf und Boxplot
+  F.h2(L("Grafiken","Charts"));
+  F.para(L(`Links der Verlauf in der zeitlichen Reihenfolge (grau Baseline, blau A ${evVN(p,"A")}, orange B ${evVN(p,"B")}, gestrichelt: neuer Testtag), rechts der Boxplot (Box: mittlere 50 %, Strich: Median, Raute: Mittelwert, Punkte: einzelne Versuche).`,`Left: progression in chronological order (grey baseline, blue A ${evVN(p,"A")}, orange B ${evVN(p,"B")}, dashed: new test day). Right: box plot (box: middle 50 %, line: median, diamond: mean, dots: individual attempts).`),{size:8.5,color:"#355262"});
+  const gw=(F.cw-12)/2;
+  for(const k of ks){ const [,l,u]=info(k); const ls=evLineChart(p,k,u), bs=evBoxChart(evBoxGroups(D,k,p),u); const svgL=(ls.match(/<svg[\s\S]*<\/svg>/)||[])[0], svgB=(bs.match(/<svg[\s\S]*<\/svg>/)||[])[0];
+    const iL=svgL?await evSvgJpeg(svgL,3):null, iB=svgB?await evSvgJpeg(svgB,3):null; const hh=Math.max(iL?gw*iL.ar:0, iB?gw*iB.ar:0);
+    F.need(hh+22); F.h3(l+uL(u));
+    if(iL) F.img(doc.addJpeg(iL.bytes,iL.w,iL.h), gw, gw*iL.ar, F.M); else doc.text(F.M,F.y+10,L("Zu wenige Werte für den Verlauf.","Too few values for the progression."),{size:8,color:"#557080"});
+    if(iB) F.img(doc.addJpeg(iB.bytes,iB.w,iB.h), gw, gw*iB.ar, F.M+gw+12);
+    F.y+=hh+8; }
+  // Qualität
+  const rq=v=>p.trials.filter(t=>t.v===v && t.rating).map(t=>t.rating);
+  if(rq("A").length||rq("B").length){ F.h2(L("Qualität der Testläufe","Quality of the test runs"));
+    F.para(["A","B"].map(v=>{ const r=rq(v); return `${v} (${evVN(p,v)}): ${r.length?(LANG==="en"?stM(r).toFixed(1):stM(r).toFixed(1).replace(".",","))+" / 5 (n = "+r.length+")":"–"}`; }).join("   ·   ")+"\n"+L("Subjektive Bewertung des Athleten von 1 (schlecht) bis 5 (sehr gut).","Athlete's subjective rating from 1 (poor) to 5 (very good)."),{}); }
+  // Tabelle aller Versuche (Kennwerte in Gruppen zu höchstens 5 Spalten)
+  F.h2(L("Alle Versuche","All attempts"));
+  const tlm=new Map(tl.rows.map(r=>[r.t,r])), ord=evOrd(p);
+  for(let g=0; g<Math.max(1,Math.ceil(ks.length/5)); g++){ const kk=ks.slice(g*5,g*5+5);
+    if(g>0) F.h3(L("Fortsetzung","Continued"));
+    F.table([{h:"Nr.",w:0.6},{h:L("Var.","Var."),w:0.7},{h:L("Stufe","Stage"),w:0.9},{h:L("Tag","Day"),w:0.8},{h:L("Uhrzeit","Time"),w:1},{h:L("Pause","Rest"),w:1.1,a:"r"},{h:L("Qual.","Qual."),w:0.7,a:"r"},...kk.map(k=>({h:info(k)[1]+uL(info(k)[2]),w:1.4,a:"r"}))],
+      ord.map((t,i)=>{ const r=tlm.get(t); return [String(i+1), {t:t.v,f:"b",c:EVC[t.v]}, t.v==="BL"?"BL":String(t.stage??1), r?String(r.day):"–", r?tm(r.t0):"–", r&&r.pause!=null?evDur(r.pause):"–", t.rating?String(t.rating):"–", ...kk.map(k=>t.m&&t.m[k]!=null?fmtU(t.m[k],info(k)[2]):"–")]; }),{size:7.4}); }
+  // Beschreibung aller Versuche
+  F.h2(L("Beschreibung der Versuche","Description of the attempts"));
+  ord.forEach((t,i)=>{ const r=tlm.get(t), parts=[`${i+1}. ${t.v==="BL"?"Baseline":`${t.v} – ${evVN(p,t.v)}`}`, t.v==="BL"?"":evStageName(t.stage??1)];
+    if(r) parts.push(L(`Tag ${r.day}, ${tm(r.t0)} Uhr`,`day ${r.day}, ${tm(r.t0)}`)); if(r&&r.pause!=null) parts.push(L(`Pause davor ${evDur(r.pause)}`,`rest before ${evDur(r.pause)}`));
+    if(t.rating) parts.push(L(`Qualität ${t.rating}/5`,`quality ${t.rating}/5`));
+    parts.push(t.status==="done"?L("ausgewertet","analysed"):t.vid?L("Video vorhanden, nicht ausgewertet","video available, not analysed"):L("ohne Video","no video"));
+    const m=t.m||{}, key=ks.slice(0,4).filter(k=>m[k]!=null).map(k=>`${info(k)[1]} ${evFmt(m[k],info(k)[2])}`);
+    let txt=parts.filter(Boolean).join(" · "); if(key.length) txt+="\n"+key.join(" · "); if(t.note) txt+="\n"+L("Bemerkung: ","Remark: ")+t.note;
+    F.need(30); F.para(txt,{size:8.5,after:5}); });
+  F.para(L("Quelle der Schwelle: Pyne, D. B., Trewin, C. B. & Hopkins, W. G. (2004). Progression and variability of competitive performance of Olympic swimmers. Journal of Sports Sciences, 22(7), 613–620.","Source of the threshold: Pyne, D. B., Trewin, C. B. & Hopkins, W. G. (2004). Progression and variability of competitive performance of Olympic swimmers. Journal of Sports Sciences, 22(7), 613–620."),{size:7.5,color:"#557080"});
+  F.footer();
+  return doc.output();
 }
 
 /* --- Projektdatei (.sprintz.json): zum Weitergeben an andere Konten ---
