@@ -405,6 +405,12 @@ body.xh-on #xhair{display:block}
 .seg.big.g4{display:grid;grid-template-columns:repeat(4,1fr)}.seg.big.g4 button{padding:11px 2px;font-size:.95rem}
 #sSpkCard{margin-top:16px}
 #spAna .vbox{position:relative}#sMeas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;z-index:2}
+#sMeasTip{position:absolute;left:8px;top:8px;z-index:3;pointer-events:none;background:rgba(8,20,28,.72);color:#fff;border-radius:10px;padding:8px 10px;font-size:.82rem;line-height:1.35;max-width:calc(100% - 16px);backdrop-filter:blur(4px)}
+#sMeasTip ol{margin:4px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
+#sMeasTip li{display:flex;gap:6px;align-items:center;opacity:.6}#sMeasTip li.cur{opacity:1;font-weight:700}#sMeasTip li.ok{opacity:.45;text-decoration:line-through}
+#sMeasTip li i{font-style:normal;display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:50%;background:#FFD24A;color:#000;font-size:.72rem;font-weight:700}
+#sMeasTip li:nth-child(3) i{background:#3FD07A}
+.wreq{font-size:.86rem;line-height:1.45;background:color-mix(in srgb,#E8B44A 18%,transparent);border-left:3px solid #E8B44A;border-radius:6px;padding:7px 10px;margin:4px 0 8px}
 .wmeasb{width:100%;margin:2px 0 10px}.wmeash{margin:-2px 0 10px;padding:8px 10px;border-radius:10px;background:var(--soft);font-size:.92rem}
 .spbars{display:block;width:100%;height:56px;margin:10px 0 0}.spbarl{display:flex;margin-bottom:10px}.spbarl span{flex:1;text-align:center;font-size:.75rem;color:var(--muted);line-height:1.25}.spbarl b{display:block;color:var(--fg);font-size:.85rem}
 #tour.over{z-index:40}
@@ -602,6 +608,47 @@ p.everr{margin:6px 0 10px;line-height:1.4}
 .evexpl{margin-top:10px;font-size:.86rem;line-height:1.5}.evexpl summary{cursor:pointer;color:var(--accent);font-weight:600}
 .evpill{display:inline-flex;align-items:center;gap:6px;margin:0 10px 6px 0;font-size:.88rem}
 .evfigs.one{grid-template-columns:1fr}
+.vhead #sFull{margin-left:auto;flex:none}
+#seriesSec .row[hidden]+.row{border-top:0;padding-top:0}
+.evextra{display:block;color:var(--muted);font-size:.8rem;margin-top:4px}
+#sVmCard{margin-top:10px}
+#sVmCard canvas,#fsVmC{display:block;width:100%;height:150px}
+.vmhd{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:6px}.vmhd span{color:var(--muted);font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vmrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:6px;font-size:.8rem;color:var(--muted)}
+.vmbtns{display:flex;gap:6px;flex-wrap:wrap}
+body.fs-on{overflow:hidden}
+#fsOv{position:fixed;inset:0;z-index:80;background:#05090c;display:flex;flex-direction:column}
+#fsMain{flex:1;display:flex;flex-direction:column;min-height:0}
+#fsGrid{flex:1;display:grid;gap:4px;min-height:0;padding:4px}
+.fscell{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;background:#000;border-radius:8px;overflow:hidden}
+.fscell video{width:100%;height:100%;object-fit:contain;display:block}
+#fsOv .vbox{width:100%;height:100%;border-radius:0;box-shadow:none;background:#000}
+#fsOv .vbox video{width:100%;height:100%;max-height:none;object-fit:contain}
+.fslab{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.55);color:#fff;font-size:.75rem;padding:2px 8px;border-radius:999px}
+.fsadj{position:absolute;right:8px;top:8px;display:flex;gap:4px;align-items:center;background:rgba(0,0,0,.55);color:#fff;font-size:.72rem;padding:3px 6px;border-radius:999px}
+.fsadj button{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:999px;padding:1px 8px;cursor:pointer;font:inherit}
+#fsVm{height:160px;padding:4px 8px;background:#0b141a}
+#fsBox{position:absolute;left:12px;top:12px;width:min(420px,calc(100vw - 24px));max-height:calc(100vh - 250px);overflow:auto;z-index:2;background:rgba(10,24,32,.7);color:#fff;border-radius:16px;padding:10px 12px;backdrop-filter:blur(6px);
+  --fg:#F2F7FA;--muted:#B9CDD7;--line:rgba(255,255,255,.18);--surface:rgba(255,255,255,.08);--bg:transparent}
+#fsBox .wcard{background:transparent;border:0;box-shadow:none;padding:0;color:#fff}
+#fsBox .wcard h3,#fsBox .wcard p{color:#fff}
+#fsBox .wnav{margin-top:8px}
+#fsBox.min #fsCardSlot,#fsBox.min #fsKeys{display:none}
+.fsboxhd{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
+.fsboxhd button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;padding:4px 12px;cursor:pointer;font:600 .8rem var(--body)}
+#fsKeys{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:.74rem;color:#B9CDD7}
+#fsKeys kbd{display:inline-block;min-width:16px;text-align:center;border:1px solid rgba(255,255,255,.35);border-radius:4px;padding:0 4px;margin-right:2px;font:600 .72rem var(--body);color:#fff}
+#fsKeys .fsal{flex-basis:100%;color:#E8D49A}
+#fsBar{display:flex;justify-content:center;padding:8px;background:#05090c}
+#fsBar .stepbar{margin:0;max-width:520px;width:100%}
+@media (max-width:700px){ #fsBox{top:auto;bottom:70px;max-height:42vh} #fsVm{height:110px} }
+.evpers{margin:4px 0 12px}
+.evpers .evpadd{border-style:dashed;color:var(--accent)}
+.evpact{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.evpform{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.evpform input,.evsel{flex:1;min-width:150px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font:500 .95rem var(--body)}
+.evsel{width:100%;box-sizing:border-box}
+.evptag{display:inline-block;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);border-radius:999px;padding:1px 8px;font-weight:600}
 #devList{margin-top:16px}
 .devh{font:700 .82rem var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
 .devitem{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);color:var(--fg);cursor:pointer;font:inherit}
@@ -661,19 +708,23 @@ select{font:600 1rem var(--body);color:var(--fg);background:var(--bg);border:1px
   <div id="spListWrap"></div>
 </section>
 <section id="evPage" hidden><div id="evTop"></div><div id="evFinishSlot" hidden></div><div id="evBottom"></div></section>
+<div id="fsOv" hidden><div id="fsMain"><div id="fsGrid"></div><div id="fsVm" hidden><canvas id="fsVmC"></canvas></div></div>
+  <div id="fsBox"><div class="fsboxhd"><button type="button" id="fsMin" aria-label="Hinweisbox ein- oder ausklappen">–</button><button type="button" id="fsClose">Vollbild beenden</button></div><div id="fsCardSlot"></div><div id="fsKeys"></div></div>
+  <div id="fsBar"></div></div>
 <section id="spAna" hidden>
   <div id="evAnaHead" hidden></div>
   <h2>Auswertung</h2>
-  <div class="vhead"><span id="sFps"></span><span id="sCur"></span></div>
-  <div class="vbox"><video id="sVid" playsinline muted preload="auto"></video><canvas id="sMeas" hidden></canvas></div>
+  <div class="vhead"><span id="sFps"></span><span id="sCur"></span><button type="button" class="testbtn small" id="sFull">⛶ Vollbild</button></div>
+  <div class="vbox" id="sBox"><video id="sVid" playsinline muted preload="auto"></video><canvas id="sMeas" hidden></canvas><div id="sMeasTip" hidden></div></div>
   <canvas id="sWave" aria-label="Tonspur"></canvas>
-  <div class="stepbar">
+  <div class="stepbar" id="sStepBar">
     <button type="button" data-sstep="-10">−10</button><button type="button" data-sstep="-1">−1</button>
     <button type="button" id="sPlay">▶</button>
     <button type="button" data-sstep="1">+1</button><button type="button" data-sstep="10">+10</button>
   </div>
   <div class="wiz"><div class="wcard" id="wCard"></div></div>
-  <div class="wnav"><button type="button" id="wPrev">‹ Zurück</button><div class="wprog" id="wProg"></div><button type="button" id="wNext">Weiter ›</button></div>
+  <div class="card" id="sVmCard" hidden></div>
+  <div class="wnav" id="wnavBar"><button type="button" id="wPrev">‹ Zurück</button><div class="wprog" id="wProg"></div><button type="button" id="wNext">Weiter ›</button></div>
   <div class="card" id="sSpkCard"></div>
 </section>
 <section id="modeSoon" hidden><button type="button" class="testbtn ghost small" id="devBack" hidden style="margin:0 0 10px">‹ Entwicklermodus</button><div class="card"><div class="ic" id="soonIc"></div><h2 id="soonT"></h2><p id="soonX"></p></div>
@@ -715,7 +766,10 @@ select{font:600 1rem var(--body);color:var(--fg);background:var(--bg);border:1px
         </div>
       </div>
       <div class="q" id="q3" hidden>
-        <p class="qt">Startest du einmal oder mehrmals? <button type="button" class="info" data-info="q3" aria-label="Erklärung anzeigen">?</button></p>
+        <p class="qt" id="q3t">Startest du einmal oder mehrmals? <button type="button" class="info" data-info="q3" aria-label="Erklärung anzeigen">?</button></p>
+        <p class="qt" id="q3tl" hidden>Wie viele Starts möchtest du machen?</p>
+        <div class="card" id="q3land" hidden><div class="row"><div class="lbl"><b>Anzahl der Starts</b><small>Bei mehr als einem Start legst du danach die Pause fest.</small></div>
+          <div class="num"><input id="runsL" type="number" inputmode="numeric" min="1" max="50" step="1" placeholder="1"></div></div></div>
         <div class="seg big" id="mode" role="group" aria-label="Einzelstart oder Serie">
           <button type="button" data-v="single">Einzelstart</button>
           <button type="button" data-v="series">Serie</button>
@@ -1271,6 +1325,8 @@ function envNote(){
   pressed("maxD", A.max&&S.maxD>0?S.maxD:null);
   reveal($("q2w"), A.env && W && !T()); reveal($("q2l"), A.env && !W);
   reveal($("q3"), A.env && sub);
+  const land=!W; $("q3t").hidden=land; $("q3tl").hidden=!land; $("q3land").hidden=!land; $("mode").hidden=land; $("seriesSec").querySelector(".row").hidden=land;
+  if(land && A.mode && document.activeElement!==$("runsL")) $("runsL").value = S.mode==="series" ? S.runs : 1;
   reveal($("q3card"), A.env && sub && A.mode && S.mode==="series");
   $("leadCard").hidden = measuring();
   reveal($("secDisQ"), A.env && sub && A.mode);
@@ -1283,6 +1339,8 @@ function envNote(){
 $("startType").querySelectorAll("button").forEach(b=>b.onclick=()=>{ S.startType=b.dataset.v; A.subW=true; save(); envNote(); });
 $("measure").querySelectorAll("button").forEach(b=>b.onclick=()=>{ S.measure=b.dataset.v==="1"; A.subL=true; save(); envNote(); });
 $("mode").querySelectorAll("button").forEach(b=>b.onclick=()=>{ S.mode=b.dataset.v; A.mode=true; save(); envNote(); });
+// an Land: die Anzahl entscheidet, ob es ein Einzelstart oder eine Serie ist
+$("runsL").addEventListener("input",()=>{ const n=Math.round(parseFloat($("runsL").value)); if(!(n>=1)) return; S.runs=Math.min(50,n); S.mode = n>1 ? "series" : "single"; A.mode=true; save(); updaters.forEach(f=>f()); envNote(); });
 $("disYN").querySelectorAll("button").forEach(b=>b.onclick=()=>{ A.dis=true; wantDis=b.dataset.v==="ja";
   if(!wantDis){ S.maxD=0; A.max=false; } else if(S.maxD===0){ A.max=false; } save(); envNote(); });
 $("maxD").querySelectorAll("button").forEach(b=>b.onclick=()=>{ S.maxD=+b.dataset.v; A.max=true; save(); envNote(); });
@@ -2030,6 +2088,107 @@ function decodeAny(ab){
   const C=window.OfflineAudioContext||window.webkitOfflineAudioContext; const oc=new C(1,44100,44100);
   return new Promise((res,rej)=>{ const p=oc.decodeAudioData(ab,res,rej); if(p&&p.then) p.then(res,rej); });
 }
+/* ---------- Tonspur robust lesen ----------
+   1) ganze Datei dekodieren (klappt bei den meisten Videos),
+   2) AAC- bzw. PCM-Tonspur selbst aus MP4/MOV herauslösen (große Zeitlupen, mehrere Tonspuren wie beim iPhone mit räumlichem Audio),
+   3) notfalls den Ton in Echtzeit mitschneiden, während das Video stumm im Hintergrund läuft. */
+async function readAudio(file, onMsg){
+  const say=t=>{ try{ onMsg&&onMsg(t); }catch(e){} };
+  if(file.size<=300e6){ try{ return await decodeAny(await file.arrayBuffer()); }catch(e){} }
+  try{ const b=await mp4Audio(file); if(b) return b; }catch(e){ console.warn("mp4Audio",e); }
+  say(L("Die Tonspur wird abgespielt und gelesen, das dauert so lange wie das Video …","Playing back the audio track to read it, this takes as long as the video …"));
+  return await liveAudio(file);
+}
+// Kleiner MP4/MOV-Leser: Box-Baum, Tonspur-Tabellen, AAC → ADTS bzw. PCM → WAV
+async function mp4Audio(file){
+  const rd=async(o,n)=>new DataView(await file.slice(o,o+n).arrayBuffer());
+  const typ=(dv,o)=>String.fromCharCode(dv.getUint8(o),dv.getUint8(o+1),dv.getUint8(o+2),dv.getUint8(o+3));
+  let off=0, moov=null;
+  for(let k=0;k<200 && off+8<=file.size;k++){ const h=await rd(off,16); let size=h.getUint32(0), hl=8; const t=typ(h,4);
+    if(size===1){ size=Number(h.getBigUint64(8)); hl=16; } else if(size===0) size=file.size-off;
+    if(t==="moov"){ if(size>64e6) return null; moov=new DataView(await file.slice(off+hl,off+size).arrayBuffer()); break; }
+    if(size<8) break; off+=size; }
+  if(!moov) return null;
+  const kids=(dv,s,e)=>{ const out=[]; let o=s; while(o+8<=e){ let size=dv.getUint32(o), hl=8; const t=typ(dv,o+4); if(size===1){ size=Number(dv.getBigUint64(o+8)); hl=16; } else if(size===0) size=e-o; if(size<8) break; out.push({t,s:o+hl,e:Math.min(e,o+size)}); o+=size; } return out; };
+  const find=(dv,s,e,path)=>{ let cur={s,e}; for(const p of path){ const c=kids(dv,cur.s,cur.e).find(x=>x.t===p); if(!c) return null; cur=c; } return cur; };
+  const top=kids(moov,0,moov.byteLength); const mvhd=top.find(x=>x.t==="mvhd"); const mts = mvhd ? (moov.getUint8(mvhd.s)===1 ? moov.getUint32(mvhd.s+20) : moov.getUint32(mvhd.s+12)) : 600;
+  const traks=top.filter(x=>x.t==="trak"); let best=null;
+  for(const tk of traks){
+    const hdlr=find(moov,tk.s,tk.e,["mdia","hdlr"]); if(!hdlr || typ(moov,hdlr.s+8)!=="soun") continue;
+    const stbl=find(moov,tk.s,tk.e,["mdia","minf","stbl"]); if(!stbl) continue; const sk=kids(moov,stbl.s,stbl.e), g=n=>sk.find(x=>x.t===n);
+    const stsd=g("stsd"); if(!stsd) continue; const ent=stsd.s+8, fmt=typ(moov,ent+4);
+    const ch=moov.getUint16(ent+8+16), bits=moov.getUint16(ent+8+18), rate=moov.getUint32(ent+8+24)>>>16, ver=moov.getUint16(ent+8+8);
+    const mdhd=find(moov,tk.s,tk.e,["mdia","mdhd"]); const ats = mdhd ? (moov.getUint8(mdhd.s)===1 ? moov.getUint32(mdhd.s+20) : moov.getUint32(mdhd.s+12)) : rate;
+    let asc=null;
+    if(fmt==="mp4a"){ // esds: DecoderSpecificInfo (Tag 5) enthält die AudioSpecificConfig
+      const base=ent+8+28+(ver===1?16:ver===2?36:0); const ex=kids(moov,base,stsd.e); const es=ex.find(x=>x.t==="esds") || (ex.find(x=>x.t==="wave") ? kids(moov,ex.find(x=>x.t==="wave").s,ex.find(x=>x.t==="wave").e).find(x=>x.t==="esds") : null);
+      if(es){ for(let i=es.s+4;i<es.e-2;i++){ if(moov.getUint8(i)===5){ let j=i+1, len=0; for(let q=0;q<4;q++){ const b=moov.getUint8(j++); len=(len<<7)|(b&127); if(!(b&128)) break; } asc=[]; for(let q=0;q<len;q++) asc.push(moov.getUint8(j+q)); break; } } }
+      if(!asc) continue;
+    } else if(!["lpcm","sowt","twos","in24","in32","fl32"].includes(fmt)) continue;
+    // Tabellen
+    const stsz=g("stsz"), stsc=g("stsc"), stco=g("stco")||g("co64"); if(!stsz||!stsc||!stco) continue;
+    const fixed=moov.getUint32(stsz.s+4), n=moov.getUint32(stsz.s+8), sizes=new Uint32Array(n); for(let i=0;i<n;i++) sizes[i]= fixed || moov.getUint32(stsz.s+12+i*4);
+    const co64=stco.t==="co64", nc=moov.getUint32(stco.s+4), chunks=new Array(nc); for(let i=0;i<nc;i++) chunks[i]= co64 ? Number(moov.getBigUint64(stco.s+8+i*8)) : moov.getUint32(stco.s+8+i*4);
+    const ns=moov.getUint32(stsc.s+4), sc=[]; for(let i=0;i<ns;i++) sc.push([moov.getUint32(stsc.s+8+i*12), moov.getUint32(stsc.s+12+i*12)]);
+    // Versatz aus der Schnittliste: leerer Anfang (Verzögerung) und übersprungene Vorlaufsamples
+    let delay=0, skip=0; const elst=find(moov,tk.s,tk.e,["edts","elst"]);
+    if(elst){ const v1=moov.getUint8(elst.s)===1, ne=moov.getUint32(elst.s+4); let o=elst.s+8;
+      for(let i=0;i<ne;i++){ const dur=v1?Number(moov.getBigUint64(o)):moov.getUint32(o), mt=v1?Number(moov.getBigInt64(o+8)):moov.getInt32(o+4); o+=v1?20:12;
+        if(mt===-1) delay+=dur/mts; else { skip=mt/ats; break; } } }
+    const cand={fmt,asc,ch,bits,rate,sizes,chunks,sc,delay,skip,ats};
+    if(!best || (best.fmt!=="mp4a" && fmt==="mp4a")) best=cand;
+  }
+  if(!best) return null;
+  // Lage jeder Probe in der Datei
+  const {sizes,chunks,sc}=best, pos=new Float64Array(sizes.length); let si=0;
+  for(let c=0;c<chunks.length && si<sizes.length;c++){ let per=sc[0][1]; for(const [first,cnt] of sc){ if(c+1>=first) per=cnt; else break; } let o=chunks[c]; for(let k=0;k<per && si<sizes.length;k++){ pos[si]=o; o+=sizes[si]; si++; } }
+  // Bytes zusammenlesen (in Blöcken, damit große Dateien nicht ganz in den Speicher müssen)
+  let total=0; for(const s of sizes) total+=s; if(total>200e6) return null;
+  const body=new Uint8Array(total + (best.fmt==="mp4a" ? sizes.length*7 : 0)); let w=0;
+  const prof=best.asc ? Math.min(4,best.asc[0]>>3)===(best.asc[0]>>3) ? (best.asc[0]>>3) : 2 : 2, sfi=best.asc ? (((best.asc[0]&7)<<1)|(best.asc[1]>>7)) : 4, chc=best.asc ? ((best.asc[1]>>3)&15) : best.ch;
+  for(let i=0;i<sizes.length;){ let j=i, s=pos[i], e=pos[i]+sizes[i]; while(j+1<sizes.length && pos[j+1]===e && e-s<8e6){ j++; e+=sizes[j]; }
+    const buf=new Uint8Array(await file.slice(s,e).arrayBuffer()); let r=0;
+    for(let k=i;k<=j;k++){ const len=sizes[k];
+      if(best.fmt==="mp4a"){ const fl=len+7; body.set([0xFF,0xF1,((Math.max(1,prof)-1)<<6)|(sfi<<2)|(chc>>2),((chc&3)<<6)|(fl>>11),(fl>>3)&255,((fl&7)<<5)|0x1F,0xFC],w); w+=7; }
+      body.set(buf.subarray(r,r+len),w); w+=len; r+=len; }
+    i=j+1; }
+  let ab;
+  if(best.fmt==="mp4a") ab=body.buffer.slice(0,w);
+  else { // PCM → WAV (Big-Endian-Formate drehen)
+    const bps=best.bits/8, be = best.fmt==="twos" || best.fmt==="in24" || best.fmt==="in32";
+    if(be){ for(let i=0;i+bps<=w;i+=bps) body.subarray(i,i+bps).reverse(); }
+    const hd=new DataView(new ArrayBuffer(44)), wr=(o,s)=>{ for(let i=0;i<4;i++) hd.setUint8(o+i,s.charCodeAt(i)); };
+    wr(0,"RIFF"); hd.setUint32(4,36+w,true); wr(8,"WAVE"); wr(12,"fmt "); hd.setUint32(16,16,true); hd.setUint16(20,best.fmt==="fl32"?3:1,true); hd.setUint16(22,best.ch,true); hd.setUint32(24,best.rate,true); hd.setUint32(28,best.rate*best.ch*bps,true); hd.setUint16(32,best.ch*bps,true); hd.setUint16(34,best.bits,true); wr(36,"data"); hd.setUint32(40,w,true);
+    const all=new Uint8Array(44+w); all.set(new Uint8Array(hd.buffer),0); all.set(body.subarray(0,w),44); ab=all.buffer; }
+  const buf=await decodeAny(ab);
+  // auf die Zeitachse des Videos legen: Verzögerung vorn auffüllen, Vorlauf abschneiden
+  const sh=Math.round((best.delay-best.skip)*buf.sampleRate); if(!sh) return buf;
+  const nCh=buf.numberOfChannels, len=Math.max(1,buf.length+sh), data=[];
+  for(let c=0;c<nCh;c++){ const src=buf.getChannelData(c), d=new Float32Array(len); if(sh>0) d.set(src,sh); else d.set(src.subarray(-sh)); data.push(d); }
+  return {sampleRate:buf.sampleRate, numberOfChannels:nCh, length:len, duration:len/buf.sampleRate, getChannelData:c=>data[c]};
+}
+// Notlösung: Ton in Echtzeit mitschneiden (Video läuft unsichtbar und stumm)
+function liveAudio(file){
+  return new Promise((res,rej)=>{
+    const AC=window.AudioContext||window.webkitAudioContext; let ac; try{ ac=new AC(); }catch(e){ rej(e); return; }
+    const v=document.createElement("video"); v.playsInline=true; v.preload="auto"; v.src=URL.createObjectURL(file); v.style.cssText="position:fixed;left:-9999px;width:2px;height:2px;opacity:0";
+    document.body.appendChild(v);
+    const chunks=[]; let t0=null, done=false; const sp=ac.createScriptProcessor(4096,2,1), sink=ac.createGain(); sink.gain.value=0;
+    const fin=ok=>{ if(done) return; done=true; try{ sp.disconnect(); src&&src.disconnect(); }catch(e){} v.pause(); URL.revokeObjectURL(v.src); v.remove(); ac.close().catch(()=>{});
+      if(!ok){ rej(new Error("live")); return; } let n=0; chunks.forEach(c=>n+=c.d.length); if(!n){ rej(new Error("leer")); return; }
+      const out=new Float32Array(Math.round((chunks[0].t)*ac.sampleRate)+n); let o=Math.round(chunks[0].t*ac.sampleRate); chunks.forEach(c=>{ out.set(c.d,Math.min(o,out.length-c.d.length)); o+=c.d.length; });
+      res({sampleRate:ac.sampleRate, numberOfChannels:1, length:out.length, duration:out.length/ac.sampleRate, getChannelData:()=>out}); };
+    let src=null;
+    try{ src=ac.createMediaElementSource(v); }catch(e){ fin(false); return; }
+    src.connect(sp); sp.connect(sink); sink.connect(ac.destination);
+    sp.onaudioprocess=e=>{ if(v.paused||v.ended) return; const a=e.inputBuffer, l=a.getChannelData(0), r=a.numberOfChannels>1?a.getChannelData(1):null, d=new Float32Array(l.length);
+      for(let i=0;i<l.length;i++) d[i]=r?(l[i]+r[i])/2:l[i]; chunks.push({t: chunks.length ? null : Math.max(0,v.currentTime - a.duration), d}); };
+    v.onended=()=>setTimeout(()=>fin(true),300); v.onerror=()=>fin(false);
+    setTimeout(()=>{ if(!done && !chunks.length) fin(false); }, 15000);
+    ac.resume().then(()=>v.play()).catch(()=>fin(false));
+  });
+}
+
 /* ---- Signalerkennung ohne Vorlage: Pfiff, Klatschen/Schuss, Hupe/Piepton ---- */
 // x: Float32Array mono, R: Abtastrate (Hz). Liefert bis zu 6 Kandidaten [{t, score, f}] nach Güte sortiert.
 function sigFFT(re, im){ const n=re.length;
@@ -2142,8 +2301,7 @@ async function loadVideo(f){
   $("vwork").hidden=false; $("fileLbl").firstChild.textContent="Anderes Video wählen"; $("vname").value=""; vRate=null; $("vRate").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
   vmsg("Tonspur wird gelesen …"); updRes();
   try{
-    if(f.size>500e6) throw new Error("zu groß");
-    const buf=await decodeAny(await f.arrayBuffer());
+    const buf=await readAudio(f, vmsg);
     V.pcm=ds(buf, V.rate); try{ V.raw=ds(buf, Math.min(24000, buf.sampleRate)); V.rawRate=Math.min(24000, buf.sampleRate); }catch(e){ V.raw=null; } buildWave(); vmsg(L(`Tippe auf „${SIG()} automatisch finden“ oder setze ${SIGa()} von Hand.`,`Tap “Find ${SIG().toLowerCase()} automatically” or mark ${SIGa()} manually.`));
   }catch(e){ V.pcm=null; buildWave(); vmsg(L(`Die Tonspur ließ sich in diesem Browser nicht lesen. Setze ${SIGa()} von Hand: Spul das Video vor, bis du ${SIGa()} hörst, und tippe dann auf „${SIG()} hier setzen“.`,`This browser couldn't read the audio track. Mark ${SIGa()} manually: scrub to where you hear ${SIGa()}, then tap “Mark ${SIG().toLowerCase()} here”.`)); }
 }
@@ -2190,7 +2348,7 @@ function drawWave(){
   if(V.wave){ g.fillStyle=css("--muted"); const {w,mx}=V.wave;
     for(let i=0;i<W;i++){ const h=Math.max(1,(w[i]/mx)*(WH*0.85)); g.fillRect(i,(WH-h)/2,1,h); } }
   if(hasLab){ g.fillStyle=css("--line"); g.fillRect(0,WH,W,dp); }
-  else { g.fillStyle=css("--muted"); g.font=`${12*(devicePixelRatio||1)}px system-ui`; g.fillText("keine Tonspur", 10, H/2); }
+  else { g.fillStyle=css("--muted"); g.font=`${12*(devicePixelRatio||1)}px system-ui`; g.fillText(L("Tonspur wird gelesen … oder nicht vorhanden","Reading audio track … or none available"), 10, H/2); }
   const mark=(t,col,wd)=>{ if(t==null||!D) return; const x=t/D*W; g.fillStyle=col; g.fillRect(x-wd/2,0,wd,H); };
   const dpr=devicePixelRatio||1;
   // Signalnamen (nur bei Aufnahmen aus dem Training bekannt)
@@ -2219,10 +2377,10 @@ $("wave").addEventListener("pointerdown",e=>{ dragging=true; $("wave").setPointe
 $("wave").addEventListener("pointermove",e=>{ if(dragging) seekFromWave(e); });
 $("wave").addEventListener("pointerup",()=>dragging=false);
 const fps=()=>parseFloat($("fps").value)||240;
-document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{
-  vid.pause(); const k=parseFloat(b.dataset.step), f=fps(), base=curT();
+function vStep(k){ vid.pause(); const f=fps(), base=curT();
   // ein Viertelbild Zuschlag, damit sicher das nächste Bild erscheint
-  const t=Math.min(vid.duration||0, Math.max(0, base + k/f + (k>0?0.25:-0.25)/f)); vid.currentTime=t; });
+  vid.currentTime=Math.min(vid.duration||0, Math.max(0, base + k/f + (k>0?0.25:-0.25)/f)); }
+document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>vStep(parseFloat(b.dataset.step)));
 $("vplay").onclick=()=>{ if(vid.paused){ vid.playbackRate=0.25; vid.play(); } else vid.pause(); };
 vid.addEventListener("play",()=>{ $("vplay").textContent="❚❚"; const loop=()=>{ if(!vid.paused){ tickV(); requestAnimationFrame(loop);} }; loop(); });
 vid.addEventListener("pause",()=>{ $("vplay").textContent="▶"; tickV(); });
@@ -2625,9 +2783,9 @@ function spStepsSwim(){
   if(cold) t("move","Erste Bewegung","First movement","Das erste Bild, in dem du dich sichtbar bewegst, meist der erste Armzug oder Beinschlag.","The first frame in which you visibly move, usually the first arm pull or kick.");
   else t("move","Erste Reaktion","First reaction","Das erste Bild, in dem du dich sichtbar bewegst.","The first frame in which you visibly move.");
   if(dive) t("hands","Hände lösen","Hands off","Das Bild, in dem sich deine Hände vom Block bzw. Griff lösen. Optional.","The frame in which your hands leave the block or grips. Optional.",{opt:true});
-  if(st==="block") t("off","Blockzeit","Block time","Das Bild, in dem dein Fuß den Startblock verlässt.","The frame in which your foot leaves the block.");
+  if(st==="block") t("off","Lösen des zweiten Fußes vom Block","Second foot leaves the block","Das Bild, in dem sich dein zweiter (hinterer bzw. letzter) Fuß vom Startblock löst. Daraus ergibt sich die Blockzeit.","The frame in which your second (rear or last) foot leaves the block. This gives the block time.");
   if(st==="back"||st==="push") t("off","Abstoß","Push-off","Das Bild, in dem deine Füße die Wand verlassen.","The frame in which your feet leave the wall.");
-  if(dive){ t("entry","Eintauchen","Entry","Das Bild, in dem deine Hände ins Wasser eintauchen.","The frame in which your hands enter the water.");
+  if(dive){ t("entry","Erster Wasserkontakt","First water contact","Das Bild, in dem deine Fingerspitzen zum ersten Mal das Wasser berühren.","The frame in which your fingertips first touch the water.");
     n("jump","Sprungweite","Start distance","Abstand von der Wand bis zur Eintauchstelle deiner Hände. Am genauesten misst du ihn direkt im Video.","Distance from the wall to where your hands entered. Measuring it directly in the video is the most accurate way.",u,
       {meas:{a:[0,()=>L("die Startwand","the start wall")], b:[5,()=>L("die Rückenfähnchen (5 m)","the backstroke flags (5 m)").replace(" m)"," "+u+")")], tg:()=>L("die Stelle, an der deine Hände eintauchen","the spot where your hands enter")}}); }
   if(D>0){
@@ -2719,12 +2877,24 @@ const sFps=()=>SA.fps||30;
 const sCurT=()=> (SA.frameT!=null && Math.abs(SA.frameT-sVid.currentTime) < 1.5/sFps()) ? SA.frameT : sVid.currentTime;
 function sFrameLoop(){ if(!hasRVFC) return; sVid.requestVideoFrameCallback((n,md)=>{ SA.frameT=md.mediaTime; sFrameLoop(); }); }
 sFrameLoop();
-document.querySelectorAll("[data-sstep]").forEach(b=>b.onclick=()=>{ sVid.pause(); const k=parseFloat(b.dataset.sstep), f=sFps(); sVid.currentTime=Math.min(sVid.duration||0, Math.max(0, sCurT()+k/f+(k>0?0.25:-0.25)/f)); });
+function sStep(k){ sVid.pause(); const f=sFps(); sVid.currentTime=Math.min(sVid.duration||0, Math.max(0, sCurT()+k/f+(k>0?0.25:-0.25)/f)); }
+document.querySelectorAll("[data-sstep]").forEach(b=>b.onclick=()=>sStep(parseFloat(b.dataset.sstep)));
+// Tastatur in der Videoauswertung: ← → ein Bild, Umschalt + ← → zehn Bilder, Leertaste Abspielen, Enter markiert
+document.addEventListener("keydown",e=>{
+  const tg=e.target, typing = tg && (tg.tagName==="INPUT"&&tg.type!=="range" || tg.tagName==="TEXTAREA" || tg.tagName==="SELECT" || tg.isContentEditable);
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  const sa = SA.active && !$("spAna").hidden, vv = !sa && typeof tab!=="undefined" && tab==="video" && !$("vwork").hidden && !$("setup").hidden;
+  if(!sa && !vv) return;
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(typing && tg.tagName!=="INPUT") return; if(typing) return; e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
+  if(typing) return;
+  if(e.key===" " && sa){ e.preventDefault(); $("sPlay").click(); return; }
+  if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
+});
 $("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.playbackRate=0.25; sVid.play(); } else sVid.pause(); };
 sVid.addEventListener("play",()=>{ $("sPlay").textContent="❚❚"; const loop=()=>{ if(!sVid.paused){ if(SA.playTo!=null && sVid.currentTime>=SA.playTo){ sVid.pause(); SA.playTo=null; } spTick(); requestAnimationFrame(loop);} }; loop(); });
 sVid.addEventListener("pause",()=>{ $("sPlay").textContent="▶"; spTick(); });
 sVid.addEventListener("seeked",spTick); sVid.addEventListener("loadedmetadata",()=>{ spDraw(); });
-function spTick(){ $("sCur").textContent=fmtS(sVid.currentTime); spDraw(); }
+function spTick(){ $("sCur").textContent=fmtS(sVid.currentTime); spDraw(); if(SA.trialRef&&SA.trialRef.vm) vmDraw(FS.on?$("fsVmC"):$("sVmC")); }
 function seekS(ev){ const c=$("sWave"), r=c.getBoundingClientRect(); if(sVid.duration){ sVid.pause(); sVid.currentTime=Math.min(1,Math.max(0,(ev.clientX-r.left)/r.width))*sVid.duration; } }
 let sDrag=false; $("sWave").addEventListener("pointerdown",e=>{ sDrag=true; $("sWave").setPointerCapture(e.pointerId); seekS(e); });
 $("sWave").addEventListener("pointermove",e=>{ if(sDrag) seekS(e); }); $("sWave").addEventListener("pointerup",()=>sDrag=false);
@@ -2844,7 +3014,7 @@ function wizRender(){
       <button type="button" class="wskip" id="wSkip">${L("Nicht zu sehen – überspringen","Not visible – skip")}</button>`; }
   } else if(st.k==="num"){
     const ta=st.seg?mAt(st.seg.a):null, tb=st.seg?mAt(st.seg.b):null;
-    h+=`<p>${st.x()}</p>${st.meas?`<button type="button" class="testbtn wmeasb" id="wMeas">${L("Im Video ausmessen","Measure in the video")}</button><p class="wmeash" id="wMeasH" hidden></p>`:""}
+    h+=`<p>${st.x()}</p>${st.meas&&st.meas.req?`<p class="wreq">${st.meas.req()}</p>`:""}${st.meas?`<button type="button" class="testbtn wmeasb" id="wMeas">${L("Im Video ausmessen","Measure in the video")}</button><p class="wmeash" id="wMeasH" hidden></p>`:""}
       ${st.seg && ta!=null && tb!=null && tb>ta ? `<button type="button" class="testbtn wmeasb" id="wSeg">▶ ${L("Abschnitt in Zeitlupe abspielen","Play this section in slow motion")}</button>` : ""}
       <div class="wnum"><input id="wNum" type="number" inputmode="decimal" step="${st.step||(st.unit==="×"?1:0.1)}" min="0" value="${SA.vals[st.id]??""}" placeholder="0"><span>${st.unit}</span></div>
       <button type="button" class="wbig" id="wTake">${L("Übernehmen","Confirm")}</button><button type="button" class="wskip" id="wSkip">${L("Weiß ich nicht – überspringen","Don't know – skip")}</button>`;
@@ -2869,6 +3039,8 @@ function wizRender(){
   // Hochgeladene Videos: Art des Startsignals und Trefferliste
   const ec=$("eCands"); if(ec) ec.querySelectorAll("button").forEach(b=>b.onclick=()=>{ const x=SA.cands[+b.dataset.i]; SA.marks.sig=x.t; SA.sigType=x.type||SA.sigType; SA.sigAuto="manual"; sVid.currentTime=x.t; spDraw(); wizRender(); });
   if(SA.mode==="eval") evAnaHead();
+  $("sFull").hidden = SA.mode!=="eval";
+  if(FS.on) fsHint();
 }
 function wizGo(i,dir){
   while(i>=0 && i<SA.steps.length && !sVisible(SA.steps[i])) i+=dir;
@@ -2884,18 +3056,25 @@ $("wPrev").onclick=()=>wizGo(SA.i-1,-1); $("wNext").onclick=()=>wizGo(SA.i+1,1);
   c.addEventListener("pointerup",e=>{ if(x0==null) return; const dx=e.clientX-x0; x0=null; if(dx<-60) wizGo(SA.i+1,1); else if(dx>60) wizGo(SA.i-1,-1); }); }
 /* ---- Weiten im Video ausmessen: zwei bekannte Marken antippen, dann den Punkt ---- */
 function measStart(st){
-  sVid.pause(); SA.meas={st, pts:[]}; const cv=$("sMeas"); cv.hidden=false; measDraw(); measHint();
+  sVid.pause(); SA.meas={st, pts:[]}; const cv=$("sMeas"); cv.hidden=false;
+  // zum passenden Bild springen (erster Wasserkontakt bzw. Auftauchen), sofern markiert
+  const at=st.meas.at && SA.marks[st.meas.at]; if(at!=null){ try{ sVid.currentTime=at; }catch(e){} }
+  measDraw(); measHint();
   $("spAna").querySelector(".vbox").scrollIntoView({block:"nearest", behavior:"smooth"});
 }
-function measEnd(){ SA.meas=null; const cv=$("sMeas"); if(cv){ cv.hidden=true; } const h=$("wMeasH"); if(h) h.hidden=true; }
+function measEnd(){ SA.meas=null; const cv=$("sMeas"); if(cv){ cv.hidden=true; } const h=$("wMeasH"); if(h) h.hidden=true; const tp=$("sMeasTip"); if(tp) tp.hidden=true; }
 function measHint(){ const M=SA.meas, h=$("wMeasH"); if(!M||!h) return; const g=M.st.meas, k=M.pts.length;
   h.hidden=false; h.innerHTML = k===0 ? L(`Stell das Video auf ein Bild, in dem beide Marken zu sehen sind. Tippe dann im Video auf ${g.a[1]()}.`,`Pause on a frame in which both marks are visible. Then tap ${g.a[1]()} in the video.`)
-    : k===1 ? L(`Tippe jetzt auf ${g.b[1]()}.`,`Now tap ${g.b[1]()}.`) : L(`Tippe jetzt auf ${g.tg()}.`,`Now tap ${g.tg()}.`); }
+    : k===1 ? L(`Tippe jetzt auf ${g.b[1]()}.`,`Now tap ${g.b[1]()}.`) : L(`Tippe jetzt auf ${g.tg()}.`,`Now tap ${g.tg()}.`);
+  // Anleitung direkt auf dem Video: alle drei Punkte, der aktuelle hervorgehoben
+  const tp=$("sMeasTip"); if(tp){ tp.hidden=false; const lst=[g.a[1](), g.b[1](), g.tg()];
+    tp.innerHTML=`<b>${L("Klicke nacheinander:","Click in order:")}</b><ol>${lst.map((x,i)=>`<li class="${i<k?"ok":i===k?"cur":""}"><i>${i+1}</i>${x}</li>`).join("")}</ol>`; } }
 function measDraw(){ const cv=$("sMeas"), r=cv.getBoundingClientRect(), dpr=devicePixelRatio||1; cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr);
   const g=cv.getContext("2d"); g.clearRect(0,0,cv.width,cv.height); const M=SA.meas; if(!M) return;
   const P=M.pts.map(p=>[p[0]*cv.width,p[1]*cv.height]);
   if(P.length>=2){ g.strokeStyle="rgba(255,210,74,.9)"; g.lineWidth=2*dpr; g.setLineDash([6*dpr,4*dpr]); g.beginPath(); g.moveTo(P[0][0],P[0][1]); g.lineTo(P[1][0],P[1][1]); g.stroke(); g.setLineDash([]); }
-  P.forEach((p,i)=>{ g.fillStyle = i<2 ? "#FFD24A" : "#3FD07A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(p[0],p[1],6*dpr,0,7); g.fill(); g.stroke(); });
+  P.forEach((p,i)=>{ g.fillStyle = i<2 ? "#FFD24A" : "#3FD07A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(p[0],p[1],6*dpr,0,7); g.fill(); g.stroke();
+    g.font=`700 ${12*dpr}px system-ui`; g.fillStyle="#000"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(String(i+1),p[0],p[1]+0.5*dpr); });
 }
 $("sMeas").addEventListener("pointerdown",e=>{ const M=SA.meas; if(!M) return; e.preventDefault(); const r=$("sMeas").getBoundingClientRect();
   M.pts.push([(e.clientX-r.left)/r.width, (e.clientY-r.top)/r.height]); measDraw();
@@ -2956,7 +3135,7 @@ const STORE={
     }catch(e){ EV.syncErr=e; evSyncNote(); return false; } },
   async del(id){ const p=this._all().find(x=>x.id===id); this._set(this._all().filter(x=>x.id!==id));
     if(this.online()){ try{ await sbReady(); await sbFetch("/rest/v1/projects?id=eq."+encodeURIComponent(id),{method:"DELETE"});
-      const paths=p&&p.trials ? p.trials.map(t=>t.vid&&t.vid.cloud).filter(Boolean) : []; if(paths.length) await sbFetch("/storage/v1/object/"+VBUCKET,{method:"DELETE", body:{prefixes:paths}});
+      const paths=p&&p.trials ? p.trials.flatMap(t=>tVids(t).map(v=>v.cloud)).filter(Boolean) : []; if(paths.length) await sbFetch("/storage/v1/object/"+VBUCKET,{method:"DELETE", body:{prefixes:paths}});
     }catch(e){ EV.syncErr=e; evSyncNote(); } } }
 };
 function evSyncNote(){ const n=$("evSync"); if(!n) return; const pv=vidPending(), mb=Math.round(pv.reduce((a,x)=>a+(x.t.vid.size||0),0)/1e6);
@@ -2978,22 +3157,23 @@ const isMobileDev=()=>/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (
 function vidAuto(){ const c=navigator.connection; if(c && c.saveData) return false; if(c && c.type) return c.type==="wifi" || c.type==="ethernet"; return !isMobileDev(); }
 // nur Videos, die auf diesem Gerät liegen (jedes Gerät lädt seine eigenen Aufnahmen hoch)
 var DEVID=(()=>{ try{ let d=localStorage.getItem("sprintz-dev"); if(!d){ d=Math.random().toString(36).slice(2,10); localStorage.setItem("sprintz-dev",d); } return d; }catch(e){ return "x"; } })();
-function vidPending(){ return STORE._all().flatMap(p=>(p.trials||[]).filter(t=>t.vid && !t.vid.cloud && !t.vid.big && (!t.vid.dev || t.vid.dev===DEVID)).map(t=>({p,t}))); }
-function vidBig(){ return STORE._all().reduce((a,p)=>a+(p.trials||[]).filter(t=>t.vid && t.vid.big).length,0); }
-const vidPath=(p,t)=>`${SESS.uid}/${p.id}/${t.vid.key.replace(/[^\w.\-]+/g,"_")}`;
+const tVids=t=> t&&t.vid ? [t.vid, ...(t.vids2||[])] : [];
+function vidPending(){ return STORE._all().flatMap(p=>(p.trials||[]).flatMap(t=>tVids(t).filter(v=>!v.cloud && !v.big && (!v.dev || v.dev===DEVID)).map(v=>({p,t,v})))); }
+function vidBig(){ return STORE._all().reduce((a,p)=>a+(p.trials||[]).reduce((b,t)=>b+tVids(t).filter(v=>v.big).length,0),0); }
+const vidPath=(p,v)=>`${SESS.uid}/${p.id}/${v.key.replace(/[^\w.\-]+/g,"_")}`;
 var VSYNC={busy:false};
 async function vidSync(force){
   if(VSYNC.busy || !STORE.online() || !navigator.onLine || !(force || vidAuto())) return; VSYNC.busy=true; evSyncNote();
   try{ await sbReady(); if(!SESS.uid) return;
-    for(const {p,t} of vidPending()){
-      const b = t.vid.src==="cam" ? await IDB.get(t.vid.key).catch(()=>null) : await IDB.get("file:"+t.vid.key).catch(()=>null);
-      const cur=STORE._all().find(x=>x.id===p.id); const ct=cur&&cur.trials[t.i]; if(!ct || !ct.vid || ct.vid.key!==t.vid.key) continue;
+    for(const {p,t,v} of vidPending()){
+      const b = v.src==="cam" ? await IDB.get(v.key).catch(()=>null) : await IDB.get("file:"+v.key).catch(()=>null);
+      const cur=STORE._all().find(x=>x.id===p.id); const ct=cur&&cur.trials[t.i]; const cv=ct && tVids(ct).find(x=>x.key===v.key); if(!cv) continue;
       if(!b) continue;
-      if(b.size>VMAX){ ct.vid.big=true; await STORE.put(cur); continue; }
-      const path=vidPath(p,t);
+      if(b.size>VMAX){ cv.big=true; await STORE.put(cur); continue; }
+      const path=vidPath(p,v);
       try{ await sbRaw(`/storage/v1/object/${VBUCKET}/${path}`,{method:"POST", headers:{"Content-Type":b.type||"video/mp4","x-upsert":"true"}, body:b}); }
-      catch(e){ if(e.status===413){ ct.vid.big=true; await STORE.put(cur); continue; } throw e; }
-      ct.vid.cloud=path; await STORE.put(cur); if(EV.cur && EV.cur.id===cur.id){ const et=EV.cur.trials[t.i]; if(et && et.vid && et.vid.key===ct.vid.key) et.vid.cloud=path; }
+      catch(e){ if(e.status===413){ cv.big=true; await STORE.put(cur); continue; } throw e; }
+      cv.cloud=path; await STORE.put(cur); if(EV.cur && EV.cur.id===cur.id){ const et=EV.cur.trials[t.i], ev=et&&tVids(et).find(x=>x.key===v.key); if(ev) ev.cloud=path; }
       evSyncNote(); evCloudIcons();
     }
     EV.syncErr=null;
@@ -3001,10 +3181,11 @@ async function vidSync(force){
   finally{ VSYNC.busy=false; evSyncNote(); evCloudIcons(); }
 }
 // Video aus dem Online-Speicher holen, wenn es auf diesem Gerät fehlt (z. B. am Mac ausgewertet, am Handy gefilmt)
-async function vidFetch(t){
-  if(!t.vid || !t.vid.cloud || !STORE.online()) return null;
-  try{ await sbReady(); const r=await sbRaw(`/storage/v1/object/authenticated/${VBUCKET}/${t.vid.cloud}`); const b=await r.blob();
-    try{ await IDB.put(t.vid.src==="cam" ? t.vid.key : "file:"+t.vid.key, b); }catch(e){} return b; }catch(e){ return null; }
+async function vidFetch(t){ return t&&t.vid ? vidFetchV(t.vid) : null; }
+async function vidFetchV(v){
+  if(!v || !v.cloud || !STORE.online()) return null;
+  try{ await sbReady(); const r=await sbRaw(`/storage/v1/object/authenticated/${VBUCKET}/${v.cloud}`); const b=await r.blob();
+    try{ await IDB.put(v.src==="cam" ? v.key : "file:"+v.key, b); }catch(e){} return b; }catch(e){ return null; }
 }
 // Trainingsdaten (Reaktions- und Starttraining): ein Datensatz je Konto, Zusammenführung über die IDs, gelöschte IDs werden gemerkt
 async function logSync(){
@@ -3025,7 +3206,7 @@ var syncT=null, syncing=false;
 function syncSoon(ms){ clearTimeout(syncT); syncT=setTimeout(syncAll, ms||1500); }
 async function syncAll(){
   if(syncing || !STORE.online() || !navigator.onLine) { evSyncNote(); return; } syncing=true;
-  try{ await STORE.list(); await logSync(); await vidSync(false); if(appMode==="eval" && EV.view==="list" && !$("evPage").hidden) evCloudIcons(); }
+  try{ await STORE.list(); await logSync(); await persSync(); await vidSync(false); if(appMode==="eval" && EV.view==="list" && !$("evPage").hidden) evCloudIcons(); }
   finally{ syncing=false; evSyncNote(); }
 }
 addEventListener("online", ()=>syncSoon(800)); addEventListener("offline", ()=>{ EV.syncErr={net:true}; evSyncNote(); });
@@ -3035,7 +3216,7 @@ try{ const c=navigator.connection; if(c && c.addEventListener) c.addEventListene
 // Wolkensymbol je Projekt: auf dem Server gespeichert (inkl. Videos) oder nicht
 const CLOUD_OK=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10.5a4.5 4.5 0 0 0 .6-8.96A6 6 0 0 0 6.4 8.1 5 5 0 0 0 7 18z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 13.2l2 2 3.8-3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const CLOUD_NO=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10.5a4.5 4.5 0 0 0 .6-8.96A6 6 0 0 0 6.4 8.1 5 5 0 0 0 7 18z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
-function evCloudState(p){ const vids=(p.trials||[]).filter(t=>t.vid), open=vids.filter(t=>!t.vid.cloud).length;
+function evCloudState(p){ const open=(p.trials||[]).reduce((a,t)=>a+tVids(t).filter(v=>!v.cloud).length,0);
   if(p._pending || !STORE.online()) return {ok:false, tip:L("Noch nicht hochgeladen, nur auf diesem Gerät gespeichert","Not uploaded yet, saved on this device only")};
   if(open) return {ok:false, tip:L(`Projekt hochgeladen, Videos nur auf dem Gerät: ${open}`,`Project uploaded, videos on the device only: ${open}`)};
   return {ok:true, tip:L("Auf dem Server gespeichert","Saved on the server")}; }
@@ -3078,23 +3259,68 @@ function evShow(v){ EV.view=v; if(v!=="setup") finishBack(); $("evFinishSlot").h
 async function evList(){
   const top=$("evTop"), bot=$("evBottom"); bot.innerHTML="";
   if(T()){ top.innerHTML=`<h2 class="big">${L("Technikevaluation","Technique evaluation")}</h2><div class="card evnote"><p>${L("Die Technikevaluation gibt es vorerst nur fürs Schwimmen. Wechsle im Menü die Sportart, um sie auszuprobieren.","Technique evaluation is only available for swimming for now. Switch sport in the menu to try it.")}</p></div>`; return; }
-  const ps=(await STORE.list()).filter(p=>p.sport==="swim");
+  const all=(await STORE.list()).filter(p=>p.sport==="swim"), f=canPersons()?(EV.personF||"all"):"all";
+  if(f!=="all" && f!=="none" && !PERS.name(f)) EV.personF="all";
+  const ps = !canPersons()||EV.personF==="all"||!EV.personF ? all : EV.personF==="none" ? all.filter(p=>!p.person||!PERS.name(p.person)) : all.filter(p=>p.person===EV.personF);
   top.innerHTML=`<h2 class="big">${L("Technikevaluation","Technique evaluation")}</h2>
     <p class="evlead">${L("Teste zwei Varianten einer Technik gegeneinander.","Test two variants of a technique against each other.")}</p>
     <button type="button" id="evNew" class="evbig">${L("Neues Projekt","New project")}</button>
     <h2 class="big" style="margin-top:26px">${L("Deine Projekte","Your projects")}</h2>
+    ${evPersonsBar(all)}
     <div class="evlist">${ps.length ? ps.map(p=>{ const done=p.trials? p.trials.filter(t=>t.status==="done").length:0, n=p.trials?p.trials.length:0;
-      return `<div class="evcard" data-id="${p.id}"><button type="button" class="evopen" data-id="${p.id}"><b>${evCloudHTML(p)}${esc(p.name)}</b><small>${evTechName(p.tech)} · ${fmtDate(new Date(p.created).toISOString())}${n?` · ${L(`${done} von ${n} ausgewertet`,`${done} of ${n} analysed`)}`:` · ${L("Einrichtung offen","Setup pending")}`}</small></button>
+      return `<div class="evcard" data-id="${p.id}"><button type="button" class="evopen" data-id="${p.id}"><b>${evCloudHTML(p)}${esc(p.name)}</b><small>${canPersons()&&p.person&&PERS.name(p.person)?`<span class="evptag">${esc(PERS.name(p.person))}</span> `:""}${evTechName(p.tech)} · ${fmtDate(new Date(p.created).toISOString())}${n?` · ${L(`${done} von ${n} ausgewertet`,`${done} of ${n} analysed`)}`:` · ${L("Einrichtung offen","Setup pending")}`}</small></button>
         <button type="button" class="evdel" data-id="${p.id}" aria-label="${L("Projekt löschen","Delete project")}">×</button></div>`; }).join("") : `<p class="hint">${L("Noch keine Projekte.","No projects yet.")}</p>`}</div>
     <label class="filebtn evup" style="margin-top:12px">${L("Projekt hochladen","Upload project")}<input type="file" id="evImport" accept=".json,.sprintz,application/json"></label>
     <p class="hint" id="evImpMsg"></p><p class="hint evsync" id="evSync" hidden></p>`;
-  evSyncNote(); $("evImport").onchange=e=>{ const f=e.target.files[0]; e.target.value=""; if(f) evImport(f); };
+  evSyncNote(); evPersonsBind(); $("evImport").onchange=e=>{ const f=e.target.files[0]; e.target.value=""; if(f) evImport(f); };
   $("evNew").onclick=()=>evNewProject();
   top.querySelectorAll(".evopen").forEach(b=>b.onclick=async()=>{ EV.cur=await STORE.get(b.dataset.id); evShow(EV.cur.trials&&EV.cur.trials.length?"plan":"setup"); });
   top.querySelectorAll(".evdel").forEach(b=>b.onclick=async()=>{
     if(b.dataset.sure){ const p=await STORE.get(b.dataset.id); if(p&&p.trials) p.trials.forEach(t=>IDB.del(evVidKey(p,t)).catch(()=>{})); await STORE.del(b.dataset.id); evList(); return; }
     b.dataset.sure="1"; b.textContent=L("Löschen?","Delete?"); b.classList.add("sure"); setTimeout(()=>{ if(b.isConnected){ delete b.dataset.sure; b.textContent="×"; b.classList.remove("sure"); } },3000); });
 }
+/* --- Personen: Projekte Athletinnen und Athleten zuordnen (nur für freigegebene Konten) --- */
+const PERSON_USERS=["host289","freaky200"]; const canPersons=()=>!!USER && PERSON_USERS.includes(USER);
+const PERS={ key:()=>"sprintz-persons-"+(USER||"gast"),
+  get(){ try{ const o=JSON.parse(localStorage.getItem(this.key())||"null"); return o && o.list ? o : {list:[], del:[], _u:0}; }catch(e){ return {list:[], del:[], _u:0}; } },
+  set(o){ o._u=Date.now(); o._p=true; try{ localStorage.setItem(this.key(), JSON.stringify(o)); }catch(e){} if(typeof syncSoon==="function") syncSoon(2500); },
+  list(){ return this.get().list.slice().sort((a,b)=>a.name.localeCompare(b.name)); },
+  name(id){ const x=this.get().list.find(q=>q.id===id); return x?x.name:null; },
+  add(name){ const o=this.get(); const x={id:evId(), name:name.trim(), created:Date.now()}; o.list.push(x); this.set(o); return x; },
+  rename(id,name){ const o=this.get(), x=o.list.find(q=>q.id===id); if(x){ x.name=name.trim(); this.set(o); } },
+  del(id){ const o=this.get(); o.list=o.list.filter(q=>q.id!==id); (o.del=o.del||[]).push(id); this.set(o); } };
+async function persSync(){
+  if(!canPersons() || !STORE.online() || !navigator.onLine) return;
+  try{ await sbReady(); const rows=await sbFetch("/rest/v1/userdata?key=eq.persons&select=data"); const R=rows&&rows[0]&&rows[0].data, L0=PERS.get();
+    if(R){ const del=new Set([...(L0.del||[]),...(R.del||[])]); const m=new Map(); [...(R.list||[]),...(L0.list||[])].forEach(x=>{ if(!del.has(x.id)) m.set(x.id,x); });
+      const o={list:[...m.values()], del:[...del].slice(-500), _u:Math.max(L0._u||0,R._u||0), _p:L0._p}; try{ localStorage.setItem(PERS.key(), JSON.stringify(o)); }catch(e){} }
+    const cur=PERS.get(); if(cur._p || !R){ const d=Object.assign({},cur); delete d._p;
+      await sbFetch("/rest/v1/userdata?on_conflict=user_id,key",{method:"POST", headers:{Prefer:"resolution=merge-duplicates,return=minimal"}, body:{key:"persons", data:d, updated_at:new Date().toISOString()}});
+      cur._p=false; try{ localStorage.setItem(PERS.key(), JSON.stringify(cur)); }catch(e){} }
+  }catch(e){}
+}
+function evPersonsSel(p){ if(!canPersons()) return ""; const pl=PERS.list();
+  return `<div class="q"><p class="qt">${L("Person","Person")}</p><select id="evPerson" class="evsel"><option value="">${L("– keine Zuordnung –","– not assigned –")}</option>${pl.map(x=>`<option value="${x.id}"${p.person===x.id?" selected":""}>${esc(x.name)}</option>`).join("")}</select></div>`; }
+// Auswahl in der Projektübersicht: Filter, neue Person, umbenennen, löschen
+function evPersonsBar(ps){ if(!canPersons()) return ""; const pl=PERS.list(), f=EV.personF||"all", cnt=id=>ps.filter(p=>(p.person||"")===id).length, un=ps.filter(p=>!p.person||!PERS.name(p.person)).length;
+  const sel=pl.find(x=>x.id===f);
+  return `<div class="evpers"><p class="qt" style="margin:0 0 6px">${L("Personen","People")}</p><div class="evchips" id="evPersF">
+    <button type="button" data-p="all" aria-pressed="${f==="all"}">${L("Alle","All")} (${ps.length})</button>
+    ${pl.map(x=>`<button type="button" data-p="${x.id}" aria-pressed="${f===x.id}">${esc(x.name)} (${cnt(x.id)})</button>`).join("")}
+    ${un&&pl.length?`<button type="button" data-p="none" aria-pressed="${f==="none"}">${L("Ohne Zuordnung","Not assigned")} (${un})</button>`:""}
+    <button type="button" data-p="add" class="evpadd">+ ${L("Person","Person")}</button></div>
+    <div id="evPersEd"></div>
+    ${sel?`<div class="evpact"><button type="button" class="testbtn ghost small" id="evPRen">${L("Umbenennen","Rename")}</button><button type="button" class="testbtn ghost small" id="evPDel">${L("Person löschen","Delete person")}</button></div>`:""}</div>`; }
+function evPersonsBind(){ const box=$("evPersF"); if(!box) return;
+  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{ if(b.dataset.p==="add"){ evPersonEdit(null); return; } EV.personF=b.dataset.p; evList(); });
+  const rn=$("evPRen"); if(rn) rn.onclick=()=>evPersonEdit(EV.personF);
+  const dl=$("evPDel"); if(dl) dl.onclick=async()=>{ if(!dl.dataset.sure){ dl.dataset.sure="1"; dl.textContent=L("Wirklich löschen? Die Projekte bleiben erhalten.","Really delete? The projects are kept."); return; }
+    const id=EV.personF; PERS.del(id); for(const p of STORE._all().filter(x=>x.person===id)){ p.person=null; await STORE.put(p); } EV.personF="all"; evList(); }; }
+function evPersonEdit(id){ const ed=$("evPersEd"), x=id?PERS.get().list.find(q=>q.id===id):null;
+  ed.innerHTML=`<form class="evpform"><input id="evPName" maxlength="40" placeholder="${L("Name der Person","Person's name")}" value="${x?esc(x.name):""}"><button type="submit" class="testbtn small">${x?L("Speichern","Save"):L("Hinzufügen","Add")}</button><button type="button" class="testbtn ghost small" id="evPCancel">${L("Abbrechen","Cancel")}</button></form>`;
+  const inp=$("evPName"); inp.focus(); $("evPCancel").onclick=()=>{ ed.innerHTML=""; };
+  ed.querySelector("form").onsubmit=e=>{ e.preventDefault(); const v=inp.value.trim(); if(!v) return; if(x) PERS.rename(x.id,v); else { const n=PERS.add(v); EV.personF=n.id; } evList(); }; }
+
 /* --- Neues Projekt: zuerst die Technik --- */
 function evNewProject(){
   const top=$("evTop"); $("evBottom").innerHTML="";
@@ -3106,7 +3332,7 @@ function evNewProject(){
   $("evTech").querySelectorAll("button:not([disabled])").forEach(b=>b.onclick=async()=>{
     b.setAttribute("aria-pressed","true");
     const d=new Date(), p={id:evId(), sport:"swim", tech:b.dataset.v, created:Date.now(), name:`${evTechName(b.dataset.v)} · ${d.toLocaleDateString(L("de-DE","en-GB"),{day:"2-digit",month:"2-digit",year:"numeric"})}`,
-      start:null, nameA:"", nameB:"", A:"", B:"", n:5, mode:null, s:{}, trials:[]};
+      start:null, nameA:"", nameB:"", A:"", B:"", n:5, mode:null, uw:"fly", s:{}, trials:[], person: canPersons() && EV.personF && EV.personF!=="all" && EV.personF!=="none" ? EV.personF : null};
     EV.cur=p; await STORE.put(p); setTimeout(()=>evShow("setup"),200); });
 }
 /* --- Einrichtung: Startart, Varianten, Anzahl, Aufnahmeart, Startsignal --- */
@@ -3122,6 +3348,8 @@ function evSetup(){
       <textarea class="note-in evdesc" id="ev${k}" maxlength="400" placeholder="${k==="A"?L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit hohem Ellbogen, Unterarm früh senkrecht","Detailed description for standardisation, e.g. first arm pull with a high elbow, forearm vertical early"):L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit gestrecktem Arm unter dem Körper","Detailed description for standardisation, e.g. first arm pull with a straight arm under the body")}">${esc(p[k]||"")}</textarea></div>`).join("")}
     <div class="card" style="margin-top:14px"><div class="row"><div class="lbl"><b>${L("Versuche je Variante","Attempts per variant")}</b><small>${L("Am besten 5 oder mehr.","Ideally 5 or more.")}</small></div>
       <div class="num"><input id="evN" type="number" inputmode="numeric" min="2" max="20" step="1" value="${p.n||5}"${locked?" disabled":""}></div></div></div>
+    ${p.tech==="start"?segH("evUw",L("Was machst du in der Unterwasserphase?","What do you do underwater?"),[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],p.uw||"fly"):""}
+    ${evPersonsSel(p)}
     ${segH("evMode",L("Wie nimmst du die Versuche auf?","How do you record the attempts?"),[["upload",L("Aufnahmen hochladen","Upload recordings")],["cam",L("In der App filmen","Film in the app")]],p.mode)}
     <p class="hint" id="evModeHint"></p>`;
   const hint=$("evModeHint");
@@ -3132,7 +3360,8 @@ function evSetup(){
   if(p.mode==="cam" && p.start){ S=evalToS(); finishTo($("evFinishSlot")); $("evFinishSlot").hidden=false; renderTiming(); updaters.forEach(f=>f()); }
   else { finishBack(); $("evFinishSlot").hidden=true; }
   const seg=(id,fn)=>{ const el=$(id); if(el) el.querySelectorAll("button").forEach(b=>b.onclick=()=>{ fn(b.dataset.v); evSave(); evSetup(); }); };
-  seg("evStart",v=>{ p.start=v; }); seg("evMode",v=>{ p.mode=v; });
+  seg("evStart",v=>{ p.start=v; }); seg("evMode",v=>{ p.mode=v; }); seg("evUw",v=>{ p.uw=v; });
+  const ps=$("evPerson"); if(ps) ps.onchange=()=>{ p.person=ps.value||null; evSave(); };
   ["A","B"].forEach(k=>{ const el=$("ev"+k), nm=$("evN"+k); el.oninput=()=>{ p[k]=el.value; clearTimeout(EV.tA); EV.tA=setTimeout(evSave,600); }; nm.oninput=()=>{ p["name"+k]=nm.value.trim(); clearTimeout(EV.tA); EV.tA=setTimeout(evSave,600); }; });
   $("evN").onchange=()=>{ p.n=Math.max(2,Math.min(20,Math.round(+$("evN").value||4))); $("evN").value=p.n; evSave(); };
   $("evBack").onclick=()=>evShow("list");
@@ -3184,12 +3413,13 @@ function evTrialHTML(p,t,no){
   const up=p.mode==="upload", m=t.m||{};
   const st = t.status==="done" ? `<span class="evst ok">${L("ausgewertet","analysed")}${m.t15!=null?` · 15 m ${ms3(m.t15)}`:""}${m.block!=null?` · ${L("Block","Block")} ${msx(m.block)}`:""}</span>`
     : t.vid ? `<span class="evst">${L("Video vorhanden","Video ready")}</span>` : `<span class="evst open">${L("offen","open")}</span>`;
+  const extra=[(t.vids2||[]).length?L(`Weitere Kameras: ${t.vids2.length}`,`More cameras: ${t.vids2.length}`):"", t.vm?"Velocitymeter":""].filter(Boolean).join(" · ");
   const files=Object.keys(EV.files);
   const pick = up && files.length ? `<select class="evpick" data-i="${t.i}" aria-label="${L("Video zuordnen","Assign video")}"><option value="">${L("– kein Video –","– no video –")}</option>${files.map(k=>`<option value="${k}"${t.vid&&t.vid.key===k?" selected":""}>${esc(EV.files[k].name)} · ${evTimeLbl(EV.files[k].t)}</option>`).join("")}</select>` : (t.vid&&up?`<small class="evfile">${esc(t.vid.name||"")}</small>`:"");
   return `<li class="evt ${t.status}"><div class="evtrow"><span class="evno">${no||evPos(p,t)}</span><i class="evv ${t.v}">${t.v}</i><b class="evtn">${esc(evVN(p,t.v))}</b>${st}
       <span class="evbtns">${up?`<button type="button" class="testbtn small" data-play="${t.i}">▶ ${L("Startablauf","Start sequence")}</button>`:`<button type="button" class="testbtn small" data-rec="${t.i}">${t.vid?L("Neu aufnehmen","Record again"):L("Aufnehmen","Record")}</button>`}
       ${t.vid?`<button type="button" class="testbtn small" data-ana="${t.i}">${t.status==="done"?L("Ergebnis","Result"):L("Auswerten","Analyse")}</button>`:""}</span></div>
-    ${pick}
+    ${pick}${extra?`<small class="evextra">${extra}</small>`:""}
     ${t.v==="BL" ? "" : `<div class="evq"><span>${L("Qualität des Testlaufs","Quality of the test run")}</span><button type="button" class="evinfo" aria-label="Info" aria-expanded="false">i</button><div class="seg evrate" data-i="${t.i}">${[1,2,3,4,5].map(k=>`<button type="button" data-v="${k}" aria-pressed="${t.rating===k}">${k}</button>`).join("")}</div></div>
     <p class="evinfot" hidden>${L("Der Athlet bewertet die Qualität und Genauigkeit des Testlaufs nach subjektivem Empfinden von 1 (schlecht) bis 5 (sehr gut).","The athlete rates the quality and precision of the test run by subjective feel from 1 (poor) to 5 (very good).")}</p>`}
     <textarea class="note-in evnote" data-i="${t.i}" maxlength="300" rows="1" placeholder="${L("Bemerkung des Athleten","Athlete's remarks")}">${esc(t.note||"")}</textarea></li>`;
@@ -3247,7 +3477,7 @@ async function vidTime(f){
 async function evUpload(files){
   const p=EV.cur, msg=$("evUpMsg"); if(!files.length) return;
   msg.textContent=L("Videos werden gelesen …","Reading videos …");
-  const list=[]; for(const f of files){ const {t,src,dur}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur}; list.push({key,t,src,f}); }
+  const list=[]; for(const f of files){ const {t,src,dur}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur}; list.push({key,t,src,f,dur}); }
   list.sort((a,b)=>a.t-b.t);
   const noMeta=list.filter(x=>x.src!=="meta");
   if(noMeta.length){
@@ -3258,11 +3488,12 @@ async function evUpload(files){
           "This happens when the iPhone creates a converted copy when sending.<br><b>How to include all photo data:</b> select the videos in the Photos app → Share → tap “Options” at the top → turn on “All Photos Data” → AirDrop. Alternatively transfer them by cable with the Mac app “Image Capture”. Then upload the videos again. You can also assign the videos manually in each attempt's selection box.");
   } else {
     // Reihenfolge der Aufnahmen = Reihenfolge der Versuche; zuerst an Versuche ohne Video
-    const free=evOrd(p).filter(t=>!t.vid); const target = free.length>=list.length ? free : evOrd(p);
-    list.forEach((x,k)=>{ const t=target[k]; if(t) evSetVid(p,t,x.key); });
+    const runs=evGroupRuns(list), multi=runs.filter(r=>r.length>1).length;
+    const free=evOrd(p).filter(t=>!t.vid); const target = free.length>=runs.length ? free : evOrd(p);
+    runs.forEach((g,k)=>{ const t=target[k]; if(!t) return; evSetVid(p,t,g[0].key); evSetVids2(p,t,g.slice(1).map(x=>x.key)); });
     evSave(); evPlanView();
-    $("evUpMsg").textContent = L(`Nach Aufnahmezeit zugeordnet: ${list.length}. Prüf die Zuordnung und ändere sie notfalls im Auswahlfeld des Versuchs.`,
-      `Assigned by recording time: ${list.length}. Check the assignment and change it in the attempt's selection box if needed.`);
+    $("evUpMsg").textContent = L(`Nach Aufnahmezeit zugeordnet: ${runs.length} Läufe.`,`Assigned by recording time: ${runs.length} runs.`)+(multi?" "+L(`Bei ${multi} Läufen gibt es mehrere gleichzeitige Aufnahmen. Sie werden im Vollbild nebeneinander gezeigt und über das Startsignal abgeglichen.`,`${multi} runs have several simultaneous recordings. They are shown side by side in full screen and synced via the start signal.`):"")+" "
+      +L("Prüf die Zuordnung und ändere sie notfalls im Auswahlfeld des Versuchs.","Check the assignment and change it in the attempt's selection box if needed.");
   }
   for(const x of list){ try{ await IDB.put("file:"+x.key, x.f); }catch(e){} }
 }
@@ -3283,16 +3514,22 @@ function evSteps(){
   t("move","Erste Reaktion","First reaction","Das erste Bild, in dem du dich sichtbar bewegst.","The first frame in which you visibly move.");
   t("hands","Hände lösen","Hands off", back?"Das Bild, in dem sich deine Hände von den Griffen lösen. Optional.":"Das Bild, in dem sich deine Hände vom Block lösen. Optional.", back?"The frame in which your hands leave the grips. Optional.":"The frame in which your hands leave the block. Optional.",{opt:true});
   if(back) t("off","Abstoß","Push-off","Das Bild, in dem deine Füße die Wand verlassen.","The frame in which your feet leave the wall.");
-  else t("off","Blockzeit","Block time","Das Bild, in dem dein Fuß den Startblock verlässt.","The frame in which your foot leaves the block.");
-  t("entry","Eintauchen","Entry","Das Bild, in dem deine Hände ins Wasser eintauchen.","The frame in which your hands enter the water.");
+  else t("off","Lösen des zweiten Fußes vom Block","Second foot leaves the block","Das Bild, in dem sich dein zweiter (hinterer bzw. letzter) Fuß vom Startblock löst. Daraus ergibt sich die Blockzeit.","The frame in which your second (rear or last) foot leaves the block. This gives the block time.");
+  t("entry","Erster Wasserkontakt","First water contact","Das Bild, in dem deine Fingerspitzen zum ersten Mal das Wasser berühren.","The frame in which your fingertips first touch the water.");
   n("jump","Sprungweite","Start distance","Abstand von der Wand bis zur Eintauchstelle deiner Hände. Am genauesten misst du ihn direkt im Video.","Distance from the wall to where your hands entered. Measuring it directly in the video is the most accurate way.",u,
-    {meas:{a:[0,()=>L("die Startwand","the start wall")], b:[5,()=>L("die Rückenfähnchen (5 m)","the backstroke flags (5 m)")], tg:()=>L("die Stelle, an der deine Hände eintauchen","the spot where your hands enter")}});
+    {meas:{a:[0,()=>L("die Beckenkante (Startwand)","the pool edge (start wall)")], b:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], tg:()=>L("die Stelle, an der deine Fingerspitzen eintauchen","the spot where your fingertips enter"),
+      req:()=>L("Ausmessen geht nur, wenn im Moment des ersten Wasserkontakts die Beckenkante und die Linie der Rückenfähnchen klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if the pool edge and the backstroke flag line are clearly visible in the frame of first water contact. Otherwise enter the value manually or skip it."), at:"entry"}});
   t("p5",`5-m-Marke`,`5 m mark`,`Das Bild, in dem deine Hände unter den Rückenfähnchen hindurch die 5-m-Marke passieren.`,`The frame in which your hands pass the 5 m mark under the backstroke flags.`,{pos:5});
   t("p10","10-m-Marke","10 m mark","Das Bild, in dem dein Kopf die 10-m-Marke passiert. Nur wenn eine Markierung zu sehen ist.","The frame in which your head passes the 10 m mark. Only if a marking is visible.",{pos:10, opt:true});
   t("brk","Auftauchen","Breakout","Das Bild, in dem dein Kopf die Wasseroberfläche durchbricht.","The frame in which your head breaks the surface.",{opt:true});
   n("diveD","Tauchweite","Underwater distance","Abstand von der Wand bis zur Stelle, an der dein Kopf auftaucht.","Distance from the wall to where your head surfaced.",u,
-    {opt:true, meas:{a:[5,()=>L("die Rückenfähnchen (5 m)","the backstroke flags (5 m)")], b:[15,()=>L("die 15-m-Marke","the 15 m mark")], tg:()=>L("die Stelle, an der dein Kopf auftaucht","the spot where your head surfaces")}});
-  n("kicks","Beinschläge unter Wasser","Underwater kicks","Wie viele Delfinbeinschläge hast du bis zum Auftauchen gemacht?","How many dolphin kicks did you do before breaking out?","×",{opt:true});
+    {opt:true, meas:{a:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], b:[15,()=>L("die 15-m-Marke","the 15 m mark")], tg:()=>L("die Stelle, an der dein Kopf auftaucht","the spot where your head surfaces"),
+      req:()=>L("Ausmessen geht nur, wenn im Moment des Auftauchens die Linie der Rückenfähnchen und die 15-m-Marke klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if the backstroke flag line and the 15 m mark are clearly visible in the frame where you surface. Otherwise enter the value manually or skip it."), at:"brk"}});
+  if(EV.cur.uw==="breast"){
+    t("dk","Delfinbeinschlag (Abwärtsbewegung)","Dolphin kick (downbeat)","Das Bild, in dem die Abwärtsbewegung deines Delfinbeinschlags beginnt. Optional.","The frame in which the downbeat of your dolphin kick begins. Optional.",{opt:true});
+    t("pull","Beginn des Tauchzugs","Start of the pull-out","Das Bild, in dem deine Arme den Tauchzug beginnen.","The frame in which your arms begin the pull-out.");
+    t("bkick","Beginn des ersten Beinschlags","Start of the first kick","Das Bild, in dem du die Fersen für den ersten Brustbeinschlag anziehst.","The frame in which you draw your heels up for the first breaststroke kick.",{opt:true});
+  } else n("kicks","Delfinbeinschläge unter Wasser","Underwater dolphin kicks","Wie viele Delfinbeinschläge hast du bis zum Auftauchen gemacht?","How many dolphin kicks did you do before breaking out?","×",{opt:true});
   t("p15","15-m-Marke","15 m mark","Das Bild, in dem dein Kopf die 15-m-Marke passiert.","The frame in which your head passes the 15 m mark.",{pos:15});
   S1.push({id:"sum",k:"sum",t:()=>L("Deine Auswertung","Your analysis"),x:()=>""});
   return S1;
@@ -3300,7 +3537,7 @@ function evSteps(){
 async function evAnalyze(t){
   const p=EV.cur, blob=await evBlob(t);
   if(!blob){ alertMsg(L("Das Video dieses Versuchs ist auf diesem Gerät nicht mehr vorhanden. Lade es erneut hoch.","This attempt's video is no longer on this device. Please upload it again.")); return; }
-  EV.trial=t.i; finishBack(); $("evPage").hidden=true;
+  EV.trial=t.i; SA.trialRef=t; finishBack(); $("evPage").hidden=true;
   SA.active=true; SA.mode="eval"; SA.upload = t.vid.src==="upload"; SA.slow = 1;
   SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
   SA.meta={hornT:t.sigEst||0, sig:[]}; SA.events=[]; SA.recT0=0; SA.sigType=null; SA.cands=null; SA.fps=t.fps||30;
@@ -3310,8 +3547,8 @@ async function evAnalyze(t){
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
   detectFps(SA.url).then(f=>{ if(f){ SA.fps=f; t.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f/(SA.slow||1)*10)/10} ms`; } });
-  SA.pcm=null; SA.raw=null; spDraw(); spSpkCard(); measEnd();
-  blob.arrayBuffer().then(decodeAny).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
+  SA.pcm=null; SA.raw=null; spDraw(); spSpkCard(); measEnd(); vmCard();
+  readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
     if(SA.marks.sig==null) await evFindSig(); spDraw(); wizRender(); }).catch(()=>{ if(SA.marks.sig==null){ SA.marks.sig=t.sigEst||0; SA.sigAuto="est"; } wizRender(); });
   wizRender();
 }
@@ -3337,6 +3574,7 @@ function evMetrics(){
   o.t5=R("p5"); o.t10=R("p10"); o.t15=R("p15");
   o.uwT=d("entry","brk"); o.dive=v.diveD||null; o.kicks=v.kicks||null;
   if(o.uwT>0){ if(o.dive) o.uwV=(o.dive-(o.jump||0))/o.uwT; if(o.kicks) o.kickF=o.kicks/o.uwT; }
+  o.dk=R("dk"); o.pull=R("pull"); o.bkick=R("bkick"); o.glide=d("entry","pull"); o.pullK=d("pull","bkick");
   if(o.t5!=null && o.t15!=null && o.t15>o.t5) o.v515=10/(o.t15-o.t5);
   if(o.t10!=null && o.t15!=null && o.t15>o.t10) o.v1015=5/(o.t15-o.t10);
   if(o.t5!=null && o.t10!=null && o.t10>o.t5) o.v510=5/(o.t10-o.t5);
@@ -3350,7 +3588,8 @@ function evSumHTML(){
   h+=`<table class="restbl">`;
   h+=hd(L("Start","Start"))+row(L("Ergebnis","Result"),res)+row(L("Reaktionszeit","Reaction time"),msx(o.rt))+(o.hands!=null?row(L("Hände lösen","Hands off"),msx(o.hands)):"")+row(p.start==="back"?L("Abstoß","Push-off"):L("Blockzeit","Block time"),msx(o.block));
   h+=hd(L("Flug","Flight"))+row(L("Flugzeit","Flight time"),msx(o.flight))+row(L("Sprungweite","Start distance"),n2(o.jump,u))+row(L("Fluggeschwindigkeit","Flight velocity"),n2(o.flightV,us));
-  h+=hd(L("Unter Wasser","Underwater"))+row(L("Tauchzeit","Underwater time"),ms3(o.uwT))+row(L("Tauchweite","Underwater distance"),n2(o.dive,u))+row(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+row(L("Beinschläge","Kicks"),o.kicks!=null?String(o.kicks):"–")+row(L("Beinschlagfrequenz","Kick frequency"),n2(o.kickF,U("Hz")));
+  h+=hd(L("Unter Wasser","Underwater"))+row(L("Tauchzeit","Underwater time"),ms3(o.uwT))+row(L("Tauchweite","Underwater distance"),n2(o.dive,u))+row(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+(p.uw==="breast" ? row(L("Delfinbeinschlag","Dolphin kick"),ms3(o.dk))+row(L("Beginn Tauchzug","Start of pull-out"),ms3(o.pull))+row(L("Erster Beinschlag","First kick"),ms3(o.bkick))+row(L("Gleiten bis zum Tauchzug","Glide until pull-out"),ms3(o.glide))+row(L("Tauchzug bis Beinschlag","Pull-out to kick"),ms3(o.pullK))
+    : row(L("Delfinbeinschläge","Dolphin kicks"),o.kicks!=null?String(o.kicks):"–")+row(L("Beinschlagfrequenz","Kick frequency"),n2(o.kickF,U("Hz"))));
   h+=hd(L("Zeiten","Times"))+row(L("5-m-Zeit","5 m time"),ms3(o.t5))+row(L("10-m-Zeit","10 m time"),ms3(o.t10))+row(L("15-m-Zeit","15 m time"),ms3(o.t15))
     +row(L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),n2(o.v510,us))+row(L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),n2(o.v1015,us))+row(L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),n2(o.v515,us));
   h+=`</table>`;
@@ -3368,7 +3607,7 @@ function evSaveTrial(){
 function evAnaHead(){ const h=$("evAnaHead"), p=EV.cur, t=p&&p.trials[EV.trial]; if(!t){ h.hidden=true; return; } h.hidden=false;
   h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
   $("evAnaBack").onclick=()=>{ evCloseAna(); evShow("plan"); }; $("evAnaDl").onclick=()=>evExport(p); }
-function evCloseAna(){ SA.active=false; SA.mode=null; $("spAna").hidden=true; $("evAnaHead").hidden=true; document.body.classList.remove("reviewing"); try{ sVid.pause(); sVid.removeAttribute("src"); sVid.load(); }catch(e){} $("evPage").hidden=false; }
+function evCloseAna(){ if(FS.on) fsExit(); SA.trialRef=null; SA.active=false; SA.mode=null; $("spAna").hidden=true; $("evAnaHead").hidden=true; document.body.classList.remove("reviewing"); try{ sVid.pause(); sVid.removeAttribute("src"); sVid.load(); }catch(e){} $("evPage").hidden=false; }
 function alertMsg(t){ const m=$("evUpMsg")||$("evMsg"); if(m) m.textContent=t; else { const b=$("evBottom"); if(b) b.insertAdjacentHTML("afterbegin",`<p class="hint">${t}</p>`); } }
 /* --- #finish (Ton und Startablauf) in einen Bereich verschieben und zurück --- */
 let finishHome2=null;
@@ -3382,6 +3621,159 @@ function finishBack(){ const f=$("finish"); document.body.classList.remove("ev-f
 { const _sum=summary; summary=function(){ if(appMode==="eval") return; _sum(); }; }
 { const _ss=setSport; setSport=function(v){ _ss(v); if(appMode==="eval") setTimeout(()=>{ EV.view="list"; evEnter(); },0); }; }
 
+/* ---------- Mehrere Videos je Lauf, Velocitymeter und Vollbild-Auswertung ---------- */
+// Videos eines Laufs: Haupt-Video plus weitere Kameras (gleiche Aufnahmezeit)
+const evVids=t=> t && t.vid ? [t.vid, ...(t.vids2||[])] : [];
+async function evBlobOf(v){
+  if(!v) return null; const k=v.key; if(EV.files[k]) return EV.files[k].blob;
+  try{ const b = v.src==="cam" ? await IDB.get(k) : await IDB.get("file:"+k); if(b){ EV.files[k]={blob:b, name:v.name, t:v.t, dur:v.dur}; return b; } }catch(e){}
+  const c=await vidFetchV(v); if(c){ EV.files[k]={blob:c, name:v.name, t:v.t, dur:v.dur}; return c; }
+  return null;
+}
+// Gruppen bilden: Aufnahmen, die sich zeitlich überschneiden, gehören zu einem Lauf
+function evGroupRuns(list){
+  const g=[]; for(const x of list){ const last=g[g.length-1], s=x.t, e=x.t+(x.dur||0)*1000;
+    if(last && s <= last.end + 2000){ last.items.push(x); last.end=Math.max(last.end,e); } else g.push({items:[x], end:e}); }
+  return g.map(z=>z.items);
+}
+function evSetVids2(p,t,keys){
+  t.vids2 = keys.map(k=>{ const f=EV.files[k]; return f ? {key:k, src:"upload", name:f.name, t:f.t, dur:f.dur||null, size:f.blob.size, dev:DEVID, off:null} : null; }).filter(Boolean);
+  if(!t.vids2.length) delete t.vids2;
+}
+
+/* --- Velocitymeter: Datei lesen (CSV/TXT), Geschwindigkeit oder Weg über der Zeit --- */
+function vmParse(text){
+  const lines=text.replace(/\r/g,"").split("\n").map(l=>l.trim()).filter(Boolean); if(lines.length<5) throw new Error("kurz");
+  const cnt=(c)=>lines.slice(0,40).map(l=>l.split(c).length-1);
+  const dl=[";","\t",",","|"," "].map(c=>({c, n:cnt(c)})).map(o=>({c:o.c, sc: o.n.filter(x=>x>0).length*10 - (Math.max(...o.n)-Math.min(...o.n.filter(x=>x>0).concat([0])))})).sort((a,b)=>b.sc-a.sc)[0].c;
+  const split=l=> dl===" " ? l.split(/\s+/) : l.split(dl);
+  const num=s=>{ s=String(s).trim().replace(/^"|"$/g,""); if(dl!==",") s=s.replace(",","."); const x=parseFloat(s); return /^[-+]?[\d.]+(e[-+]?\d+)?$/i.test(s)&&isFinite(x) ? x : null; };
+  let head=null; const rows=[];
+  for(const l of lines){ const c=split(l); const v=c.map(num); if(v.filter(x=>x!=null).length>=Math.max(1,c.length-1) && v.some(x=>x!=null)) rows.push(v); else if(!rows.length) head=c.map(x=>x.trim().replace(/^"|"$/g,"").toLowerCase()); }
+  if(rows.length<5) throw new Error("zahlen");
+  const nc=Math.max(...rows.map(r=>r.length)), col=i=>rows.map(r=>r[i]);
+  const find=re=> head ? head.findIndex(h=>re.test(h)) : -1;
+  let ti=find(/^(t|time|zeit|sec|secs|s|ms|timestamp)\b|zeit|time/), vi=find(/(^v\b|vel|speed|geschw|m\/s)/), di=find(/(dist|weg|strecke|pos|^s\b|^d\b|\(m\)|^m$)/);
+  if(ti<0) ti=0; if(vi===ti) vi=-1; if(di===ti) di=-1;
+  if(vi<0 && di<0){ const cand=[...Array(nc).keys()].filter(i=>i!==ti); const mono=i=>{ const c=col(i).filter(x=>x!=null); let up=0; for(let k=1;k<c.length;k++) if(c[k]>=c[k-1]) up++; return up/(c.length-1); };
+    const c=cand[0]; if(c==null) throw new Error("spalten"); if(mono(c)>0.97 && Math.max(...col(c).filter(x=>x!=null))>3) di=c; else vi=c; }
+  let T=col(ti); const okI=T.map((x,i)=>x!=null && (vi>=0?rows[i][vi]!=null:rows[i][di]!=null));
+  let t=T.filter((x,i)=>okI[i]), val=(vi>=0?col(vi):col(di)).filter((x,i)=>okI[i]);
+  // Zeit in Sekunden: Millisekunden erkennen
+  const dts=[]; for(let i=1;i<Math.min(t.length,200);i++) dts.push(t[i]-t[i-1]); dts.sort((a,b)=>a-b); const md=dts[dts.length>>1]||0.01;
+  if(md>=0.9 && t[t.length-1]>200) t=t.map(x=>x/1000);
+  const t0=t[0]; t=t.map(x=>x-t0);
+  let v;
+  if(vi>=0){ v=val; const mx=Math.max(...v.map(Math.abs)); if(mx>15) v=v.map(x=>x/100); }
+  else { let d=val; const mx=Math.max(...d); if(mx>200) d=d.map(x=>x/100); // cm → m
+    const n=d.length, w=Math.max(1,Math.round(0.03/Math.max(1e-4,md>=0.9?md/1000:md))); v=new Array(n).fill(0);
+    for(let i=0;i<n;i++){ const a=Math.max(0,i-w), b=Math.min(n-1,i+w); v[i]= t[b]>t[a] ? (d[b]-d[a])/(t[b]-t[a]) : 0; } }
+  // auf höchstens 4000 Punkte verdichten
+  const step=Math.max(1,Math.ceil(t.length/4000)), tt=[], vv=[]; for(let i=0;i<t.length;i+=step){ tt.push(+t[i].toFixed(4)); vv.push(+v[i].toFixed(3)); }
+  return {t:tt, v:vv, src: vi>=0?"v":"d"};
+}
+// Bewegungsbeginn in den Daten: Geschwindigkeit bleibt erstmals 50 ms über 0,3 m/s
+function vmOnset(vm){ const t=vm.t, v=vm.v; for(let i=0;i<t.length;i++){ if(v[i]>0.3){ let ok=true; for(let j=i;j<t.length && t[j]-t[i]<0.05;j++) if(v[j]<=0.3){ ok=false; break; } if(ok){ // zurück bis zum Anstieg aus der Ruhe
+      let k=i; while(k>0 && v[k-1]>0.08 && v[k-1]<v[k]+0.02) k--; return t[k]; } } } return null; }
+// Automatischer Zeitabgleich: Bewegungsbeginn im Velocitymeter = erste Reaktion im Video (ersatzweise Abheben bzw. Signal + 0,2 s)
+function vmAutoOff(vm){ const on=vmOnset(vm); if(on==null) return null; const ref = SA.marks.move ?? (SA.marks.off!=null ? SA.marks.off-0.25 : SA.marks.sig!=null ? SA.marks.sig+0.2 : null); return ref==null ? null : ref-on; }
+const vmAt=(vm,tv)=>{ const x=tv-(vm.off||0), t=vm.t; if(x<t[0]||x>t[t.length-1]) return null; let lo=0, hi=t.length-1; while(hi-lo>1){ const m=(lo+hi)>>1; if(t[m]<=x) lo=m; else hi=m; } const f=(x-t[lo])/((t[hi]-t[lo])||1); return vm.v[lo]+(vm.v[hi]-vm.v[lo])*f; };
+function vmDraw(cv){
+  const tr=SA.trialRef, vm=tr&&tr.vm; if(!cv||!vm) return; const dpr=devicePixelRatio||1, r=cv.getBoundingClientRect(); cv.width=Math.max(10,Math.round(r.width*dpr)); cv.height=Math.max(10,Math.round(r.height*dpr));
+  const g=cv.getContext("2d"), W=cv.width, H=cv.height, off=vm.off||0, dark=cv.closest("#fsOv")!=null; g.clearRect(0,0,W,H);
+  const D=sVid.duration||((vm.t[vm.t.length-1]||1)+off), x0=Math.max(0,(SA.marks.sig??0)-0.5), x1=Math.max(x0+1,Math.min(D, x0+12)), X=t=>(t-x0)/(x1-x0)*W;
+  const vmax=Math.max(1,...vm.v)*1.08, PB=14*dpr, Y=v=>(H-PB)-(Math.max(0,v)/vmax)*(H-PB-6*dpr);
+  g.strokeStyle=dark?"rgba(255,255,255,.15)":css("--line"); g.lineWidth=1; g.font=`${10*dpr}px system-ui`; g.fillStyle=dark?"#cfe0e8":css("--muted");
+  for(let s=0;s<=vmax;s+=1){ g.beginPath(); g.moveTo(0,Y(s)); g.lineTo(W,Y(s)); g.stroke(); g.fillText(`${s} m/s`,4*dpr,Y(s)-3*dpr); }
+  Object.entries(SA.marks).forEach(([k,t])=>{ if(t==null||t<x0||t>x1) return; g.fillStyle = k==="sig"?css("--signal"):"rgba(127,160,180,.7)"; g.fillRect(X(t)-0.5*dpr,0,dpr,H-PB); });
+  g.strokeStyle="#3FB0D8"; g.lineWidth=2*dpr; g.beginPath(); let pen=false;
+  for(let i=0;i<vm.t.length;i++){ const tv=vm.t[i]+off; if(tv<x0||tv>x1){ pen=false; continue; } const x=X(tv), y=Y(vm.v[i]); if(!pen){ g.moveTo(x,y); pen=true; } else g.lineTo(x,y); } g.stroke();
+  const cur=sCurT(), cv0=vmAt(vm,cur); if(cur>=x0&&cur<=x1){ g.fillStyle=dark?"#fff":css("--fg"); g.fillRect(X(cur)-dpr/2,0,dpr,H-PB);
+    if(cv0!=null){ g.beginPath(); g.arc(X(cur),Y(cv0),4*dpr,0,7); g.fill(); const lab=n2(cv0,U("m/s")); g.font=`700 ${11*dpr}px system-ui`; const tw=g.measureText(lab).width; g.fillText(lab, Math.min(W-tw-4*dpr, X(cur)+6*dpr), 14*dpr); } }
+  g.fillStyle=dark?"#cfe0e8":css("--muted"); g.font=`${10*dpr}px system-ui`; for(let s=Math.ceil(x0);s<=x1;s++){ g.fillText(`${s} s`, X(s)+2*dpr, H-3*dpr); }
+}
+function vmCard(){
+  const box=$("sVmCard"); if(!box) return; if(SA.mode!=="eval"){ box.hidden=true; return; } box.hidden=false; const tr=SA.trialRef, vm=tr&&tr.vm;
+  box.innerHTML = vm ? `<div class="vmhd"><b>Velocitymeter</b><span>${esc(vm.name||"")}</span></div><canvas id="sVmC"></canvas>
+      <div class="vmrow"><span>${vm.auto?L("Zeitabgleich automatisch (Bewegungsbeginn = erste Reaktion)","Time sync automatic (movement onset = first reaction)"):L("Zeitabgleich von Hand","Time sync set manually")} · ${L("Versatz","offset")} ${n2(vm.off||0,U("s"))}</span>
+      <span class="vmbtns"><button type="button" class="testbtn small" data-vmo="-0.01">−10 ms</button><button type="button" class="testbtn small" data-vmo="0.01">+10 ms</button><button type="button" class="testbtn small" id="vmAuto">${L("Automatisch","Automatic")}</button><button type="button" class="testbtn ghost small" id="vmDel">×</button></span></div>`
+    : `<div class="vmhd"><b>Velocitymeter</b></div><p class="hint" style="margin:4px 0 8px">${L("Füge die Messdaten dieses Versuchs hinzu (CSV oder TXT mit Zeit und Geschwindigkeit oder Weg). Sprintz legt die Kurve automatisch unter das Video: Der Bewegungsbeginn in den Daten wird auf die markierte erste Reaktion gelegt.","Add this attempt's measurement data (CSV or TXT with time and velocity or distance). Sprintz lines the curve up with the video automatically: the movement onset in the data is placed on the marked first reaction.")}</p>
+      <label class="filebtn" style="padding:10px">${L("Velocitymeter-Daten hinzufügen","Add velocity meter data")}<input type="file" id="vmFile" accept=".csv,.txt,.tsv,text/csv,text/plain"></label><p class="hint" id="vmMsg"></p>`;
+  const f=$("vmFile"); if(f) f.onchange=async e=>{ const file=e.target.files[0]; e.target.value=""; if(!file) return;
+    try{ const d=vmParse(await file.text()); d.name=file.name; const o=vmAutoOff(d); d.off=o??0; d.auto=o!=null; tr.vm=d; evSave(); vmCard(); if(!d.auto) $("vmMsg") && ($("vmMsg").textContent=L("Markiere zuerst die erste Reaktion, dann richtet Sprintz die Kurve automatisch aus.","Mark the first reaction first, then Sprintz aligns the curve automatically.")); fsLayout(); }
+    catch(err){ $("vmMsg").textContent=L("Die Datei ließ sich nicht lesen. Erwartet wird eine Tabelle mit Zeit und Geschwindigkeit (m/s) oder Weg (m).","The file couldn't be read. Expected is a table with time and velocity (m/s) or distance (m)."); } };
+  box.querySelectorAll("[data-vmo]").forEach(b=>b.onclick=()=>{ vm.off=(vm.off||0)+parseFloat(b.dataset.vmo); vm.auto=false; evSave(); vmCard(); });
+  const a=$("vmAuto"); if(a) a.onclick=()=>{ const o=vmAutoOff(vm); if(o!=null){ vm.off=o; vm.auto=true; evSave(); } vmCard(); };
+  const dl=$("vmDel"); if(dl) dl.onclick=()=>{ delete tr.vm; evSave(); vmCard(); fsLayout(); };
+  vmDraw($("sVmC"));
+}
+
+/* --- Vollbild: Videos nebeneinander bzw. untereinander, Velocitymeter-Kurve, halbtransparente Hinweisbox --- */
+const FS={on:false, secs:[], home:null};
+async function fsEnter(){
+  if(FS.on) return; FS.on=true; const ov=$("fsOv"), grid=$("fsGrid"); ov.hidden=false; document.body.classList.add("fs-on");
+  FS.home={box:[$("sBox").parentNode,$("sBox").nextSibling], card:[$("wCard").parentNode,$("wCard").nextSibling], nav:[$("wnavBar").parentNode,$("wnavBar").nextSibling], bar:[$("sStepBar").parentNode,$("sStepBar").nextSibling]};
+  const c0=document.createElement("div"); c0.className="fscell"; c0.appendChild($("sBox")); grid.appendChild(c0);
+  $("fsCardSlot").appendChild($("wCard")); $("fsCardSlot").appendChild($("wnavBar")); $("fsBar").prepend($("sStepBar"));
+  // weitere Kameras
+  FS.secs=[]; const tr=SA.trialRef;
+  for(const v of (tr&&tr.vids2)||[]){ const b=await evBlobOf(v); if(!b) continue; const cell=document.createElement("div"); cell.className="fscell";
+    const el=document.createElement("video"); el.muted=true; el.playsInline=true; el.preload="auto"; el.src=URL.createObjectURL(b); cell.appendChild(el);
+    const lab=document.createElement("span"); lab.className="fslab"; lab.textContent=v.name||L("Video 2","Video 2"); cell.appendChild(lab);
+    const adj=document.createElement("div"); adj.className="fsadj"; adj.innerHTML=`<button type="button" data-o="-1">−1</button><span>${L("Versatz","offset")}</span><button type="button" data-o="1">+1</button>`; cell.appendChild(adj);
+    grid.appendChild(cell); const S2={v, el, cell, blob:b}; FS.secs.push(S2);
+    adj.querySelectorAll("button").forEach(x=>x.onclick=()=>{ v.off=(v.off||0)+(+x.dataset.o)/sFps(); v.offAuto=false; evSave(); fsSync(true); });
+    el.addEventListener("loadedmetadata",()=>{ fsLayout(); fsSync(true); });
+    if(v.off==null) fsAlign(S2); }
+  $("fsVm").hidden=!(tr&&tr.vm); try{ if(ov.requestFullscreen) await ov.requestFullscreen(); else if(ov.webkitRequestFullscreen) ov.webkitRequestFullscreen(); }catch(e){}
+  fsLayout(); fsSync(true); fsHint();
+}
+function fsExit(){
+  if(!FS.on) return; FS.on=false; const h=FS.home;
+  h.box[0].insertBefore($("sBox"),h.box[1]); h.card[0].insertBefore($("wCard"),h.card[1]); h.nav[0].insertBefore($("wnavBar"),h.nav[1]); h.bar[0].insertBefore($("sStepBar"),h.bar[1]);
+  FS.secs.forEach(s=>{ try{ s.el.pause(); URL.revokeObjectURL(s.el.src); }catch(e){} }); FS.secs=[]; $("fsGrid").innerHTML=""; $("fsOv").hidden=true; document.body.classList.remove("fs-on");
+  try{ if(document.fullscreenElement) document.exitFullscreen(); else if(document.webkitFullscreenElement) document.webkitExitFullscreen(); }catch(e){}
+  measDraw&&SA.meas&&measDraw(); spDraw(); vmCard();
+}
+document.addEventListener("fullscreenchange",()=>{ if(!document.fullscreenElement && FS.on) fsExit(); });
+// Aufteilung nach Format der Videos: nebeneinander oder untereinander, je nachdem, was mehr Bildfläche ergibt
+function fsLayout(){
+  if(!FS.on) return; const grid=$("fsGrid"), vmOn=!!(SA.trialRef&&SA.trialRef.vm); $("fsVm").hidden=!vmOn;
+  const W=grid.clientWidth, H=grid.clientHeight, vids=[sVid, ...FS.secs.map(s=>s.el)], ar=vids.map(v=>v.videoWidth&&v.videoHeight ? v.videoWidth/v.videoHeight : 16/9), n=vids.length;
+  const fit=(a,w,h)=>{ const ww=Math.min(w,h*a); return ww*(ww/a); };
+  const row=ar.reduce((s,a)=>s+fit(a,W/n,H),0), col=ar.reduce((s,a)=>s+fit(a,W,H/n),0);
+  grid.style.gridTemplateColumns = n>1 && row>=col ? `repeat(${n},1fr)` : "1fr"; grid.style.gridTemplateRows = n>1 && row<col ? `repeat(${n},1fr)` : "1fr";
+  if(SA.meas) setTimeout(measDraw,30); vmDraw($("fsVmC"));
+}
+addEventListener("resize",()=>{ if(FS.on) fsLayout(); });
+// weitere Kameras zeitgleich zum Haupt-Video halten
+function fsSync(force){ if(!FS.on) return; const tp=sVid.currentTime;
+  FS.secs.forEach(s=>{ const tgt=tp+(s.v.off||0); if(!(s.el.duration>0)) return; const tt=Math.min(s.el.duration, Math.max(0,tgt));
+    if(sVid.paused){ if(!s.el.paused) s.el.pause(); if(force || Math.abs(s.el.currentTime-tt)>0.3/sFps()) s.el.currentTime=tt; }
+    else { s.el.playbackRate=sVid.playbackRate; if(s.el.paused) s.el.play().catch(()=>{}); if(Math.abs(s.el.currentTime-tt)>0.06) s.el.currentTime=tt; } });
+  vmDraw($("fsVmC")); fsHint(); }
+sVid.addEventListener("seeked",()=>fsSync(true)); sVid.addEventListener("pause",()=>fsSync(true)); sVid.addEventListener("play",()=>{ const lp=()=>{ if(FS.on && !sVid.paused){ fsSync(false); requestAnimationFrame(lp); } }; lp(); });
+// Zeitabgleich zweier Kameras über das Startsignal in beiden Tonspuren (ersatzweise über die Aufnahmezeit)
+async function fsAlign(S2){
+  const v=S2.v, pv=SA.trialRef&&SA.trialRef.vid, meta = pv&&pv.t&&v.t ? (pv.t-v.t)/1000 : null;
+  let sigS=null;
+  try{ const buf=await readAudio(S2.blob); const pcm=ds(buf,V.rate), rr=Math.min(24000,buf.sampleRate), raw=ds(buf,rr), exp = SA.marks.sig!=null && meta!=null ? SA.marks.sig+meta : null;
+    let c=[]; if(!SA.sigType || SA.sigType==="app"){ const r=await corrSearch(pcm, exp!=null?exp-1.5:0, exp!=null?exp+1.5:Infinity); if(r&&r.best>0.3) c=[{t:r.t,q:r.best}]; }
+    if(!c.length){ for(const ty of [SA.sigType&&SA.sigType!=="app"?SA.sigType:"whistle","tone","clap"]){ try{ c=sigDetect(raw,rr,ty); }catch(e){ c=[]; } if(c.length) break; } }
+    if(c.length){ if(exp!=null) c.sort((a,b)=>Math.abs(a.t-exp)-Math.abs(b.t-exp)); sigS=c[0].t; } }catch(e){}
+  if(sigS!=null && SA.marks.sig!=null){ v.off=sigS-SA.marks.sig; v.offAuto="audio"; }
+  else if(meta!=null){ v.off=meta; v.offAuto="time"; }
+  else { v.off=0; v.offAuto=false; }
+  evSave(); fsSync(true); fsHint();
+}
+// halbtransparente Box: was ist gerade zu finden, Tastenkürzel
+function fsHint(){ if(!FS.on) return; const st=SA.steps[SA.i], k=$("fsKeys"); if(!k) return;
+  const al=FS.secs.map((s,i)=>s.v.offAuto==="audio"?L(`Video ${i+2}: über das Startsignal abgeglichen`,`Video ${i+2}: synced via the start signal`):s.v.offAuto==="time"?L(`Video ${i+2}: über die Aufnahmezeit abgeglichen, bitte prüfen`,`Video ${i+2}: synced via recording time, please check`):L(`Video ${i+2}: Versatz von Hand`,`Video ${i+2}: offset set manually`));
+  k.innerHTML=`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
+
+$("sFull").onclick=()=>fsEnter(); $("fsClose").onclick=()=>fsExit();
+$("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin").textContent=b.classList.contains("min")?"+":"–"; };
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && FS.on){ e.preventDefault(); fsExit(); } });
 /* --- Ergebnisblatt der Technikevaluation: Baseline, Vergleich A/B, Verlauf, Boxplot, Pausen und Testtage --- */
 // Kennwerte: Schlüssel, Bezeichnung, Einheit/Format, bessere Richtung (low = kleiner ist besser, high = größer ist besser, null = neutral)
 const EVM=()=>[
@@ -3396,13 +3788,18 @@ const EVM=()=>[
   ["uwV",L("Tauchgeschwindigkeit","Underwater velocity"),"m/s","high"],
   ["kicks",L("Beinschläge","Kicks"),"n",null],
   ["kickF",L("Beinschlagfrequenz","Kick frequency"),"Hz",null],
+  ["dk",L("Delfinbeinschlag","Dolphin kick"),"s",null],
+  ["pull",L("Beginn Tauchzug","Start of pull-out"),"s",null],
+  ["bkick",L("Erster Beinschlag","First kick"),"s",null],
+  ["glide",L("Gleiten bis zum Tauchzug","Glide until pull-out"),"s",null],
+  ["pullK",L("Tauchzug bis Beinschlag","Pull-out to kick"),"s",null],
   ["t5",L("5-m-Zeit","5 m time"),"s","low"],
   ["t10",L("10-m-Zeit","10 m time"),"s","low"],
   ["t15",L("15-m-Zeit","15 m time"),"s","low"],
   ["v510",L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),"m/s","high"],
   ["v1015",L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),"m/s","high"],
   ["v515",L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),"m/s","high"]];
-const EV_TIMEK=["rt","hands","block","flight","uwT","t5","t10","t15"];
+const EV_TIMEK=["rt","hands","block","flight","uwT","t5","t10","t15","dk","pull","bkick","glide","pullK"];
 // Kleinste bedeutsame Veränderung: halbe Leistungsschwankung olympischer Schwimmer zwischen Wettkämpfen (CV 0,8 % → 0,4 %; Pyne, Trewin & Hopkins 2004)
 const EV_SWC=0.004;
 function evFmt(v,u,sd){ if(v==null || !isFinite(v)) return "–"; const dec=(x,n)=>LANG==="en"?x.toFixed(n):x.toFixed(n).replace(".",",");
@@ -3771,7 +4168,7 @@ async function evPdfBuild(p, keys){
    Videos sind nicht enthalten (zu groß); sie werden nach dem Hochladen über Name und Aufnahmezeit wieder zugeordnet. */
 const EVFMT="sprintz-project", EVVER=1;
 function evExportObj(p){
-  const d=JSON.parse(JSON.stringify(p)); delete d._pending;
+  const d=JSON.parse(JSON.stringify(p)); delete d._pending; if(d.person){ d.personName=PERS.name(d.person)||d.personName||null; }
   return {format:EVFMT, version:EVVER, exported:new Date().toISOString(), app:"Sprintz", project:d};
 }
 async function evExport(p){
@@ -3789,6 +4186,7 @@ async function evImport(f){
     if(!j || j.format!==EVFMT || !j.project || !Array.isArray(j.project.trials)) throw new Error("format");
     if((j.version||1)>EVVER) throw new Error("version");
     const p=j.project; p.id=evId(); p.imported=Date.now(); delete p._pending;
+    if(canPersons() && p.personName){ const ex=PERS.list().find(x=>x.name.toLowerCase()===p.personName.toLowerCase()); p.person = ex ? ex.id : PERS.add(p.personName).id; } else p.person=null;
     // Videos sind nicht in der Datei: Verweis merken, Versuch ohne Video; Ergebnisse, Bewertungen und Bemerkungen bleiben erhalten
     p.trials.forEach(t=>{ if(t.vid){ t.vidRef=t.vid; t.vid=null; } if(t.status==="rec") t.status="open"; });
     await STORE.put(p); await evList(); $("evImpMsg").textContent=L(`„${p.name}“ wurde hinzugefügt.`,`“${p.name}” was added.`);
@@ -4275,7 +4673,7 @@ $("again").onclick=()=>{ stopAll(); persistSession(); $("stop").textContent="Sto
 document.addEventListener("visibilitychange",async()=>{ if(running && document.visibilityState==="visible"){ try{ wake = await navigator.wakeLock?.request("screen"); }catch(e){} } });
 
 /* ---------- Sprache: Deutsch / Englisch ---------- */
-const DICT = {"‹ Entwicklermodus": "‹ Developer mode", "In Entwicklung": "In development", "Entwicklermodus": "Developer mode", "Nur für dich sichtbar": "Only visible to you", "Training konzipieren": "Plan your training", "Technikevaluation": "Technique evaluation", "Varianten im A/B-Vergleich testen": "Test variants in an A/B comparison", "Benutzername": "Username", "Passwort": "Password", "Anmelden": "Log in", "(Startabläufe),": "(start sequences),", "(Startbewegungen Bild für Bild auswerten).": "(analyse your start frame by frame).", "(deine Daten und Verläufe) und": "(your data and progress) and", "+ Diese Einstellungen als Voreinstellung speichern": "+ Save these settings as a preset", "Abbrechen": "Cancel", "Ablauf vor dem Start": "Pre-start sequence", "Absenden": "Send", "Abstand zwischen Signalen": "Gap between signals", "Aktuelle Messung als Ton-Bild-Versatz übernehmen": "Use current measurement as audio–video offset", "Alle Daten löschen": "Delete all data", "Als CSV kopieren": "Copy as CSV", "An Land": "Dry-land", "An Land:": "Dry-land:", "Anderes Video wählen": "Choose another video", "Auf Störsignal": "Reacted to a distractor", "Auf der Tartanbahn": "On the track", "Auf der Tartanbahn:": "On the track:", "Aufnahme": "Recording", "Auswertung": "Analysis", "Bei einem Originalvideo trägst du 1 ein. Hast du eine iPhone-Zeitlupe als normales Video gespeichert, läuft sie langsamer ab. Dann trägst du den Faktor ein, z. B. 8, wenn 240 Bilder pro Sekunde mit 30 abgespielt werden.": "Enter 1 for an original video. If you saved an iPhone slow-motion clip as a normal video, it plays back slower. In that case enter the factor, e.g. 8 if 240 fps footage plays back at 30 fps.", "Bereiche": "Sections", "Bilder pro Sekunde": "Frames per second", "Bis zum ersten Startsignal": "Until the first signal", "Bitte beschreibe dein Anliegen kurz.": "Please briefly describe your request.", "Bitte gib eine gültige E-Mail-Adresse ein, damit du eine Antwort bekommen kannst.": "Please enter a valid email address so we can reply.", "Blockzeit (Take-off)": "Block time (take-off)", "Damit springst du mit −1 / +1 genau ein Bild weiter.": "Makes −1 / +1 jump exactly one frame.", "Das Kontaktformular wird gerade eingerichtet. Bitte versuche es später noch einmal.": "The contact form is still being set up. Please try again later.", "Das Senden hat nicht geklappt. Prüfe deine Internetverbindung und versuche es noch einmal.": "Sending failed. Check your internet connection and try again.", "Das Video ist zu kurz.": "The video is too short.", "Das sind keine gültigen Trainingsdaten. Füge bitte den kompletten exportierten Text ein.": "That is not valid training data. Please paste the complete exported text.", "Daten": "Data", "Dein Anliegen": "Your message", "Deine Daten liegen nur in diesem Browser auf diesem Gerät. Mit „Trainingsdaten exportieren“ und „Trainingsdaten importieren“ nimmst du sie auf ein anderes Gerät oder in eine andere Version der App mit. Die CSV-Daten kannst du in Excel oder R auswerten.": "Your data is stored only in this browser on this device. Use “Export training data” and “Import training data” to move it to another device or another version of the app. You can analyse the CSV data in Excel or R.", "Deine E-Mail-Adresse": "Your email address", "Der Entwickler": "The developer", "Die Anzahl der möglichen Störsignale. Das bedeutet nicht, dass genauso viele oder überhaupt welche ertönen.": "The maximum number of distractors. It does not mean that this many – or any at all – will sound.", "Die Besonderheit: Mit Sprintz kannst du das auch alleine professionell umsetzen. Du bist nicht auf die Hilfe anderer angewiesen.": "What makes it special: with Sprintz you can train like a pro on your own – no starter or training partner needed.", "Die Idee": "The idea", "Diese Datei stammt nicht aus Sprintz.": "This file is not a Sprintz backup.", "Direkt gemessen": "Measured directly", "Du gehst zuerst ins Wasser und startest dann aus der Rückenstartposition. Das Ins-Wasser-Gehen ist im Startablauf enthalten.": "You enter the water first and start from the backstroke start position. Entering the water is part of the start sequence.", "Du hast den Take-off noch nicht gesetzt.": "You haven't marked the take-off yet.", "Du hast nicht getippt": "You didn't tap", "Du hast nicht losgelassen": "You didn't release", "Du hast noch keine Voreinstellung gespeichert. Sobald du alle Fragen beantwortet hast, kannst du deine Einstellungen unter dem Start-Button speichern.": "You haven't saved a preset yet. Once you've answered all questions, you can save your settings below the Start button.", "Du springst vom Startblock ins Wasser.": "You dive from the starting block into the water.", "Du startest aus dem Startblock auf der Bahn, mit dem kompletten Startablauf.": "You start from the blocks on the track with the full start procedure.", "Du startest stehend vom Block, z. B. für Brust, Schmetterling und Freistil.": "You start standing on the block, e.g. for breaststroke, butterfly and freestyle.", "Du tippst beim Startsignal auf den Bildschirm, und die App zeigt dir sofort deine Reaktionszeit.": "You tap the screen at the start signal and the app shows your reaction time instantly.", "Du tippst beim Startsignal auf den Bildschirm. Die App zeigt dir sofort deine Reaktionszeit.": "You tap the screen at the gun. The app shows your reaction time instantly.", "Du trainierst nur deine Reaktion, z. B. im Sitzen. Dabei kannst du deine Reaktionszeit auch direkt messen.": "You train your reaction only, e.g. seated. You can also measure your reaction time directly.", "Du warst zu früh": "False start – you went too early", "Du übst trocken, z. B. im Sitzen oder mit Sprüngen.": "You practise on dry land, e.g. seated or with jumps.", "Einheit löschen": "Delete session", "Einheiten": "Sessions", "Einzelstart": "Single start", "Einzelstart oder Serie": "Single start or set", "Einzelstart:": "Single start:", "Ergebnis": "Result", "Erklärung anzeigen": "Show explanation", "Erweiterte Einstellungen": "Advanced settings", "Erweiterte Einstellungen öffnen": "Open advanced settings", "Es ertönt direkt das Startsignal.": "The starting signal sounds straight away.", "Fertig": "Done", "Füße verlassen den Block": "feet leave the block", "Füße verlassen die Startblöcke": "feet leave the blocks", "Geh in die Startblöcke": "Get into your blocks", "Geh zu deinem Startblock": "Walk to your blocks", "Geh zum Startblock": "Walk to the block", "Geh ins Wasser": "Enter the water", "Gelungen": "Good", "Gesamt": "Overview", "Gespeicherte Messungen": "Saved measurements", "Hier speicherst du deine aktuellen Einstellungen unter einem Namen.": "Save your current settings under a name.", "Hier triffst du die Voreinstellungen: Wo genau trainierst du? Wie startest du? Wie oft möchtest du starten?": "Set up your session here: Where are you training? How do you start? How many starts?", "Hände lösen": "Hands off", "Hände lösen hier": "Hands off here", "Hüfte hoch": "Hips up", "Ideal, wenn du die Zeit per Video auswerten möchtest oder während des Ablaufs nicht auf den Bildschirm drücken kannst.": "Ideal if you want to analyse your time on video or can't tap the screen during the sequence.", "Im Training ist oft keine weitere Person da, die Startsignale geben kann. Sprintz übernimmt das: Die App spielt den Startablauf nach Wettkampfregeln ab, mit echtem Startsignal und zufälligen Zeitabständen. Störsignale trainieren zusätzlich deine Aufmerksamkeit.": "In training there is often nobody around to give start commands. Sprintz does it for you: the app plays the start procedure according to competition rules, with a real starting signal and randomised timing. Distractors also train your attention.", "Im Wasser": "In the pool", "Im Wasser:": "In the pool:", "Info zu den Daten": "About the data", "Info zu den Phasen": "About the phases", "Info zu den Werten": "About the values", "Info zum Ton-Bild-Versatz": "About the audio–video offset", "Info zum Zeitlupen-Faktor": "About the slow-motion factor", "Info zur Frage": "About this question", "Info zur Videoauswertung": "About video analysis", "Ja": "Yes", "Ja, endgültig löschen": "Yes, delete permanently", "Ja:": "Yes:", "Kein Störsignal": "No distractor", "Kontakt": "Contact", "Kontaktieren": "Get in touch", "Lautstärke": "Volume", "Leg deine Hände auf": "Place your hands", "Leg deine Hände hier auf": "Place your hands here", "Leg deine Hände wieder auf, der Durchgang beginnt neu": "Place your hands again – the rep restarts", "Lege das Zeitfenster fest, in dem nach dem Fertigmachen („Take your mark“) das erste Start- oder Störsignal ertönen soll.": "Set the time window after “Take your mark” in which the first starting signal or distractor sounds.", "Lege das Zeitfenster fest, in dem nach „Set“ das erste Start- oder Störsignal ertönen soll. Standard sind 1,5–2,1 s: In internationalen Sprintfinals liegen im Mittel 1,78 s (± 0,16 s) zwischen „Set“ und Startschuss.": "Set the time window after “Set” in which the gun or the first distractor sounds. Default is 1.5–2.1 s: in international sprint finals the set-to-gun interval averages 1.78 s (± 0.16 s).", "Lege ein Zeitfenster fest, in dem nach einem Störsignal das nächste Signal ertönen soll.": "Set the time window after a distractor in which the next signal sounds.", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem ersten kurzen Pfiff (Herantreten an den Startblock) soll das zweite Signal (auf den Startblock steigen) ertönen?": "Set a fixed time or a time window: how long after the short whistles (step up to the block) should the long whistle (step onto the block) sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem ersten langen Pfiff (ins Wasser gehen) soll der zweite lange Pfiff (zurück an die Wand in die Startposition) ertönen?": "Set a fixed time or a time window: how long after the first long whistle (enter the water) should the second long whistle (return to the wall into the start position) sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem zweiten langen Pfiff soll das Signal zum Fertigmachen („Take your mark“) ertönen?": "Set a fixed time or a time window: how long after the second long whistle should “Take your mark” sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach „On your marks“ soll das Kommando „Set“ ertönen?": "Set a fixed time or a time window: how long after “On your marks” should the “Set” command sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange, nachdem du auf den Startblock gestiegen bist, soll das Signal zum Fertigmachen („Take your mark“) ertönen?": "Set a fixed time or a time window: how long after you step onto the block should “Take your mark” sound?", "Leichtathletik": "Athletics", "Maximale Störsignale": "Maximum distractors", "Messung": "Measurement", "Messung löschen": "Delete measurement", "Messung speichern": "Save measurement", "Misslungen": "Poor", "Mit Sprintz kannst du deine Reaktionszeit sportartspezifisch trainieren.": "With Sprintz you can train your reaction time in a sport-specific way.", "Mit diesem Schalter wechselst du zwischen Schwimmen und Leichtathletik. Voreinstellungen und Auswertungen sind für beide Sportarten getrennt.": "Use this switch to change between swimming and athletics. Presets and analyses are kept separately for each sport.", "Mit direkter Zeitmessung": "With timing", "Mit direkter Zeitmessung:": "With timing:", "Mit direkter Zeitmessung?": "Measure your reaction time?", "Mit welcher Wahrscheinlichkeit statt des echten Startsignals zuerst ein Störsignal ertönt. Ist die Wahrscheinlichkeit zu hoch, erwartest du eher ein Störsignal. Ist sie zu niedrig, erwartest du eher das echte Startsignal.": "How likely it is that a distractor sounds before the real starting signal. Set it too high and you start expecting a distractor; too low and you start anticipating the real signal.", "Möchtest du Störsignale einbauen?": "Add distractors?", "Name der Voreinstellung": "Preset name", "Name, z. B. Montag Sprint": "Name, e.g. Monday sprint", "Nein": "No", "Nein:": "No:", "Nimm die Startposition ein und leg die Hände aufs Display": "Get into your start position and place your hands on the screen", "Nochmal": "Again", "Notiz zum Start": "Start notes", "Nur die Reaktion": "Reaction only", "Nur die Reaktion:": "Reaction only:", "Oben wechselst du zwischen": "At the top you switch between", "Ohne direkte Zeitmessung": "Without timing", "Ohne direkte Zeitmessung:": "Without timing:", "Okay": "OK", "Passe die Lautstärke flexibel an. Teste sie mit den beiden Knöpfen darunter.": "Adjust the volume as needed. Test it with the two buttons below.", "Pause": "Rest", "Perfekt für einzelne Starts oder wenn du noch nicht weißt, wie viel Zeit du zwischen den Starts hast.": "Perfect for one-off starts or if you don't yet know how much time you'll have between starts.", "Quelle": "Source", "Reaktion hier": "Reaction here", "Reaktionen auf Störsignale": "Reactions to distractors", "Reaktionstraining": "Reaction training", "Reaktionszeit": "Reaction time", "Rücken": "Backstroke", "Rückenstart": "Backstroke start", "Rückenstart:": "Backstroke start:", "Sauber": "Clean", "Schließen": "Close", "Schwimmen": "Swimming", "Serie": "Set", "Serie fertig": "Set complete", "Serie:": "Set:", "Trainingsdaten exportieren": "Export training data", "Trainingsdaten importieren": "Import training data", "Exportdatei wählen": "Choose export file", "So viel Zeit hast du zwischen deinen Starts.": "Your time between starts.", "Speichern": "Save", "Sportart": "Sport", "Start aus dem Block": "Block start", "Start ins Wasser": "Dive start", "Startbewegung aus Video": "Start analysis from video", "Startest du einmal oder mehrmals?": "One start or several?", "Startsignal": "Starting signal", "Sprintz wurde von Lasse Dietrich entwickelt. Er studiert Sportwissenschaft an der Technischen Universität Darmstadt und schwimmt bei den Masters mit Schwerpunkt auf den Sprintstrecken im Freistil.": "Sprintz was developed by Lasse Dietrich. He studies sport science at the Technical University of Darmstadt (Germany) and competes in Masters swimming, specialising in the freestyle sprint events.", "Steig auf den Block": "Step onto the block", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Kommando (In den Startblock gehen) bleibt.": "Set how much time you have between starting the app and the “On your marks” command.", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Signal (An den Startblock herantreten) bleibt.": "Set how much time you have between starting the app and the first whistle (step up to the block).", "Stopp": "Stop", "Störsignal": "Distractor", "Störsignale": "Distractors", "Störsignale einbauen?": "Add distractors?", "Take-off hier": "Take-off here", "Ton": "Sound", "Ton-Bild-Versatz": "Audio–video offset", "Tonspur. Antippen springt an diese Stelle.": "Audio track. Tap to jump to this point.", "Tour durch die App starten": "Start the app tour", "Training starten": "Start training", "Trockensprung an Land": "Dry-land jump", "Verlauf": "Progress", "Video auswählen": "Choose video", "Video-Messungen": "Video measurements", "Videoauswertung": "Video analysis", "Von oben": "Dive start", "Von oben:": "Dive start:", "Vor dem richtigen Startsignal können zufällig Störsignale ertönen, auf die du nicht reagieren darfst. Das fördert deine Aufmerksamkeitsfähigkeit.": "Random distractors may sound before the real starting signal – don't react to them. This trains your attention.", "Voreinstellungen": "Presets", "Vorlauf": "Lead-in", "Wahrscheinlichkeit Störsignal": "Distractor probability", "Was möchtest du mitteilen?": "What would you like to tell us?", "Was war gut, was nicht? Z. B. Reaktion gut, Hüfte zu tief, Eintauchwinkel zu flach, neue Fußstellung getestet": "What went well, what didn't? E.g. good reaction, hips too low, entry angle too flat, tried a new foot position", "Wenn du eine Anzahl von Starts mit einer festen Pause dazwischen einstellen willst.": "If you want a number of starts with a fixed rest in between.", "Wie ist der Start gelungen": "How was the start?", "Wie startest du?": "How do you start?", "Wie trainierst du?": "How are you training?", "Wie viele Störsignale möchtest du maximal haben?": "Maximum number of distractors?", "Wie war dein Start?": "How was your start?", "Wiederholungen": "Reps", "Wo trainierst du?": "Where are you training?", "Zeitlupen-Faktor": "Slow-motion factor", "Zu früh": "Too early", "Zu früh losgelassen": "Released too early", "Zurück": "Back", "Zurück an die Wand, nimm die Startposition ein": "Back to the wall, take your start position", "erste Bewegung": "first movement", "optional": "optional", "name@beispiel.de": "name@example.com", "Ø Hände lösen": "Ø hands off", "Über Sprintz": "About Sprintz", "Über Sprintz und den Entwickler": "About Sprintz and the developer", "Über das Zahnrad öffnest du weitere Einstellungen. Hier kannst du die genauen Abläufe deines Starts anpassen.": "The gear icon opens more settings where you can fine-tune your start sequence.", "Über diesen Button startest du die Tour jederzeit neu. Viel Erfolg beim Training!": "Use this button to restart the tour at any time. Enjoy your training!", "Übernehmen": "Import", "… oder die exportierten Daten hier einfügen": "… or paste the exported data here", "Tippe beim Startsignal": "Tap at the start signal", "▶ Startschuss probehören": "▶ Test gun", "▶ Störsignal probehören": "▶ Test distractor", "Tartanbahn": "Track", "Reaktion": "Reaction", "Startblock": "Block", "Halte still": "Hold still", "Kurze Pfiffe": "Short whistles", "Mach dich fertig": "Get ready", "Langer Pfiff": "Long whistle", "Verpasst": "Missed", "Fehlstart": "False start", "Wie möchtest du reagieren?": "How do you want to respond?", "Hände": "Hands", "Blockzeit": "Block time", "Datum": "Date", "Starts": "Starts", "sauber": "clean", "Fehler": "Errors", "Starts gemessen": "Starts measured", "Ø Reaktionszeit": "Ø reaction time", "Bestwert": "Best", "Streuung (SD)": "Variability (SD)", "Fehlstarts": "False starts", "Starts protokolliert": "Starts logged", "Videos ausgewertet": "Videos analysed", "Ø Blockzeit (Take-off)": "Ø block time (take-off)", "Beste Blockzeit": "Best block time", "Streuung Blockzeit": "Block time variability", "Kopiert ✓": "Copied ✓", "Gespeichert ✓": "Saved ✓", "Text markiert, kopiere ihn bitte": "Text selected – please copy it", "Wird gesendet …": "Sending …", "Danke! Deine Nachricht wurde gesendet.": "Thank you! Your message has been sent.", "Worum geht es?": "What's it about?", "Weiter": "Next", "Zur Tour": "Start tour", "Beenden": "End", "Drei Bereiche": "Three sections", "Schwimmen oder Leichtathletik": "Swimming or athletics", "Voreinstellung speichern": "Save preset", "Ab zwei Werten siehst du hier deinen Verlauf.": "Your progress appears here once you have two values.", "Du hast noch keine Einheiten gespeichert.": "You haven't saved any sessions yet.", "Du hast noch keine Messungen gespeichert.": "You haven't saved any measurements yet.", "Du hast auf ein Störsignal reagiert": "You reacted to a distractor", "Verlauf: Ø Reaktionszeit je Einheit (ms)": "Progress: Ø reaction time per session (ms)", "Verlauf: saubere Starts je Einheit": "Progress: clean starts per session", "Verlauf: Blockzeit je Video (ms)": "Progress: block time per video (ms)", "Sprache": "Language", "Deutsch": "Deutsch", "English": "English", "Startsignal automatisch finden": "Find start signal automatically", "Startschuss automatisch finden": "Find gun automatically", "Startsignal hier setzen": "Mark start signal here", "Startschuss hier setzen": "Mark gun here", "Ohne Startblock": "Without blocks", "Start": "Start", "Video": "Video", "Training": "Training", "Tour": "Tour", "Protokoll": "Log", "Trockensprung": "Dry-land", "Wasser": "Pool", "Bahn": "Track", "Block": "Block", "Fest": "Fixed", "Zufall": "Random", "On your marks → Set": "On your marks → Set", "Kurze Pfiffe → langer Pfiff": "Short whistles → long whistle", "Langer Pfiff → Take your mark": "Long whistle → Take your mark", "Langer Pfiff → zweiter langer Pfiff": "Long whistle → second long whistle", "Zweiter langer Pfiff → Take your mark": "Second long whistle → Take your mark", "Sprache / Language": "Sprache / Language", "s": "s", "Eigene": "Custom", "Aufnahme beenden": "Stop recording", "Mach dich bereit": "Get ready", "Nächster Start": "Next start", "Maximale Störsignale": "Maximum distractors", "Auswertung": "Analysis", "‹ Zurück": "‹ Back", "Weiter ›": "Next ›", "Sprintz hat drei Trainingsbereiche: Technikevaluation, Krafttraining sowie Start- und Reaktionstraining. Im Menü oben links wählst du aus, womit du loslegen möchtest.": "Sprintz has three training areas: technique evaluation, strength training, and start and reaction training. Use the menu at the top left to choose where to begin.", "Menü öffnen": "Open menu", "Menü schließen": "Close menu", "Menü": "Menu", "Trainingsbereich": "Training area", "Start- und Reaktionstraining": "Start and reaction training", "Startsignale, Störsignale, Videoanalyse": "Start signals, distractors, video analysis", "Krafttraining": "Strength training", "Training tracken, Hantelgeschwindigkeit": "Track training, bar velocity", "Sprinttraining": "Sprint training", "Rennanalyse aus dem Video": "Race analysis from video", "Deine Sportart gilt für alle Bereiche. Voreinstellungen und Auswertungen werden getrennt gespeichert.": "Your sport applies to all areas. Presets and analyses are stored separately.", "Über das Menü wechselst du den Trainingsbereich und die Sportart, also Schwimmen oder Leichtathletik. Voreinstellungen und Auswertungen sind für beide Sportarten getrennt.": "Use the menu to switch training area and sport – swimming or athletics. Presets and analyses are kept separately for each sport.", "Zum Startblock gehen": "Walk to the block", "Zu den Startblöcken gehen": "Walk to your blocks", "In den Startblock gehen": "Get into your blocks", "In den Startblock → Set": "Into the blocks → Set", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Kommando zum In-den-Startblock-Gehen soll das Kommando „Set“ ertönen?": "Set a fixed time or a time window: how long after the command to get into your blocks should “Set” sound?", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Kommando (In den Startblock gehen) bleibt.": "Set how much time you have between starting the app and the first command (get into your blocks).", "An den Startblock herantreten": "Step up to the block", "Auf den Startblock heraufsteigen": "Step onto the block", "Ins Wasser gehen": "Enter the water", "Startposition einnehmen": "Take your start position", "Zurück an die Wand": "Back to the wall", "Herantreten → Heraufsteigen": "Step up → step onto the block", "Heraufsteigen → Take your mark": "Step onto the block → Take your mark", "Ins Wasser → Startposition": "Enter the water → start position", "Startposition → Take your mark": "Start position → Take your mark", "Startsignal automatisch finden": "Find start signal automatically", "Startsignal hier setzen": "Mark start signal here", "Info zum Abstand": "About the distance", "Möchtest du die Videos herunterladen?": "Do you want to download the videos?", "Videos speichern": "Save videos", "Nicht speichern": "Don't save", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Signal zum Herantreten an den Startblock soll das Signal zum Heraufsteigen auf den Startblock ertönen?": "Set a fixed time or a time window: how long after the signal to step up to the block should the signal to step onto the block sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Signal zum Ins-Wasser-Gehen soll das Signal zum Einnehmen der Startposition an der Wand ertönen?": "Set a fixed time or a time window: how long after the signal to enter the water should the signal to take your start position at the wall sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Signal zum Einnehmen der Startposition soll das Signal zum Fertigmachen („Take your mark“) ertönen?": "Set a fixed time or a time window: how long after the signal to take your start position should “Take your mark” sound?", "Steht der Lautsprecher nicht direkt neben dem Handy, kommt das Signal etwa 3 ms pro Meter später im Video an. Trag den Abstand ein, dann gleicht Sprintz das aus. Den Weg vom Lautsprecher zu dir rechnet Sprintz nicht heraus, denn den gibt es im Wettkampf genauso.": "If the speaker isn't right next to the phone, the signal reaches the video about 3 ms per metre later. Enter the distance and Sprintz compensates for it. The distance from the speaker to you is not removed – it exists in competition too.", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Signal (An den Startblock herantreten) bleibt.": "Set how much time you have between starting the app and the first signal (step up to the block).", "Normalerweise musst du hier nichts ändern. Manche Handys speichern Zeitlupen-Videos so, dass sie schon verlangsamt ablaufen, z. B. 240 Bilder pro Sekunde, abgespielt mit 30. Dann zeigt das Video 1 Sekunde Wirklichkeit in 8 Sekunden. Trag in diesem Fall 8 ein, damit Sprintz die echten Zeiten berechnet. Erkennst du das Startsignal im Video normal schnell, bleibt der Wert bei 1.": "Normally you don't need to change anything here. Some phones save slow-motion videos already slowed down, e.g. 240 frames per second played back at 30. The video then shows 1 second of real time over 8 seconds. In that case enter 8 so Sprintz calculates the real times. If the starting signal sounds at normal speed in the video, leave it at 1.", "Einstellungen zur Videoauswertung": "Video analysis settings", "Erkennt Sprintz automatisch.": "Detected automatically by Sprintz.", "Nur bei bereits verlangsamt gespeicherten Videos.": "Only for videos already saved in slow motion.", "Verzögerung deines Lautsprechers": "Speaker delay", "Info zur Verzögerung": "About the delay", "Noch nicht gemessen": "Not measured yet", "Messen": "Measure", "Abstand Lautsprecher → Handy": "Distance speaker → phone", "Steht der Lautsprecher nicht direkt neben dem Handy, kommt das Signal etwa 3 ms pro Meter später im Video an. Sprintz gleicht das aus. Den Weg vom Lautsprecher zu dir rechnet Sprintz nicht heraus, denn den gibt es im Wettkampf genauso.": "If the speaker isn't right next to the phone, the signal reaches the video about 3 ms per metre later. Sprintz compensates for this. The distance from the speaker to you is not removed – it exists in competition too.", "Kamera nicht verfügbar": "Camera not available", "Ohne Video trainieren": "Train without video", "Zwischen dem Abspielen eines Tons und dem Moment, in dem er aus dem Lautsprecher kommt, vergeht Zeit. Am Handy-Lautsprecher sind das meist 10–40 ms, bei Bluetooth oft 150–250 ms. Diese Verzögerung würde deine Reaktionszeit künstlich verlängern. Beim Messen spielt Sprintz fünf kurze Klicks ab und hört sie über das Mikrofon wieder. Daraus berechnet die App die Verzögerung und zieht sie von deinen direkt gemessenen Reaktionszeiten ab. Miss neu, wenn du den Lautsprecher wechselst. Das Tippen selbst wird über den Zeitstempel des Touch-Ereignisses erfasst, die Bearbeitungszeit im Browser fließt also nicht ein.": "Time passes between playing a sound and it actually coming out of the speaker – usually 10–40 ms on the phone speaker, often 150–250 ms over Bluetooth. This delay would artificially lengthen your reaction time. When you measure, Sprintz plays five short clicks and listens for them through the microphone. From this it calculates the delay and subtracts it from your directly measured reaction times. Measure again whenever you change speakers. Your tap itself is captured via the touch event's timestamp, so browser processing time doesn't count.", "▶ Startsignal probehören": "▶ Test starting signal", "Für welche Sportart trainierst du?": "What's your profession?", "Möchtest du deine Starts filmen?": "Do you want to film your starts?", "Ja, mit Video": "Yes, with video", "Nein, ohne Video": "No, without video", "Sprintz öffnet die Kamera und nimmt jeden Start auf. Direkt danach wertest du ihn aus und kannst ihn kommentieren.": "Sprintz opens the camera and records every start. Right afterwards you analyse it and can add comments.", "Der Startablauf beginnt sofort.": "The start sequence begins straight away.", "Achtung!": "Please note!", "Verstanden": "Got it", "So stellst du die Kamera auf": "How to set up the camera", "Start auswerten": "Analyse your start", "Ohne Zeiten speichern": "Save without times", "Video herunterladen": "Download video", "Training beenden": "End training", "Starts mit Störsignal": "Starts with distractors", "Verlauf: Störsignal widerstanden je Tag": "Progress: distractors resisted per day", "Info zu den Störsignal-Starts": "About starts with distractors", "Starts, vor denen mindestens ein Störsignal kam, wertet Sprintz getrennt aus. So verfälschen sie deine normalen Reaktions- und Blockzeiten nicht. „Störsignal widerstanden“ heißt: Du hast weder auf das Störsignal reagiert noch bist du zu früh gestartet. Mehrere Einheiten an einem Tag werden in den Grafiken zu einem Punkt zusammengefasst.": "Starts preceded by at least one distractor are analysed separately so they don't skew your normal reaction and block times. “Distractor resisted” means you neither reacted to the distractor nor went early. Several sessions on the same day are combined into one point in the charts.", "Hintergrund": "Background", "Quellen": "Sources", "Zu welchem Start gehört das Video?": "Which start does this video belong to?", "Wie war der Start?": "How did the start go?", "Gab es Störsignale vor dem Start?": "Were there distractors before the start?"};
+const DICT = {"⛶ Vollbild": "⛶ Full screen", "Vollbild beenden": "Exit full screen", "Wie viele Starts möchtest du machen?": "How many starts do you want to do?", "Anzahl der Starts": "Number of starts", "Bei mehr als einem Start legst du danach die Pause fest.": "With more than one start, you set the rest next.", "‹ Entwicklermodus": "‹ Developer mode", "In Entwicklung": "In development", "Entwicklermodus": "Developer mode", "Nur für dich sichtbar": "Only visible to you", "Training konzipieren": "Plan your training", "Technikevaluation": "Technique evaluation", "Varianten im A/B-Vergleich testen": "Test variants in an A/B comparison", "Benutzername": "Username", "Passwort": "Password", "Anmelden": "Log in", "(Startabläufe),": "(start sequences),", "(Startbewegungen Bild für Bild auswerten).": "(analyse your start frame by frame).", "(deine Daten und Verläufe) und": "(your data and progress) and", "+ Diese Einstellungen als Voreinstellung speichern": "+ Save these settings as a preset", "Abbrechen": "Cancel", "Ablauf vor dem Start": "Pre-start sequence", "Absenden": "Send", "Abstand zwischen Signalen": "Gap between signals", "Aktuelle Messung als Ton-Bild-Versatz übernehmen": "Use current measurement as audio–video offset", "Alle Daten löschen": "Delete all data", "Als CSV kopieren": "Copy as CSV", "An Land": "Dry-land", "An Land:": "Dry-land:", "Anderes Video wählen": "Choose another video", "Auf Störsignal": "Reacted to a distractor", "Auf der Tartanbahn": "On the track", "Auf der Tartanbahn:": "On the track:", "Aufnahme": "Recording", "Auswertung": "Analysis", "Bei einem Originalvideo trägst du 1 ein. Hast du eine iPhone-Zeitlupe als normales Video gespeichert, läuft sie langsamer ab. Dann trägst du den Faktor ein, z. B. 8, wenn 240 Bilder pro Sekunde mit 30 abgespielt werden.": "Enter 1 for an original video. If you saved an iPhone slow-motion clip as a normal video, it plays back slower. In that case enter the factor, e.g. 8 if 240 fps footage plays back at 30 fps.", "Bereiche": "Sections", "Bilder pro Sekunde": "Frames per second", "Bis zum ersten Startsignal": "Until the first signal", "Bitte beschreibe dein Anliegen kurz.": "Please briefly describe your request.", "Bitte gib eine gültige E-Mail-Adresse ein, damit du eine Antwort bekommen kannst.": "Please enter a valid email address so we can reply.", "Blockzeit (Take-off)": "Block time (take-off)", "Damit springst du mit −1 / +1 genau ein Bild weiter.": "Makes −1 / +1 jump exactly one frame.", "Das Kontaktformular wird gerade eingerichtet. Bitte versuche es später noch einmal.": "The contact form is still being set up. Please try again later.", "Das Senden hat nicht geklappt. Prüfe deine Internetverbindung und versuche es noch einmal.": "Sending failed. Check your internet connection and try again.", "Das Video ist zu kurz.": "The video is too short.", "Das sind keine gültigen Trainingsdaten. Füge bitte den kompletten exportierten Text ein.": "That is not valid training data. Please paste the complete exported text.", "Daten": "Data", "Dein Anliegen": "Your message", "Deine Daten liegen nur in diesem Browser auf diesem Gerät. Mit „Trainingsdaten exportieren“ und „Trainingsdaten importieren“ nimmst du sie auf ein anderes Gerät oder in eine andere Version der App mit. Die CSV-Daten kannst du in Excel oder R auswerten.": "Your data is stored only in this browser on this device. Use “Export training data” and “Import training data” to move it to another device or another version of the app. You can analyse the CSV data in Excel or R.", "Deine E-Mail-Adresse": "Your email address", "Der Entwickler": "The developer", "Die Anzahl der möglichen Störsignale. Das bedeutet nicht, dass genauso viele oder überhaupt welche ertönen.": "The maximum number of distractors. It does not mean that this many – or any at all – will sound.", "Die Besonderheit: Mit Sprintz kannst du das auch alleine professionell umsetzen. Du bist nicht auf die Hilfe anderer angewiesen.": "What makes it special: with Sprintz you can train like a pro on your own – no starter or training partner needed.", "Die Idee": "The idea", "Diese Datei stammt nicht aus Sprintz.": "This file is not a Sprintz backup.", "Direkt gemessen": "Measured directly", "Du gehst zuerst ins Wasser und startest dann aus der Rückenstartposition. Das Ins-Wasser-Gehen ist im Startablauf enthalten.": "You enter the water first and start from the backstroke start position. Entering the water is part of the start sequence.", "Du hast den Take-off noch nicht gesetzt.": "You haven't marked the take-off yet.", "Du hast nicht getippt": "You didn't tap", "Du hast nicht losgelassen": "You didn't release", "Du hast noch keine Voreinstellung gespeichert. Sobald du alle Fragen beantwortet hast, kannst du deine Einstellungen unter dem Start-Button speichern.": "You haven't saved a preset yet. Once you've answered all questions, you can save your settings below the Start button.", "Du springst vom Startblock ins Wasser.": "You dive from the starting block into the water.", "Du startest aus dem Startblock auf der Bahn, mit dem kompletten Startablauf.": "You start from the blocks on the track with the full start procedure.", "Du startest stehend vom Block, z. B. für Brust, Schmetterling und Freistil.": "You start standing on the block, e.g. for breaststroke, butterfly and freestyle.", "Du tippst beim Startsignal auf den Bildschirm, und die App zeigt dir sofort deine Reaktionszeit.": "You tap the screen at the start signal and the app shows your reaction time instantly.", "Du tippst beim Startsignal auf den Bildschirm. Die App zeigt dir sofort deine Reaktionszeit.": "You tap the screen at the gun. The app shows your reaction time instantly.", "Du trainierst nur deine Reaktion, z. B. im Sitzen. Dabei kannst du deine Reaktionszeit auch direkt messen.": "You train your reaction only, e.g. seated. You can also measure your reaction time directly.", "Du warst zu früh": "False start – you went too early", "Du übst trocken, z. B. im Sitzen oder mit Sprüngen.": "You practise on dry land, e.g. seated or with jumps.", "Einheit löschen": "Delete session", "Einheiten": "Sessions", "Einzelstart": "Single start", "Einzelstart oder Serie": "Single start or set", "Einzelstart:": "Single start:", "Ergebnis": "Result", "Erklärung anzeigen": "Show explanation", "Erweiterte Einstellungen": "Advanced settings", "Erweiterte Einstellungen öffnen": "Open advanced settings", "Es ertönt direkt das Startsignal.": "The starting signal sounds straight away.", "Fertig": "Done", "Füße verlassen den Block": "feet leave the block", "Füße verlassen die Startblöcke": "feet leave the blocks", "Geh in die Startblöcke": "Get into your blocks", "Geh zu deinem Startblock": "Walk to your blocks", "Geh zum Startblock": "Walk to the block", "Geh ins Wasser": "Enter the water", "Gelungen": "Good", "Gesamt": "Overview", "Gespeicherte Messungen": "Saved measurements", "Hier speicherst du deine aktuellen Einstellungen unter einem Namen.": "Save your current settings under a name.", "Hier triffst du die Voreinstellungen: Wo genau trainierst du? Wie startest du? Wie oft möchtest du starten?": "Set up your session here: Where are you training? How do you start? How many starts?", "Hände lösen": "Hands off", "Hände lösen hier": "Hands off here", "Hüfte hoch": "Hips up", "Ideal, wenn du die Zeit per Video auswerten möchtest oder während des Ablaufs nicht auf den Bildschirm drücken kannst.": "Ideal if you want to analyse your time on video or can't tap the screen during the sequence.", "Im Training ist oft keine weitere Person da, die Startsignale geben kann. Sprintz übernimmt das: Die App spielt den Startablauf nach Wettkampfregeln ab, mit echtem Startsignal und zufälligen Zeitabständen. Störsignale trainieren zusätzlich deine Aufmerksamkeit.": "In training there is often nobody around to give start commands. Sprintz does it for you: the app plays the start procedure according to competition rules, with a real starting signal and randomised timing. Distractors also train your attention.", "Im Wasser": "In the pool", "Im Wasser:": "In the pool:", "Info zu den Daten": "About the data", "Info zu den Phasen": "About the phases", "Info zu den Werten": "About the values", "Info zum Ton-Bild-Versatz": "About the audio–video offset", "Info zum Zeitlupen-Faktor": "About the slow-motion factor", "Info zur Frage": "About this question", "Info zur Videoauswertung": "About video analysis", "Ja": "Yes", "Ja, endgültig löschen": "Yes, delete permanently", "Ja:": "Yes:", "Kein Störsignal": "No distractor", "Kontakt": "Contact", "Kontaktieren": "Get in touch", "Lautstärke": "Volume", "Leg deine Hände auf": "Place your hands", "Leg deine Hände hier auf": "Place your hands here", "Leg deine Hände wieder auf, der Durchgang beginnt neu": "Place your hands again – the rep restarts", "Lege das Zeitfenster fest, in dem nach dem Fertigmachen („Take your mark“) das erste Start- oder Störsignal ertönen soll.": "Set the time window after “Take your mark” in which the first starting signal or distractor sounds.", "Lege das Zeitfenster fest, in dem nach „Set“ das erste Start- oder Störsignal ertönen soll. Standard sind 1,5–2,1 s: In internationalen Sprintfinals liegen im Mittel 1,78 s (± 0,16 s) zwischen „Set“ und Startschuss.": "Set the time window after “Set” in which the gun or the first distractor sounds. Default is 1.5–2.1 s: in international sprint finals the set-to-gun interval averages 1.78 s (± 0.16 s).", "Lege ein Zeitfenster fest, in dem nach einem Störsignal das nächste Signal ertönen soll.": "Set the time window after a distractor in which the next signal sounds.", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem ersten kurzen Pfiff (Herantreten an den Startblock) soll das zweite Signal (auf den Startblock steigen) ertönen?": "Set a fixed time or a time window: how long after the short whistles (step up to the block) should the long whistle (step onto the block) sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem ersten langen Pfiff (ins Wasser gehen) soll der zweite lange Pfiff (zurück an die Wand in die Startposition) ertönen?": "Set a fixed time or a time window: how long after the first long whistle (enter the water) should the second long whistle (return to the wall into the start position) sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem zweiten langen Pfiff soll das Signal zum Fertigmachen („Take your mark“) ertönen?": "Set a fixed time or a time window: how long after the second long whistle should “Take your mark” sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach „On your marks“ soll das Kommando „Set“ ertönen?": "Set a fixed time or a time window: how long after “On your marks” should the “Set” command sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange, nachdem du auf den Startblock gestiegen bist, soll das Signal zum Fertigmachen („Take your mark“) ertönen?": "Set a fixed time or a time window: how long after you step onto the block should “Take your mark” sound?", "Leichtathletik": "Athletics", "Maximale Störsignale": "Maximum distractors", "Messung": "Measurement", "Messung löschen": "Delete measurement", "Messung speichern": "Save measurement", "Misslungen": "Poor", "Mit Sprintz kannst du deine Reaktionszeit sportartspezifisch trainieren.": "With Sprintz you can train your reaction time in a sport-specific way.", "Mit diesem Schalter wechselst du zwischen Schwimmen und Leichtathletik. Voreinstellungen und Auswertungen sind für beide Sportarten getrennt.": "Use this switch to change between swimming and athletics. Presets and analyses are kept separately for each sport.", "Mit direkter Zeitmessung": "With timing", "Mit direkter Zeitmessung:": "With timing:", "Mit direkter Zeitmessung?": "Measure your reaction time?", "Mit welcher Wahrscheinlichkeit statt des echten Startsignals zuerst ein Störsignal ertönt. Ist die Wahrscheinlichkeit zu hoch, erwartest du eher ein Störsignal. Ist sie zu niedrig, erwartest du eher das echte Startsignal.": "How likely it is that a distractor sounds before the real starting signal. Set it too high and you start expecting a distractor; too low and you start anticipating the real signal.", "Möchtest du Störsignale einbauen?": "Add distractors?", "Name der Voreinstellung": "Preset name", "Name, z. B. Montag Sprint": "Name, e.g. Monday sprint", "Nein": "No", "Nein:": "No:", "Nimm die Startposition ein und leg die Hände aufs Display": "Get into your start position and place your hands on the screen", "Nochmal": "Again", "Notiz zum Start": "Start notes", "Nur die Reaktion": "Reaction only", "Nur die Reaktion:": "Reaction only:", "Oben wechselst du zwischen": "At the top you switch between", "Ohne direkte Zeitmessung": "Without timing", "Ohne direkte Zeitmessung:": "Without timing:", "Okay": "OK", "Passe die Lautstärke flexibel an. Teste sie mit den beiden Knöpfen darunter.": "Adjust the volume as needed. Test it with the two buttons below.", "Pause": "Rest", "Perfekt für einzelne Starts oder wenn du noch nicht weißt, wie viel Zeit du zwischen den Starts hast.": "Perfect for one-off starts or if you don't yet know how much time you'll have between starts.", "Quelle": "Source", "Reaktion hier": "Reaction here", "Reaktionen auf Störsignale": "Reactions to distractors", "Reaktionstraining": "Reaction training", "Reaktionszeit": "Reaction time", "Rücken": "Backstroke", "Rückenstart": "Backstroke start", "Rückenstart:": "Backstroke start:", "Sauber": "Clean", "Schließen": "Close", "Schwimmen": "Swimming", "Serie": "Set", "Serie fertig": "Set complete", "Serie:": "Set:", "Trainingsdaten exportieren": "Export training data", "Trainingsdaten importieren": "Import training data", "Exportdatei wählen": "Choose export file", "So viel Zeit hast du zwischen deinen Starts.": "Your time between starts.", "Speichern": "Save", "Sportart": "Sport", "Start aus dem Block": "Block start", "Start ins Wasser": "Dive start", "Startbewegung aus Video": "Start analysis from video", "Startest du einmal oder mehrmals?": "One start or several?", "Startsignal": "Starting signal", "Sprintz wurde von Lasse Dietrich entwickelt. Er studiert Sportwissenschaft an der Technischen Universität Darmstadt und schwimmt bei den Masters mit Schwerpunkt auf den Sprintstrecken im Freistil.": "Sprintz was developed by Lasse Dietrich. He studies sport science at the Technical University of Darmstadt (Germany) and competes in Masters swimming, specialising in the freestyle sprint events.", "Steig auf den Block": "Step onto the block", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Kommando (In den Startblock gehen) bleibt.": "Set how much time you have between starting the app and the “On your marks” command.", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Signal (An den Startblock herantreten) bleibt.": "Set how much time you have between starting the app and the first whistle (step up to the block).", "Stopp": "Stop", "Störsignal": "Distractor", "Störsignale": "Distractors", "Störsignale einbauen?": "Add distractors?", "Take-off hier": "Take-off here", "Ton": "Sound", "Ton-Bild-Versatz": "Audio–video offset", "Tonspur. Antippen springt an diese Stelle.": "Audio track. Tap to jump to this point.", "Tour durch die App starten": "Start the app tour", "Training starten": "Start training", "Trockensprung an Land": "Dry-land jump", "Verlauf": "Progress", "Video auswählen": "Choose video", "Video-Messungen": "Video measurements", "Videoauswertung": "Video analysis", "Von oben": "Dive start", "Von oben:": "Dive start:", "Vor dem richtigen Startsignal können zufällig Störsignale ertönen, auf die du nicht reagieren darfst. Das fördert deine Aufmerksamkeitsfähigkeit.": "Random distractors may sound before the real starting signal – don't react to them. This trains your attention.", "Voreinstellungen": "Presets", "Vorlauf": "Lead-in", "Wahrscheinlichkeit Störsignal": "Distractor probability", "Was möchtest du mitteilen?": "What would you like to tell us?", "Was war gut, was nicht? Z. B. Reaktion gut, Hüfte zu tief, Eintauchwinkel zu flach, neue Fußstellung getestet": "What went well, what didn't? E.g. good reaction, hips too low, entry angle too flat, tried a new foot position", "Wenn du eine Anzahl von Starts mit einer festen Pause dazwischen einstellen willst.": "If you want a number of starts with a fixed rest in between.", "Wie ist der Start gelungen": "How was the start?", "Wie startest du?": "How do you start?", "Wie trainierst du?": "How are you training?", "Wie viele Störsignale möchtest du maximal haben?": "Maximum number of distractors?", "Wie war dein Start?": "How was your start?", "Wiederholungen": "Reps", "Wo trainierst du?": "Where are you training?", "Zeitlupen-Faktor": "Slow-motion factor", "Zu früh": "Too early", "Zu früh losgelassen": "Released too early", "Zurück": "Back", "Zurück an die Wand, nimm die Startposition ein": "Back to the wall, take your start position", "erste Bewegung": "first movement", "optional": "optional", "name@beispiel.de": "name@example.com", "Ø Hände lösen": "Ø hands off", "Über Sprintz": "About Sprintz", "Über Sprintz und den Entwickler": "About Sprintz and the developer", "Über das Zahnrad öffnest du weitere Einstellungen. Hier kannst du die genauen Abläufe deines Starts anpassen.": "The gear icon opens more settings where you can fine-tune your start sequence.", "Über diesen Button startest du die Tour jederzeit neu. Viel Erfolg beim Training!": "Use this button to restart the tour at any time. Enjoy your training!", "Übernehmen": "Import", "… oder die exportierten Daten hier einfügen": "… or paste the exported data here", "Tippe beim Startsignal": "Tap at the start signal", "▶ Startschuss probehören": "▶ Test gun", "▶ Störsignal probehören": "▶ Test distractor", "Tartanbahn": "Track", "Reaktion": "Reaction", "Startblock": "Block", "Halte still": "Hold still", "Kurze Pfiffe": "Short whistles", "Mach dich fertig": "Get ready", "Langer Pfiff": "Long whistle", "Verpasst": "Missed", "Fehlstart": "False start", "Wie möchtest du reagieren?": "How do you want to respond?", "Hände": "Hands", "Blockzeit": "Block time", "Datum": "Date", "Starts": "Starts", "sauber": "clean", "Fehler": "Errors", "Starts gemessen": "Starts measured", "Ø Reaktionszeit": "Ø reaction time", "Bestwert": "Best", "Streuung (SD)": "Variability (SD)", "Fehlstarts": "False starts", "Starts protokolliert": "Starts logged", "Videos ausgewertet": "Videos analysed", "Ø Blockzeit (Take-off)": "Ø block time (take-off)", "Beste Blockzeit": "Best block time", "Streuung Blockzeit": "Block time variability", "Kopiert ✓": "Copied ✓", "Gespeichert ✓": "Saved ✓", "Text markiert, kopiere ihn bitte": "Text selected – please copy it", "Wird gesendet …": "Sending …", "Danke! Deine Nachricht wurde gesendet.": "Thank you! Your message has been sent.", "Worum geht es?": "What's it about?", "Weiter": "Next", "Zur Tour": "Start tour", "Beenden": "End", "Drei Bereiche": "Three sections", "Schwimmen oder Leichtathletik": "Swimming or athletics", "Voreinstellung speichern": "Save preset", "Ab zwei Werten siehst du hier deinen Verlauf.": "Your progress appears here once you have two values.", "Du hast noch keine Einheiten gespeichert.": "You haven't saved any sessions yet.", "Du hast noch keine Messungen gespeichert.": "You haven't saved any measurements yet.", "Du hast auf ein Störsignal reagiert": "You reacted to a distractor", "Verlauf: Ø Reaktionszeit je Einheit (ms)": "Progress: Ø reaction time per session (ms)", "Verlauf: saubere Starts je Einheit": "Progress: clean starts per session", "Verlauf: Blockzeit je Video (ms)": "Progress: block time per video (ms)", "Sprache": "Language", "Deutsch": "Deutsch", "English": "English", "Startsignal automatisch finden": "Find start signal automatically", "Startschuss automatisch finden": "Find gun automatically", "Startsignal hier setzen": "Mark start signal here", "Startschuss hier setzen": "Mark gun here", "Ohne Startblock": "Without blocks", "Start": "Start", "Video": "Video", "Training": "Training", "Tour": "Tour", "Protokoll": "Log", "Trockensprung": "Dry-land", "Wasser": "Pool", "Bahn": "Track", "Block": "Block", "Fest": "Fixed", "Zufall": "Random", "On your marks → Set": "On your marks → Set", "Kurze Pfiffe → langer Pfiff": "Short whistles → long whistle", "Langer Pfiff → Take your mark": "Long whistle → Take your mark", "Langer Pfiff → zweiter langer Pfiff": "Long whistle → second long whistle", "Zweiter langer Pfiff → Take your mark": "Second long whistle → Take your mark", "Sprache / Language": "Sprache / Language", "s": "s", "Eigene": "Custom", "Aufnahme beenden": "Stop recording", "Mach dich bereit": "Get ready", "Nächster Start": "Next start", "Maximale Störsignale": "Maximum distractors", "Auswertung": "Analysis", "‹ Zurück": "‹ Back", "Weiter ›": "Next ›", "Sprintz hat drei Trainingsbereiche: Technikevaluation, Krafttraining sowie Start- und Reaktionstraining. Im Menü oben links wählst du aus, womit du loslegen möchtest.": "Sprintz has three training areas: technique evaluation, strength training, and start and reaction training. Use the menu at the top left to choose where to begin.", "Menü öffnen": "Open menu", "Menü schließen": "Close menu", "Menü": "Menu", "Trainingsbereich": "Training area", "Start- und Reaktionstraining": "Start and reaction training", "Startsignale, Störsignale, Videoanalyse": "Start signals, distractors, video analysis", "Krafttraining": "Strength training", "Training tracken, Hantelgeschwindigkeit": "Track training, bar velocity", "Sprinttraining": "Sprint training", "Rennanalyse aus dem Video": "Race analysis from video", "Deine Sportart gilt für alle Bereiche. Voreinstellungen und Auswertungen werden getrennt gespeichert.": "Your sport applies to all areas. Presets and analyses are stored separately.", "Über das Menü wechselst du den Trainingsbereich und die Sportart, also Schwimmen oder Leichtathletik. Voreinstellungen und Auswertungen sind für beide Sportarten getrennt.": "Use the menu to switch training area and sport – swimming or athletics. Presets and analyses are kept separately for each sport.", "Zum Startblock gehen": "Walk to the block", "Zu den Startblöcken gehen": "Walk to your blocks", "In den Startblock gehen": "Get into your blocks", "In den Startblock → Set": "Into the blocks → Set", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Kommando zum In-den-Startblock-Gehen soll das Kommando „Set“ ertönen?": "Set a fixed time or a time window: how long after the command to get into your blocks should “Set” sound?", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Kommando (In den Startblock gehen) bleibt.": "Set how much time you have between starting the app and the first command (get into your blocks).", "An den Startblock herantreten": "Step up to the block", "Auf den Startblock heraufsteigen": "Step onto the block", "Ins Wasser gehen": "Enter the water", "Startposition einnehmen": "Take your start position", "Zurück an die Wand": "Back to the wall", "Herantreten → Heraufsteigen": "Step up → step onto the block", "Heraufsteigen → Take your mark": "Step onto the block → Take your mark", "Ins Wasser → Startposition": "Enter the water → start position", "Startposition → Take your mark": "Start position → Take your mark", "Startsignal automatisch finden": "Find start signal automatically", "Startsignal hier setzen": "Mark start signal here", "Info zum Abstand": "About the distance", "Möchtest du die Videos herunterladen?": "Do you want to download the videos?", "Videos speichern": "Save videos", "Nicht speichern": "Don't save", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Signal zum Herantreten an den Startblock soll das Signal zum Heraufsteigen auf den Startblock ertönen?": "Set a fixed time or a time window: how long after the signal to step up to the block should the signal to step onto the block sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Signal zum Ins-Wasser-Gehen soll das Signal zum Einnehmen der Startposition an der Wand ertönen?": "Set a fixed time or a time window: how long after the signal to enter the water should the signal to take your start position at the wall sound?", "Lege eine feste Zeit oder ein Zeitfenster fest: Wie lange nach dem Signal zum Einnehmen der Startposition soll das Signal zum Fertigmachen („Take your mark“) ertönen?": "Set a fixed time or a time window: how long after the signal to take your start position should “Take your mark” sound?", "Steht der Lautsprecher nicht direkt neben dem Handy, kommt das Signal etwa 3 ms pro Meter später im Video an. Trag den Abstand ein, dann gleicht Sprintz das aus. Den Weg vom Lautsprecher zu dir rechnet Sprintz nicht heraus, denn den gibt es im Wettkampf genauso.": "If the speaker isn't right next to the phone, the signal reaches the video about 3 ms per metre later. Enter the distance and Sprintz compensates for it. The distance from the speaker to you is not removed – it exists in competition too.", "Stelle ein, wie viel Zeit dir vom Starten in der App bis zum ersten Signal (An den Startblock herantreten) bleibt.": "Set how much time you have between starting the app and the first signal (step up to the block).", "Normalerweise musst du hier nichts ändern. Manche Handys speichern Zeitlupen-Videos so, dass sie schon verlangsamt ablaufen, z. B. 240 Bilder pro Sekunde, abgespielt mit 30. Dann zeigt das Video 1 Sekunde Wirklichkeit in 8 Sekunden. Trag in diesem Fall 8 ein, damit Sprintz die echten Zeiten berechnet. Erkennst du das Startsignal im Video normal schnell, bleibt der Wert bei 1.": "Normally you don't need to change anything here. Some phones save slow-motion videos already slowed down, e.g. 240 frames per second played back at 30. The video then shows 1 second of real time over 8 seconds. In that case enter 8 so Sprintz calculates the real times. If the starting signal sounds at normal speed in the video, leave it at 1.", "Einstellungen zur Videoauswertung": "Video analysis settings", "Erkennt Sprintz automatisch.": "Detected automatically by Sprintz.", "Nur bei bereits verlangsamt gespeicherten Videos.": "Only for videos already saved in slow motion.", "Verzögerung deines Lautsprechers": "Speaker delay", "Info zur Verzögerung": "About the delay", "Noch nicht gemessen": "Not measured yet", "Messen": "Measure", "Abstand Lautsprecher → Handy": "Distance speaker → phone", "Steht der Lautsprecher nicht direkt neben dem Handy, kommt das Signal etwa 3 ms pro Meter später im Video an. Sprintz gleicht das aus. Den Weg vom Lautsprecher zu dir rechnet Sprintz nicht heraus, denn den gibt es im Wettkampf genauso.": "If the speaker isn't right next to the phone, the signal reaches the video about 3 ms per metre later. Sprintz compensates for this. The distance from the speaker to you is not removed – it exists in competition too.", "Kamera nicht verfügbar": "Camera not available", "Ohne Video trainieren": "Train without video", "Zwischen dem Abspielen eines Tons und dem Moment, in dem er aus dem Lautsprecher kommt, vergeht Zeit. Am Handy-Lautsprecher sind das meist 10–40 ms, bei Bluetooth oft 150–250 ms. Diese Verzögerung würde deine Reaktionszeit künstlich verlängern. Beim Messen spielt Sprintz fünf kurze Klicks ab und hört sie über das Mikrofon wieder. Daraus berechnet die App die Verzögerung und zieht sie von deinen direkt gemessenen Reaktionszeiten ab. Miss neu, wenn du den Lautsprecher wechselst. Das Tippen selbst wird über den Zeitstempel des Touch-Ereignisses erfasst, die Bearbeitungszeit im Browser fließt also nicht ein.": "Time passes between playing a sound and it actually coming out of the speaker – usually 10–40 ms on the phone speaker, often 150–250 ms over Bluetooth. This delay would artificially lengthen your reaction time. When you measure, Sprintz plays five short clicks and listens for them through the microphone. From this it calculates the delay and subtracts it from your directly measured reaction times. Measure again whenever you change speakers. Your tap itself is captured via the touch event's timestamp, so browser processing time doesn't count.", "▶ Startsignal probehören": "▶ Test starting signal", "Für welche Sportart trainierst du?": "What's your profession?", "Möchtest du deine Starts filmen?": "Do you want to film your starts?", "Ja, mit Video": "Yes, with video", "Nein, ohne Video": "No, without video", "Sprintz öffnet die Kamera und nimmt jeden Start auf. Direkt danach wertest du ihn aus und kannst ihn kommentieren.": "Sprintz opens the camera and records every start. Right afterwards you analyse it and can add comments.", "Der Startablauf beginnt sofort.": "The start sequence begins straight away.", "Achtung!": "Please note!", "Verstanden": "Got it", "So stellst du die Kamera auf": "How to set up the camera", "Start auswerten": "Analyse your start", "Ohne Zeiten speichern": "Save without times", "Video herunterladen": "Download video", "Training beenden": "End training", "Starts mit Störsignal": "Starts with distractors", "Verlauf: Störsignal widerstanden je Tag": "Progress: distractors resisted per day", "Info zu den Störsignal-Starts": "About starts with distractors", "Starts, vor denen mindestens ein Störsignal kam, wertet Sprintz getrennt aus. So verfälschen sie deine normalen Reaktions- und Blockzeiten nicht. „Störsignal widerstanden“ heißt: Du hast weder auf das Störsignal reagiert noch bist du zu früh gestartet. Mehrere Einheiten an einem Tag werden in den Grafiken zu einem Punkt zusammengefasst.": "Starts preceded by at least one distractor are analysed separately so they don't skew your normal reaction and block times. “Distractor resisted” means you neither reacted to the distractor nor went early. Several sessions on the same day are combined into one point in the charts.", "Hintergrund": "Background", "Quellen": "Sources", "Zu welchem Start gehört das Video?": "Which start does this video belong to?", "Wie war der Start?": "How did the start go?", "Gab es Störsignale vor dem Start?": "Were there distractors before the start?"};
 const ORIG = new WeakMap(); const ATTRS=["placeholder","aria-label","title"];
 // "Set" bleibt als Startkommando stehen, auch wenn es sonst „Serie“ bedeutet
 const NOXL=new Set(["Set","Take your mark","On your marks"]);
