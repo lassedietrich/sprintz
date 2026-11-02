@@ -1327,7 +1327,9 @@ function xl(en){
 const L = (de,en) => LANG==="de" ? de : LANG==="en" ? en : xl(en);
 // Einheiten in der jeweiligen Sprache (Russisch kyrillisch, Türkisch „sn“ für Sekunde)
 const UNITS={ru:{ms:"мс",s:"с",m:"м","m/s":"м/с",yd:"ярд","yd/s":"ярд/с",Hz:"Гц"}, tr:{s:"sn"}};
-const U = x => (UNITS[LANG]||{})[x] || x;
+const U = x => x==="spm" ? L("Schläge/min","kicks/min") : (UNITS[LANG]||{})[x] || x;
+// Beinschlagfrequenz in Schlägen pro Minute (wie Zug- und Beinschlagfrequenz im Schwimmen üblich)
+const kpm = v => v==null || !isFinite(v) ? "–" : Math.round(v)+" "+U("spm");
 const SIG = () => T() ? L("Startschuss","Gun") : L("Startsignal","Start signal");
 const SIGa = () => T() ? L("den Startschuss","the gun") : L("das Startsignal","the start signal");
 const SIGdat = () => T() ? L("dem Startschuss","the gun") : L("dem Startsignal","the start signal");
@@ -3081,7 +3083,7 @@ function spMetricsSwim(){
   out.rt=R("move"); out.hands=R("hands"); out.block=R("off"); spResult(out);
   if(m.entry!=null && m.off!=null){ out.flight=m.entry-m.off; if(v.jump>0) out.flightV=v.jump/out.flight; }
   out.jump=v.jump||null; out.t5=R("p5"); out.t15=R("p15"); out.t25=R("p25");
-  if(m.brk!=null){ const from = m.entry!=null ? m.entry : m.off; if(from!=null){ out.uwT=m.brk-from; if(v.diveD>0) out.uwV=(v.diveD-(v.jump||0))/out.uwT; if(v.kicks>0) out.kickF=v.kicks/out.uwT; } }
+  if(m.brk!=null){ const from = m.entry!=null ? m.entry : m.off; if(from!=null){ out.uwT=m.brk-from; if(v.diveD>0) out.uwV=(v.diveD-(v.jump||0))/out.uwT; if(v.kicks>0) out.kickF=v.kicks/out.uwT*60; } }
   out.dive=v.diveD||null; out.kicks=v.kicks||null;
   // freies Schwimmen: erstes Paar Kopf-Marken nach dem Auftauchen, ohne Wende dazwischen
   const P=SA.steps.filter(s=>s.k==="time" && s.pos!=null && !s.wall && !s.fin && m[s.id]!=null && s.pos>=Math.max(15, v.diveD||0));
@@ -3132,7 +3134,7 @@ function spSumHTML(){
     h+=spHd(L("Start","Start"))+spRow(L("Ergebnis","Result"),spResTxt(o))+spRow(L("Reaktionszeit","Reaction time"),msx(o.rt))+(o.hands!=null?spRow(L("Hände lösen","Hands off"),msx(o.hands)):"")+(o.block!=null?spRow(SP.start==="block"?L("Blockzeit","Block time"):L("Abstoß","Push-off"),msx(o.block)):"");
     if(o.flight!=null) h+=spRow(L("Flugzeit","Flight time"),msx(o.flight))+spRow(L("Sprungweite","Start distance"),n2(o.jump,u))+spRow(L("Fluggeschwindigkeit","Flight velocity"),n2(o.flightV,us));
     if(SP.dist>0){
-      if(SP.start!=="cold") h+=spHd(L("Unter Wasser","Underwater"))+spRow(L(`5-${u}-Zeit`,`5 ${u} time`),ms3(o.t5))+spRow(L("Tauchweite","Underwater distance"),n2(o.dive,u))+spRow(L("Tauchzeit","Underwater time"),ms3(o.uwT))+spRow(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+(SP.stroke!=="breast"?spRow(L("Beinschlagfrequenz","Kick frequency"),n2(o.kickF,U("Hz"))):"");
+      if(SP.start!=="cold") h+=spHd(L("Unter Wasser","Underwater"))+spRow(L(`5-${u}-Zeit`,`5 ${u} time`),ms3(o.t5))+spRow(L("Tauchweite","Underwater distance"),n2(o.dive,u))+spRow(L("Tauchzeit","Underwater time"),ms3(o.uwT))+spRow(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+(SP.stroke!=="breast"?spRow(L("Beinschlagfrequenz","Kick frequency"),kpm(o.kickF)):"");
       else if(o.t5!=null) h+=spRow(L(`5-${u}-Zeit`,`5 ${u} time`),ms3(o.t5));
       h+=spHd(L("Schwimmen","Swimming"))+(SP.dist>15?spRow(L(`15-${u}-Zeit`,`15 ${u} time`),ms3(o.t15)):"")+(SP.dist>25?spRow(L(`25-${u}-Zeit`,`25 ${u} time`),ms3(o.t25)):"")+spRow(L(`Geschwindigkeit frei (${o.vFreeSeg||"–"})`,`Free swimming velocity (${o.vFreeSeg||"–"})`),n2(o.vFree,us))+spRow(L("Zugfrequenz","Stroke rate"),o.sr?Math.round(o.sr)+L(" Zyklen/min"," cycles/min"):"–")+spRow(L("Zuglänge","Stroke length"),n2(o.sl,u));
       const pr=o.srProg.filter(x=>x.sr); if(pr.length>1) h+=spHd(L("Verlauf der Zugfrequenz","Stroke rate over the race"))+pr.map(x=>spRow(`${x.seg} ${u}`,`${Math.round(x.sr)} ${L("Zyklen/min","cycles/min")}${x.sl?" · "+n2(x.sl,u):""}`)).join("");
@@ -3817,7 +3819,7 @@ function evMetrics(){
   o.flight=d("off","entry"); o.jump=v.jump||null; if(o.flight>0 && o.jump) o.flightV=o.jump/o.flight;
   o.t5=R("p5"); o.t10=R("p10"); o.t15=R("p15");
   o.uwT=d("entry","brk"); o.dive=v.diveD||null; o.kicks=v.kicks||null;
-  if(o.uwT>0){ if(o.dive) o.uwV=(o.dive-(o.jump||0))/o.uwT; if(o.kicks) o.kickF=o.kicks/o.uwT; }
+  if(o.uwT>0){ if(o.dive) o.uwV=(o.dive-(o.jump||0))/o.uwT; if(o.kicks) o.kickF=o.kicks/o.uwT*60; }
   o.dk=R("dk"); o.pull=R("pull"); o.bkick=R("bkick"); o.glide=d("entry","pull"); o.pullK=d("pull","bkick");
   if(o.t5!=null && o.t15!=null && o.t15>o.t5) o.v515=10/(o.t15-o.t5);
   if(o.t10!=null && o.t15!=null && o.t15>o.t10) o.v1015=5/(o.t15-o.t10);
@@ -3833,7 +3835,7 @@ function evSumHTML(){
   h+=hd(L("Start","Start"))+row(L("Ergebnis","Result"),res)+row(L("Reaktionszeit","Reaction time"),msx(o.rt))+(o.hands!=null?row(L("Hände lösen","Hands off"),msx(o.hands)):"")+row(p.start==="back"?L("Abstoß","Push-off"):L("Blockzeit","Block time"),msx(o.block));
   h+=hd(L("Flug","Flight"))+row(L("Flugzeit","Flight time"),msx(o.flight))+row(L("Sprungweite","Start distance"),n2(o.jump,u))+row(L("Fluggeschwindigkeit","Flight velocity"),n2(o.flightV,us));
   h+=hd(L("Unter Wasser","Underwater"))+row(L("Tauchzeit","Underwater time"),ms3(o.uwT))+row(L("Tauchweite","Underwater distance"),n2(o.dive,u))+row(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+(p.uw==="breast"&&p.start!=="back" ? row(L("Delfinbeinschlag","Dolphin kick"),ms3(o.dk))+row(L("Beginn Tauchzug","Start of pull-out"),ms3(o.pull))+row(L("Erster Beinschlag","First kick"),ms3(o.bkick))+row(L("Gleiten bis zum Tauchzug","Glide until pull-out"),ms3(o.glide))+row(L("Tauchzug bis Beinschlag","Pull-out to kick"),ms3(o.pullK))
-    : row(L("Delfinbeinschläge","Dolphin kicks"),o.kicks!=null?String(o.kicks):"–")+row(L("Beinschlagfrequenz","Kick frequency"),n2(o.kickF,U("Hz"))));
+    : row(L("Delfinbeinschläge","Dolphin kicks"),o.kicks!=null?String(o.kicks):"–")+row(L("Beinschlagfrequenz","Kick frequency"),kpm(o.kickF)));
   h+=hd(L("Zeiten","Times"))+row(L("5-m-Zeit","5 m time"),ms3(o.t5))+row(L("10-m-Zeit","10 m time"),ms3(o.t10))+row(L("15-m-Zeit","15 m time"),ms3(o.t15))
     +row(L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),n2(o.v510,us))+row(L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),n2(o.v1015,us))+row(L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),n2(o.v515,us));
   h+=`</table>`;
@@ -4062,7 +4064,7 @@ const EVM=()=>[
   ["dive",L("Tauchweite","Underwater distance"),"m",null],
   ["uwV",L("Tauchgeschwindigkeit","Underwater velocity"),"m/s","high"],
   ["kicks",L("Beinschläge","Kicks"),"n",null],
-  ["kickF",L("Beinschlagfrequenz","Kick frequency"),"Hz",null],
+  ["kickF",L("Beinschlagfrequenz","Kick frequency"),"spm",null],
   ["dk",L("Delfinbeinschlag","Dolphin kick"),"s",null],
   ["pull",L("Beginn Tauchzug","Start of pull-out"),"s",null],
   ["bkick",L("Erster Beinschlag","First kick"),"s",null],
@@ -4078,7 +4080,7 @@ const EV_TIMEK=["rt","hands","block","flight","uwT","t5","t10","t15","dk","pull"
 // Kleinste bedeutsame Veränderung: halbe Leistungsschwankung olympischer Schwimmer zwischen Wettkämpfen (CV 0,8 % → 0,4 %; Pyne, Trewin & Hopkins 2004)
 const EV_SWC=0.004;
 function evFmt(v,u,sd){ if(v==null || !isFinite(v)) return "–"; const dec=(x,n)=>LANG==="en"?x.toFixed(n):x.toFixed(n).replace(".",",");
-  if(u==="ms") return Math.round(v*1000)+(sd?"":" "+U("ms")); if(u==="s") return dec(v,2)+(sd?"":" "+U("s")); if(u==="n") return dec(v,1);
+  if(u==="ms") return Math.round(v*1000)+(sd?"":" "+U("ms")); if(u==="spm") return Math.round(v)+(sd?"":" "+U("spm")); if(u==="s") return dec(v,2)+(sd?"":" "+U("s")); if(u==="n") return dec(v,1);
   return dec(v,2)+(sd?"":" "+U(u)); }
 /* Statistik */
 const stM=a=>a.reduce((x,y)=>x+y,0)/a.length;
@@ -4109,7 +4111,7 @@ function evTimeline(p){
 const evDur=s=>{ if(s==null) return "–"; s=Math.round(s); const m=Math.floor(s/60), r=s%60; return m ? `${m}:${String(r).padStart(2,"0")} min` : `${r} s`; };
 /* Diagramme (SVG) */
 const EVC={BL:"#7A8B95", A:"#1F7FB8", B:"#C9762B"};
-function svgAxisY(lo,hi,Y,PL,W,u){ const st=(hi-lo)/3, dec = u==="ms" ? 0 : Math.max(u==="n"?1:2, Math.min(4, Math.ceil(-Math.log10(st||1))+1));
+function svgAxisY(lo,hi,Y,PL,W,u){ const st=(hi-lo)/3, dec = u==="ms"||u==="spm" ? 0 : Math.max(u==="n"?1:2, Math.min(4, Math.ceil(-Math.log10(st||1))+1));
   const f=v=> u==="ms" ? String(Math.round(v*1000)) : (LANG==="en"?v.toFixed(dec):v.toFixed(dec).replace(".",","));
   return [0,1,2,3].map(k=>{ const v=lo+st*k; return `<line class="grid" x1="${PL}" x2="${W-8}" y1="${Y(v)}" y2="${Y(v)}"/><text class="axis" x="${PL-5}" y="${Y(v)+4}" text-anchor="end">${f(v)}</text>`; }).join(""); }
 function evRange(vals){ let lo=Math.min(...vals), hi=Math.max(...vals); const pad=(hi-lo)*0.15 || Math.abs(hi)*0.05 || 0.01; return [lo-pad, hi+pad]; }
@@ -4161,6 +4163,7 @@ function evVerdict(w,thr,better){
 }
 // Daten des Projekts für Ergebnisblatt und PDF
 function evData(p){
+  p.trials.forEach(t=>{ if(t.m && t.m.kickF!=null && t.m.kickF<20) t.m.kickF*=60; });
   const done=p.trials.filter(t=>t.status==="done" && t.m), grp=v=>done.filter(t=>t.v===v), M=EVM();
   const have=M.filter(([k])=>done.some(t=>t.m[k]!=null && isFinite(t.m[k])));
   const stages=[...new Set(done.filter(t=>t.v!=="BL").map(t=>t.stage??1))].sort((a,b)=>a-b);
@@ -4288,7 +4291,7 @@ function evDefs(p){
     dive:[L("Abstand von der Wand bis zur Stelle, an der der Kopf auftaucht, im Video ausgemessen oder von Hand eingetragen.","Distance from the wall to where the head surfaces, measured in the video or entered manually."),[]],
     uwV:[L("(Tauchweite − Sprungweite) geteilt durch Tauchzeit: mittlere Geschwindigkeit unter Wasser.","(Underwater distance − start distance) divided by underwater time: mean velocity underwater."),[]],
     kicks:[L("Anzahl der Delfinbeinschläge bis zum Auftauchen, von Hand gezählt.","Number of dolphin kicks before breaking out, counted manually."),[]],
-    kickF:[L("Beinschläge geteilt durch Tauchzeit, in Schlägen pro Sekunde.","Kicks divided by underwater time, in kicks per second."),[]],
+    kickF:[L("Beinschläge geteilt durch Tauchzeit, mal 60: Schläge pro Minute.","Kicks divided by underwater time, times 60: kicks per minute."),[]],
     dk:[L("Zeit vom Startsignal bis zum Beginn der Abwärtsbewegung des Delfinbeinschlags.","Time from the start signal to the start of the dolphin kick's downbeat."),["dk"]],
     pull:[L("Zeit vom Startsignal bis zum Beginn des Tauchzugs.","Time from the start signal to the start of the pull-out."),["pull"]],
     bkick:[L("Zeit vom Startsignal bis zum Beginn des ersten Brustbeinschlags.","Time from the start signal to the start of the first breaststroke kick."),["bkick"]],
