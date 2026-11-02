@@ -439,7 +439,17 @@ h2 .minfo{width:26px;height:26px;font-size:.95rem}
 .msit label small{color:var(--muted);font-size:.76rem}.msit input{flex:none;transform:translateY(2px)}
 .msi{flex:none;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted);font:700 .7rem/1 Georgia,serif;font-style:italic;padding:0;cursor:pointer;opacity:.7}.msi[aria-expanded="true"]{opacity:1;color:var(--accent);border-color:var(--accent)}
 .msx{flex-basis:100%;margin:2px 0 4px 24px;font-size:.84rem;line-height:1.45}.msx span{color:var(--muted)}
-.evdl{margin:6px 0 0}.evdl dt{font-weight:700;margin-top:8px}.evdl dd{margin:2px 0 0;line-height:1.45}.evdl i{color:var(--muted)}
+.evdl{margin:6px 0 0}
+#evMetBar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:flex;justify-content:center;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+#evMetBtn{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:12px;padding:8px 14px;font:inherit;text-align:left;cursor:pointer}
+#evMetBtn span{display:flex;flex-direction:column;min-width:0}#evMetBtn small{font-size:.72rem;color:var(--muted)}#evMetBtn b{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#evMetBtn i{font-style:normal;color:var(--accent)}
+body.evrep #evBottom,body.evrep #evTop{padding-bottom:84px}body.evrep #fabL{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+body.desk #evMetBar{left:var(--side,0px)}
+.emrow{display:flex;align-items:flex-start;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);cursor:pointer}.emrow span{display:flex;flex-direction:column}.emrow small{color:var(--muted);font-size:.8rem}.emrow input{margin-top:3px}
+.msuw{font-style:normal;font-size:.68rem;font-weight:700;color:#8a5a00;background:color-mix(in srgb,#E8B44A 25%,transparent);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.evsw{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:.92rem;cursor:pointer}.evsw input{position:absolute;opacity:0;pointer-events:none}
+.evsw span{flex:none;width:42px;height:26px;border-radius:13px;background:var(--line);position:relative;transition:background .2s}.evsw span::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.evsw input:checked+span{background:var(--accent)}.evsw input:checked+span::after{transform:translateX(16px)}.evsw input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}.evdl dt{font-weight:700;margin-top:8px}.evdl dd{margin:2px 0 0;line-height:1.45}.evdl i{color:var(--muted)}
 .wmeasb{width:100%;margin:2px 0 10px}.wmeash{margin:-2px 0 10px;padding:8px 10px;border-radius:10px;background:var(--soft);font-size:.92rem}
 .spbars{display:block;width:100%;height:56px;margin:10px 0 0}.spbarl{display:flex;margin-bottom:10px}.spbarl span{flex:1;text-align:center;font-size:.75rem;color:var(--muted);line-height:1.25}.spbarl b{display:block;color:var(--fg);font-size:.85rem}
 #tour.over{z-index:40}
@@ -3050,14 +3060,16 @@ document.querySelectorAll("[data-sstep]").forEach(b=>b.onclick=()=>sStep(parseFl
 // Tastatur in der Videoauswertung: ← → ein Bild, Umschalt + ← → zehn Bilder, Leertaste Abspielen, Enter markiert
 document.addEventListener("keydown",e=>{
   const tg=e.target, typing = tg && (tg.tagName==="INPUT"&&tg.type!=="range" || tg.tagName==="TEXTAREA" || tg.tagName==="SELECT" || tg.isContentEditable);
+  // für ← → zählt nur echtes Schreiben (Text, Notiz); in Zahlenfeldern, Knöpfen, Dateiauswahl usw. steuern die Pfeile weiter das Video
+  const textlike = tg && (tg.tagName==="TEXTAREA" || tg.isContentEditable || (tg.tagName==="INPUT" && ["text","search","email","password","tel","url"].includes(tg.type)));
   if(e.metaKey||e.ctrlKey||e.altKey) return;
   const sa = SA.active && !$("spAna").hidden, vv = !sa && typeof tab!=="undefined" && tab==="video" && !$("vwork").hidden && !$("setup").hidden;
   if(!sa && !vv) return;
-  if(sa && !typing && SA.meas && SA.meas.pts.length>=2){
+  if(sa && !textlike && SA.meas && SA.meas.pts.length>=2){
     if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ e.preventDefault(); measMove((e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1)); return; }
     if(e.key==="ArrowUp"||e.key==="ArrowDown"){ e.preventDefault(); SA.meas.dir = e.key==="ArrowUp"?-1:1; measDraw(); measCtl(); return; } }
   if(sa && FS.on && !typing && (e.key==="+"||e.key==="="||e.key==="-"||e.key==="0")){ e.preventDefault(); if(e.key==="0") fsZoomReset(); else fsZoomAt(e.key==="-"?1/1.25:1.25); return; }
-  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(typing && tg.tagName!=="INPUT") return; if(typing) return; e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(textlike) return; if(tg && tg.tagName==="INPUT" && tg.type!=="range") tg.blur(); e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
   if(typing) return;
   if(e.key===" " && sa){ e.preventDefault(); $("sPlay").click(); return; }
   if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
@@ -3241,7 +3253,10 @@ function wizGo(i,dir){
   c.classList.add(dir>0?"out-l":"out-r");
   setTimeout(()=>{ SA.i=i; c.classList.remove("out-l","out-r"); c.classList.add(dir>0?"pre-r":"pre-l"); wizRender(); void c.offsetWidth; c.classList.remove("pre-r","pre-l");
     // nächste Markierung: Video kurz hinter die letzte Marke stellen
-    const st=SA.steps[SA.i]; if(st.k==="time" && SA.marks[st.id]==null){ const prev=Math.max(-1,...Object.values(SA.marks).filter(x=>x!=null)); if(prev>=0 && sVid.duration){ sVid.pause(); sVid.currentTime=Math.min(sVid.duration, prev+1/sFps()); } }
+    const st=SA.steps[SA.i], f=sFps(), go=t=>{ if(!sVid.duration) return; sVid.pause(); const tg=Math.min(sVid.duration, Math.max(0,t)); SST.t=tg; sVid.currentTime=tg; };
+    if(st.k==="time" && !st.sig){ if(SA.marks[st.id]!=null) go(SA.marks[st.id]+0.5/f); else { const prev=Math.max(-1,...Object.entries(SA.marks).filter(([k,x])=>k!=="sig"&&x!=null).map(([k,x])=>x)); if(prev>=0) go(prev+1.5/f); } }
+    // Ausmess-Schritt: direkt das Bild des zugehörigen Ereignisses zeigen (z. B. erster Wasserkontakt), genau dieses Bild, ohne Versatz
+    else if(st.k==="num" && st.meas && st.meas.at && SA.marks[st.meas.at]!=null) go(SA.marks[st.meas.at]+0.5/f);
   },260);
 }
 $("wPrev").onclick=()=>wizGo(SA.i-1,-1); $("wNext").onclick=()=>wizGo(SA.i+1,1);
@@ -3252,7 +3267,7 @@ $("wPrev").onclick=()=>wizGo(SA.i-1,-1); $("wNext").onclick=()=>wizGo(SA.i+1,1);
    Danach steht eine Senkrechte zu dieser Linie im Bild; sie wird mit ← → (Umschalt: 10 Pixel) oder durch Ziehen
    auf das Ereignis geschoben, ↑ ↓ legen fest, ob sie nach oben oder unten zeigt. Die Weite ergibt sich aus der Lage
    ihres Fußpunkts zwischen den beiden Marken (lineare Interpolation, Seitenansicht). */
-const MREF=()=>({0:L("die Beckenkante (Startwand)","the pool edge (start wall)"),5:L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)"),10:L("die 10-m-Marke","the 10 m mark"),15:L("die 15-m-Marke","the 15 m mark")});
+const MREF=()=>({0:isTurn(EV.cur)?L("die Wendewand","the turning wall"):L("die Beckenkante (Startwand)","the pool edge (start wall)"),5:L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)"),10:L("die 10-m-Marke","the 10 m mark"),15:L("die 15-m-Marke","the 15 m mark")});
 function measRefs(M){ const g=M.st.meas; if(g.pairs){ const pr=g.pairs[M.pair||0], R=MREF(); return [[pr[0],R[pr[0]]],[pr[1],R[pr[1]]]]; } return [[g.a[0],g.a[1]()],[g.b[0],g.b[1]()]]; }
 const measZ=()=> FS.on && FS.z ? FS.z : {s:1,x:0,y:0};
 // Bildschirmpunkt → Lage im (ungezoomten) Video, 0…1
@@ -3268,7 +3283,7 @@ function measStart(st){
   $("wCard").classList.add("meascol");
   if(FS.on){ const b=$("fsBox"); SA.measFsMin=!b.classList.contains("min"); b.classList.add("min"); $("fsMin").textContent="+"; }
   // zum passenden Bild springen (erster Wasserkontakt bzw. Auftauchen), sofern markiert
-  const at=st.meas.at && SA.marks[st.meas.at]; if(at!=null){ try{ sVid.currentTime=at; }catch(e){} }
+  const at=st.meas.at && SA.marks[st.meas.at]; if(at!=null){ try{ const f=sFps(); if(Math.abs(sCurT()-at)>0.25/f){ const tg=at+0.5/f; SST.t=tg; sVid.currentTime=tg; } }catch(e){} }
   measDraw(); measHint(); measCtl();
   if(!FS.on) $("spAna").querySelector(".vbox").scrollIntoView({block:"nearest", behavior:"smooth"});
 }
@@ -3314,6 +3329,9 @@ function measDraw(){ const cv=$("sMeas"), r=cv.getBoundingClientRect(), dpr=devi
     if(M.foot!=null){ const F=[A[0]+M.foot*ab[0], A[1]+M.foot*ab[1]]; let n=[-u[1],u[0]]; if(n[1]>0 || (n[1]===0 && n[0]>0)) n=[-n[0],-n[1]]; if(M.dir>0) n=[-n[0],-n[1]];
       g.strokeStyle="#000"; g.lineWidth=4*dpr; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
       g.strokeStyle="#3FD07A"; g.lineWidth=2*dpr; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
+      // Winkelzeichen: die Senkrechte steht rechtwinklig auf der Geraden durch Punkt 1 und 2 (nicht auf dem Bildrand)
+      { const q=11*dpr, sg=M.foot<0.5?1:-1, a1=[F[0]+u[0]*q*sg, F[1]+u[1]*q*sg], a2=[a1[0]+n[0]*q, a1[1]+n[1]*q], a3=[F[0]+n[0]*q, F[1]+n[1]*q];
+        g.strokeStyle="#3FD07A"; g.lineWidth=1.5*dpr; g.beginPath(); g.moveTo(a1[0],a1[1]); g.lineTo(a2[0],a2[1]); g.lineTo(a3[0],a3[1]); g.stroke(); }
       g.fillStyle="#3FD07A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(F[0],F[1],5*dpr,0,7); g.fill(); g.stroke();
       const lab=n2(Math.max(0,measDist(M)),spUnitD()); g.font=`700 ${13*dpr}px system-ui`; const tw=g.measureText(lab).width, lx=Math.min(cv.width-tw-8*dpr, Math.max(4*dpr, F[0]+n[0]*40*dpr+6*dpr)), ly=Math.min(cv.height-8*dpr, Math.max(16*dpr, F[1]+n[1]*40*dpr));
       g.fillStyle="rgba(0,0,0,.65)"; g.fillRect(lx-4*dpr,ly-14*dpr,tw+8*dpr,19*dpr); g.fillStyle="#3FD07A"; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(lab,lx,ly); } }
@@ -3492,7 +3510,7 @@ const IDB={ db:null,
   async del(k){ const d=await this.open(); return new Promise(res=>{ const t=d.transaction("videos","readwrite"); t.objectStore("videos").delete(k); t.oncomplete=()=>res(); t.onerror=()=>res(); }); }
 };
 const EV={view:"list", cur:null, files:{}, trial:-1, warned:false, play:null};
-const EVTECH=()=>[["start",L("Startsprung","Start"),true],["swim",L("Sprinttechnik","Sprint technique"),false],["turn",L("Wende","Turn"),false],["finish",L("Anschlag","Finish"),false]];
+const EVTECH=()=>[["start",L("Startsprung","Start"),true],["swim",L("Sprinttechnik","Sprint technique"),false],["turn",L("Wende","Turn"),true],["finish",L("Anschlag","Finish"),false]];
 const evTechName=k=>(EVTECH().find(x=>x[0]===k)||[k,k])[1];
 const evId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const evSave=()=>{ if(EV.cur) STORE.put(EV.cur); };
@@ -3514,8 +3532,8 @@ function evEnter(){
   $("modeSoon").hidden=true; $("spPage").hidden=true; $("evPage").hidden=false;
   if(EV.view==="plan" && EV.cur) evShow("plan"); else if(EV.view==="setup" && EV.cur) evShow("setup"); else evShow("list");
 }
-function evLeave(){ $("evPage").hidden=true; finishBack(); $("spAna").hidden=true; }
-function evShow(v){ EV.view=v; if(v!=="setup") finishBack(); $("evFinishSlot").hidden=true; const tp=$("evTop"); tp.classList.remove("view-enter"); ({list:evList, setup:evSetup, plan:evPlanView, report:evReport})[v](); scrollTo(0,0); void tp.offsetWidth; tp.classList.add("view-enter"); }
+function evLeave(){ evMetHide(); $("evPage").hidden=true; finishBack(); $("spAna").hidden=true; }
+function evShow(v){ EV.view=v; if(v!=="report") evMetHide(); if(v!=="setup") finishBack(); $("evFinishSlot").hidden=true; const tp=$("evTop"); tp.classList.remove("view-enter"); ({list:evList, setup:evSetup, plan:evPlanView, report:evReport})[v](); scrollTo(0,0); void tp.offsetWidth; tp.classList.add("view-enter"); }
 
 /* --- Übersicht der Projekte --- */
 async function evList(){
@@ -3605,26 +3623,31 @@ function evSetup(){
   top.innerHTML=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Projekte","‹ Projects")}</button></div>
     <h2 class="big"><span id="evName">${esc(p.name)}</span> <button type="button" class="evren" id="evRen">✎ <small>${L("Name ändern","Rename")}</small></button></h2>
     <p class="evlead">${evTechName(p.tech)}</p>
-    ${segH("evStart",L("Wie startest du?","How do you start?"),[["block",L("Vom Startblock","From the block")],["back",L("Rückenstart","Backstroke start")]],p.start)}
+    ${p.tech==="turn" ? `<div class="q"><p class="qt">${L("Welche Wende?","Which turn?")}</p><label class="evsw"><input type="checkbox" id="evTurnDet"${p.turnDetail?" checked":""}><span></span>${L("Genauer unterscheiden (nach Schwimmart)","Differentiate in more detail (by stroke)")}</label>
+      <div class="seg big${p.turnDetail?" g2":""}" id="evTurn">${TURNTYPES(!!p.turnDetail).map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${p.turn===v}">${l}</button>`).join("")}</div></div>`
+      : segH("evStart",L("Wie startest du?","How do you start?"),[["block",L("Vom Startblock","From the block")],["back",L("Rückenstart","Backstroke start")]],p.start)}
     ${["A","B"].map(k=>`<div class="q evvarq"><p class="qt"><i class="evv ${k}">${k}</i> ${k==="A"?L("Variante A","Variant A"):L("Variante B","Variant B")}</p>
-      <input class="evvname" id="evN${k}" maxlength="24" placeholder="${k==="A"?L("Kurzname, z. B. Hoher Ellbogen","Short name, e.g. High elbow"):L("Kurzname, z. B. Gerader Arm","Short name, e.g. Straight arm")}" value="${esc(p["name"+k]||"")}">
-      <textarea class="note-in evdesc" id="ev${k}" maxlength="400" placeholder="${k==="A"?L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit hohem Ellbogen, Unterarm früh senkrecht","Detailed description for standardisation, e.g. first arm pull with a high elbow, forearm vertical early"):L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit gestrecktem Arm unter dem Körper","Detailed description for standardisation, e.g. first arm pull with a straight arm under the body")}">${esc(p[k]||"")}</textarea></div>`).join("")}
+      <input class="evvname" id="evN${k}" maxlength="24" placeholder="${p.tech==="turn" ? (k==="A"?L("Kurzname, z. B. Kompakte Rolle","Short name, e.g. Compact flip"):L("Kurzname, z. B. Späte Rolle","Short name, e.g. Late flip")) : k==="A"?L("Kurzname, z. B. Hoher Ellbogen","Short name, e.g. High elbow"):L("Kurzname, z. B. Gerader Arm","Short name, e.g. Straight arm")}" value="${esc(p["name"+k]||"")}">
+      <textarea class="note-in evdesc" id="ev${k}" maxlength="400" placeholder="${p.tech==="turn" ? (k==="A"?L("Genaue Beschreibung zur Standardisierung, z. B. Knie eng an die Brust, Füße hoch an der Wand aufsetzen","Detailed description for standardisation, e.g. knees tight to the chest, place the feet high on the wall"):L("Genaue Beschreibung zur Standardisierung, z. B. Rolle näher an der Wand beginnen, Füße tiefer aufsetzen","Detailed description for standardisation, e.g. start the flip closer to the wall, place the feet lower")) : k==="A"?L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit hohem Ellbogen, Unterarm früh senkrecht","Detailed description for standardisation, e.g. first arm pull with a high elbow, forearm vertical early"):L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit gestrecktem Arm unter dem Körper","Detailed description for standardisation, e.g. first arm pull with a straight arm under the body")}">${esc(p[k]||"")}</textarea></div>`).join("")}
     <div class="card" style="margin-top:14px"><div class="row"><div class="lbl"><b>${L("Versuche je Variante","Attempts per variant")}</b><small>${L("Am besten 5 oder mehr.","Ideally 5 or more.")}</small></div>
       <div class="num"><input id="evN" type="number" inputmode="numeric" min="1" max="20" step="1" value="${p.n||5}"${locked?" disabled":""}></div></div></div>
+    ${p.tech==="turn"&&p.turn==="open"?segH("evUw",L("Was machst du nach dem Abstoß unter Wasser?","What do you do underwater after the push-off?"),[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],p.uw||"fly"):""}
     ${p.tech==="start"&&p.start!=="back"?segH("evUw",L("Was machst du in der Unterwasserphase?","What do you do underwater?"),[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],p.uw||"fly"):""}
-    ${p.tech==="start"&&p.start?spMetSelHTML(p):""}
+    ${(p.tech==="start"&&p.start)||(p.tech==="turn"&&p.turn)?spMetSelHTML(p):""}
     ${evPersonsSel(p)}
-    ${segH("evMode",L("Wie nimmst du die Versuche auf?","How do you record the attempts?"),[["upload",L("Aufnahmen hochladen","Upload recordings")],["cam",L("In der App filmen","Film in the app")]],p.mode)}
+    ${p.tech==="turn"?"":segH("evMode",L("Wie nimmst du die Versuche auf?","How do you record the attempts?"),[["upload",L("Aufnahmen hochladen","Upload recordings")],["cam",L("In der App filmen","Film in the app")]],p.mode)}
     <p class="hint" id="evModeHint"></p>`;
   const hint=$("evModeHint"); if(document.querySelector(".mscard")) spMetSelBind(p);
   hint.textContent = p.mode==="cam" ? L("Sprintz spielt den Startablauf ab und filmt jeden Versuch direkt. Im Browser sind meist nur 30 bis 60 Bilder pro Sekunde möglich, hochgeladene Zeitlupen sind genauer.","Sprintz plays the start sequence and films each attempt directly. Browsers usually only allow 30 to 60 frames per second; uploaded slow-motion videos are more precise.")
     : L("Empfohlen: Filme alle Läufe im Zeitlupenmodus, die berechneten Zeiten und Werte werden so genauer.","Recommended: film all runs in slow motion. This makes the calculated times and values more precise.");
   bot.innerHTML=`<button type="button" class="evbig" id="evMake" style="margin-top:22px">${locked?L("Weiter zum Ablauf","Continue to the sequence"):p.trials.length?L("Ablauf neu erstellen","Create new sequence"):L("Ablauf erstellen","Create sequence")}</button><p class="hint" id="evMsg"></p>`;
   // Startsignal-Einstellungen nur beim Filmen in der App (ohne Störsignale)
-  if(p.mode==="cam" && p.start){ S=evalToS(); finishTo($("evFinishSlot")); $("evFinishSlot").hidden=false; renderTiming(); updaters.forEach(f=>f()); }
+  if(p.mode==="cam" && p.start && p.tech!=="turn"){ S=evalToS(); finishTo($("evFinishSlot")); $("evFinishSlot").hidden=false; renderTiming(); updaters.forEach(f=>f()); }
   else { finishBack(); $("evFinishSlot").hidden=true; }
   const seg=(id,fn)=>{ const el=$(id); if(el) el.querySelectorAll("button").forEach(b=>b.onclick=()=>{ fn(b.dataset.v); evSave(); evSetup(); }); };
-  seg("evStart",v=>{ p.start=v; }); seg("evMode",v=>{ p.mode=v; }); seg("evUw",v=>{ p.uw=v; });
+  seg("evStart",v=>{ p.start=v; }); seg("evMode",v=>{ p.mode=v; }); seg("evUw",v=>{ p.uw=v; }); seg("evTurn",v=>{ p.turn=v; });
+  if(p.tech==="turn" && p.mode!=="upload"){ p.mode="upload"; evSave(); }
+  const td=$("evTurnDet"); if(td) td.onchange=()=>{ p.turnDetail=td.checked; if(p.turnDetail){ if(p.turn==="open") p.turn = p.uw==="breast" ? "openBr" : "openFly"; } else if(p.turn==="openBr"||p.turn==="openFly"){ p.uw = p.turn==="openBr" ? "breast" : "fly"; p.turn="open"; } evSave(); evSetup(); };
   const ps=$("evPerson"); if(ps) ps.onchange=()=>{ p.person=ps.value||null; evSave(); };
   ["A","B"].forEach(k=>{ const el=$("ev"+k), nm=$("evN"+k); el.oninput=()=>{ p[k]=el.value; clearTimeout(EV.tA); EV.tA=setTimeout(evSave,600); }; nm.oninput=()=>{ p["name"+k]=nm.value.trim(); clearTimeout(EV.tA); EV.tA=setTimeout(evSave,600); }; });
   $("evN").onchange=()=>{ p.n=Math.max(1,Math.min(20,Math.round(+$("evN").value||4))); $("evN").value=p.n; evSave(); };
@@ -3632,7 +3655,7 @@ function evSetup(){
   $("evRen").onclick=()=>{ const h=$("evName"); h.innerHTML=`<input id="evNameIn" maxlength="60" class="evnamein">`; const i=$("evNameIn"); i.value=p.name; i.focus(); i.select();
     const done=()=>{ const v=i.value.trim(); if(v) p.name=v; evSave(); h.textContent=p.name; }; i.onblur=done; i.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); i.blur(); } }; };
   $("evMake").onclick=()=>{
-    const miss=[]; if(!p.start) miss.push(L("Startart","start type")); if(!(p.nameA||"").trim()) miss.push(L("Name von Variante A","name of variant A")); if(!(p.nameB||"").trim()) miss.push(L("Name von Variante B","name of variant B")); if(!p.mode) miss.push(L("Aufnahmeart","recording method"));
+    const miss=[]; if(p.tech==="turn"){ if(!p.turn) miss.push(L("Wendenart","turn type")); } else if(!p.start) miss.push(L("Startart","start type")); if(!(p.nameA||"").trim()) miss.push(L("Name von Variante A","name of variant A")); if(!(p.nameB||"").trim()) miss.push(L("Name von Variante B","name of variant B")); if(!p.mode) miss.push(L("Aufnahmeart","recording method"));
     if(miss.length){ $("evMsg").textContent=L(`Es fehlt noch: ${miss.join(", ")}.`,`Still missing: ${miss.join(", ")}.`); return; }
     const fresh=!locked, tg = fresh && DESK.matches ? pdfTarget("sprintz-protokoll") : null;
     if(!locked){ p.trials=[...evBase(0), ...evPlan(p.n,1,EV_NBASE)]; } evSave(); evShow("plan"); if(tg) evProtoPdf(p,tg); };
@@ -3697,7 +3720,7 @@ function evTrialHTML(p,t,no){
   const files=Object.keys(EV.files);
   const pick = up && files.length ? `<select class="evpick" data-i="${t.i}" aria-label="${L("Video zuordnen","Assign video")}"><option value="">${L("– kein Video –","– no video –")}</option>${files.map(k=>`<option value="${k}"${t.vid&&t.vid.key===k?" selected":""}>${esc(EV.files[k].name)} · ${evTimeLbl(EV.files[k].t)}</option>`).join("")}</select>` : (t.vid&&up?`<small class="evfile">${esc(t.vid.name||"")}</small>`:"");
   return `<li class="evt ${t.status}"><div class="evtrow"><span class="evno">${no||evPos(p,t)}</span><i class="evv ${t.v}">${t.v}</i><b class="evtn">${esc(evVN(p,t.v))}</b>${st}<button type="button" class="evtdel" data-tdel="${t.i}" aria-label="${L("Versuch löschen","Delete attempt")}">×</button>
-      <span class="evbtns">${up?`<button type="button" class="testbtn small" data-play="${t.i}">▶ ${L("Startablauf","Start sequence")}</button>`:`<button type="button" class="testbtn small" data-rec="${t.i}">${t.vid?L("Neu aufnehmen","Record again"):L("Aufnehmen","Record")}</button>`}
+      <span class="evbtns">${up?(p.tech==="turn"?"":`<button type="button" class="testbtn small" data-play="${t.i}">▶ ${L("Startablauf","Start sequence")}</button>`):`<button type="button" class="testbtn small" data-rec="${t.i}">${t.vid?L("Neu aufnehmen","Record again"):L("Aufnehmen","Record")}</button>`}
       ${t.vid&&t.vid.src==="cam"&&EV.files[t.vid.key]?`<button type="button" class="testbtn small ghost" data-vsave="${t.i}">${L("Video sichern","Save video")}</button>`:""}
       ${t.vid?`<button type="button" class="testbtn small" data-ana="${t.i}">${t.status==="done"?L("Ergebnis","Result"):L("Auswerten","Analyse")}</button>`:""}</span></div>
     ${pick}${extra?`<small class="evextra">${extra}</small>`:""}
@@ -3795,7 +3818,7 @@ async function evBlob(t){
 }
 /* --- Auswertung eines Versuchs mit dem Schritt-für-Schritt-Assistenten --- */
 function evSteps(P){
-  P=P||EV.cur||{}; const back=P.start==="back", breast=P.uw==="breast" && !back, u=U("m"); const {S1,t,n}=mkSteps();
+  P=P||EV.cur||{}; if(isTurn(P)) return turnSteps(P); const back=P.start==="back", breast=P.uw==="breast" && !back, u=U("m"); const {S1,t,n}=mkSteps();
   const R0=()=>L("die Beckenkante (Startwand)","the pool edge (start wall)"), R5=()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)");
   // Standard: „Lösen“ = letztes Bild mit Kontakt, „Kontakt/Erreichen“ = erstes Bild mit Kontakt; Positionen am Kopf
   t("move","Erste Reaktion","First reaction","Das erste Bild, in dem du dich auf dem Block sichtbar bewegst.","The first frame in which you visibly move on the block.");
@@ -3812,9 +3835,9 @@ function evSteps(P){
     {opt:true, meas:{a:[0,R0], b:[5,R5], tg:()=>L("die Stelle, an der deine Kopfoberseite eintaucht","the spot where the top of your head enters"),
       req:()=>L("Ausmessen geht nur, wenn im Moment, in dem der Kopf eintaucht, die Beckenkante und die Linie der Rückenfähnchen klar im Bild zu erkennen sind.","Measuring only works if the pool edge and the backstroke flag line are clearly visible in the frame in which your head enters."), at:"headIn"}});
   t("kick1","Erster Delfinkick","First dolphin kick", breast?"Das Bild, in dem die Abwärtsbewegung deines Delfinkicks beim Tauchzug beginnt. Optional.":"Das Bild, in dem die Abwärtsbewegung deines ersten Delfinkicks unter Wasser beginnt. Optional.", breast?"The frame in which the downbeat of your dolphin kick during the pull-out begins. Optional.":"The frame in which the downbeat of your first underwater dolphin kick begins. Optional.",{opt:true});
-  n("kick1D","Distanz beim 1. Delfinkick","Distance at 1st dolphin kick","Abstand von der Wand bis zu deiner Kopfmitte beim ersten Delfinkick. Optional.","Distance from the wall to the centre of your head at the first dolphin kick. Optional.",u,
-    {opt:true, meas:{a:[0,R0], b:[5,R5], pairs:[[0,5],[5,10],[0,10]], tg:()=>L("deine Kopfmitte","the centre of your head"),
-      req:()=>L("Ausmessen geht nur, wenn im Moment des ersten Delfinkicks zwei Markierungen (Wand und 5 m, 5 m und 10 m oder Wand und 10 m) klar im Bild zu erkennen sind.","Measuring only works if two markings (wall and 5 m, 5 m and 10 m, or wall and 10 m) are clearly visible in the frame of the first dolphin kick."), at:"kick1"}});
+  n("kick1D","Distanz beim 1. Delfinkick","Distance at 1st dolphin kick","Abstand von der Wand bis zu deiner Kopfmitte beim ersten Delfinkick. Nur mit einer Unterwasserkamera auf Höhe des Kopfes sinnvoll. Optional.","Distance from the wall to the centre of your head at the first dolphin kick. Only meaningful with an underwater camera at head height. Optional.",u,
+    {opt:true, uwcam:true, meas:{a:[0,R0], b:[5,R5], pairs:[[0,5],[5,10],[0,10]], tg:()=>L("deine Kopfmitte","the centre of your head"),
+      req:()=>L("Nur mit einer Unterwasserkamera auf Kopfhöhe, senkrecht zur Bahn und mit Markierungen in der Ebene deiner Bahn. Von oberhalb des Wassers verfälschen Brechung und Perspektive die Position unter Wasser.","Only with an underwater camera at head height, perpendicular to the lane and with markings in the plane of your lane. From above the water, refraction and perspective distort the position underwater."), at:"kick1"}});
   t("p5",`5-m-Marke`,`5 m mark`,`Das erste Bild, in dem deine Kopfoberseite die 5-m-Marke (Linie der Rückenfähnchen) erreicht.`,`The first frame in which the top of your head reaches the 5 m mark (backstroke flag line).`,{pos:5});
   if(breast){
     t("pull","Beginn des Tauchzugs","Start of the pull-out","Das Bild, in dem deine Arme den Tauchzug beginnen.","The frame in which your arms begin the pull-out.");
@@ -3834,7 +3857,7 @@ function evSteps(P){
 async function evAnalyze(t){
   const p=EV.cur, blob=await evBlob(t);
   if(!blob){ alertMsg(L("Sprintz speichert keine Videos, nur die Daten daraus. Lade das Video über „Aufnahmen hochladen“ erneut, es wird automatisch wieder diesem Versuch zugeordnet.","Sprintz doesn't store videos, only the data from them. Upload the video again via “Upload recordings”; it is automatically matched to this attempt again.")); return; }
-  EV.trial=t.i; SA.trialRef=t; finishBack(); $("evPage").hidden=true;
+  EV.trial=t.i; SA.trialRef=t; finishBack(); evMetHide(); $("evPage").hidden=true;
   SA.active=true; SA.mode="eval"; SA.upload = t.vid.src==="upload"; SA.slow = 1;
   SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
   SA.meta={hornT:t.sigEst||0, sig:[]}; SA.events=[]; SA.recT0=0; SA.sigType=null; SA.cands=null; SA.fps=t.fps||30;
@@ -3846,7 +3869,7 @@ async function evAnalyze(t){
   detectFps(SA.url).then(f=>{ if(f){ SA.fps=f; t.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f/(SA.slow||1)*10)/10} ms`; } });
   SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard();
   readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
-    if(SA.marks.sig==null) await evFindSig(); spDraw(); wizRender(); }).catch(()=>{ if(SA.marks.sig==null){ SA.marks.sig=t.sigEst||0; SA.sigAuto="est"; } wizRender(); });
+    if(SA.marks.sig==null && !isTurn(p)) await evFindSig(); spDraw(); wizRender(); }).catch(()=>{ if(SA.marks.sig==null && !isTurn(p)){ SA.marks.sig=t.sigEst||0; SA.sigAuto="est"; } wizRender(); });
   wizRender();
 }
 // Startsignal ohne Vorgabe erkennen: zuerst das Sprintz-Signal, dann Pfiff, Hupe/Piepton, Knall
@@ -3865,6 +3888,7 @@ async function evFindSig(){
 // Kennwerte des Starts (Zeiten in Echtzeit, Zeitlupen-Faktor berücksichtigt)
 // Kennwerte eines Versuchs nach den Definitionen in SPMET (Zeiten ab Startsignal, Positionen am Kopf)
 function evMetrics(){
+  if(isTurn(EV.cur)) return turnMetrics();
   const m=SA.marks, v=SA.vals, R=k=>spRel(m[k]), k=SA.slow||1, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a])/k : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null;
   o.rt=R("move"); o.hands=R("hands"); o.block=R("off");
   const tm = m.move!=null ? m.move : m.off; o.result = tm!=null && m.sig!=null ? (tm>=m.sig?"clean":"early") : null;
@@ -3892,9 +3916,9 @@ function evSumHTML(){
   let h=`<p class="evlead" style="margin:0 0 8px"><i class="evv ${t.v}">${t.v}</i> <b>${esc(evVN(p,t.v))}</b> · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)} ${spInfoBtn()}</p>`;
   if((o.block!=null && o.block>1.6) || (o.rt!=null && o.rt>1.2)) h+=`<p class="everr evwarn">${L("Die Zeiten sind unrealistisch lang. Wahrscheinlich ist das Video eine umgewandelte Zeitlupe statt der Originaldatei. Sende das Video mit „Alle Fotodaten“ und lade es erneut hoch.","The times are unrealistically long. The video is probably a converted slow-motion copy instead of the original file. Send the video with “All Photos Data” and upload it again.")}</p>`;
   // Kernwerte immer, weitere nur, wenn sie berechnet werden konnten
-  const core=new Set(["rt","block","flight","jump","t5","t15"]); let cur="block";
-  h+=`<table class="restbl">`+hd(PH.block)+row(L("Ergebnis","Result"),res);
-  const sel=evSel(p); SPMET(p).filter(x=>spApplies(x,p,!!t.vm) && (!sel || sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null && !core.has(x.k)) return;
+  const turn=isTurn(p), core=new Set(turn?["tIn5","t55","tOut5","footT"]:["rt","block","flight","jump","t5","t15"]); let cur=turn?null:"block";
+  h+=`<table class="restbl">`+(turn?"":hd(PH.block)+row(L("Ergebnis","Result"),res));
+  const sel=evSel(p); METCAT(p).filter(x=>spApplies(x,p,!!t.vm) && (!sel || sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null && !core.has(x.k)) return;
     if(x.ph!==cur){ cur=x.ph; h+=hd(PH[x.ph]); } h+=row(x.l, x.u==="n" ? (v!=null?String(v):"–") : evFmt(v,x.u)); });
   h+=`</table>`;
   const od=evOrd(p), nextT=od.find(x=>evPos(p,x)>evPos(p,t) && x.vid && x.status!=="done") || od.find(x=>x!==t && x.vid && x.status!=="done");
@@ -3918,7 +3942,7 @@ async function evNextTrial(saved){
   else evShow("plan");
 }
 function evAnaHead(){ const h=$("evAnaHead"), p=EV.cur, t=p&&p.trials[EV.trial]; if(!t){ h.hidden=true; return; } h.hidden=false;
-  h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)} ${p.tech==="start"?spInfoBtn():""}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
+  h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)} ${p.tech==="start"||p.tech==="turn"?spInfoBtn():""}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
   $("evAnaBack").onclick=()=>{ evCloseAna(); evShow("plan"); }; $("evAnaDl").onclick=()=>evExport(p); }
 function evCloseAna(soft){ if(FS.on) fsExit(soft); measEnd(); SA.trialRef=null; SA.active=false; SA.mode=null; $("spAna").hidden=true; $("evAnaHead").hidden=true; document.body.classList.remove("reviewing"); try{ sVid.pause(); sVid.removeAttribute("src"); sVid.load(); }catch(e){} $("evPage").hidden=false; }
 function alertMsg(t){ const m=$("evUpMsg")||$("evMsg"); if(m) m.textContent=t; else { const b=$("evBottom"); if(b) b.insertAdjacentHTML("afterbegin",`<p class="hint">${t}</p>`); } }
@@ -4114,8 +4138,8 @@ $("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && FS.on){ e.preventDefault(); fsExit(); } });
 /* --- Ergebnisblatt der Technikevaluation: Baseline, Vergleich A/B, Verlauf, Boxplot, Pausen und Testtage --- */
 // Kennwerte: Schlüssel, Bezeichnung, Einheit/Format, bessere Richtung (low = kleiner ist besser, high = größer ist besser, null = neutral)
-const EVM=()=>{ const p=EV.cur||{}, sel=evSel(p); return SPMET(p).filter(x=>spApplies(x,p) && (!sel || sel.has(x.k))).map(x=>[x.k,x.l,x.u,x.dir]); };
-const EV_TIMEK=["rt","hands","ffs","block","mt","flight","entryT","kick1","gt","uwT","pull","bkick","pullK","brkT","t5","t10","t15","s510","s1015"];
+const EVM=()=>{ const p=EV.cur||{}, sel=evSel(p); return METCAT(p).filter(x=>spApplies(x,p) && (!sel || sel.has(x.k))).map(x=>[x.k,x.l,x.u,x.dir]); };
+const EV_TIMEK=["tIn5","rotT","handT","turnT","footT","rollT","wallT","tOut5","offOut5","t55","t1010","pullT","rt","hands","ffs","block","mt","flight","entryT","kick1","gt","uwT","pull","bkick","pullK","brkT","t5","t10","t15","s510","s1015"];
 // Kleinste bedeutsame Veränderung: halbe Leistungsschwankung olympischer Schwimmer zwischen Wettkämpfen (CV 0,8 % → 0,4 %; Pyne, Trewin & Hopkins 2004)
 const EV_SWC=0.004;
 function evFmt(v,u,sd){ if(v==null || !isFinite(v)) return "–"; const dec=(x,n)=>LANG==="en"?x.toFixed(n):x.toFixed(n).replace(".",",");
@@ -4206,7 +4230,7 @@ function evData(p){
   const done=p.trials.filter(t=>t.status==="done" && t.m), grp=v=>done.filter(t=>t.v===v), M=EVM();
   const have=M.filter(([k])=>done.some(t=>t.m[k]!=null && isFinite(t.m[k])));
   const stages=[...new Set(done.filter(t=>t.v!=="BL").map(t=>t.stage??1))].sort((a,b)=>a-b);
-  const prim=(have.find(x=>x[0]==="t15")||have.find(x=>x[0]==="block")||have[0]||[null])[0];
+  const prim=(have.find(x=>x[0]==="t15")||have.find(x=>x[0]==="t55")||have.find(x=>x[0]==="block")||have[0]||[null])[0];
   return {done, M, have, BL:grp("BL"), A:grp("A"), B:grp("B"), stages, prim, tl:evTimeline(p), fps:Math.max(...done.map(t=>t.fps||0),0)};
 }
 const evVals=(ts,k)=>ts.map(t=>t.m[k]).filter(x=>x!=null && isFinite(x));
@@ -4221,10 +4245,30 @@ const evP=w=> !w ? "–" : w.p<0.001 ? (LANG==="en"?"<0.001":"<0,001") : (LANG==
 const evPct=x=> x==null || !isFinite(x) ? "–" : (LANG==="en"?x.toFixed(1):x.toFixed(1).replace(".",","))+" %";
 const evStageName=s=> s===0 ? "Baseline" : L(`Teststufe ${s}`,`Test stage ${s}`);
 // Schaltflächen zum Wechseln des Kennwerts (je Tabelle bzw. Grafik eigener Zustand)
-function evChips(id, D, sel, all){
+// Kennwert-Auswahl im Bericht: eine feste Leiste am unteren Rand statt Knöpfen über jeder Tabelle
+function evChips(id, D, sel, all){ return ""; }
+function evChipsOld(id, D, sel, all){
   return `<div class="evchips" data-chip="${id}">${all?`<button type="button" data-k="all" aria-pressed="${sel==="all"}">${L("Alle","All")}</button>`:""}${D.have.map(([k,l])=>`<button type="button" data-k="${k}" aria-pressed="${k===sel}">${l}</button>`).join("")}</div>`;
 }
-function evRK(id, D, all){ EV.rk=EV.rk||{}; const v=EV.rk[id]; if(v==="all" && all) return "all"; if(v && D.have.some(x=>x[0]===v)) return v; return all ? "all" : D.prim; }
+function evRK(id, D, all){ const v=EV.rkG; if(v && v!=="all" && D.have.some(x=>x[0]===v)) return v; return all ? "all" : D.prim; }
+function evMetBar(D){
+  let b=$("evMetBar"); if(!b){ b=document.createElement("div"); b.id="evMetBar"; document.body.appendChild(b); }
+  const v=EV.rkG && D.have.some(x=>x[0]===EV.rkG) ? EV.rkG : null, lab=k=>(D.have.find(x=>x[0]===k)||[0,""])[1];
+  b.hidden=false; document.body.classList.add("evrep");
+  b.innerHTML=`<button type="button" id="evMetBtn" aria-haspopup="dialog"><span><small>${L("Angezeigter Kennwert","Parameter shown")}</small><b>${v?lab(v):L("Alle Kennwerte","All parameters")+(D.prim?` · ${L("Grafiken:","charts:")} ${lab(D.prim)}`:"")}</b></span><i aria-hidden="true">▴</i></button>`;
+  $("evMetBtn").onclick=()=>evMetSheet(D);
+}
+function evMetHide(){ const b=$("evMetBar"); if(b) b.hidden=true; document.body.classList.remove("evrep"); }
+function evMetSheet(D){
+  let d=$("evMetDlg"); if(!d){ d=document.createElement("div"); d.id="evMetDlg"; d.className="dlg"; d.setAttribute("role","dialog"); d.setAttribute("aria-modal","true"); document.body.appendChild(d); }
+  const p=EV.cur, PH=SPPH(), cat=METCAT(p), v=EV.rkG||"all", groups=[];
+  D.have.forEach(([k,l])=>{ const c=cat.find(x=>x.k===k), ph=c?c.ph:""; let g=groups.find(o=>o.ph===ph); if(!g){ g={ph,a:[]}; groups.push(g); } g.a.push([k,l]); });
+  d.innerHTML=`<div class="dlgbox mibox"><div class="mihd"><h2>${L("Kennwert wählen","Choose parameter")}</h2><button type="button" class="testbtn ghost small" id="evMetX">${L("Schließen","Close")}</button></div>
+    <div class="mibody"><label class="emrow"><input type="radio" name="evmet" value="all"${v==="all"?" checked":""}> <span><b>${L("Alle Kennwerte","All parameters")}</b><small>${L("Tabellen zeigen alle Kennwerte, Grafiken den wichtigsten.","Tables show all parameters, charts the main one.")}</small></span></label>
+    ${groups.map(g=>`<h4 class="mih">${PH[g.ph]||""}</h4>${g.a.map(([k,l])=>`<label class="emrow"><input type="radio" name="evmet" value="${k}"${v===k?" checked":""}> <span>${l}</span></label>`).join("")}`).join("")}</div></div>`;
+  d.hidden=false; const close=()=>{ d.hidden=true; }; $("evMetX").onclick=close; d.onclick=e=>{ if(e.target===d) close(); };
+  d.querySelectorAll('input[name="evmet"]').forEach(r=>r.onchange=()=>{ EV.rkG=r.value==="all"?null:r.value; close(); const y=scrollY; evReport(); scrollTo(0,y); });
+}
 function evCmpCard(c){
   const ci=x=>x?`<b>${evFmt(x.m,c.u)}</b>${x.lo!=null?`<small>${L("KI","CI")} [${evFmt(x.lo,c.u,true)}; ${evFmt(x.hi,c.u,true)}] · n = ${x.n}</small>`:`<small>n = 1</small>`}`:"–";
   return `<div class="evcrow"><div class="evchd"><b>${c.lab}</b><span class="evverd ${c.v.c}">${c.v.t}</span></div>
@@ -4235,7 +4279,7 @@ function evReport(){
   const p=EV.cur, top=$("evTop"), bot=$("evBottom"); bot.innerHTML=""; finishBack();
   const D=evData(p), {BL,A,B,tl,M}=D, lab=k=>M.find(x=>x[0]===k)[1], unit=k=>M.find(x=>x[0]===k)[2];
   let h=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Ablauf","‹ Sequence")}</button><span class="evhr"><button type="button" class="testbtn ghost small" id="evDl">${L("Projekt herunterladen","Download project")}</button></span></div>
-    <h2 class="big">${L("Ergebnisse","Results")} ${p.tech==="start"?spInfoBtn():""}</h2><p class="evlead">${esc(p.name)} · ${evTechName(p.tech)}</p>
+    <h2 class="big">${L("Ergebnisse","Results")} ${p.tech==="start"||p.tech==="turn"?spInfoBtn():""}</h2><p class="evlead">${esc(p.name)} · ${evTechName(p.tech)}</p>
     <div class="evvars">${["A","B"].map(k=>`<div><i class="evv ${k}">${k}</i><span><b>${esc(evVN(p,k))}</b>${p[k]?` – ${esc(p[k])}`:""}</span></div>`).join("")}</div>
     <p class="hint">${L(`Ausgewertet: Baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`,`Analysed: baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`)}${tl.days>1?" · "+L(`${tl.days} Testtage`,`${tl.days} test days`):""}</p>`;
   if(!D.done.length){ top.innerHTML=h+`<p class="hint">${L("Noch keine ausgewerteten Versuche.","No analysed attempts yet.")}</p>`; $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); return; }
@@ -4286,7 +4330,7 @@ function evReport(){
       <div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>Nr.</th><th>${L("Variante","Variant")}</th>${D.stages.length>1?`<th>${L("Stufe","Stage")}</th>`:""}${tl.days>1?`<th>${L("Tag","Day")}</th>`:""}<th class="r">${L("Uhrzeit","Time")}</th><th class="r">${L("Pause davor","Rest before")}</th><th class="r">${lab(sQ)}</th></tr></thead><tbody>
       ${tl.rows.map(r=>`<tr><td>${evPos(p,r.t)}</td><td><i class="evv ${r.t.v}">${r.t.v}</i></td>${D.stages.length>1?`<td>${(r.t.stage??1)||"BL"}</td>`:""}${tl.days>1?`<td>${r.day}</td>`:""}<td class="r">${new Date(r.t0).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"})}</td><td class="r">${r.pause!=null?evDur(r.pause):"–"}</td><td class="r">${r.t.m&&r.t.m[sQ]!=null?evFmt(r.t.m[sQ],uq):"–"}</td></tr>`).join("")}</tbody></table></div>`;
   }
-  top.innerHTML=h;
+  top.innerHTML=h; evMetBar(D);
   $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); $("evPdf").onclick=()=>evPdfAsk(p);
   top.querySelectorAll("[data-chip]").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{ EV.rk=EV.rk||{}; EV.rk[g.dataset.chip]=b.dataset.k; const y=scrollY; evReport(); scrollTo(0,y); }));
 }
@@ -4307,6 +4351,7 @@ const EVSTAT=()=>[
   {k:"verd", t:L("Bewertung","Verdict"), d:L("„Bedeutsam“: Das ganze Konfidenzintervall liegt jenseits der Schwelle. „Kein bedeutsamer Unterschied“: Das ganze Intervall liegt innerhalb der Schwelle. „Signifikant, Bedeutsamkeit unsicher“: p < 0,05, aber das Intervall reicht in den Bereich unterhalb der Schwelle. „Unklar“: Die Daten reichen für keine Aussage, mehr Versuche helfen.","“Meaningful”: the whole confidence interval lies beyond the threshold. “No meaningful difference”: the whole interval lies within the threshold. “Significant, relevance uncertain”: p < 0.05, but the interval reaches below the threshold. “Unclear”: the data don't support a conclusion; more attempts help.")},
   {k:"box", t:L("Boxplot","Box plot"), d:L("Box: mittlere 50 % der Werte (1. bis 3. Quartil), Strich: Median, Raute: Mittelwert, Punkte: einzelne Versuche, Antennen: kleinster und größter Wert innerhalb des 1,5-fachen Interquartilsabstands (Tukey).","Box: middle 50 % of the values (1st to 3rd quartile), line: median, diamond: mean, dots: individual attempts, whiskers: smallest and largest value within 1.5 times the interquartile range (Tukey).")},
   {k:"ord", t:L("Reihenfolge","Order"), d:L("Innerhalb jedes Paares war die Reihenfolge von A und B zufällig (AB oder BA), damit Ermüdung, Aufwärmen und Gewöhnung beide Varianten gleich treffen. Lern- und Ermüdungstrends werden nicht herausgerechnet.","Within each pair the order of A and B was random (AB or BA) so that fatigue, warm-up and familiarisation affect both variants equally. Learning and fatigue trends are not removed.")},
+  isTurn(EV.cur) ? {k:"time", t:L("Zeitbezug","Time reference"), d:L("Gemessen wird zwischen zwei Markierungen im Video, ein Startsignal braucht es nicht. Wandkontakt ist bei Roll- und Rückenwende der erste Fußkontakt, bei der Kippwende der Anschlag. Die Genauigkeit beträgt ein Videobild (1 / Bildrate).","Times are measured between two marks in the video; no start signal is needed. Wall contact is the first foot contact for flip and backstroke turns and the touch for open turns. The precision is one video frame (1 / frame rate).")} :
   {k:"time", t:L("Zeitbezug","Time reference"), d:L("Alle Zeiten zählen ab dem Startsignal in der Tonspur. Die Laufzeit des Schalls vom Lautsprecher zum Aufnahmegerät (343 m/s) wird herausgerechnet. Die Genauigkeit beträgt ein Videobild (1 / Bildrate).","All times count from the start signal in the audio track. The travel time of the sound from the speaker to the recording device (343 m/s) is subtracted. The precision is one video frame (1 / frame rate).")},
   {k:"q", t:L("Qualität des Testlaufs","Quality of the test run"), d:EVQTXT()},
   {k:"pause", t:L("Pause","Rest"), d:EVPAUSETXT()}];
@@ -4319,7 +4364,174 @@ const EVSRC=()=>[
    Definitionen nach der Metrikenübersicht „Kenndaten und Metriken Startsprung“ (Zeiten ab Startsignal, Positionen am Kopf).
    Felder: k Schlüssel, kz Kürzel, ph Phase, l Name, u Einheit, dir bessere Richtung, d Beschreibung, h Berechnung/Erfassung, r Bedeutung für 5 m und 15 m,
    m Markierungen im Video, w Bedingung (block = nur Startsprung vom Block, fly = Delfinkicks, breast = Brust-Tauchzug, vm = nur mit Velocitymeter) --- */
-const SPPH=()=>({block:L("Blockphase","Block phase"), flight:L("Flugphase","Flight phase"), entry:L("Eintauchen","Entry"), uw:L("Unterwasserphase","Underwater phase"), brk:L("Auftauchen","Breakout"), split:L("Zeitmarken und Abschnitte","Splits and sections"), kin:L("Kraft und Leistung auf dem Startblock","Force and power on the starting block"), dry:L("Ergänzende Trockentests","Supplementary dry-land tests")});
+const SPPH=()=>({approach:L("Anschwimmen","Approach"), rot:L("Drehung","Rotation"), wall:L("Wandkontakt und Abstoß","Wall contact and push-off"), block:L("Blockphase","Block phase"), flight:L("Flugphase","Flight phase"), entry:L("Eintauchen","Entry"), uw:L("Unterwasserphase","Underwater phase"), brk:L("Auftauchen","Breakout"), split:L("Zeitmarken und Abschnitte","Splits and sections"), kin:L("Kraft und Leistung auf dem Startblock","Force and power on the starting block"), dry:L("Ergänzende Trockentests","Supplementary dry-land tests")});
+/* --- Technikevaluation Wende: Rollwende, Rückenwende, Kippwende (genauer: Rollwende Kraul, Rückenwende, Kippwende Brust, Kippwende Schmetterling).
+   Zeitbezug ist nicht das Startsignal, sondern die Markierungen im Video; Hauptgröße ist die Wendenzeit 5 m + 5 m (Kopf an der 5-m-Marke vor bis nach der Wand).
+   Wandkontakt: bei Roll- und Rückenwende der erste Fußkontakt, bei der Kippwende der Anschlag der Hände. --- */
+const isTurn=p=>!!p && p.tech==="turn";
+const turnOpen=p=>/^open/.test((p&&p.turn)||"");
+const turnUw=p=> p.turn==="openBr" ? "breast" : (p.turn==="open" && p.uw==="breast") ? "breast" : "fly";
+const TURNTYPES=detail=> detail
+  ? [["flip",L("Rollwende Kraul","Freestyle flip turn")],["back",L("Rückenwende","Backstroke turn")],["openBr",L("Kippwende Brust","Breaststroke open turn")],["openFly",L("Kippwende Schmetterling","Butterfly open turn")]]
+  : [["flip",L("Rollwende","Flip turn")],["back",L("Rückenwende","Backstroke turn")],["open",L("Kippwende","Open turn")]];
+const turnName=p=>{ const all=[...TURNTYPES(true),...TURNTYPES(false)]; return (all.find(x=>x[0]===p.turn)||[0,""])[1]; };
+function turnSteps(P){
+  const open=turnOpen(P), back=P.turn==="back", breast=turnUw(P)==="breast", u=U("m"); const {S1,t,n}=mkSteps(); S1.length=0;
+  const RW=()=>L("die Wendewand","the turning wall"), R5=()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)");
+  t("in10","10 m vor der Wand","10 m before the wall","Das erste Bild, in dem deine Kopfoberseite die 10-m-Marke vor der Wand erreicht. Optional, nur wenn eine Markierung zu sehen ist.","The first frame in which the top of your head reaches the 10 m mark before the wall. Optional, only if a marking is visible.",{opt:true});
+  t("in5","5 m vor der Wand","5 m before the wall","Das erste Bild, in dem deine Kopfoberseite die 5-m-Marke (Rückenfähnchen) vor der Wand erreicht.","The first frame in which the top of your head reaches the 5 m mark (backstroke flags) before the wall.");
+  if(open){
+    t("touch","Anschlag","Touch","Das erste Bild, in dem deine Hände die Wand berühren (bei Brust und Schmetterling beide Hände gleichzeitig).","The first frame in which your hands touch the wall (both hands simultaneously in breaststroke and butterfly).");
+    t("handsOff","Hände lösen","Hands off","Das letzte Bild, in dem eine deiner Hände die Wand noch berührt. Optional.","The last frame in which one of your hands still touches the wall. Optional.",{opt:true});
+  } else {
+    t("rot", back?"Beginn der Drehung":"Beginn der Rolle", back?"Start of the rotation":"Start of the flip",
+      back?"Das erste Bild, in dem du nach dem Drehen auf die Brust mit der Rolle beginnst (Kopf taucht nach unten ab).":"Das erste Bild, in dem dein Kopf zur Rolle nach unten abtaucht.",
+      back?"The first frame in which you begin the flip after turning onto your front (head starts to go down).":"The first frame in which your head starts to go down into the flip.");
+    n("rotD","Abstand bei Drehbeginn","Distance at start of rotation","Abstand von der Wand zu deiner Kopfoberseite im Bild, in dem die Drehung beginnt. Optional.","Distance from the wall to the top of your head in the frame in which the rotation begins. Optional.",u,
+      {opt:true, meas:{a:[0,RW], b:[5,R5], tg:()=>L("deine Kopfoberseite","the top of your head"),
+        req:()=>L("Ausmessen geht nur, wenn im Moment des Drehbeginns die Wendewand und die Linie der Rückenfähnchen klar im Bild zu erkennen sind.","Measuring only works if the turning wall and the backstroke flag line are clearly visible in the frame where the rotation begins."), at:"rot"}});
+  }
+  t("feetOn","Füße an der Wand","Feet on the wall","Das erste Bild, in dem deine Füße die Wand berühren.","The first frame in which your feet touch the wall.");
+  t("off","Abstoß","Push-off","Das letzte Bild, in dem deine Füße die Wand noch berühren.","The last frame in which your feet still touch the wall.");
+  t("kick1","Erster Delfinkick","First dolphin kick", breast?"Das Bild, in dem die Abwärtsbewegung deines Delfinkicks beim Tauchzug beginnt. Optional.":"Das Bild, in dem die Abwärtsbewegung deines ersten Delfinkicks nach dem Abstoß beginnt. Optional.", breast?"The frame in which the downbeat of your dolphin kick during the pull-out begins. Optional.":"The frame in which the downbeat of your first dolphin kick after the push-off begins. Optional.",{opt:true});
+  n("kick1D","Distanz beim 1. Delfinkick","Distance at 1st dolphin kick","Abstand von der Wand bis zu deiner Kopfmitte beim ersten Delfinkick. Nur mit einer Unterwasserkamera auf Höhe des Kopfes sinnvoll. Optional.","Distance from the wall to the centre of your head at the first dolphin kick. Only meaningful with an underwater camera at head height. Optional.",u,
+    {opt:true, uwcam:true, meas:{a:[0,RW], b:[5,R5], pairs:[[0,5],[5,10],[0,10]], tg:()=>L("deine Kopfmitte","the centre of your head"),
+      req:()=>L("Nur mit einer Unterwasserkamera auf Kopfhöhe, senkrecht zur Bahn und mit Markierungen in der Ebene deiner Bahn. Von oberhalb des Wassers verfälschen Brechung und Perspektive die Position unter Wasser.","Only with an underwater camera at head height, perpendicular to the lane and with markings in the plane of your lane. From above the water, refraction and perspective distort the position underwater."), at:"kick1"}});
+  if(breast){
+    t("pull","Beginn des Tauchzugs","Start of the pull-out","Das Bild, in dem deine Arme den Tauchzug beginnen.","The frame in which your arms begin the pull-out.");
+    t("bkick","Beginn des ersten Beinschlags","Start of the first kick","Das Bild, in dem du die Fersen für den ersten Brustbeinschlag anziehst.","The frame in which you draw your heels up for the first breaststroke kick.",{opt:true});
+  }
+  t("out5","5 m nach der Wand","5 m after the wall","Das erste Bild, in dem deine Kopfoberseite nach der Wende die 5-m-Marke (Rückenfähnchen) erreicht.","The first frame in which the top of your head reaches the 5 m mark (backstroke flags) after the turn.");
+  t("brk","Auftauchen","Breakout","Das erste Bild, in dem deine Kopfoberseite die Wasseroberfläche durchbricht.","The first frame in which the top of your head breaks the water surface.",{opt:true});
+  n("diveD","Auftauchdistanz","Breakout distance","Abstand von der Wand bis zur Stelle, an der deine Kopfoberseite auftaucht.","Distance from the wall to where the top of your head breaks out.",u,
+    {opt:true, meas:{a:[5,R5], b:[10,()=>L("die 10-m-Marke","the 10 m mark")], pairs:[[5,10],[0,5],[0,10]], tg:()=>L("die Stelle, an der deine Kopfoberseite auftaucht","the spot where the top of your head breaks out"),
+      req:()=>L("Ausmessen geht nur, wenn im Moment des Auftauchens zwei Markierungen (Wand, 5 m oder 10 m) klar im Bild zu erkennen sind.","Measuring only works if two markings (wall, 5 m or 10 m) are clearly visible in the frame where you surface."), at:"brk"}});
+  if(!breast) n("kicks","Delfinkicks unter Wasser","Underwater dolphin kicks","Wie viele Delfinkicks hast du nach dem Abstoß bis zum Auftauchen gemacht?","How many dolphin kicks did you do after the push-off before breaking out?","×",{opt:true});
+  t("out10","10 m nach der Wand","10 m after the wall","Das erste Bild, in dem deine Kopfoberseite die 10-m-Marke nach der Wand erreicht. Optional, nur wenn eine Markierung zu sehen ist.","The first frame in which the top of your head reaches the 10 m mark after the wall. Optional, only if a marking is visible.",{opt:true});
+  S1.push({id:"sum",k:"sum",t:()=>L("Deine Auswertung","Your analysis"),x:()=>""});
+  const need=evNeeded(P); return need ? S1.filter(st=>need.has(st.id)) : S1;
+}
+// benötigte Markierungen je Kennwert (w0 = Wandkontakt: Füße bzw. Anschlag)
+const TURNNEED={vIn:["in10","in5"],tIn5:["in5","w0"],rotD:["rot","rotD"],rotT:["rot","feetOn"],rollT:["rot","off"],handT:["touch","handsOff"],turnT:["touch","feetOn"],footT:["feetOn","off"],wallT:["touch","off"],
+  tOut5:["w0","out5"],offOut5:["off","out5"],t55:["in5","out5"],t1010:["in10","out10"],gt:["off","kick1"],kick1D:["kick1","kick1D"],brkT:["off","brk"],dive:["brk","diveD"],uwV:["out5","brk","diveD"],
+  vOut:["out5","out10"],kicks:["kicks"],kickF:["kicks","kick1","brk"],kl:["kicks","kick1","kick1D","brk","diveD"],pullT:["off","pull"],pullK:["pull","bkick"],
+  vOff:["off"],vIn5vm:["in5"],gvVm:["off","kick1"],uwVvm:["off","brk"]};
+function TURNMET(p){
+  p=p||EV.cur||{}; const open=turnOpen(p), W0=open?L("Anschlag","touch"):L("erster Fußkontakt","first foot contact");
+  const RT=L("Die Wendenzeit 5 m + 5 m ist das Gesamtmaß der Wende; sie fasst Anschwimmen, Drehung, Abstoß und Unterwasserphase zusammen.","The 5 m + 5 m turn time is the overall measure of the turn; it combines approach, rotation, push-off and underwater phase.");
+  const RAP=L("Wer das Tempo bis zur Wand hält und nicht vor der Wand abbremst oder gleitet, verliert weniger Zeit in der Wende.","Holding your speed into the wall without slowing down or gliding before it loses less time in the turn.");
+  const RROT=L("Eine schnelle, kompakte Drehung verkürzt die Wendenzeit direkt; zu weit von der Wand entfernt begonnen, wird der Abstoß kraftlos, zu nah begonnen, wird die Drehung eng.","A fast, compact rotation directly shortens the turn time; started too far from the wall the push-off lacks power, started too close the rotation gets cramped.");
+  const RWALL=L("Die Zeit an der Wand ist der größte Hebel der Wende: kurz, aber mit vollem Abstoß.","Time on the wall is the biggest lever of the turn: short, but with a full push-off.");
+  const RUW=L("Nach dem Abstoß ist der Schwimmer am schnellsten; eine gute Unterwasserphase trägt dieses Tempo über die 5-m-Marke hinaus.","The swimmer is fastest after the push-off; a good underwater phase carries that speed beyond the 5 m mark.");
+  const RBP=L("Taktung der Unterwasserphase beim Brust-Tauchzug.","Timing of the underwater phase in the breaststroke pull-out.");
+  const ME=L("Im Video ausgemessen oder von Hand eingetragen.","Measured in the video or entered manually.");
+  const VMH=L("Aus den Velocitymeter-Daten im markierten Bild abgelesen. Nur mit Velocitymeter.","Read from the velocity meter data in the marked frame. Only with a velocity meter.");
+  const VMM=L("Mittelwert der Velocitymeter-Geschwindigkeit in diesem Abschnitt. Nur mit Velocitymeter.","Mean of the velocity meter velocity in this section. Only with a velocity meter.");
+  return [
+    {k:"vIn",kz:"v 10–5 m in",ph:"approach",l:L("Anschwimmgeschwindigkeit 10–5 m","Approach velocity 10–5 m"),u:"m/s",dir:"high",m:["in10","in5"],
+     d:L("Mittlere Geschwindigkeit zwischen der 10-m- und der 5-m-Marke vor der Wand.","Mean velocity between the 10 m and 5 m marks before the wall."),h:L("5 m geteilt durch die Zeit zwischen beiden Marken.","5 m divided by the time between both marks."),r:RAP},
+    {k:"vIn5vm",src:"vm",kz:"v 5 m in (VM)",ph:"approach",l:L("Geschwindigkeit 5 m vor der Wand","Velocity 5 m before the wall"),u:"m/s",dir:"high",m:["in5"],w:"vm",
+     d:L("Geschwindigkeit, wenn der Kopf die 5-m-Marke vor der Wand erreicht.","Velocity when the head reaches the 5 m mark before the wall."),h:VMH,r:RAP},
+    {k:"tIn5",kz:"T5 in",ph:"approach",l:L("Anschwimmzeit 5 m","Approach time 5 m"),u:"s",dir:"low",m:["in5"],
+     d:open?L("Zeit von der 5-m-Marke vor der Wand bis zum Anschlag.","Time from the 5 m mark before the wall to the touch."):L("Zeit von der 5-m-Marke vor der Wand bis zum ersten Fußkontakt.","Time from the 5 m mark before the wall to the first foot contact."),r:RAP},
+    {k:"rotD",kz:"",ph:"rot",l:L("Abstand bei Drehbeginn","Distance at start of rotation"),u:"m",dir:null,m:["rot"],w:"roll",
+     d:L("Abstand der Kopfoberseite zur Wand, wenn die Rolle beginnt.","Distance of the top of the head from the wall when the flip begins."),h:ME,r:RROT},
+    {k:"rotT",kz:"",ph:"rot",l:L("Drehzeit","Rotation time"),u:"ms",dir:"low",m:["rot","feetOn"],w:"roll",
+     d:L("Zeit vom Beginn der Rolle bis zum ersten Fußkontakt an der Wand.","Time from the start of the flip to the first foot contact on the wall."),r:RROT},
+    {k:"handT",kz:"",ph:"rot",l:L("Handkontaktzeit","Hand contact time"),u:"ms",dir:"low",m:["touch","handsOff"],w:"open",
+     d:L("Zeit vom Anschlag, bis die letzte Hand die Wand verlässt.","Time from the touch until the last hand leaves the wall."),r:RROT},
+    {k:"turnT",kz:"",ph:"rot",l:L("Drehzeit an der Wand","Rotation time at the wall"),u:"ms",dir:"low",m:["touch","feetOn"],w:"open",
+     d:L("Zeit vom Anschlag bis zum ersten Fußkontakt an der Wand.","Time from the touch to the first foot contact on the wall."),r:RROT},
+    {k:"footT",kz:"",ph:"wall",l:L("Fußkontaktzeit","Foot contact time"),u:"ms",dir:null,m:["feetOn","off"],
+     d:L("Zeit vom ersten Fußkontakt bis zum Abstoß (letztes Bild mit Fußkontakt).","Time from the first foot contact to the push-off (last frame with foot contact)."),
+     r:L("Zu kurz heißt meist ein unvollständiger Abstoß, zu lang kostet Zeit. Am besten im Vergleich der Varianten mit der Zeit bis 5 m nach der Wand bewerten.","Too short usually means an incomplete push-off, too long costs time. Best judged together with the time to 5 m after the wall when comparing variants.")},
+    {k:"rollT",kz:"",ph:"wall",l:L("Dreh- und Abstoßzeit","Rotation and push-off time"),u:"ms",dir:"low",m:["rot","off"],w:"roll",
+     d:L("Zeit vom Beginn der Rolle bis zum Abstoß.","Time from the start of the flip to the push-off."),h:L("Drehzeit plus Fußkontaktzeit.","Rotation time plus foot contact time."),r:RWALL},
+    {k:"wallT",kz:"",ph:"wall",l:L("Wandzeit","Wall time"),u:"ms",dir:"low",m:["touch","off"],w:"open",
+     d:L("Zeit vom Anschlag bis zum Abstoß.","Time from the touch to the push-off."),h:L("Handkontakt, Drehung und Fußkontakt zusammen.","Hand contact, rotation and foot contact together."),r:RWALL},
+    {k:"vOff",src:"vm",kz:"v push-off (VM)",ph:"wall",l:L("Abstoßgeschwindigkeit","Push-off velocity"),u:"m/s",dir:"high",m:["off"],w:"vm",
+     d:L("Geschwindigkeit im Moment, in dem die Füße die Wand verlassen.","Velocity at the moment the feet leave the wall."),h:VMH,
+     r:L("Zeigt, wie viel Tempo der Abstoß erzeugt; Grundlage für eine schnelle Unterwasserphase.","Shows how much speed the push-off produces; basis for a fast underwater phase.")},
+    {k:"gt",kz:"GT",ph:"uw",l:L("Gleitzeit","Glide time"),u:"s",dir:null,m:["off","kick1"],
+     d:L("Zeit vom Abstoß bis zum Beginn des ersten Delfinkicks.","Time from the push-off to the start of the first dolphin kick."),
+     r:L("Zu früh zu kicken erhöht den Widerstand, zu lang zu gleiten verschenkt Tempo.","Kicking too early increases drag, gliding too long wastes speed.")},
+    {k:"gvVm",src:"vm",kz:"GV (VM)",ph:"uw",l:L("Gleitgeschwindigkeit (Velocitymeter)","Glide velocity (velocity meter)"),u:"m/s",dir:"high",m:["off","kick1"],w:"vm",
+     d:L("Mittlere Geschwindigkeit vom Abstoß bis zum 1. Delfinkick.","Mean velocity from the push-off to the 1st dolphin kick."),h:VMM,r:RUW},
+    {k:"kick1D",kz:"1stKickHDist",ph:"uw",l:L("Distanz beim 1. Delfinkick","Distance at 1st dolphin kick"),u:"m",dir:null,m:[],uwcam:true,
+     d:L("Abstand von der Wand bis zur Kopfmitte beim ersten Delfinkick.","Distance from the wall to the centre of the head at the first dolphin kick."),
+     h:L("Im Video ausgemessen; nur mit Unterwasserkamera auf Kopfhöhe aussagekräftig.","Measured in the video; only meaningful with an underwater camera at head height."),r:RUW},
+    {k:"pullT",kz:"",ph:"uw",l:L("Abstoß bis Tauchzug","Push-off to pull-out"),u:"s",dir:null,m:["off","pull"],w:"breast",
+     d:L("Zeit vom Abstoß bis zum Beginn des Tauchzugs.","Time from the push-off to the start of the pull-out."),r:RBP},
+    {k:"pullK",kz:"",ph:"uw",l:L("Tauchzug bis Beinschlag","Pull-out to kick"),u:"s",dir:null,m:["pull","bkick"],w:"breast",
+     d:L("Zeit vom Beginn des Tauchzugs bis zum Beginn des ersten Brustbeinschlags.","Time from the start of the pull-out to the start of the first breaststroke kick."),r:RBP},
+    {k:"kicks",kz:"n",ph:"uw",l:L("Delfinkicks","Dolphin kicks"),u:"n",dir:null,m:[],w:"fly",
+     d:L("Anzahl der Delfinkicks nach dem Abstoß bis zum Auftauchen.","Number of dolphin kicks after the push-off before breakout."),h:L("Von Hand gezählt.","Counted manually."),
+     r:L("Grundlage für Beinschlagfrequenz und Beinschlaglänge.","Basis for kick frequency and kick length.")},
+    {k:"kickF",kz:"f",ph:"uw",l:L("Beinschlagfrequenz","Kick frequency"),u:"spm",dir:null,m:["kick1","brk"],w:"fly",
+     d:L("Beinschlagzyklen pro Minute (Kehrwert der Dauer eines Zyklus, mal 60).","Kick cycles per minute (reciprocal of the cycle duration, times 60)."),
+     h:L("Anzahl der Delfinkicks geteilt durch die Zeit vom 1. Delfinkick bis zum Auftauchen, mal 60.","Number of dolphin kicks divided by the time from the 1st dolphin kick to breakout, times 60."),r:RUW},
+    {k:"kl",kz:"KL",ph:"uw",l:L("Beinschlaglänge","Kick length"),u:"m",dir:null,m:[],w:"fly",uwcam:true,
+     d:L("Strecke, die du pro Beinschlagzyklus zurücklegst.","Distance covered per kick cycle."),
+     h:L("(Auftauchdistanz − Distanz beim 1. Delfinkick) geteilt durch die Anzahl der Delfinkicks.","(Breakout distance − distance at the 1st dolphin kick) divided by the number of dolphin kicks."),r:RUW},
+    {k:"uwVvm",src:"vm",kz:"UV (VM)",ph:"uw",l:L("Mittlere Geschwindigkeit unter Wasser (Velocitymeter)","Mean underwater velocity (velocity meter)"),u:"m/s",dir:"high",m:["off","brk"],w:"vm",
+     d:L("Mittlere Geschwindigkeit vom Abstoß bis zum Auftauchen.","Mean velocity from the push-off to breakout."),h:VMM,r:RUW},
+    {k:"brkT",kz:"Breakout",ph:"brk",l:L("Auftauchzeit nach dem Abstoß","Breakout time after push-off"),u:"s",dir:null,m:["off","brk"],
+     d:L("Zeit vom Abstoß, bis die Kopfoberseite die Wasseroberfläche durchbricht.","Time from the push-off until the top of the head breaks the water surface."),r:RUW},
+    {k:"dive",kz:"BreakoutDist",ph:"brk",l:L("Auftauchdistanz","Breakout distance"),u:"m",dir:null,m:[],
+     d:L("Abstand von der Wand zur Stelle, an der die Kopfoberseite auftaucht.","Distance from the wall to where the top of the head breaks out."),h:ME,r:RUW},
+    {k:"uwV",kz:"UV 5 m–BO",ph:"brk",l:L("Unterwassergeschwindigkeit ab 5 m","Underwater velocity from 5 m"),u:"m/s",dir:"high",m:["out5","brk"],
+     d:L("Mittlere Geschwindigkeit von der 5-m-Marke bis zum Auftauchen (nur wenn du hinter der 5-m-Marke auftauchst).","Mean velocity from the 5 m mark to breakout (only if you break out beyond the 5 m mark)."),
+     h:L("(Auftauchdistanz − 5 m) geteilt durch die Zeit von der 5-m-Marke bis zum Auftauchen; beide Punkte am Kopf und an der Oberfläche gemessen, daher ohne Verfälschung durch Brechung.","(Breakout distance − 5 m) divided by the time from the 5 m mark to breakout; both points measured at the head and at the surface, so without distortion from refraction."),r:RUW},
+    {k:"tOut5",kz:"T5 out",ph:"split",l:L("Zeit bis 5 m nach der Wand","Time to 5 m after the wall"),u:"s",dir:"low",m:["out5"],
+     d:open?L("Zeit vom Anschlag, bis die Kopfoberseite die 5-m-Marke nach der Wand erreicht.","Time from the touch until the top of the head reaches the 5 m mark after the wall."):L("Zeit vom ersten Fußkontakt, bis die Kopfoberseite die 5-m-Marke nach der Wand erreicht.","Time from the first foot contact until the top of the head reaches the 5 m mark after the wall."),r:RT},
+    {k:"offOut5",kz:"",ph:"split",l:L("Abstoß bis 5 m","Push-off to 5 m"),u:"s",dir:"low",m:["off","out5"],
+     d:L("Zeit vom Abstoß, bis die Kopfoberseite die 5-m-Marke nach der Wand erreicht.","Time from the push-off until the top of the head reaches the 5 m mark after the wall."),r:RUW},
+    {k:"t55",kz:"T5+5",ph:"split",l:L("Wendenzeit 5 m + 5 m","Turn time 5 m + 5 m"),u:"s",dir:"low",m:["in5","out5"],
+     d:L("Zeit von der 5-m-Marke vor der Wand bis zur 5-m-Marke nach der Wand (Kopfoberseite).","Time from the 5 m mark before the wall to the 5 m mark after the wall (top of the head)."),r:RT},
+    {k:"t1010",kz:"T10+10",ph:"split",l:L("Wendenzeit 10 m + 10 m","Turn time 10 m + 10 m"),u:"s",dir:"low",m:["in10","out10"],
+     d:L("Zeit von der 10-m-Marke vor der Wand bis zur 10-m-Marke nach der Wand.","Time from the 10 m mark before the wall to the 10 m mark after the wall."),
+     r:L("Schließt An- und Ausschwimmen stärker ein; zeigt, ob eine schnelle Wende auf Kosten des Tempos danach geht.","Includes approach and exit more strongly; shows whether a fast turn comes at the cost of speed afterwards.")},
+    {k:"vOut",kz:"v 5–10 m out",ph:"split",l:L("Geschwindigkeit 5–10 m nach der Wand","Velocity 5–10 m after the wall"),u:"m/s",dir:"high",m:["out5","out10"],
+     d:L("Mittlere Geschwindigkeit zwischen der 5-m- und der 10-m-Marke nach der Wand.","Mean velocity between the 5 m and 10 m marks after the wall."),h:L("5 m geteilt durch die Zeit zwischen beiden Marken.","5 m divided by the time between both marks."),
+     r:L("Zeigt, wie gut der Übergang ins Schwimmen gelingt.","Shows how well the transition into swimming works.")}];
+}
+function TURNMORE(){
+  const FP=L("Nur mit Kraftmessplatte in der Wand.","Only with a force plate in the wall.");
+  const AN=L("2D-Videoanalyse mit Winkelmessung (Unterwasserkamera senkrecht zur Bahn).","2D video analysis with angle measurement (underwater camera perpendicular to the lane).");
+  const UW=L("Seitliche Unterwasserkamera mit Tiefen- bzw. Längenbezug.","Lateral underwater camera with a depth or length reference.");
+  const RW=L("Bestimmt, wie viel Tempo der Abstoß erzeugt.","Determines how much speed the push-off produces.");
+  return [
+    {ph:"wall",l:L("Spitzenkraft und Impuls des Abstoßes","Peak force and impulse of the push-off"),kz:"Fpk, × KG; I, Ns/kg",d:L("Größte Kraft der Füße auf die Wand und Kraftstoß über die Kontaktzeit.","Largest force of the feet on the wall and impulse over the contact time."),r:RW,e:FP},
+    {ph:"wall",l:L("Kniewinkel beim Fußaufsatz","Knee angle at foot plant"),kz:"°",d:L("Winkel im Kniegelenk beim ersten Fußkontakt.","Knee joint angle at the first foot contact."),r:L("Zu gebeugt kostet Zeit und Kraftentfaltung, zu gestreckt verkürzt den Abstoßweg.","Too flexed costs time and force development, too extended shortens the push-off path."),e:AN},
+    {ph:"wall",l:L("Fußaufsatztiefe","Foot plant depth"),kz:"m",d:L("Tiefe der Füße unter der Wasseroberfläche beim Wandkontakt.","Depth of the feet below the water surface at wall contact."),r:L("Bestimmt mit, in welcher Tiefe und Richtung du abstößt.","Helps determine the depth and direction of your push-off."),e:UW},
+    {ph:"rot",l:L("Abstand der Hüfte zur Wand beim Fußaufsatz","Hip distance to the wall at foot plant"),kz:"m",d:L("Waagerechter Abstand der Hüfte zur Wand beim ersten Fußkontakt; Maß für die Kompaktheit der Drehung.","Horizontal distance of the hip from the wall at the first foot contact; a measure of how compact the rotation is."),r:RW,e:UW},
+    {ph:"wall",l:L("Körperlage beim Abstoß","Body position at push-off"),kz:"°",d:L("Rotation um die Längsachse beim Abstoß (Rücken-, Seiten- oder Bauchlage), bei der Rollwende relevant.","Rotation about the longitudinal axis at push-off (back, side or front), relevant for the flip turn."),r:L("Beeinflusst, wie früh und reibungslos du in die Bauchlage drehst.","Affects how early and smoothly you rotate onto your front."),e:L("Unterwasserkamera von vorn oder von der Seite.","Underwater camera from the front or the side.")},
+    {ph:"wall",l:L("Abstoßwinkel und Abstoßtiefe","Push-off angle and depth"),kz:"°, m",d:L("Richtung des Abstoßes zur Waagerechten und Tiefe des Körperschwerpunkts beim Abstoß.","Direction of the push-off relative to the horizontal and depth of the centre of mass at push-off."),r:L("Eine passende Tiefe senkt den Wellenwiderstand nach dem Abstoß.","A suitable depth reduces wave drag after the push-off."),e:AN},
+    {ph:"uw",l:L("Maximale Tiefe nach dem Abstoß","Maximum depth after the push-off"),kz:"m",d:L("Tiefster Punkt des Kopfes in der Unterwasserphase.","Deepest point of the head in the underwater phase."),r:L("Zu flach erhöht den Wellenwiderstand, zu tief verlängert den Weg zur Oberfläche.","Too shallow increases wave drag, too deep lengthens the way to the surface."),e:UW},
+    {ph:"uw",l:L("Beinschlagamplitude und Strouhal-Zahl","Kick amplitude and Strouhal number"),kz:"A, m; St",d:L("Senkrechte Ausdehnung des Kicks und Effizienzkennzahl A × f / v.","Vertical range of the kick and the efficiency index A × f / v."),r:L("Kennzahlen für die Effizienz des Delfinkicks.","Indices of dolphin kick efficiency."),e:UW}];
+}
+// Kennwerte eines Wendeversuchs
+function turnMetrics(){
+  const m=SA.marks, v=SA.vals, k=SA.slow||1, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a])/k : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null, p=EV.cur||{}, open=turnOpen(p), w0=open?"touch":"feetOn";
+  const a=pos(d("in10","in5")); if(a) o.vIn=5/a;
+  o.tIn5=pos(d("in5",w0)); o.rotD=v.rotD||null;
+  if(open){ o.handT=pos(d("touch","handsOff")); o.turnT=pos(d("touch","feetOn")); o.wallT=pos(d("touch","off")); }
+  else { o.rotT=pos(d("rot","feetOn")); o.rollT=pos(d("rot","off")); }
+  o.footT=pos(d("feetOn","off"));
+  o.tOut5=pos(d(w0,"out5")); o.offOut5=pos(d("off","out5")); o.t55=pos(d("in5","out5")); o.t1010=pos(d("in10","out10"));
+  o.gt=pos(d("off","kick1")); o.kick1D=v.kick1D||null; o.brkT=pos(d("off","brk")); o.dive=v.diveD||null; o.kicks=v.kicks||null;
+  const ub=pos(d("out5","brk")); if(ub && o.dive>5) o.uwV=(o.dive-5)/ub;
+  const b=pos(d("out5","out10")); if(b) o.vOut=5/b;
+  const kt=pos(d("kick1","brk")); if(kt && o.kicks) o.kickF=o.kicks/kt*60; if(o.kicks && o.dive && o.kick1D!=null && o.dive>o.kick1D) o.kl=(o.dive-o.kick1D)/o.kicks;
+  o.pullT=pos(d("off","pull")); o.pullK=d("pull","bkick");
+  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ try{ if(m.off!=null){ const x=vmAt(vm,m.off); if(ok(x)) o.vOff=x; } if(m.in5!=null){ const x=vmAt(vm,m.in5); if(ok(x)) o.vIn5vm=x; }
+    const g=vmMean(vm,m.off,m.kick1); if(ok(g)) o.gvVm=g; const u=vmMean(vm,m.off,m.brk); if(ok(u)) o.uwVvm=u; }catch(e){} }
+  return o;
+}
+
+const METCAT=p=> isTurn(p) ? TURNMET(p) : SPMET(p);
+const MORECAT=p=> isTurn(p) ? TURNMORE() : SPMORE();
+const relLab=(p,h)=> isTurn(p||EV.cur) ? (h?L("Bedeutung für die Wendenzeit","Relevance for the turn time"):L("Bedeutung für die Wendenzeit:","Relevance for the turn time:")) : (h?L("Bedeutung für 5 m und 15 m","Relevance for 5 m and 15 m"):L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:"));
 function SPMET(p){
   p=p||EV.cur||{}; const back=p.start==="back";
   const R5=L("Zeigt, wie gut du das Tempo nach dem Eintauchen hältst und ob du auf dem Weg zu 15 m Zeit verlierst.","Shows how well you hold your speed after entry and whether you lose time on the way to 15 m.");
@@ -4375,15 +4587,15 @@ function SPMET(p){
      r:L("Das Tempo, das du aus der Luft mit ins Wasser nimmst. Ein hoher Wert gibt gute Zeiten bei 5 m und 15 m.","The speed you carry from the air into the water. A high value gives good times at 5 m and 15 m.")},
     {k:"kick1",kz:"1stKick",ph:"uw",l:L("Zeit bis zum 1. Delfinkick","Time to 1st dolphin kick"),u:"s",dir:null,m:["kick1"],
      d:L("Zeit vom Startsignal bis zum ersten Unterwasserbeinschlag (Beginn der Abwärtsbewegung).","Time from the start signal to the first underwater kick (start of the downbeat)."),r:RK1},
-    {k:"kick1D",kz:"1stKickHDist",ph:"uw",l:L("Distanz beim 1. Delfinkick","Distance at 1st dolphin kick"),u:"m",dir:null,m:[],
+    {k:"kick1D",kz:"1stKickHDist",ph:"uw",l:L("Distanz beim 1. Delfinkick","Distance at 1st dolphin kick"),u:"m",dir:null,m:[],uwcam:true,
      d:L("Abstand von der Beckenwand bis zur Kopfmitte beim ersten Unterwasserbeinschlag.","Distance from the pool wall to the centre of the head at the first underwater kick."),h:ME,r:RK1},
     {k:"gt",kz:"GT",ph:"uw",l:L("Gleitzeit","Glide time"),u:"s",dir:null,m:["headIn","kick1"],
      d:L("Dauer des Gleitens nach dem Eintauchen, bis der Beinschlag beginnt.","Duration of the glide after entry until the kick begins."),
      h:L("Zeit bis zum 1. Delfinkick minus Eintauchzeit.","Time to the 1st dolphin kick minus entry time."),r:RGL},
-    {k:"gd",kz:"GD",ph:"uw",l:L("Gleitdistanz","Glide distance"),u:"m",dir:null,m:[],
+    {k:"gd",uwcam:true,kz:"GD",ph:"uw",l:L("Gleitdistanz","Glide distance"),u:"m",dir:null,m:[],
      d:L("Strecke, die du nach dem Eintauchen gleitest, bis der Beinschlag beginnt.","Distance you glide after entry until the kick begins."),
      h:L("Distanz beim 1. Delfinkick minus Eintauchdistanz.","Distance at the 1st dolphin kick minus entry distance."),r:RGL},
-    {k:"gv",kz:"GV",ph:"uw",l:L("Gleitgeschwindigkeit","Glide velocity"),u:"m/s",dir:"high",m:[],
+    {k:"gv",uwcam:true,kz:"GV",ph:"uw",l:L("Gleitgeschwindigkeit","Glide velocity"),u:"m/s",dir:"high",m:[],
      d:L("Mittlere Geschwindigkeit beim Gleiten.","Mean velocity during the glide."),h:L("Gleitdistanz geteilt durch Gleitzeit.","Glide distance divided by glide time."),r:RGL},
     {k:"gvVm",src:"vm",kz:"GV (VM)",ph:"uw",l:L("Gleitgeschwindigkeit (Velocitymeter)","Glide velocity (velocity meter)"),u:"m/s",dir:"high",m:["headIn","kick1"],w:"vm",
      d:L("Mittlere Geschwindigkeit vom Eintauchen des Kopfes bis zum 1. Delfinkick.","Mean velocity from the head entering to the 1st dolphin kick."),
@@ -4407,7 +4619,7 @@ function SPMET(p){
      d:L("Beinschlagzyklen pro Minute (Kehrwert der Dauer eines Zyklus, mal 60).","Kick cycles per minute (reciprocal of the cycle duration, times 60)."),
      h:L("Anzahl der Delfinkicks geteilt durch die Zeit vom 1. Delfinkick bis zum Auftauchen, mal 60.","Number of dolphin kicks divided by the time from the 1st dolphin kick to breakout, times 60."),
      r:L("Hält das Tempo unter Wasser hoch. Wirkt indirekt, vor allem auf 15 m.","Keeps the underwater speed high. Indirect effect, mainly on 15 m.")},
-    {k:"kl",kz:"KL",ph:"uw",l:L("Beinschlaglänge","Kick length"),u:"m",dir:null,m:[],w:"fly",
+    {k:"kl",uwcam:true,kz:"KL",ph:"uw",l:L("Beinschlaglänge","Kick length"),u:"m",dir:null,m:[],w:"fly",
      d:L("Strecke, die du pro Beinschlagzyklus zurücklegst.","Distance covered per kick cycle."),
      h:L("(Auftauchdistanz − Distanz beim 1. Delfinkick) geteilt durch die Anzahl der Delfinkicks.","(Breakout distance − distance at the 1st dolphin kick) divided by the number of dolphin kicks."),
      r:L("Zeigt, wie effektiv jeder Beinschlag ist. Wirkt indirekt, vor allem auf 15 m.","Shows how effective each kick is. Indirect effect, mainly on 15 m.")},
@@ -4444,8 +4656,8 @@ function SPMET(p){
      d:L("Mittlere Geschwindigkeit zwischen 5 und 15 m.","Mean velocity between 5 and 15 m."),h:L("10 m geteilt durch die Zeit zwischen 5-m- und 15-m-Marke.","10 m divided by the time between the 5 m and 15 m marks."),r:R5}];
 }
 // gilt der Kennwert für dieses Projekt?
-const spApplies=(x,p,vm)=>{ const back=p.start==="back", breast=p.uw==="breast"&&!back;
-  return !x.w || (x.w==="block"&&!back) || (x.w==="fly"&&!breast) || (x.w==="breast"&&breast) || (x.w==="vm"&&vm!==false); };
+const spApplies=(x,p,vm)=>{ const turn=isTurn(p), back=!turn&&p.start==="back", breast= turn ? turnUw(p)==="breast" : (p.uw==="breast"&&!back), open=turn&&turnOpen(p);
+  return !x.w || (x.w==="block"&&!turn&&!back) || (x.w==="fly"&&!breast) || (x.w==="breast"&&breast) || (x.w==="vm"&&vm!==false) || (x.w==="open"&&open) || (x.w==="roll"&&turn&&!open); };
 // weitere Kennwerte, die man kennen sollte (mit Sprintz derzeit nicht erfasst); e = womit sie erfasst werden
 function SPMORE(){
   const FP=L("Nur mit instrumentiertem Startblock (Kraftmessplatten).","Only with an instrumented starting block (force plates).");
@@ -4490,17 +4702,17 @@ const SPNEED={rt:["move"],hands:["hands"],rft:["rear","off"],ffs:["rear","off"],
   gvVm:["headIn","kick1"],uwT:["headIn","brk"],uwV:["headIn","entryD","brk","diveD"],uwVvm:["headIn","brk"],kicks:["kicks"],kickF:["kicks","kick1","brk"],kl:["kicks","kick1","kick1D","brk","diveD"],
   pull:["pull"],bkick:["bkick"],pullK:["pull","bkick"],brkT:["brk"],dive:["brk","diveD"],t5:["p5"],t10:["p10"],t15:["p15"],s510:["p5","p10"],s1015:["p10","p15"],v510:["p5","p10"],v1015:["p10","p15"],v515:["p5","p15"]};
 // gewählte Kennwerte (null = alle, für ältere Projekte)
-const evSel=p=> p && p.tech==="start" && Array.isArray(p.metrics) ? new Set(p.metrics) : null;
-function evNeeded(p){ const sel=evSel(p); if(!sel) return null; const n=new Set(["sig","sum"]); sel.forEach(k=>(SPNEED[k]||[]).forEach(x=>n.add(x))); return n; }
+const evSel=p=> !p || !(p.tech==="start"||p.tech==="turn") ? null : Array.isArray(p.metrics) ? new Set(p.metrics) : new Set(METCAT(p).filter(x=>!x.uwcam).map(x=>x.k));
+function evNeeded(p){ const sel=evSel(p); if(!sel) return null; const N=isTurn(p)?TURNNEED:SPNEED, w0=turnOpen(p)?"touch":"feetOn", n=new Set(["sig","sum"]); sel.forEach(k=>(N[k]||[]).forEach(x=>n.add(x==="w0"?w0:x))); return n; }
 function spMetSelHTML(p){
-  const all=SPMET(p).filter(x=>spApplies(x,p)), sel=evSel(p)||new Set(all.map(x=>x.k)), PH=SPPH(), tab=EV.metTab||0, open=!!EV.metOpen;
+  const all=METCAT(p).filter(x=>spApplies(x,p)), sel=evSel(p)||new Set(all.map(x=>x.k)), PH=SPPH(), tab=EV.metTab||0, open=!!EV.metOpen;
   const nSel=all.filter(x=>sel.has(x.k)).length;
-  const lists=[all.filter(x=>x.src!=="vm"), all.filter(x=>x.src==="vm"), SPMORE()];
+  const lists=[all.filter(x=>x.src!=="vm"), all.filter(x=>x.src==="vm"), MORECAT(p)];
   const grp=(arr,f)=>{ const out=[]; arr.forEach(x=>{ let g=out.find(o=>o.ph===x.ph); if(!g){ g={ph:x.ph,a:[]}; out.push(g); } g.a.push(x); }); return out.map(g=>`<div class="msgh">${PH[g.ph]||""}</div>${g.a.map(f).join("")}`).join(""); };
-  const item=(x,i,on)=>`<div class="msit"><label><input type="checkbox" data-mk="${x.k}"${on?" checked":""}> <span>${x.l}</span> <small>${[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ")}</small></label><button type="button" class="msi" aria-expanded="false" aria-label="${L("Erklärung","Explanation")}">i</button>
-    <p class="msx" hidden>${x.d}${x.h?" "+x.h:""}<br><span>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")} ${x.r||"–"}</span></p></div>`;
+  const item=(x,i,on)=>`<div class="msit"><label><input type="checkbox" data-mk="${x.k}"${on?" checked":""}> <span>${x.l}</span> <small>${[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ")}</small>${x.uwcam?`<em class="msuw">${L("Unterwasserkamera","Underwater camera")}</em>`:""}</label><button type="button" class="msi" aria-expanded="false" aria-label="${L("Erklärung","Explanation")}">i</button>
+    <p class="msx" hidden>${x.d}${x.h?" "+x.h:""}<br><span>${relLab(p)} ${x.r||"–"}</span></p></div>`;
   const itemMore=x=>`<div class="msit"><label class="off"><input type="checkbox" disabled> <span>${x.l}</span> <small>${x.kz}</small></label><button type="button" class="msi" aria-expanded="false" aria-label="${L("Erklärung","Explanation")}">i</button>
-    <p class="msx" hidden>${x.d}<br><span>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")} ${x.r}</span><br><span>${L("Erfassung:","How it is captured:")} ${x.e}</span></p></div>`;
+    <p class="msx" hidden>${x.d}<br><span>${relLab(p)} ${x.r}</span><br><span>${L("Erfassung:","How it is captured:")} ${x.e}</span></p></div>`;
   const hint=[L("Sprintz misst oder berechnet diese Werte aus deinen Markierungen im Video. Bei der Auswertung fragt Sprintz nur die Markierungen ab, die für die gewählten Kennwerte nötig sind.","Sprintz measures or calculates these values from your marks in the video. During the analysis Sprintz only asks for the marks needed for the selected parameters."),
     L("Diese Werte berechnet Sprintz, wenn du zu einem Versuch Velocitymeter-Daten hinzufügst. Die nötigen Markierungen im Video kommen trotzdem dazu.","Sprintz calculates these values when you add velocity meter data to an attempt. The required marks in the video are still added."),
     L("Diese Kennwerte kann Sprintz nicht erfassen; sie brauchen zusätzliche Messtechnik. Sie stehen hier zur Orientierung.","Sprintz can't capture these parameters; they need additional measuring equipment. They are listed here for orientation.")][tab];
@@ -4514,11 +4726,11 @@ function spMetSelHTML(p){
 }
 function spMetSelBind(p){
   const box=document.querySelector(".mscard"); if(!box) return; const re=()=>{ const y=scrollY; box.outerHTML=spMetSelHTML(p); spMetSelBind(p); scrollTo(0,y); };
-  const all=()=>SPMET(p).filter(x=>spApplies(x,p)).map(x=>x.k), cur=()=>evSel(p)||new Set(all());
+  const all=()=>METCAT(p).filter(x=>spApplies(x,p)).map(x=>x.k), cur=()=>evSel(p)||new Set(all());
   $("msToggle").onclick=()=>{ EV.metOpen=!EV.metOpen; re(); };
   box.querySelectorAll("[data-mst]").forEach(b=>b.onclick=()=>{ EV.metTab=+b.dataset.mst; re(); });
   box.querySelectorAll("[data-mk]").forEach(c=>c.onchange=()=>{ const s=cur(); if(c.checked) s.add(c.dataset.mk); else s.delete(c.dataset.mk); p.metrics=all().filter(k=>s.has(k)); evSave(); re(); });
-  box.querySelectorAll("[data-msall]").forEach(b=>b.onclick=()=>{ const s=cur(), tabKs=SPMET(p).filter(x=>spApplies(x,p) && (EV.metTab===1 ? x.src==="vm" : x.src!=="vm")).map(x=>x.k);
+  box.querySelectorAll("[data-msall]").forEach(b=>b.onclick=()=>{ const s=cur(), tabKs=METCAT(p).filter(x=>spApplies(x,p) && (EV.metTab===1 ? x.src==="vm" : x.src!=="vm") && (b.dataset.msall!=="1" || !x.uwcam)).map(x=>x.k);
     tabKs.forEach(k=> b.dataset.msall==="1" ? s.add(k) : s.delete(k)); p.metrics=all().filter(k=>s.has(k)); evSave(); re(); });
   box.querySelectorAll(".msi").forEach(b=>b.onclick=()=>{ const x=b.parentNode.querySelector(".msx"); x.hidden=!x.hidden; b.setAttribute("aria-expanded",String(!x.hidden)); });
 }
@@ -4526,30 +4738,30 @@ function spMetSelBind(p){
 function vmMean(vm,a,b){ if(a==null||b==null||!(b>a)) return null; const off=vm.off||0; let s=0,n=0; for(let i=0;i<vm.t.length;i++){ const tv=vm.t[i]+off; if(tv>=a && tv<=b && isFinite(vm.v[i])){ s+=vm.v[i]; n++; } } return n ? s/n : null; }
 
 function evDefs(p,all){
-  p=p||EV.cur||{}; const S={}, sel=all?null:evSel(p); evSteps(Object.assign({},p,{metrics:undefined})).forEach(s=>S[s.id]=s);
-  return SPMET(p).filter(x=>spApplies(x,p) && (!sel || sel.has(x.k))).map(x=>{ const mk=(x.m||[]).filter(i=>S[i]).map(i=>`„${S[i].t()}“`).join(L(" und "," and "));
+  p=p||EV.cur||{}; const S={}, sel=all?null:evSel(p); evSteps(Object.assign({},p,{metrics:METCAT(p).map(x=>x.k)})).forEach(s=>S[s.id]=s);
+  return METCAT(p).filter(x=>all || (spApplies(x,p) && (!sel || sel.has(x.k)))).map(x=>{ const mk=(x.m||[]).filter(i=>S[i]).map(i=>`„${S[i].t()}“`).join(L(" und "," and "));
     return {...x, def:[x.d, x.h||"", mk?L(`Markierung im Video: ${mk}.`,`Video mark: ${mk}.`):""].filter(Boolean).join(" ")}; });
 }
 // Info-Knopf: Kennwerte erklärt, getrennt nach „mit Sprintz erfasst“ und „weitere Kennwerte“
 function spInfoHTML(p){
   const PH=SPPH(), uL=u=>u&&u!=="n"?`, ${U(u)}`:"", grp=(arr,f)=>{ const out=[]; arr.forEach(x=>{ let g=out.find(o=>o.ph===x.ph); if(!g){ g={ph:x.ph,a:[]}; out.push(g); } g.a.push(x); }); return out.map(g=>`<h4 class="mih">${PH[g.ph]||""}</h4>${g.a.map(f).join("")}`).join(""); };
-  const A=evDefs(p,true), M=SPMORE();
-  return `<div class="mitabs" role="tablist"><button type="button" role="tab" data-mt="0" aria-selected="true">${L("Mit Sprintz erfasst","Captured with Sprintz")} (${A.length})</button><button type="button" role="tab" data-mt="1" aria-selected="false">${L("Weitere Kennwerte","Further parameters")} (${M.length})</button></div>
-    <div class="mipane" data-mp="0"><p class="hint">${L("Diese Kennwerte misst oder berechnet Sprintz aus deinen Markierungen im Video. Alle Zeiten zählen ab dem Startsignal, Positionen werden am Kopf bestimmt.","Sprintz measures or calculates these parameters from your marks in the video. All times count from the start signal; positions are taken at the head.")}</p>
-      ${grp(A,x=>`<details class="mi"><summary><b>${x.l}</b> <span>${[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ")}</span></summary><p>${x.def}</p><p class="mir"><b>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")}</b> ${x.r||"–"}</p>${x.dir?`<p class="mir">${x.dir==="low"?L("Kleiner ist besser.","Lower is better."):L("Größer ist besser.","Higher is better.")}</p>`:""}</details>`)}</div>
-    <div class="mipane" data-mp="1" hidden><p class="hint">${L("Diese Kennwerte erfasst Sprintz nicht. Sie helfen, einen Start vollständig zu verstehen, und brauchen meist zusätzliche Messtechnik.","Sprintz doesn't capture these parameters. They help to understand a start fully and usually need additional measuring equipment.")}</p>
-      ${grp(M,x=>`<details class="mi"><summary><b>${x.l}</b> <span>${x.kz}</span></summary><p>${x.d}</p><p class="mir"><b>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")}</b> ${x.r}</p><p class="mir"><b>${L("Erfassung:","How it is captured:")}</b> ${x.e}</p></details>`)}</div>`;
+  const A=evDefs(p,true), M=MORECAT(p);
+  return `<div class="mitabs" role="tablist"><button type="button" role="tab" data-mt="0" aria-selected="true">${L("Mit Sprintz erfassbar","Capturable with Sprintz")} (${A.length})</button><button type="button" role="tab" data-mt="1" aria-selected="false">${L("Weitere Kennwerte","Further parameters")} (${M.length})</button></div>
+    <div class="mipane" data-mp="0"><p class="hint">${isTurn(p)?L("Diese Kennwerte misst oder berechnet Sprintz aus deinen Markierungen im Video. Gemessen wird zwischen Markierungen; Positionen werden am Kopf bestimmt. Alle hier gezeigten Kennwerte sind möglich, welche ein Projekt nutzt, legst du in der Einrichtung fest.","Sprintz measures or calculates these parameters from your marks in the video. Times are measured between marks; positions are taken at the head. All possible parameters are shown here; which ones a project uses is set in the setup."):L("Diese Kennwerte misst oder berechnet Sprintz aus deinen Markierungen im Video. Alle Zeiten zählen ab dem Startsignal, Positionen werden am Kopf bestimmt. Alle hier gezeigten Kennwerte sind möglich, welche ein Projekt nutzt, legst du in der Einrichtung fest.","Sprintz measures or calculates these parameters from your marks in the video. All times count from the start signal; positions are taken at the head. All possible parameters are shown here; which ones a project uses is set in the setup.")}</p>
+      ${grp(A,x=>`<details class="mi"><summary><b>${x.l}</b> <span>${[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ")}</span></summary><p>${x.def}</p><p class="mir"><b>${relLab(p)}</b> ${x.r||"–"}</p>${x.dir?`<p class="mir">${x.dir==="low"?L("Kleiner ist besser.","Lower is better."):L("Größer ist besser.","Higher is better.")}</p>`:""}</details>`)}</div>
+    <div class="mipane" data-mp="1" hidden><p class="hint">${L("Diese Kennwerte erfasst Sprintz nicht. Sie helfen, die Technik vollständig zu verstehen, und brauchen meist zusätzliche Messtechnik.","Sprintz doesn't capture these parameters. They help to understand the technique fully and usually need additional measuring equipment.")}</p>
+      ${grp(M,x=>`<details class="mi"><summary><b>${x.l}</b> <span>${x.kz}</span></summary><p>${x.d}</p><p class="mir"><b>${relLab(p)}</b> ${x.r}</p><p class="mir"><b>${L("Erfassung:","How it is captured:")}</b> ${x.e}</p></details>`)}</div>`;
 }
 function spInfo(p){
   let d=$("spInfoDlg"); if(!d){ d=document.createElement("div"); d.id="spInfoDlg"; d.className="dlg"; d.setAttribute("role","dialog"); d.setAttribute("aria-modal","true"); document.body.appendChild(d); }
-  d.innerHTML=`<div class="dlgbox mibox"><div class="mihd"><h2>${L("Kennwerte Startsprung","Start parameters")}</h2><button type="button" class="testbtn ghost small" id="spInfoX">${L("Schließen","Close")}</button></div><div class="mibody">${spInfoHTML(p||EV.cur)}</div></div>`;
+  d.innerHTML=`<div class="dlgbox mibox"><div class="mihd"><h2>${isTurn(p||EV.cur)?L("Kennwerte Wende","Turn parameters"):L("Kennwerte Startsprung","Start parameters")}</h2><button type="button" class="testbtn ghost small" id="spInfoX">${L("Schließen","Close")}</button></div><div class="mibody">${spInfoHTML(p||EV.cur)}</div></div>`;
   d.hidden=false; const close=()=>{ d.hidden=true; }; $("spInfoX").onclick=close; d.onclick=e=>{ if(e.target===d) close(); };
   d.querySelectorAll("[data-mt]").forEach(b=>b.onclick=()=>{ d.querySelectorAll("[data-mt]").forEach(x=>x.setAttribute("aria-selected",String(x===b))); d.querySelectorAll("[data-mp]").forEach(x=>x.hidden=x.dataset.mp!==b.dataset.mt); });
 }
 const spInfoBtn=()=>`<button type="button" class="minfo" data-spinfo aria-label="${L("Kennwerte erklärt","Parameters explained")}" title="${L("Kennwerte erklärt","Parameters explained")}">i</button>`;
 document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-spinfo]"); if(b){ e.preventDefault(); spInfo(EV.cur); } });
 document.addEventListener("keydown",e=>{ const d=$("spInfoDlg"); if(e.key==="Escape" && d && !d.hidden) d.hidden=true; });
-const evExecName=p=> p.tech==="start" ? (p.start==="back" ? L("Rückenstart","Backstroke start") : p.uw==="breast" ? L("Startsprung mit Brust-Tauchzug","Dive start with breaststroke pull-out") : L("Startsprung","Dive start"))
+const evExecName=p=> p.tech==="turn" ? turnName(p) : p.tech==="start" ? (p.start==="back" ? L("Rückenstart","Backstroke start") : p.uw==="breast" ? L("Startsprung mit Brust-Tauchzug","Dive start with breaststroke pull-out") : L("Startsprung","Dive start"))
   : p.tech==="turn" ? ({flip:L("Rollwende","Flip turn"), open:L("Kippwende","Open turn")}[p.turn]||"") : "";
 const evSubtitle=p=>["Sprintz Test", evTechName(p.tech), evExecName(p)].filter(Boolean).join(" · ");
 // letzte Seite(n) des Ergebnisblatts: alle Kennwerte, Markierungen und statistischen Werte
@@ -4557,15 +4769,15 @@ function evPdfDefs(F,p){
   F.newPage(); F.h1(L("Erklärung der Kennwerte und statistischen Werte","Explanation of the parameters and statistical values"));
   const PH=SPPH(), un=x=>[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ");
   F.h2(L("Mit Sprintz erfasste Kennwerte","Parameters captured with Sprintz"));
-  F.para(L("Alle Zeiten zählen ab dem Startsignal, Positionen werden am Kopf bestimmt. „Lösen“ ist jeweils das letzte Bild mit Kontakt, „Erreichen“ und „Kontakt“ das erste Bild.","All times count from the start signal; positions are taken at the head. “Leaving” is always the last frame with contact; “reaching” and “contact” the first frame."),{size:8,color:"#355262"});
-  F.table([{h:L("Kennwert","Parameter"),w:2.1},{h:L("Definition und Erfassung","Definition and capture"),w:4.4},{h:L("Bedeutung für 5 m und 15 m","Relevance for 5 m and 15 m"),w:3.2},{h:L("Besser","Better"),w:0.9}],
+  F.para((isTurn(p)?L("Zeiten werden zwischen Markierungen im Video gemessen, Positionen am Kopf bestimmt.","Times are measured between marks in the video; positions are taken at the head."):L("Alle Zeiten zählen ab dem Startsignal, Positionen werden am Kopf bestimmt.","All times count from the start signal; positions are taken at the head."))+" "+L("„Lösen“ ist jeweils das letzte Bild mit Kontakt, „Erreichen“ und „Kontakt“ das erste Bild.","“Leaving” is always the last frame with contact; “reaching” and “contact” the first frame."),{size:8,color:"#355262"});
+  F.table([{h:L("Kennwert","Parameter"),w:2.1},{h:L("Definition und Erfassung","Definition and capture"),w:4.4},{h:relLab(p,true),w:3.2},{h:L("Besser","Better"),w:0.9}],
     evDefs(p).map(x=>[{t:x.l+(un(x)?` (${un(x)})`:""),f:"b"}, x.def, x.r||"–", x.dir==="low"?L("kleiner","lower"):x.dir==="high"?L("größer","higher"):"–"]),{size:7.2});
   F.h2(L("Markierungen im Video","Video marks"));
   F.table([{h:L("Markierung","Mark"),w:2.2},{h:L("Was markiert wird","What is marked"),w:7.3}], evSteps(p).filter(s=>s.k!=="sum").map(s=>[{t:s.t(),f:"b"}, s.x()]),{size:7.4});
   F.h2(L("Weitere Kennwerte, die man kennen sollte","Further parameters worth knowing"));
   F.para(L("Diese Kennwerte erfasst Sprintz nicht; sie brauchen meist zusätzliche Messtechnik.","Sprintz doesn't capture these parameters; they usually need additional measuring equipment."),{size:8,color:"#355262"});
-  F.table([{h:L("Kennwert","Parameter"),w:2.3},{h:L("Beschreibung","Description"),w:3.6},{h:L("Bedeutung für 5 m und 15 m","Relevance for 5 m and 15 m"),w:2.8},{h:L("Erfassung","Capture"),w:1.9}],
-    SPMORE().map(x=>[{t:`${x.l} (${x.kz})`,f:"b"}, `${PH[x.ph]}: ${x.d}`, x.r, x.e]),{size:7});
+  F.table([{h:L("Kennwert","Parameter"),w:2.3},{h:L("Beschreibung","Description"),w:3.6},{h:relLab(p,true),w:2.8},{h:L("Erfassung","Capture"),w:1.9}],
+    MORECAT(p).map(x=>[{t:`${x.l} (${x.kz})`,f:"b"}, `${PH[x.ph]}: ${x.d}`, x.r, x.e]),{size:7});
   F.h2(L("Statistische Werte","Statistical values"));
   F.table([{h:L("Begriff","Term"),w:2.2},{h:L("Erklärung","Explanation"),w:7.3}], EVSTAT().map(x=>[{t:x.t,f:"b"}, x.d]),{size:7.4});
   F.h2(L("Quellen","Sources")); EVSRC().forEach(x=>F.para(x,{size:7.6,color:"#355262",after:3}));
@@ -4763,7 +4975,7 @@ async function evPdfBuild(p, keys){
   const nb=p.trials.filter(t=>t.v==="BL").length, st=[...new Set(p.trials.filter(t=>t.v!=="BL").map(t=>t.stage??1))].sort((a,b)=>a-b), perSt=st.map(x=>`${evStageName(x)}: ${p.trials.filter(t=>(t.stage??1)===x&&t.v==="A").length}`).join(", "), nd=D.done.length, nt=p.trials.length, fps=D.fps;
   F.para(L(`Ablauf: ${nb} Baseline-Versuche in der gewohnten Technik, danach Teststufen mit Versuchen je Variante (${perSt}).`,`Procedure: ${nb} baseline attempts with the usual technique, followed by test stages with attempts per variant (${perSt}).`)+" "
     +L("Die Reihenfolge von A und B war innerhalb jedes Paares zufällig (AB oder BA), damit Ermüdung, Aufwärmen und Gewöhnung beide Varianten gleich treffen.","The order of A and B was random within each pair (AB or BA) so that fatigue, warm-up and familiarisation affect both variants equally.")+" "
-    +L(`Ausgewertet wurden ${nd} von ${nt} Versuchen, Bild für Bild im Video.`,`${nd} of ${nt} attempts were analysed frame by frame in the video.`)+(fps?" "+L(`Höchste Bildrate: ${fps} Bilder pro Sekunde.`,`Highest frame rate: ${fps} frames per second.`):"")+" "+L("Alle Zeiten beziehen sich auf das Startsignal.","All times refer to the start signal."));
+    +L(`Ausgewertet wurden ${nd} von ${nt} Versuchen, Bild für Bild im Video.`,`${nd} of ${nt} attempts were analysed frame by frame in the video.`)+(fps?" "+L(`Höchste Bildrate: ${fps} Bilder pro Sekunde.`,`Highest frame rate: ${fps} frames per second.`):"")+" "+(isTurn(p)?L("Alle Zeiten werden zwischen Markierungen im Video gemessen; Hauptgröße ist die Wendenzeit von der 5-m-Marke vor bis zur 5-m-Marke nach der Wand.","All times are measured between marks in the video; the main variable is the turn time from the 5 m mark before to the 5 m mark after the wall."):L("Alle Zeiten beziehen sich auf das Startsignal.","All times refer to the start signal.")));
   F.para(L("Was die Kennwerte und statistischen Werte bedeuten, steht auf der letzten Seite.","What the parameters and statistical values mean is explained on the last page."),{size:8.5,color:"#355262"});
   // Baseline
   if(BL.length){

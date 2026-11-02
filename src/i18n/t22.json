@@ -1,0 +1,938 @@
+[
+[
+"the turning wall",
+"dönüş duvarına",
+"стенку поворота",
+"de keerwand"
+],
+[
+"Which turn?",
+"Hangi dönüş?",
+"Какой поворот?",
+"Welk keerpunt?"
+],
+[
+"Differentiate in more detail (by stroke)",
+"Daha ayrıntılı ayır (yüzme stiline göre)",
+"Различать подробнее (по способу плавания)",
+"Nauwkeuriger onderscheiden (per zwemslag)"
+],
+[
+"Short name, e.g. Compact flip",
+"Kısa ad, ör. Kompakt takla",
+"Краткое название, например «Компактное сальто»",
+"Korte naam, bijv. Compacte koprol"
+],
+[
+"Short name, e.g. Late flip",
+"Kısa ad, ör. Geç takla",
+"Краткое название, например «Позднее сальто»",
+"Korte naam, bijv. Late koprol"
+],
+[
+"Detailed description for standardisation, e.g. knees tight to the chest, place the feet high on the wall",
+"Standartlaştırma için ayrıntılı açıklama, ör. dizler göğse yakın, ayakları duvara yüksek koy",
+"Подробное описание для стандартизации, например: колени плотно к груди, стопы ставить высоко на стенку",
+"Nauwkeurige beschrijving voor standaardisatie, bijv. knieën dicht tegen de borst, voeten hoog tegen de wand zetten"
+],
+[
+"Detailed description for standardisation, e.g. start the flip closer to the wall, place the feet lower",
+"Standartlaştırma için ayrıntılı açıklama, ör. taklaya duvara daha yakın başla, ayakları daha aşağı koy",
+"Подробное описание для стандартизации, например: начинать сальто ближе к стенке, стопы ставить ниже",
+"Nauwkeurige beschrijving voor standaardisatie, bijv. de koprol dichter bij de wand beginnen, voeten lager zetten"
+],
+[
+"What do you do underwater after the push-off?",
+"İtişten sonra su altında ne yapıyorsun?",
+"Что ты делаешь под водой после отталкивания?",
+"Wat doe je onder water na de afzet?"
+],
+[
+"turn type",
+"dönüş türü",
+"тип поворота",
+"soort keerpunt"
+],
+[
+"Distance from the wall to the centre of your head at the first dolphin kick. Only meaningful with an underwater camera at head height. Optional.",
+"İlk yunus vuruşunda duvardan başının ortasına kadar olan mesafe. Yalnızca baş yüksekliğindeki bir su altı kamerasıyla anlamlıdır. İsteğe bağlı.",
+"Расстояние от стенки до центра головы при первом ударе дельфином. Имеет смысл только с подводной камерой на уровне головы. Необязательно.",
+"Afstand van de wand tot het midden van je hoofd bij de eerste dolfijnslag. Alleen zinvol met een onderwatercamera op hoofdhoogte. Optioneel."
+],
+[
+"Only with an underwater camera at head height, perpendicular to the lane and with markings in the plane of your lane. From above the water, refraction and perspective distort the position underwater.",
+"Yalnızca baş yüksekliğinde, kulvara dik duran ve işaretleri kulvarının düzleminde olan bir su altı kamerasıyla. Su üstünden bakıldığında kırılma ve perspektif su altındaki konumu bozar.",
+"Только с подводной камерой на уровне головы, перпендикулярно дорожке и с отметками в плоскости твоей дорожки. Сверху над водой преломление и перспектива искажают положение под водой.",
+"Alleen met een onderwatercamera op hoofdhoogte, loodrecht op de baan en met markeringen in het vlak van jouw baan. Van boven het water vertekenen breking en perspectief de positie onder water."
+],
+[
+"Parameter shown",
+"Gösterilen ölçüt",
+"Показанный показатель",
+"Getoond kenmerk"
+],
+[
+"All parameters",
+"Tüm ölçütler",
+"Все показатели",
+"Alle kenmerken"
+],
+[
+"charts:",
+"grafikler:",
+"графики:",
+"grafieken:"
+],
+[
+"Choose parameter",
+"Ölçüt seç",
+"Выбрать показатель",
+"Kenmerk kiezen"
+],
+[
+"Tables show all parameters, charts the main one.",
+"Tablolar tüm ölçütleri, grafikler ana ölçütü gösterir.",
+"Таблицы показывают все показатели, графики — главный.",
+"Tabellen tonen alle kenmerken, grafieken het belangrijkste."
+],
+[
+"Times are measured between two marks in the video; no start signal is needed. Wall contact is the first foot contact for flip and backstroke turns and the touch for open turns. The precision is one video frame (1 / frame rate).",
+"Süreler videodaki iki işaret arasında ölçülür; start sinyali gerekmez. Duvar teması takla ve sırtüstü dönüşte ilk ayak teması, açık dönüşte el temasıdır. Doğruluk bir video karesidir (1 / kare hızı).",
+"Время измеряется между двумя отметками на видео; стартовый сигнал не нужен. Контакт со стенкой — это первый контакт стоп при повороте сальто и повороте на спине и касание руками при открытом повороте. Точность — один кадр видео (1 / частота кадров).",
+"Tijden worden tussen twee markeringen in de video gemeten; een startsignaal is niet nodig. Wandcontact is bij koprol- en rugslagkeerpunt het eerste voetcontact, bij het open keerpunt de aantik. De nauwkeurigheid is één videobeeld (1 / beeldsnelheid)."
+],
+[
+"Approach",
+"Yaklaşma",
+"Подплывание",
+"Aanzwemmen"
+],
+[
+"Rotation",
+"Dönüş",
+"Вращение",
+"Draai"
+],
+[
+"Wall contact and push-off",
+"Duvar teması ve itiş",
+"Контакт со стенкой и отталкивание",
+"Wandcontact en afzet"
+],
+[
+"Freestyle flip turn",
+"Serbest stil takla dönüş",
+"Поворот сальто вольным стилем",
+"Koprolkeerpunt vrije slag"
+],
+[
+"Backstroke turn",
+"Sırtüstü dönüş",
+"Поворот на спине",
+"Rugslagkeerpunt"
+],
+[
+"Breaststroke open turn",
+"Kurbağalama açık dönüş",
+"Открытый поворот брассом",
+"Open keerpunt schoolslag"
+],
+[
+"Butterfly open turn",
+"Kelebek açık dönüş",
+"Открытый поворот баттерфляем",
+"Open keerpunt vlinderslag"
+],
+[
+"10 m before the wall",
+"Duvardan 10 m önce",
+"10 м до стенки",
+"10 m voor de wand"
+],
+[
+"The first frame in which the top of your head reaches the 10 m mark before the wall. Optional, only if a marking is visible.",
+"Başının üst kısmının duvardan önceki 10 m işaretine ulaştığı ilk kare. İsteğe bağlı, yalnızca bir işaret görünüyorsa.",
+"Первый кадр, в котором макушка достигает отметки 10 м перед стенкой. Необязательно, только если отметка видна.",
+"Het eerste beeld waarin de bovenkant van je hoofd de 10-m-markering voor de wand bereikt. Optioneel, alleen als er een markering te zien is."
+],
+[
+"5 m before the wall",
+"Duvardan 5 m önce",
+"5 м до стенки",
+"5 m voor de wand"
+],
+[
+"The first frame in which the top of your head reaches the 5 m mark (backstroke flags) before the wall.",
+"Başının üst kısmının duvardan önceki 5 m işaretine (sırtüstü bayrakları) ulaştığı ilk kare.",
+"Первый кадр, в котором макушка достигает отметки 5 м (флажки для плавания на спине) перед стенкой.",
+"Het eerste beeld waarin de bovenkant van je hoofd de 5-m-markering (rugslagvlaggetjes) voor de wand bereikt."
+],
+[
+"Touch",
+"Duvara dokunuş",
+"Касание",
+"Aantikken"
+],
+[
+"The first frame in which your hands touch the wall (both hands simultaneously in breaststroke and butterfly).",
+"Ellerinin duvara değdiği ilk kare (kurbağalama ve kelebekte iki el aynı anda).",
+"Первый кадр, в котором руки касаются стенки (в брассе и баттерфляе обе руки одновременно).",
+"Het eerste beeld waarin je handen de wand raken (bij schoolslag en vlinderslag beide handen tegelijk)."
+],
+[
+"The last frame in which one of your hands still touches the wall. Optional.",
+"Ellerinden birinin duvara hâlâ temas ettiği son kare. İsteğe bağlı.",
+"Последний кадр, в котором одна из рук ещё касается стенки. Необязательно.",
+"Het laatste beeld waarin een van je handen de wand nog raakt. Optioneel."
+],
+[
+"Distance at start of rotation",
+"Dönüş başlangıcındaki mesafe",
+"Расстояние в начале вращения",
+"Afstand bij het begin van de draai"
+],
+[
+"Distance from the wall to the top of your head in the frame in which the rotation begins. Optional.",
+"Dönüşün başladığı karede duvardan başının üst kısmına kadar olan mesafe. İsteğe bağlı.",
+"Расстояние от стенки до макушки в кадре, где начинается вращение. Необязательно.",
+"Afstand van de wand tot de bovenkant van je hoofd in het beeld waarin de draai begint. Optioneel."
+],
+[
+"the top of your head",
+"başının üst kısmı",
+"макушку",
+"de bovenkant van je hoofd"
+],
+[
+"Measuring only works if the turning wall and the backstroke flag line are clearly visible in the frame where the rotation begins.",
+"Ölçüm yalnızca dönüşün başladığı karede dönüş duvarı ve sırtüstü bayraklarının hizası açıkça görünüyorsa mümkündür.",
+"Измерить можно, только если в кадре начала вращения чётко видны стенка поворота и линия флажков для плавания на спине.",
+"Meten lukt alleen als de keerwand en de lijn van de rugslagvlaggetjes duidelijk te zien zijn in het beeld waarin de draai begint."
+],
+[
+"Feet on the wall",
+"Ayaklar duvarda",
+"Стопы на стенке",
+"Voeten tegen de wand"
+],
+[
+"The first frame in which your feet touch the wall.",
+"Ayaklarının duvara değdiği ilk kare.",
+"Первый кадр, в котором стопы касаются стенки.",
+"Het eerste beeld waarin je voeten de wand raken."
+],
+[
+"5 m after the wall",
+"Duvardan 5 m sonra",
+"5 м после стенки",
+"5 m na de wand"
+],
+[
+"The first frame in which the top of your head reaches the 5 m mark (backstroke flags) after the turn.",
+"Dönüşten sonra başının üst kısmının 5 m işaretine (sırtüstü bayrakları) ulaştığı ilk kare.",
+"Первый кадр, в котором макушка после поворота достигает отметки 5 м (флажки для плавания на спине).",
+"Het eerste beeld waarin de bovenkant van je hoofd na het keerpunt de 5-m-markering (rugslagvlaggetjes) bereikt."
+],
+[
+"Measuring only works if two markings (wall, 5 m or 10 m) are clearly visible in the frame where you surface.",
+"Ölçüm yalnızca yüzeye çıktığın karede iki işaret (duvar, 5 m ya da 10 m) açıkça görünüyorsa mümkündür.",
+"Измерить можно, только если в кадре выхода на поверхность чётко видны две отметки (стенка, 5 м или 10 м).",
+"Meten lukt alleen als in het beeld waarin je bovenkomt twee markeringen (wand, 5 m of 10 m) duidelijk te zien zijn."
+],
+[
+"How many dolphin kicks did you do after the push-off before breaking out?",
+"İtişten sonra yüzeye çıkana kadar kaç yunus vuruşu yaptın?",
+"Сколько ударов дельфином ты сделал после отталкивания до выхода на поверхность?",
+"Hoeveel dolfijnslagen maakte je na de afzet tot het bovenkomen?"
+],
+[
+"10 m after the wall",
+"Duvardan 10 m sonra",
+"10 м после стенки",
+"10 m na de wand"
+],
+[
+"The first frame in which the top of your head reaches the 10 m mark after the wall. Optional, only if a marking is visible.",
+"Başının üst kısmının duvardan sonraki 10 m işaretine ulaştığı ilk kare. İsteğe bağlı, yalnızca bir işaret görünüyorsa.",
+"Первый кадр, в котором макушка достигает отметки 10 м после стенки. Необязательно, только если отметка видна.",
+"Het eerste beeld waarin de bovenkant van je hoofd de 10-m-markering na de wand bereikt. Optioneel, alleen als er een markering te zien is."
+],
+[
+"touch",
+"duvara dokunuş",
+"касание",
+"aantikken"
+],
+[
+"first foot contact",
+"ilk ayak teması",
+"первый контакт стоп",
+"eerste voetcontact"
+],
+[
+"The 5 m + 5 m turn time is the overall measure of the turn; it combines approach, rotation, push-off and underwater phase.",
+"5 m + 5 m dönüş süresi dönüşün genel ölçüsüdür; yaklaşma, dönüş, itiş ve su altı fazını birleştirir.",
+"Время поворота 5 м + 5 м — общая мера поворота; оно объединяет подплывание, вращение, отталкивание и подводную фазу.",
+"De keerpunttijd 5 m + 5 m is de totaalmaat van het keerpunt; ze combineert aanzwemmen, draai, afzet en onderwaterfase."
+],
+[
+"Holding your speed into the wall without slowing down or gliding before it loses less time in the turn.",
+"Duvara kadar hızını koruyan, duvardan önce yavaşlamayan ya da süzülmeyen, dönüşte daha az zaman kaybeder.",
+"Кто сохраняет скорость до стенки и не тормозит и не скользит перед ней, теряет в повороте меньше времени.",
+"Wie zijn snelheid tot aan de wand vasthoudt en niet afremt of glijdt, verliest minder tijd in het keerpunt."
+],
+[
+"A fast, compact rotation directly shortens the turn time; started too far from the wall the push-off lacks power, started too close the rotation gets cramped.",
+"Hızlı ve kompakt bir dönüş, dönüş süresini doğrudan kısaltır; duvardan çok uzakta başlanırsa itiş güçsüz kalır, çok yakında başlanırsa dönüş sıkışır.",
+"Быстрое компактное вращение напрямую сокращает время поворота; если начать слишком далеко от стенки, отталкивание будет слабым, слишком близко — вращение станет тесным.",
+"Een snelle, compacte draai verkort de keerpunttijd direct; te ver van de wand begonnen mist de afzet kracht, te dichtbij begonnen wordt de draai krap."
+],
+[
+"Time on the wall is the biggest lever of the turn: short, but with a full push-off.",
+"Duvarda geçen süre dönüşün en büyük kaldıracıdır: kısa ama tam bir itişle.",
+"Время на стенке — главный рычаг поворота: коротко, но с полным отталкиванием.",
+"De tijd aan de wand is de grootste hefboom van het keerpunt: kort, maar met een volledige afzet."
+],
+[
+"The swimmer is fastest after the push-off; a good underwater phase carries that speed beyond the 5 m mark.",
+"Yüzücü itişten sonra en hızlıdır; iyi bir su altı fazı bu hızı 5 m işaretinin ötesine taşır.",
+"После отталкивания пловец быстрее всего; хорошая подводная фаза переносит эту скорость за отметку 5 м.",
+"Na de afzet is de zwemmer het snelst; een goede onderwaterfase draagt die snelheid voorbij de 5-m-markering."
+],
+[
+"Read from the velocity meter data in the marked frame. Only with a velocity meter.",
+"İşaretlenen karede velocimetre verilerinden okunur. Yalnızca velocimetreyle.",
+"Считывается из данных велосиметра в отмеченном кадре. Только с велосиметром.",
+"Afgelezen uit de velocitymeter-gegevens in het gemarkeerde beeld. Alleen met velocitymeter."
+],
+[
+"Mean of the velocity meter velocity in this section. Only with a velocity meter.",
+"Bu bölümdeki velocimetre hızının ortalaması. Yalnızca velocimetreyle.",
+"Среднее значение скорости по велосиметру на этом отрезке. Только с велосиметром.",
+"Gemiddelde van de velocitymeter-snelheid in dit traject. Alleen met velocitymeter."
+],
+[
+"Approach velocity 10–5 m",
+"Yaklaşma hızı 10–5 m",
+"Скорость подплывания 10–5 м",
+"Aanzwemsnelheid 10–5 m"
+],
+[
+"Mean velocity between the 10 m and 5 m marks before the wall.",
+"Duvardan önceki 10 m ile 5 m işaretleri arasındaki ortalama hız.",
+"Средняя скорость между отметками 10 м и 5 м перед стенкой.",
+"Gemiddelde snelheid tussen de 10-m- en de 5-m-markering voor de wand."
+],
+[
+"5 m divided by the time between both marks.",
+"5 m bölü iki işaret arasındaki süre.",
+"5 м, делённые на время между отметками.",
+"5 m gedeeld door de tijd tussen beide markeringen."
+],
+[
+"Velocity 5 m before the wall",
+"Duvardan 5 m önce hız",
+"Скорость за 5 м до стенки",
+"Snelheid 5 m voor de wand"
+],
+[
+"Velocity when the head reaches the 5 m mark before the wall.",
+"Baş duvardan önceki 5 m işaretine ulaştığındaki hız.",
+"Скорость в момент, когда голова достигает отметки 5 м перед стенкой.",
+"Snelheid wanneer het hoofd de 5-m-markering voor de wand bereikt."
+],
+[
+"Approach time 5 m",
+"Yaklaşma süresi 5 m",
+"Время подплывания 5 м",
+"Aanzwemtijd 5 m"
+],
+[
+"Time from the 5 m mark before the wall to the touch.",
+"Duvardan önceki 5 m işaretinden duvara dokunuşa kadar geçen süre.",
+"Время от отметки 5 м перед стенкой до касания.",
+"Tijd van de 5-m-markering voor de wand tot het aantikken."
+],
+[
+"Time from the 5 m mark before the wall to the first foot contact.",
+"Duvardan önceki 5 m işaretinden ilk ayak temasına kadar geçen süre.",
+"Время от отметки 5 м перед стенкой до первого контакта стоп.",
+"Tijd van de 5-m-markering voor de wand tot het eerste voetcontact."
+],
+[
+"Distance of the top of the head from the wall when the flip begins.",
+"Takla başladığında başın üst kısmının duvara uzaklığı.",
+"Расстояние макушки от стенки в начале сальто.",
+"Afstand van de bovenkant van het hoofd tot de wand wanneer de koprol begint."
+],
+[
+"Rotation time",
+"Dönüş süresi",
+"Время вращения",
+"Draaitijd"
+],
+[
+"Time from the start of the flip to the first foot contact on the wall.",
+"Taklanın başlangıcından duvardaki ilk ayak temasına kadar geçen süre.",
+"Время от начала сальто до первого контакта стоп со стенкой.",
+"Tijd van het begin van de koprol tot het eerste voetcontact met de wand."
+],
+[
+"Hand contact time",
+"El temas süresi",
+"Время контакта рук",
+"Handcontacttijd"
+],
+[
+"Time from the touch until the last hand leaves the wall.",
+"Duvara dokunuştan son elin duvardan ayrılmasına kadar geçen süre.",
+"Время от касания до момента, когда последняя рука отрывается от стенки.",
+"Tijd van het aantikken tot de laatste hand de wand verlaat."
+],
+[
+"Rotation time at the wall",
+"Duvardaki dönüş süresi",
+"Время вращения у стенки",
+"Draaitijd aan de wand"
+],
+[
+"Time from the touch to the first foot contact on the wall.",
+"Duvara dokunuştan duvardaki ilk ayak temasına kadar geçen süre.",
+"Время от касания до первого контакта стоп со стенкой.",
+"Tijd van het aantikken tot het eerste voetcontact met de wand."
+],
+[
+"Foot contact time",
+"Ayak temas süresi",
+"Время контакта стоп",
+"Voetcontacttijd"
+],
+[
+"Time from the first foot contact to the push-off (last frame with foot contact).",
+"İlk ayak temasından itişe (ayak temasının olduğu son kare) kadar geçen süre.",
+"Время от первого контакта стоп до отталкивания (последний кадр с контактом стоп).",
+"Tijd van het eerste voetcontact tot de afzet (laatste beeld met voetcontact)."
+],
+[
+"Too short usually means an incomplete push-off, too long costs time. Best judged together with the time to 5 m after the wall when comparing variants.",
+"Çok kısa olması genellikle eksik bir itiş demektir, çok uzun olması zaman kaybettirir. Varyantları karşılaştırırken en iyisi duvardan sonraki 5 m süresiyle birlikte değerlendirmektir.",
+"Слишком коротко обычно означает неполное отталкивание, слишком долго стоит времени. При сравнении вариантов лучше оценивать вместе со временем до 5 м после стенки.",
+"Te kort betekent meestal een onvolledige afzet, te lang kost tijd. Bij het vergelijken van varianten het best samen met de tijd tot 5 m na de wand beoordelen."
+],
+[
+"Rotation and push-off time",
+"Dönüş ve itiş süresi",
+"Время вращения и отталкивания",
+"Draai- en afzettijd"
+],
+[
+"Time from the start of the flip to the push-off.",
+"Taklanın başlangıcından itişe kadar geçen süre.",
+"Время от начала сальто до отталкивания.",
+"Tijd van het begin van de koprol tot de afzet."
+],
+[
+"Rotation time plus foot contact time.",
+"Dönüş süresi artı ayak temas süresi.",
+"Время вращения плюс время контакта стоп.",
+"Draaitijd plus voetcontacttijd."
+],
+[
+"Wall time",
+"Duvar süresi",
+"Время у стенки",
+"Wandtijd"
+],
+[
+"Time from the touch to the push-off.",
+"Duvara dokunuştan itişe kadar geçen süre.",
+"Время от касания до отталкивания.",
+"Tijd van het aantikken tot de afzet."
+],
+[
+"Hand contact, rotation and foot contact together.",
+"El teması, dönüş ve ayak teması birlikte.",
+"Контакт рук, вращение и контакт стоп вместе.",
+"Handcontact, draai en voetcontact samen."
+],
+[
+"Push-off velocity",
+"İtiş hızı",
+"Скорость отталкивания",
+"Afzetsnelheid"
+],
+[
+"Velocity at the moment the feet leave the wall.",
+"Ayakların duvardan ayrıldığı andaki hız.",
+"Скорость в момент отрыва стоп от стенки.",
+"Snelheid op het moment dat de voeten de wand verlaten."
+],
+[
+"Shows how much speed the push-off produces; basis for a fast underwater phase.",
+"İtişin ne kadar hız ürettiğini gösterir; hızlı bir su altı fazının temelidir.",
+"Показывает, какую скорость создаёт отталкивание; основа быстрой подводной фазы.",
+"Laat zien hoeveel snelheid de afzet oplevert; basis voor een snelle onderwaterfase."
+],
+[
+"Time from the push-off to the start of the first dolphin kick.",
+"İtişten ilk yunus vuruşunun başlangıcına kadar geçen süre.",
+"Время от отталкивания до начала первого удара дельфином.",
+"Tijd van de afzet tot het begin van de eerste dolfijnslag."
+],
+[
+"Kicking too early increases drag, gliding too long wastes speed.",
+"Çok erken vurmak direnci artırır, çok uzun süzülmek hız kaybettirir.",
+"Слишком ранний удар увеличивает сопротивление, слишком долгое скольжение теряет скорость.",
+"Te vroeg slaan verhoogt de weerstand, te lang glijden verspilt snelheid."
+],
+[
+"Mean velocity from the push-off to the 1st dolphin kick.",
+"İtişten ilk yunus vuruşuna kadar ortalama hız.",
+"Средняя скорость от отталкивания до первого удара дельфином.",
+"Gemiddelde snelheid van de afzet tot de 1e dolfijnslag."
+],
+[
+"Distance from the wall to the centre of the head at the first dolphin kick.",
+"İlk yunus vuruşunda duvardan başın ortasına kadar olan mesafe.",
+"Расстояние от стенки до центра головы при первом ударе дельфином.",
+"Afstand van de wand tot het midden van het hoofd bij de eerste dolfijnslag."
+],
+[
+"Measured in the video; only meaningful with an underwater camera at head height.",
+"Videoda ölçülür; yalnızca baş yüksekliğindeki bir su altı kamerasıyla anlamlıdır.",
+"Измеряется на видео; имеет смысл только с подводной камерой на уровне головы.",
+"Gemeten in de video; alleen zinvol met een onderwatercamera op hoofdhoogte."
+],
+[
+"Push-off to pull-out",
+"İtişten su altı çekişine",
+"От отталкивания до подводного гребка",
+"Afzet tot onderwaterarmslag"
+],
+[
+"Time from the push-off to the start of the pull-out.",
+"İtişten su altı çekişinin başlangıcına kadar geçen süre.",
+"Время от отталкивания до начала подводного гребка.",
+"Tijd van de afzet tot het begin van de onderwaterarmslag."
+],
+[
+"Number of dolphin kicks after the push-off before breakout.",
+"İtişten sonra yüzeye çıkmadan önceki yunus vuruşu sayısı.",
+"Количество ударов дельфином после отталкивания до выхода на поверхность.",
+"Aantal dolfijnslagen na de afzet tot het bovenkomen."
+],
+[
+"Mean velocity from the push-off to breakout.",
+"İtişten yüzeye çıkışa kadar ortalama hız.",
+"Средняя скорость от отталкивания до выхода на поверхность.",
+"Gemiddelde snelheid van de afzet tot het bovenkomen."
+],
+[
+"Breakout time after push-off",
+"İtişten sonra yüzeye çıkış süresi",
+"Время выхода на поверхность после отталкивания",
+"Bovenkomtijd na de afzet"
+],
+[
+"Time from the push-off until the top of the head breaks the water surface.",
+"İtişten başın üst kısmının su yüzeyini delmesine kadar geçen süre.",
+"Время от отталкивания до момента, когда макушка пробивает поверхность воды.",
+"Tijd van de afzet tot de bovenkant van het hoofd door het wateroppervlak breekt."
+],
+[
+"Distance from the wall to where the top of the head breaks out.",
+"Duvardan başın üst kısmının yüzeye çıktığı yere kadar olan mesafe.",
+"Расстояние от стенки до места, где макушка выходит на поверхность.",
+"Afstand van de wand tot waar de bovenkant van het hoofd bovenkomt."
+],
+[
+"Underwater velocity from 5 m",
+"5 m'den itibaren su altı hızı",
+"Подводная скорость от 5 м",
+"Onderwatersnelheid vanaf 5 m"
+],
+[
+"Mean velocity from the 5 m mark to breakout (only if you break out beyond the 5 m mark).",
+"5 m işaretinden yüzeye çıkışa kadar ortalama hız (yalnızca 5 m işaretinin ötesinde yüzeye çıkıyorsan).",
+"Средняя скорость от отметки 5 м до выхода на поверхность (только если ты выходишь за отметкой 5 м).",
+"Gemiddelde snelheid van de 5-m-markering tot het bovenkomen (alleen als je voorbij de 5-m-markering bovenkomt)."
+],
+[
+"(Breakout distance − 5 m) divided by the time from the 5 m mark to breakout; both points measured at the head and at the surface, so without distortion from refraction.",
+"(Yüzeye çıkış mesafesi − 5 m) bölü 5 m işaretinden yüzeye çıkışa kadar geçen süre; iki nokta da başta ve yüzeyde ölçülür, bu yüzden kırılmadan kaynaklanan bozulma yoktur.",
+"(Дистанция выхода − 5 м), делённая на время от отметки 5 м до выхода; обе точки измеряются по голове у поверхности, поэтому без искажения преломлением.",
+"(Bovenkomafstand − 5 m) gedeeld door de tijd van de 5-m-markering tot het bovenkomen; beide punten aan het hoofd en aan het oppervlak gemeten, dus zonder vertekening door breking."
+],
+[
+"Time to 5 m after the wall",
+"Duvardan sonra 5 m'ye kadar süre",
+"Время до 5 м после стенки",
+"Tijd tot 5 m na de wand"
+],
+[
+"Time from the touch until the top of the head reaches the 5 m mark after the wall.",
+"Duvara dokunuştan başın üst kısmının duvardan sonraki 5 m işaretine ulaşmasına kadar geçen süre.",
+"Время от касания до момента, когда макушка достигает отметки 5 м после стенки.",
+"Tijd van het aantikken tot de bovenkant van het hoofd de 5-m-markering na de wand bereikt."
+],
+[
+"Time from the first foot contact until the top of the head reaches the 5 m mark after the wall.",
+"İlk ayak temasından başın üst kısmının duvardan sonraki 5 m işaretine ulaşmasına kadar geçen süre.",
+"Время от первого контакта стоп до момента, когда макушка достигает отметки 5 м после стенки.",
+"Tijd van het eerste voetcontact tot de bovenkant van het hoofd de 5-m-markering na de wand bereikt."
+],
+[
+"Push-off to 5 m",
+"İtişten 5 m'ye",
+"От отталкивания до 5 м",
+"Afzet tot 5 m"
+],
+[
+"Time from the push-off until the top of the head reaches the 5 m mark after the wall.",
+"İtişten başın üst kısmının duvardan sonraki 5 m işaretine ulaşmasına kadar geçen süre.",
+"Время от отталкивания до момента, когда макушка достигает отметки 5 м после стенки.",
+"Tijd van de afzet tot de bovenkant van het hoofd de 5-m-markering na de wand bereikt."
+],
+[
+"Turn time 5 m + 5 m",
+"Dönüş süresi 5 m + 5 m",
+"Время поворота 5 м + 5 м",
+"Keerpunttijd 5 m + 5 m"
+],
+[
+"Time from the 5 m mark before the wall to the 5 m mark after the wall (top of the head).",
+"Duvardan önceki 5 m işaretinden duvardan sonraki 5 m işaretine kadar geçen süre (başın üst kısmı).",
+"Время от отметки 5 м перед стенкой до отметки 5 м после стенки (по макушке).",
+"Tijd van de 5-m-markering voor de wand tot de 5-m-markering na de wand (bovenkant van het hoofd)."
+],
+[
+"Turn time 10 m + 10 m",
+"Dönüş süresi 10 m + 10 m",
+"Время поворота 10 м + 10 м",
+"Keerpunttijd 10 m + 10 m"
+],
+[
+"Time from the 10 m mark before the wall to the 10 m mark after the wall.",
+"Duvardan önceki 10 m işaretinden duvardan sonraki 10 m işaretine kadar geçen süre.",
+"Время от отметки 10 м перед стенкой до отметки 10 м после стенки.",
+"Tijd van de 10-m-markering voor de wand tot de 10-m-markering na de wand."
+],
+[
+"Includes approach and exit more strongly; shows whether a fast turn comes at the cost of speed afterwards.",
+"Yaklaşma ve çıkışı daha güçlü kapsar; hızlı bir dönüşün sonrasındaki hız pahasına olup olmadığını gösterir.",
+"Сильнее учитывает подплывание и выход; показывает, не достигается ли быстрый поворот ценой скорости после него.",
+"Neemt aanzwemmen en wegzwemmen sterker mee; laat zien of een snel keerpunt ten koste gaat van de snelheid erna."
+],
+[
+"Velocity 5–10 m after the wall",
+"Duvardan sonra 5–10 m hız",
+"Скорость 5–10 м после стенки",
+"Snelheid 5–10 m na de wand"
+],
+[
+"Mean velocity between the 5 m and 10 m marks after the wall.",
+"Duvardan sonraki 5 m ile 10 m işaretleri arasındaki ortalama hız.",
+"Средняя скорость между отметками 5 м и 10 м после стенки.",
+"Gemiddelde snelheid tussen de 5-m- en de 10-m-markering na de wand."
+],
+[
+"Shows how well the transition into swimming works.",
+"Yüzmeye geçişin ne kadar iyi olduğunu gösterir.",
+"Показывает, насколько хорошо удаётся переход к плаванию.",
+"Laat zien hoe goed de overgang naar het zwemmen lukt."
+],
+[
+"Only with a force plate in the wall.",
+"Yalnızca duvarda kuvvet platformuyla.",
+"Только с силовой платформой в стенке.",
+"Alleen met een krachtplaat in de wand."
+],
+[
+"2D video analysis with angle measurement (underwater camera perpendicular to the lane).",
+"Açı ölçümlü 2B video analizi (kulvara dik su altı kamerası).",
+"2D-видеоанализ с измерением углов (подводная камера перпендикулярно дорожке).",
+"2D-videoanalyse met hoekmeting (onderwatercamera loodrecht op de baan)."
+],
+[
+"Determines how much speed the push-off produces.",
+"İtişin ne kadar hız ürettiğini belirler.",
+"Определяет, какую скорость создаёт отталкивание.",
+"Bepaalt hoeveel snelheid de afzet oplevert."
+],
+[
+"Peak force and impulse of the push-off",
+"İtişin tepe kuvveti ve impulsu",
+"Пиковая сила и импульс отталкивания",
+"Piekkracht en impuls van de afzet"
+],
+[
+"Largest force of the feet on the wall and impulse over the contact time.",
+"Ayakların duvara uyguladığı en büyük kuvvet ve temas süresi boyunca impuls.",
+"Наибольшая сила стоп на стенку и импульс за время контакта.",
+"Grootste kracht van de voeten op de wand en impuls over de contacttijd."
+],
+[
+"Knee angle at foot plant",
+"Ayak koyuşta diz açısı",
+"Угол в колене при постановке стоп",
+"Kniehoek bij het plaatsen van de voeten"
+],
+[
+"Knee joint angle at the first foot contact.",
+"İlk ayak temasında diz eklemi açısı.",
+"Угол коленного сустава при первом контакте стоп.",
+"Hoek in het kniegewricht bij het eerste voetcontact."
+],
+[
+"Too flexed costs time and force development, too extended shortens the push-off path.",
+"Çok bükük olması zaman ve kuvvet gelişimine mal olur, çok düz olması itiş yolunu kısaltır.",
+"Слишком согнутое стоит времени и развития силы, слишком разогнутое укорачивает путь отталкивания.",
+"Te gebogen kost tijd en krachtontwikkeling, te gestrekt verkort de afzetweg."
+],
+[
+"Foot plant depth",
+"Ayak koyma derinliği",
+"Глубина постановки стоп",
+"Diepte van de voetplaatsing"
+],
+[
+"Depth of the feet below the water surface at wall contact.",
+"Duvar temasında ayakların su yüzeyinin altındaki derinliği.",
+"Глубина стоп под поверхностью воды при контакте со стенкой.",
+"Diepte van de voeten onder het wateroppervlak bij wandcontact."
+],
+[
+"Helps determine the depth and direction of your push-off.",
+"İtişinin derinliğini ve yönünü belirlemeye katkı sağlar.",
+"Влияет на глубину и направление отталкивания.",
+"Bepaalt mee op welke diepte en in welke richting je afzet."
+],
+[
+"Hip distance to the wall at foot plant",
+"Ayak koyuşta kalçanın duvara uzaklığı",
+"Расстояние таза до стенки при постановке стоп",
+"Heupafstand tot de wand bij het plaatsen van de voeten"
+],
+[
+"Horizontal distance of the hip from the wall at the first foot contact; a measure of how compact the rotation is.",
+"İlk ayak temasında kalçanın duvara yatay uzaklığı; dönüşün ne kadar kompakt olduğunun ölçüsü.",
+"Горизонтальное расстояние таза от стенки при первом контакте стоп; мера компактности вращения.",
+"Horizontale afstand van de heup tot de wand bij het eerste voetcontact; maat voor hoe compact de draai is."
+],
+[
+"Body position at push-off",
+"İtişte vücut pozisyonu",
+"Положение тела при отталкивании",
+"Lichaamshouding bij de afzet"
+],
+[
+"Rotation about the longitudinal axis at push-off (back, side or front), relevant for the flip turn.",
+"İtişte boyuna eksen etrafındaki dönme (sırt, yan ya da yüzüstü), takla dönüş için önemlidir.",
+"Поворот вокруг продольной оси при отталкивании (на спине, на боку или на груди), важно для поворота сальто.",
+"Draaiing om de lengteas bij de afzet (rug-, zij- of buikligging), relevant voor het koprolkeerpunt."
+],
+[
+"Affects how early and smoothly you rotate onto your front.",
+"Yüzüstü pozisyona ne kadar erken ve akıcı döndüğünü etkiler.",
+"Влияет на то, как рано и плавно ты поворачиваешься на грудь.",
+"Beïnvloedt hoe vroeg en soepel je naar buikligging draait."
+],
+[
+"Underwater camera from the front or the side.",
+"Önden ya da yandan su altı kamerası.",
+"Подводная камера спереди или сбоку.",
+"Onderwatercamera van voren of van opzij."
+],
+[
+"Push-off angle and depth",
+"İtiş açısı ve derinliği",
+"Угол и глубина отталкивания",
+"Afzethoek en -diepte"
+],
+[
+"Direction of the push-off relative to the horizontal and depth of the centre of mass at push-off.",
+"İtişin yataya göre yönü ve itişte ağırlık merkezinin derinliği.",
+"Направление отталкивания относительно горизонтали и глубина центра масс при отталкивании.",
+"Richting van de afzet ten opzichte van de horizontaal en diepte van het lichaamszwaartepunt bij de afzet."
+],
+[
+"A suitable depth reduces wave drag after the push-off.",
+"Uygun bir derinlik itişten sonra dalga direncini azaltır.",
+"Подходящая глубина снижает волновое сопротивление после отталкивания.",
+"Een passende diepte vermindert de golfweerstand na de afzet."
+],
+[
+"Maximum depth after the push-off",
+"İtişten sonra maksimum derinlik",
+"Максимальная глубина после отталкивания",
+"Maximale diepte na de afzet"
+],
+[
+"Deepest point of the head in the underwater phase.",
+"Su altı fazında başın en derin noktası.",
+"Самая глубокая точка головы в подводной фазе.",
+"Diepste punt van het hoofd in de onderwaterfase."
+],
+[
+"Too shallow increases wave drag, too deep lengthens the way to the surface.",
+"Çok sığ olması dalga direncini artırır, çok derin olması yüzeye giden yolu uzatır.",
+"Слишком мелко увеличивает волновое сопротивление, слишком глубоко удлиняет путь к поверхности.",
+"Te ondiep verhoogt de golfweerstand, te diep verlengt de weg naar het oppervlak."
+],
+[
+"Kick amplitude and Strouhal number",
+"Vuruş genliği ve Strouhal sayısı",
+"Амплитуда ударов и число Струхаля",
+"Beenslagamplitude en Strouhalgetal"
+],
+[
+"Vertical range of the kick and the efficiency index A × f / v.",
+"Vuruşun dikey genişliği ve verimlilik göstergesi A × f / v.",
+"Вертикальный размах удара и показатель эффективности A × f / v.",
+"Verticale reikwijdte van de beenslag en de efficiëntiemaat A × f / v."
+],
+[
+"Indices of dolphin kick efficiency.",
+"Yunus vuruşu verimliliğinin göstergeleri.",
+"Показатели эффективности удара дельфином.",
+"Maten voor de efficiëntie van de dolfijnslag."
+],
+[
+"Relevance for the turn time",
+"Dönüş süresi için önemi",
+"Значение для времени поворота",
+"Belang voor de keerpunttijd"
+],
+[
+"Relevance for the turn time:",
+"Dönüş süresi için önemi:",
+"Значение для времени поворота:",
+"Belang voor de keerpunttijd:"
+],
+[
+"Underwater camera",
+"Su altı kamerası",
+"Подводная камера",
+"Onderwatercamera"
+],
+[
+"Capturable with Sprintz",
+"Sprintz ile ölçülebilir",
+"Можно измерить в Sprintz",
+"Met Sprintz te meten"
+],
+[
+"Sprintz measures or calculates these parameters from your marks in the video. Times are measured between marks; positions are taken at the head. All possible parameters are shown here; which ones a project uses is set in the setup.",
+"Sprintz bu ölçütleri videodaki işaretlerinden ölçer ya da hesaplar. Süreler işaretler arasında ölçülür, konumlar başta belirlenir. Burada tüm olası ölçütler gösterilir; bir projenin hangilerini kullandığını kurulumda belirlersin.",
+"Sprintz измеряет или рассчитывает эти показатели по твоим отметкам на видео. Время измеряется между отметками, положения определяются по голове. Здесь показаны все возможные показатели; какие из них использует проект, задаётся в настройке.",
+"Sprintz meet of berekent deze kenmerken uit je markeringen in de video. Tijden worden tussen markeringen gemeten, posities aan het hoofd bepaald. Hier staan alle mogelijke kenmerken; welke een project gebruikt, leg je bij het instellen vast."
+],
+[
+"Sprintz measures or calculates these parameters from your marks in the video. All times count from the start signal; positions are taken at the head. All possible parameters are shown here; which ones a project uses is set in the setup.",
+"Sprintz bu ölçütleri videodaki işaretlerinden ölçer ya da hesaplar. Tüm süreler start sinyalinden itibaren sayılır, konumlar başta belirlenir. Burada tüm olası ölçütler gösterilir; bir projenin hangilerini kullandığını kurulumda belirlersin.",
+"Sprintz измеряет или рассчитывает эти показатели по твоим отметкам на видео. Всё время отсчитывается от стартового сигнала, положения определяются по голове. Здесь показаны все возможные показатели; какие из них использует проект, задаётся в настройке.",
+"Sprintz meet of berekent deze kenmerken uit je markeringen in de video. Alle tijden tellen vanaf het startsignaal, posities worden aan het hoofd bepaald. Hier staan alle mogelijke kenmerken; welke een project gebruikt, leg je bij het instellen vast."
+],
+[
+"Sprintz doesn't capture these parameters. They help to understand the technique fully and usually need additional measuring equipment.",
+"Sprintz bu ölçütleri ölçmez. Tekniği tam anlamaya yardımcı olurlar ve çoğunlukla ek ölçüm donanımı gerektirirler.",
+"Sprintz не измеряет эти показатели. Они помогают полностью понять технику и обычно требуют дополнительной измерительной техники.",
+"Sprintz legt deze kenmerken niet vast. Ze helpen de techniek volledig te begrijpen en vragen meestal extra meetapparatuur."
+],
+[
+"Turn parameters",
+"Dönüş ölçütleri",
+"Показатели поворота",
+"Keerpuntkenmerken"
+],
+[
+"Times are measured between marks in the video; positions are taken at the head.",
+"Süreler videodaki işaretler arasında ölçülür, konumlar başta belirlenir.",
+"Время измеряется между отметками на видео, положения определяются по голове.",
+"Tijden worden tussen markeringen in de video gemeten, posities aan het hoofd bepaald."
+],
+[
+"All times count from the start signal; positions are taken at the head.",
+"Tüm süreler start sinyalinden itibaren sayılır, konumlar başta belirlenir.",
+"Всё время отсчитывается от стартового сигнала, положения определяются по голове.",
+"Alle tijden tellen vanaf het startsignaal, posities worden aan het hoofd bepaald."
+],
+[
+"“Leaving” is always the last frame with contact; “reaching” and “contact” the first frame.",
+"„Ayrılış“ her zaman temasın olduğu son karedir, „ulaşma“ ve „temas“ ise ilk karedir.",
+"«Отрыв» — всегда последний кадр с контактом, «достижение» и «контакт» — первый кадр.",
+"„Loskomen“ is steeds het laatste beeld met contact, „bereiken“ en „contact“ het eerste beeld."
+],
+[
+"All times are measured between marks in the video; the main variable is the turn time from the 5 m mark before to the 5 m mark after the wall.",
+"Tüm süreler videodaki işaretler arasında ölçülür; ana değişken, duvardan önceki 5 m işaretinden duvardan sonraki 5 m işaretine kadar olan dönüş süresidir.",
+"Всё время измеряется между отметками на видео; главная величина — время поворота от отметки 5 м перед стенкой до отметки 5 м после стенки.",
+"Alle tijden worden tussen markeringen in de video gemeten; de hoofdgrootheid is de keerpunttijd van de 5-m-markering voor tot de 5-m-markering na de wand."
+],
+[
+"The frame in which your hands touch the wall.",
+"Ellerinin duvara değdiği kare.",
+"Кадр, в котором руки касаются стенки.",
+"Het beeld waarin je handen de wand raken."
+],
+[
+"The frame in which your feet touch the wall.",
+"Ayaklarının duvara değdiği kare.",
+"Кадр, в котором стопы касаются стенки.",
+"Het beeld waarin je voeten de wand raken."
+],
+[
+"The last frame in which your hands still touch the grips. Optional.",
+"Ellerinin tutamaklara hâlâ değdiği son kare. İsteğe bağlı.",
+"Последний кадр, в котором руки ещё касаются поручней. Необязательно.",
+"Het laatste beeld waarin je handen de handgrepen nog raken. Optioneel."
+],
+[
+"The last frame in which your hands still touch the block. Optional.",
+"Ellerinin bloğa hâlâ değdiği son kare. İsteğe bağlı.",
+"Последний кадр, в котором руки ещё касаются тумбочки. Необязательно.",
+"Het laatste beeld waarin je handen het startblok nog raken. Optioneel."
+],
+[
+"The frame in which the downbeat of your dolphin kick during the pull-out begins. Optional.",
+"Su altı çekişi sırasında yunus vuruşunun aşağı hareketinin başladığı kare. İsteğe bağlı.",
+"Кадр, в котором начинается движение вниз удара дельфином во время подводного гребка. Необязательно.",
+"Het beeld waarin de neerwaartse beweging van je dolfijnslag tijdens de onderwaterarmslag begint. Optioneel."
+],
+[
+"The frame in which the downbeat of your first underwater dolphin kick begins. Optional.",
+"İlk su altı yunus vuruşunun aşağı hareketinin başladığı kare. İsteğe bağlı.",
+"Кадр, в котором начинается движение вниз первого подводного удара дельфином. Необязательно.",
+"Het beeld waarin de neerwaartse beweging van je eerste dolfijnslag onder water begint. Optioneel."
+],
+[
+"The frame in which the downbeat of your first dolphin kick after the push-off begins. Optional.",
+"İtişten sonraki ilk yunus vuruşunun aşağı hareketinin başladığı kare. İsteğe bağlı.",
+"Кадр, в котором начинается движение вниз первого удара дельфином после отталкивания. Необязательно.",
+"Het beeld waarin de neerwaartse beweging van je eerste dolfijnslag na de afzet begint. Optioneel."
+],
+[
+"Start of the rotation",
+"Dönüşün başlangıcı",
+"Начало вращения",
+"Begin van de draai"
+],
+[
+"Start of the flip",
+"Taklanın başlangıcı",
+"Начало сальто",
+"Begin van de koprol"
+],
+[
+"The first frame in which you begin the flip after turning onto your front (head starts to go down).",
+"Yüzüstü döndükten sonra taklaya başladığın ilk kare (baş aşağı inmeye başlar).",
+"Первый кадр, в котором ты после поворота на грудь начинаешь сальто (голова начинает уходить вниз).",
+"Het eerste beeld waarin je na het draaien naar buikligging met de koprol begint (hoofd gaat naar beneden)."
+],
+[
+"The first frame in which your head starts to go down into the flip.",
+"Başının taklaya doğru aşağı inmeye başladığı ilk kare.",
+"Первый кадр, в котором голова начинает уходить вниз в сальто.",
+"Het eerste beeld waarin je hoofd naar beneden gaat voor de koprol."
+]
+]
