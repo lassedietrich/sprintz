@@ -1,0 +1,104 @@
+[
+[
+"Horizontal entry velocity",
+"Yatay suya giriş hızı",
+"Горизонтальная скорость входа в воду",
+"Horizontale inzwemsnelheid"
+],
+[
+"Forward velocity at the first water contact of the hands.",
+"Ellerin ilk su temasındaki ileri hız.",
+"Скорость вперёд в момент первого касания воды руками.",
+"Voorwaartse snelheid bij het eerste watercontact van de handen."
+],
+[
+"Read from the velocity meter data in the frame of first water contact. Horizontal component only, so not identical to the resultant entry velocity (EntryVelRes).",
+"İlk su teması karesinde velocimetre verilerinden okunur. Yalnızca yatay bileşen; bu yüzden bileşke suya giriş hızıyla (EntryVelRes) aynı değildir.",
+"Считывается из данных велосиметра в кадре первого касания воды. Только горизонтальная составляющая, поэтому не совпадает с результирующей скоростью входа (EntryVelRes).",
+"Afgelezen uit de velocitymeter-gegevens in het beeld van het eerste watercontact. Alleen de horizontale component, dus niet gelijk aan de resulterende inzwemsnelheid (EntryVelRes)."
+],
+[
+"The speed you carry from the air into the water. A high value gives good times at 5 m and 15 m.",
+"Havadan suya taşıdığın hız. Yüksek bir değer 5 m ve 15 m'de iyi süreler verir.",
+"Скорость, которую ты переносишь из воздуха в воду. Высокое значение даёт хорошее время на 5 м и 15 м.",
+"De snelheid die je uit de lucht meeneemt het water in. Een hoge waarde geeft goede tijden op 5 m en 15 m."
+],
+[
+"Glide velocity (velocity meter)",
+"Kayma hızı (velocimetre)",
+"Скорость скольжения (велосиметр)",
+"Glijsnelheid (velocitymeter)"
+],
+[
+"Mean velocity from the head entering to the 1st dolphin kick.",
+"Başın suya girişinden ilk yunus vuruşuna kadar ortalama hız.",
+"Средняя скорость от входа головы в воду до первого удара дельфином.",
+"Gemiddelde snelheid van het ingaan van het hoofd tot de 1e dolfijnslag."
+],
+[
+"Mean of the velocity meter velocity in this section; needs no measured distances.",
+"Bu bölümdeki velocimetre hızının ortalaması; ölçülmüş mesafe gerektirmez.",
+"Среднее значение скорости по велосиметру на этом отрезке; измеренные дистанции не нужны.",
+"Gemiddelde van de velocitymeter-snelheid in dit traject; er zijn geen gemeten afstanden nodig."
+],
+[
+"Mean underwater velocity (velocity meter)",
+"Su altında ortalama hız (velocimetre)",
+"Средняя скорость под водой (велосиметр)",
+"Gemiddelde snelheid onder water (velocitymeter)"
+],
+[
+"Mean velocity from the head entering to the head breaking out.",
+"Başın suya girişinden yüzeye çıkışına kadar ortalama hız.",
+"Средняя скорость от входа головы в воду до её выхода на поверхность.",
+"Gemiddelde snelheid van het ingaan tot het bovenkomen van het hoofd."
+],
+[
+"Sprintz measures or calculates these values from your marks in the video. During the analysis Sprintz only asks for the marks needed for the selected parameters.",
+"Sprintz bu değerleri videodaki işaretlerinden ölçer ya da hesaplar. Analiz sırasında yalnızca seçilen ölçütler için gereken işaretleri sorar.",
+"Sprintz измеряет или рассчитывает эти значения по твоим отметкам на видео. При анализе Sprintz запрашивает только отметки, нужные для выбранных показателей.",
+"Sprintz meet of berekent deze waarden uit je markeringen in de video. Bij de analyse vraagt Sprintz alleen de markeringen die voor de gekozen kenmerken nodig zijn."
+],
+[
+"Sprintz calculates these values when you add velocity meter data to an attempt. The required marks in the video are still added.",
+"Bir denemeye velocimetre verisi eklediğinde Sprintz bu değerleri hesaplar. Videoda gereken işaretler yine de eklenir.",
+"Sprintz рассчитывает эти значения, если ты добавишь к попытке данные велосиметра. Нужные отметки на видео всё равно добавляются.",
+"Sprintz berekent deze waarden als je velocitymeter-gegevens aan een poging toevoegt. De benodigde markeringen in de video worden toch toegevoegd."
+],
+[
+"Sprintz can't capture these parameters; they need additional measuring equipment. They are listed here for orientation.",
+"Sprintz bu ölçütleri ölçemez; ek ölçüm donanımı gerektirirler. Burada fikir vermesi için listelenmiştir.",
+"Sprintz не может измерить эти показатели; для них нужна дополнительная измерительная техника. Они приведены здесь для ориентира.",
+"Sprintz kan deze kenmerken niet vastleggen; ze vragen extra meetapparatuur. Ze staan hier ter oriëntatie."
+],
+[
+"Which parameters should be included?",
+"Hangi ölçütler dikkate alınsın?",
+"Какие показатели учитывать?",
+"Welke kenmerken moeten worden meegenomen?"
+],
+[
+"{0} of {1} selected",
+"{1} ölçütten {0} seçildi",
+"Выбрано {0} из {1}",
+"{0} van {1} gekozen"
+],
+[
+"Captured via video",
+"Video ile ölçülebilir",
+"Измеряется по видео",
+"Via video te meten"
+],
+[
+"Captured via velocity meter",
+"Velocimetre ile ölçülebilir",
+"Измеряется велосиметром",
+"Via velocitymeter te meten"
+],
+[
+"Not captured by Sprintz",
+"Sprintz ile ölçülemez",
+"Не измеряется в Sprintz",
+"Niet met Sprintz te meten"
+]
+]

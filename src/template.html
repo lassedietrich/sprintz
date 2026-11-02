@@ -431,6 +431,14 @@ h2 .minfo{width:26px;height:26px;font-size:.95rem}
 .mitabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .mih{margin:14px 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .mi{border-bottom:1px solid var(--line);padding:7px 0}.mi summary{cursor:pointer;line-height:1.35}.mi summary span{color:var(--muted);font-size:.82rem}.mi p{margin:6px 0 0;font-size:.9rem;line-height:1.45}.mi .mir{color:var(--muted)}
+.mscard{margin-top:14px;padding:0!important;overflow:hidden;animation:none!important}.mshead{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;border:0;background:transparent;color:var(--fg);font:inherit;text-align:left;padding:14px 16px;cursor:pointer}
+.mshead span{display:flex;flex-direction:column;gap:2px}.mshead small{color:var(--muted);font-size:.84rem}.mschev{font-style:normal;font-size:1.5rem;line-height:1;color:var(--muted);transition:transform .2s}.mshead[aria-expanded="true"] .mschev{transform:rotate(90deg)}
+.msbody{padding:0 16px 14px}.msbody .mitabs button{font-size:.8rem;padding:7px 8px}.msall{display:flex;gap:6px;margin:4px 0}.msall .testbtn{flex:none}
+.msgh{margin:12px 0 2px;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.msit{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding:6px 0;border-bottom:1px solid var(--line)}.msit label{flex:1;display:flex;align-items:baseline;gap:7px;cursor:pointer;min-width:0}.msit label.off{cursor:default;opacity:.75}
+.msit label small{color:var(--muted);font-size:.76rem}.msit input{flex:none;transform:translateY(2px)}
+.msi{flex:none;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted);font:700 .7rem/1 Georgia,serif;font-style:italic;padding:0;cursor:pointer;opacity:.7}.msi[aria-expanded="true"]{opacity:1;color:var(--accent);border-color:var(--accent)}
+.msx{flex-basis:100%;margin:2px 0 4px 24px;font-size:.84rem;line-height:1.45}.msx span{color:var(--muted)}
 .evdl{margin:6px 0 0}.evdl dt{font-weight:700;margin-top:8px}.evdl dd{margin:2px 0 0;line-height:1.45}.evdl i{color:var(--muted)}
 .wmeasb{width:100%;margin:2px 0 10px}.wmeash{margin:-2px 0 10px;padding:8px 10px;border-radius:10px;background:var(--soft);font-size:.92rem}
 .spbars{display:block;width:100%;height:56px;margin:10px 0 0}.spbarl{display:flex;margin-bottom:10px}.spbarl span{flex:1;text-align:center;font-size:.75rem;color:var(--muted);line-height:1.25}.spbarl b{display:block;color:var(--fg);font-size:.85rem}
@@ -3604,10 +3612,11 @@ function evSetup(){
     <div class="card" style="margin-top:14px"><div class="row"><div class="lbl"><b>${L("Versuche je Variante","Attempts per variant")}</b><small>${L("Am besten 5 oder mehr.","Ideally 5 or more.")}</small></div>
       <div class="num"><input id="evN" type="number" inputmode="numeric" min="1" max="20" step="1" value="${p.n||5}"${locked?" disabled":""}></div></div></div>
     ${p.tech==="start"&&p.start!=="back"?segH("evUw",L("Was machst du in der Unterwasserphase?","What do you do underwater?"),[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],p.uw||"fly"):""}
+    ${p.tech==="start"&&p.start?spMetSelHTML(p):""}
     ${evPersonsSel(p)}
     ${segH("evMode",L("Wie nimmst du die Versuche auf?","How do you record the attempts?"),[["upload",L("Aufnahmen hochladen","Upload recordings")],["cam",L("In der App filmen","Film in the app")]],p.mode)}
     <p class="hint" id="evModeHint"></p>`;
-  const hint=$("evModeHint");
+  const hint=$("evModeHint"); if(document.querySelector(".mscard")) spMetSelBind(p);
   hint.textContent = p.mode==="cam" ? L("Sprintz spielt den Startablauf ab und filmt jeden Versuch direkt. Im Browser sind meist nur 30 bis 60 Bilder pro Sekunde möglich, hochgeladene Zeitlupen sind genauer.","Sprintz plays the start sequence and films each attempt directly. Browsers usually only allow 30 to 60 frames per second; uploaded slow-motion videos are more precise.")
     : L("Empfohlen: Filme alle Läufe im Zeitlupenmodus, die berechneten Zeiten und Werte werden so genauer.","Recommended: film all runs in slow motion. This makes the calculated times and values more precise.");
   bot.innerHTML=`<button type="button" class="evbig" id="evMake" style="margin-top:22px">${locked?L("Weiter zum Ablauf","Continue to the sequence"):p.trials.length?L("Ablauf neu erstellen","Create new sequence"):L("Ablauf erstellen","Create sequence")}</button><p class="hint" id="evMsg"></p>`;
@@ -3819,6 +3828,7 @@ function evSteps(P){
   if(!breast) n("kicks","Delfinkicks unter Wasser","Underwater dolphin kicks","Wie viele Delfinkicks hast du bis zum Auftauchen gemacht?","How many dolphin kicks did you do before breaking out?","×",{opt:true});
   t("p15","15-m-Marke","15 m mark","Das erste Bild, in dem deine Kopfoberseite die 15-m-Marke erreicht.","The first frame in which the top of your head reaches the 15 m mark.",{pos:15});
   S1.push({id:"sum",k:"sum",t:()=>L("Deine Auswertung","Your analysis"),x:()=>""});
+  const need=evNeeded(P); if(need) return S1.filter(st=>need.has(st.id));
   return S1;
 }
 async function evAnalyze(t){
@@ -3861,7 +3871,8 @@ function evMetrics(){
   if(ok(o.block)&&ok(o.rt)) o.mt=o.block-o.rt;
   const rear=R("rear"); if(ok(rear) && o.block>0){ o.rft=rear/o.block*100; o.ffs=o.block-rear; }
   o.flight=d("off","entry"); o.jump=v.jump||null; if(o.flight>0 && o.jump) o.flightV=o.jump/o.flight;
-  const vm=SA.trialRef&&SA.trialRef.vm; if(vm && m.off!=null){ try{ const x=vmAt(vm,m.off); if(ok(x)) o.vxTO=x; }catch(e){} }
+  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ try{ if(m.off!=null){ const x=vmAt(vm,m.off); if(ok(x)) o.vxTO=x; } if(m.entry!=null){ const x=vmAt(vm,m.entry); if(ok(x)) o.vxEntry=x; }
+    const g=vmMean(vm,m.headIn,m.kick1); if(ok(g)) o.gvVm=g; const u=vmMean(vm,m.headIn,m.brk); if(ok(u)) o.uwVvm=u; }catch(e){} }
   o.entryT=R("headIn"); o.entryD=v.entryD||null;
   o.kick1=R("kick1"); o.kick1D=v.kick1D||null;
   o.gt=pos(d("headIn","kick1")); if(o.gt && o.kick1D!=null && o.entryD!=null){ o.gd=o.kick1D-o.entryD; o.gv=o.gd/o.gt; }
@@ -3883,7 +3894,7 @@ function evSumHTML(){
   // Kernwerte immer, weitere nur, wenn sie berechnet werden konnten
   const core=new Set(["rt","block","flight","jump","t5","t15"]); let cur="block";
   h+=`<table class="restbl">`+hd(PH.block)+row(L("Ergebnis","Result"),res);
-  SPMET(p).filter(x=>spApplies(x,p,!!t.vm)).forEach(x=>{ const v=o[x.k]; if(v==null && !core.has(x.k)) return;
+  const sel=evSel(p); SPMET(p).filter(x=>spApplies(x,p,!!t.vm) && (!sel || sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null && !core.has(x.k)) return;
     if(x.ph!==cur){ cur=x.ph; h+=hd(PH[x.ph]); } h+=row(x.l, x.u==="n" ? (v!=null?String(v):"–") : evFmt(v,x.u)); });
   h+=`</table>`;
   const od=evOrd(p), nextT=od.find(x=>evPos(p,x)>evPos(p,t) && x.vid && x.status!=="done") || od.find(x=>x!==t && x.vid && x.status!=="done");
@@ -4103,7 +4114,7 @@ $("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && FS.on){ e.preventDefault(); fsExit(); } });
 /* --- Ergebnisblatt der Technikevaluation: Baseline, Vergleich A/B, Verlauf, Boxplot, Pausen und Testtage --- */
 // Kennwerte: Schlüssel, Bezeichnung, Einheit/Format, bessere Richtung (low = kleiner ist besser, high = größer ist besser, null = neutral)
-const EVM=()=>{ const p=EV.cur||{}; return SPMET(p).filter(x=>spApplies(x,p)).map(x=>[x.k,x.l,x.u,x.dir]); };
+const EVM=()=>{ const p=EV.cur||{}, sel=evSel(p); return SPMET(p).filter(x=>spApplies(x,p) && (!sel || sel.has(x.k))).map(x=>[x.k,x.l,x.u,x.dir]); };
 const EV_TIMEK=["rt","hands","ffs","block","mt","flight","entryT","kick1","gt","uwT","pull","bkick","pullK","brkT","t5","t10","t15","s510","s1015"];
 // Kleinste bedeutsame Veränderung: halbe Leistungsschwankung olympischer Schwimmer zwischen Wettkämpfen (CV 0,8 % → 0,4 %; Pyne, Trewin & Hopkins 2004)
 const EV_SWC=0.004;
@@ -4348,7 +4359,7 @@ function SPMET(p){
      d:L("Mittlere waagerechte Geschwindigkeit in der Flugphase.","Mean horizontal velocity in the flight phase."),
      h:L("Flugweite geteilt durch Flugzeit. Näherung für die horizontale Abstoßgeschwindigkeit, aber nicht identisch, weil die Flugweite an den Händen und nicht am Körperschwerpunkt gemessen wird.","Flight distance divided by flight time. Approximates the horizontal take-off velocity but is not identical, because the flight distance is measured at the hands rather than the centre of mass."),
      r:L("Die horizontale Abstoßgeschwindigkeit ist die wichtigste Einzelgröße des Starts.","The horizontal take-off velocity is the single most important variable of the start.")},
-    {k:"vxTO",kz:"TakeOffHVel, Vx",ph:"flight",l:L("Horizontale Abstoßgeschwindigkeit","Horizontal take-off velocity"),u:"m/s",dir:"high",m:["off"],w:"vm",
+    {k:"vxTO",src:"vm",kz:"TakeOffHVel, Vx",ph:"flight",l:L("Horizontale Abstoßgeschwindigkeit","Horizontal take-off velocity"),u:"m/s",dir:"high",m:["off"],w:"vm",
      d:L("Vorwärtsgeschwindigkeit im Moment des Abstoßes vom Block.","Forward velocity at the moment of take-off from the block."),
      h:L("Aus den Velocitymeter-Daten im Bild des Abstoßes abgelesen (Messpunkt am Gürtel als Näherung für den Körperschwerpunkt). Nur mit Velocitymeter.","Read from the velocity meter data in the take-off frame (belt attachment as an approximation of the centre of mass). Only with a velocity meter."),
      r:L("Wichtigste Einzelgröße: Wer schneller nach vorn abhebt, ist früher bei 5 m und gibt das Tempo für den gesamten Start vor, auch für 15 m.","Most important single variable: taking off forwards faster gets you to 5 m earlier and sets the pace for the whole start, including 15 m.")},
@@ -4358,6 +4369,10 @@ function SPMET(p){
     {k:"entryD",kz:"EntryDistance",ph:"entry",l:L("Eintauchdistanz","Entry distance"),u:"m",dir:null,m:[],
      d:L("Abstand von der Beckenwand zur Stelle, an der die Kopfoberseite eintaucht.","Distance from the pool wall to where the top of the head enters."),h:ME,
      r:L("Zeigt, wo du ins Wasser gehst; Grundlage für Gleitdistanz und Unterwassergeschwindigkeit.","Shows where you enter the water; basis for glide distance and underwater velocity.")},
+    {k:"vxEntry",src:"vm",kz:"EntryHVel",ph:"entry",l:L("Horizontale Eintauchgeschwindigkeit","Horizontal entry velocity"),u:"m/s",dir:"high",m:["entry"],w:"vm",
+     d:L("Vorwärtsgeschwindigkeit beim ersten Wasserkontakt der Hände.","Forward velocity at the first water contact of the hands."),
+     h:L("Aus den Velocitymeter-Daten im Bild des ersten Wasserkontakts abgelesen. Nur der waagerechte Anteil, deshalb nicht identisch mit der resultierenden Eintauchgeschwindigkeit (EntryVelRes).","Read from the velocity meter data in the frame of first water contact. Horizontal component only, so not identical to the resultant entry velocity (EntryVelRes)."),
+     r:L("Das Tempo, das du aus der Luft mit ins Wasser nimmst. Ein hoher Wert gibt gute Zeiten bei 5 m und 15 m.","The speed you carry from the air into the water. A high value gives good times at 5 m and 15 m.")},
     {k:"kick1",kz:"1stKick",ph:"uw",l:L("Zeit bis zum 1. Delfinkick","Time to 1st dolphin kick"),u:"s",dir:null,m:["kick1"],
      d:L("Zeit vom Startsignal bis zum ersten Unterwasserbeinschlag (Beginn der Abwärtsbewegung).","Time from the start signal to the first underwater kick (start of the downbeat)."),r:RK1},
     {k:"kick1D",kz:"1stKickHDist",ph:"uw",l:L("Distanz beim 1. Delfinkick","Distance at 1st dolphin kick"),u:"m",dir:null,m:[],
@@ -4370,6 +4385,9 @@ function SPMET(p){
      h:L("Distanz beim 1. Delfinkick minus Eintauchdistanz.","Distance at the 1st dolphin kick minus entry distance."),r:RGL},
     {k:"gv",kz:"GV",ph:"uw",l:L("Gleitgeschwindigkeit","Glide velocity"),u:"m/s",dir:"high",m:[],
      d:L("Mittlere Geschwindigkeit beim Gleiten.","Mean velocity during the glide."),h:L("Gleitdistanz geteilt durch Gleitzeit.","Glide distance divided by glide time."),r:RGL},
+    {k:"gvVm",src:"vm",kz:"GV (VM)",ph:"uw",l:L("Gleitgeschwindigkeit (Velocitymeter)","Glide velocity (velocity meter)"),u:"m/s",dir:"high",m:["headIn","kick1"],w:"vm",
+     d:L("Mittlere Geschwindigkeit vom Eintauchen des Kopfes bis zum 1. Delfinkick.","Mean velocity from the head entering to the 1st dolphin kick."),
+     h:L("Mittelwert der Velocitymeter-Geschwindigkeit in diesem Abschnitt; braucht keine ausgemessenen Distanzen.","Mean of the velocity meter velocity in this section; needs no measured distances."),r:RGL},
     {k:"uwT",kz:"",ph:"uw",l:L("Unterwasserzeit","Underwater time"),u:"s",dir:null,m:["headIn","brk"],
      d:L("Zeit vom Eintauchen bis zum Auftauchen des Kopfes.","Time from the head entering to the head breaking out."),
      h:L("Auftauchzeit minus Eintauchzeit.","Breakout time minus entry time."),
@@ -4377,6 +4395,10 @@ function SPMET(p){
     {k:"uwV",kz:"UV",ph:"uw",l:L("Mittlere Geschwindigkeit unter Wasser","Mean underwater velocity"),u:"m/s",dir:"high",m:[],
      d:L("Durchschnittsgeschwindigkeit vom Eintauchen bis zum Auftauchen.","Mean velocity from entry to breakout."),
      h:L("(Auftauchdistanz − Eintauchdistanz) geteilt durch (Auftauchzeit − Eintauchzeit), jeweils am Kopf gemessen.","(Breakout distance − entry distance) divided by (breakout time − entry time), both measured at the head."),
+     r:L("Wer unter Wasser schneller bleibt, hat bei 15 m die bessere Zeit.","Staying faster underwater gives the better 15 m time.")},
+    {k:"uwVvm",src:"vm",kz:"UV (VM)",ph:"uw",l:L("Mittlere Geschwindigkeit unter Wasser (Velocitymeter)","Mean underwater velocity (velocity meter)"),u:"m/s",dir:"high",m:["headIn","brk"],w:"vm",
+     d:L("Mittlere Geschwindigkeit vom Eintauchen bis zum Auftauchen des Kopfes.","Mean velocity from the head entering to the head breaking out."),
+     h:L("Mittelwert der Velocitymeter-Geschwindigkeit in diesem Abschnitt; braucht keine ausgemessenen Distanzen.","Mean of the velocity meter velocity in this section; needs no measured distances."),
      r:L("Wer unter Wasser schneller bleibt, hat bei 15 m die bessere Zeit.","Staying faster underwater gives the better 15 m time.")},
     {k:"kicks",kz:"n",ph:"uw",l:L("Delfinkicks","Dolphin kicks"),u:"n",dir:null,m:[],w:"fly",
      d:L("Anzahl der Delfinkicks bis zum Auftauchen.","Number of dolphin kicks before breakout."),h:L("Von Hand gezählt.","Counted manually."),
@@ -4461,15 +4483,57 @@ function SPMORE(){
     {ph:"dry",l:L("Sprunghöhe und Abstoßgeschwindigkeit","Jump height and take-off velocity"),kz:"CMJ, SJ, cm; m/s",d:L("Sprunghöhe bzw. Abstoßgeschwindigkeit aus Sprüngen mit dem Körpergewicht (Countermovement Jump, Squat Jump).","Jump height or take-off velocity from body-weight jumps (countermovement jump, squat jump)."),r:L("Wer an Land höher und schneller abspringt, startet meist auch im Wasser schneller.","Those who jump higher and faster on land usually also start faster in the water."),e:L("Kraftmessplatte, Kontaktmatte oder Video (Flugzeitmethode).","Force plate, contact mat or video (flight-time method).")}];
 }
 // Kompatibel zu früher: Definition je Kennwert mit Markierungen aus den Schritttexten
-function evDefs(p){
-  p=p||EV.cur||{}; const S={}; evSteps(p).forEach(s=>S[s.id]=s);
-  return SPMET(p).filter(x=>spApplies(x,p)).map(x=>{ const mk=(x.m||[]).filter(i=>S[i]).map(i=>`„${S[i].t()}“`).join(L(" und "," and "));
+/* --- Kennwerte je Projekt auswählen: bestimmt, welche Markierungen die Auswertung abfragt und was Bericht und Ergebnisblatt zeigen --- */
+// benötigte Schritte (Markierungen und Eingaben) je Kennwert
+const SPNEED={rt:["move"],hands:["hands"],rft:["rear","off"],ffs:["rear","off"],block:["off"],mt:["move","off"],flight:["off","entry"],jump:["entry","jump"],flightV:["off","entry","jump"],
+  vxTO:["off"],vxEntry:["entry"],entryT:["headIn"],entryD:["headIn","entryD"],kick1:["kick1"],kick1D:["kick1","kick1D"],gt:["headIn","kick1"],gd:["headIn","entryD","kick1","kick1D"],gv:["headIn","entryD","kick1","kick1D"],
+  gvVm:["headIn","kick1"],uwT:["headIn","brk"],uwV:["headIn","entryD","brk","diveD"],uwVvm:["headIn","brk"],kicks:["kicks"],kickF:["kicks","kick1","brk"],kl:["kicks","kick1","kick1D","brk","diveD"],
+  pull:["pull"],bkick:["bkick"],pullK:["pull","bkick"],brkT:["brk"],dive:["brk","diveD"],t5:["p5"],t10:["p10"],t15:["p15"],s510:["p5","p10"],s1015:["p10","p15"],v510:["p5","p10"],v1015:["p10","p15"],v515:["p5","p15"]};
+// gewählte Kennwerte (null = alle, für ältere Projekte)
+const evSel=p=> p && p.tech==="start" && Array.isArray(p.metrics) ? new Set(p.metrics) : null;
+function evNeeded(p){ const sel=evSel(p); if(!sel) return null; const n=new Set(["sig","sum"]); sel.forEach(k=>(SPNEED[k]||[]).forEach(x=>n.add(x))); return n; }
+function spMetSelHTML(p){
+  const all=SPMET(p).filter(x=>spApplies(x,p)), sel=evSel(p)||new Set(all.map(x=>x.k)), PH=SPPH(), tab=EV.metTab||0, open=!!EV.metOpen;
+  const nSel=all.filter(x=>sel.has(x.k)).length;
+  const lists=[all.filter(x=>x.src!=="vm"), all.filter(x=>x.src==="vm"), SPMORE()];
+  const grp=(arr,f)=>{ const out=[]; arr.forEach(x=>{ let g=out.find(o=>o.ph===x.ph); if(!g){ g={ph:x.ph,a:[]}; out.push(g); } g.a.push(x); }); return out.map(g=>`<div class="msgh">${PH[g.ph]||""}</div>${g.a.map(f).join("")}`).join(""); };
+  const item=(x,i,on)=>`<div class="msit"><label><input type="checkbox" data-mk="${x.k}"${on?" checked":""}> <span>${x.l}</span> <small>${[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ")}</small></label><button type="button" class="msi" aria-expanded="false" aria-label="${L("Erklärung","Explanation")}">i</button>
+    <p class="msx" hidden>${x.d}${x.h?" "+x.h:""}<br><span>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")} ${x.r||"–"}</span></p></div>`;
+  const itemMore=x=>`<div class="msit"><label class="off"><input type="checkbox" disabled> <span>${x.l}</span> <small>${x.kz}</small></label><button type="button" class="msi" aria-expanded="false" aria-label="${L("Erklärung","Explanation")}">i</button>
+    <p class="msx" hidden>${x.d}<br><span>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")} ${x.r}</span><br><span>${L("Erfassung:","How it is captured:")} ${x.e}</span></p></div>`;
+  const hint=[L("Sprintz misst oder berechnet diese Werte aus deinen Markierungen im Video. Bei der Auswertung fragt Sprintz nur die Markierungen ab, die für die gewählten Kennwerte nötig sind.","Sprintz measures or calculates these values from your marks in the video. During the analysis Sprintz only asks for the marks needed for the selected parameters."),
+    L("Diese Werte berechnet Sprintz, wenn du zu einem Versuch Velocitymeter-Daten hinzufügst. Die nötigen Markierungen im Video kommen trotzdem dazu.","Sprintz calculates these values when you add velocity meter data to an attempt. The required marks in the video are still added."),
+    L("Diese Kennwerte kann Sprintz nicht erfassen; sie brauchen zusätzliche Messtechnik. Sie stehen hier zur Orientierung.","Sprintz can't capture these parameters; they need additional measuring equipment. They are listed here for orientation.")][tab];
+  return `<div class="card mscard"><button type="button" class="mshead" id="msToggle" aria-expanded="${open}"><span><b>${L("Welche Kennwerte sollen berücksichtigt werden?","Which parameters should be included?")}</b><small>${L(`${nSel} von ${all.length} ausgewählt`,`${nSel} of ${all.length} selected`)}</small></span><i class="mschev" aria-hidden="true">›</i></button>
+    <div class="msbody"${open?"":" hidden"}>
+      <div class="mitabs" role="tablist">${[L("Über Video erfassbar","Captured via video"),L("Über Velocitymeter erfassbar","Captured via velocity meter"),L("Nicht mit Sprintz erfassbar","Not captured by Sprintz")].map((t,i)=>`<button type="button" role="tab" data-mst="${i}" aria-selected="${i===tab}">${t}</button>`).join("")}</div>
+      <p class="hint">${hint}</p>
+      ${tab<2?`<div class="msall"><button type="button" class="testbtn ghost small" data-msall="1">${L("Alle","All")}</button><button type="button" class="testbtn ghost small" data-msall="0">${L("Keine","None")}</button></div>`:""}
+      <div class="mslist">${tab<2 ? grp(lists[tab],x=>item(x,0,sel.has(x.k))) : grp(lists[2],itemMore)}</div>
+    </div></div>`;
+}
+function spMetSelBind(p){
+  const box=document.querySelector(".mscard"); if(!box) return; const re=()=>{ const y=scrollY; box.outerHTML=spMetSelHTML(p); spMetSelBind(p); scrollTo(0,y); };
+  const all=()=>SPMET(p).filter(x=>spApplies(x,p)).map(x=>x.k), cur=()=>evSel(p)||new Set(all());
+  $("msToggle").onclick=()=>{ EV.metOpen=!EV.metOpen; re(); };
+  box.querySelectorAll("[data-mst]").forEach(b=>b.onclick=()=>{ EV.metTab=+b.dataset.mst; re(); });
+  box.querySelectorAll("[data-mk]").forEach(c=>c.onchange=()=>{ const s=cur(); if(c.checked) s.add(c.dataset.mk); else s.delete(c.dataset.mk); p.metrics=all().filter(k=>s.has(k)); evSave(); re(); });
+  box.querySelectorAll("[data-msall]").forEach(b=>b.onclick=()=>{ const s=cur(), tabKs=SPMET(p).filter(x=>spApplies(x,p) && (EV.metTab===1 ? x.src==="vm" : x.src!=="vm")).map(x=>x.k);
+    tabKs.forEach(k=> b.dataset.msall==="1" ? s.add(k) : s.delete(k)); p.metrics=all().filter(k=>s.has(k)); evSave(); re(); });
+  box.querySelectorAll(".msi").forEach(b=>b.onclick=()=>{ const x=b.parentNode.querySelector(".msx"); x.hidden=!x.hidden; b.setAttribute("aria-expanded",String(!x.hidden)); });
+}
+// Mittelwert der Velocitymeter-Geschwindigkeit zwischen zwei Videozeitpunkten
+function vmMean(vm,a,b){ if(a==null||b==null||!(b>a)) return null; const off=vm.off||0; let s=0,n=0; for(let i=0;i<vm.t.length;i++){ const tv=vm.t[i]+off; if(tv>=a && tv<=b && isFinite(vm.v[i])){ s+=vm.v[i]; n++; } } return n ? s/n : null; }
+
+function evDefs(p,all){
+  p=p||EV.cur||{}; const S={}, sel=all?null:evSel(p); evSteps(Object.assign({},p,{metrics:undefined})).forEach(s=>S[s.id]=s);
+  return SPMET(p).filter(x=>spApplies(x,p) && (!sel || sel.has(x.k))).map(x=>{ const mk=(x.m||[]).filter(i=>S[i]).map(i=>`„${S[i].t()}“`).join(L(" und "," and "));
     return {...x, def:[x.d, x.h||"", mk?L(`Markierung im Video: ${mk}.`,`Video mark: ${mk}.`):""].filter(Boolean).join(" ")}; });
 }
 // Info-Knopf: Kennwerte erklärt, getrennt nach „mit Sprintz erfasst“ und „weitere Kennwerte“
 function spInfoHTML(p){
   const PH=SPPH(), uL=u=>u&&u!=="n"?`, ${U(u)}`:"", grp=(arr,f)=>{ const out=[]; arr.forEach(x=>{ let g=out.find(o=>o.ph===x.ph); if(!g){ g={ph:x.ph,a:[]}; out.push(g); } g.a.push(x); }); return out.map(g=>`<h4 class="mih">${PH[g.ph]||""}</h4>${g.a.map(f).join("")}`).join(""); };
-  const A=evDefs(p), M=SPMORE();
+  const A=evDefs(p,true), M=SPMORE();
   return `<div class="mitabs" role="tablist"><button type="button" role="tab" data-mt="0" aria-selected="true">${L("Mit Sprintz erfasst","Captured with Sprintz")} (${A.length})</button><button type="button" role="tab" data-mt="1" aria-selected="false">${L("Weitere Kennwerte","Further parameters")} (${M.length})</button></div>
     <div class="mipane" data-mp="0"><p class="hint">${L("Diese Kennwerte misst oder berechnet Sprintz aus deinen Markierungen im Video. Alle Zeiten zählen ab dem Startsignal, Positionen werden am Kopf bestimmt.","Sprintz measures or calculates these parameters from your marks in the video. All times count from the start signal; positions are taken at the head.")}</p>
       ${grp(A,x=>`<details class="mi"><summary><b>${x.l}</b> <span>${[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ")}</span></summary><p>${x.def}</p><p class="mir"><b>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")}</b> ${x.r||"–"}</p>${x.dir?`<p class="mir">${x.dir==="low"?L("Kleiner ist besser.","Lower is better."):L("Größer ist besser.","Higher is better.")}</p>`:""}</details>`)}</div>
