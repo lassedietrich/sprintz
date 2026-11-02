@@ -370,5 +370,23 @@
 "Sunucusuz dene",
 "Тестировать без сервера",
 "Zonder server testen"
+],
+[
+"The audio couldn't start. Tap Start again. If that doesn't help, reload Sprintz.",
+"Ses başlatılamadı. Start’a tekrar dokun. İşe yaramazsa Sprintz’i yeniden yükle.",
+"Не удалось запустить звук. Нажми «Старт» ещё раз. Если не поможет, перезагрузи Sprintz.",
+"Het geluid kon niet starten. Tik nog een keer op Start. Helpt dat niet, laad Sprintz dan opnieuw."
+],
+[
+"The device paused the audio. Tap the screen to continue.",
+"Cihaz sesi durdurdu. Devam etmek için ekrana dokun.",
+"Устройство приостановило звук. Нажми на экран, чтобы продолжить.",
+"Het apparaat heeft het geluid gepauzeerd. Tik op het scherm om verder te gaan."
+],
+[
+"random",
+"rastgele",
+"случайно",
+"willekeurig"
 ]
 ]
