@@ -405,12 +405,23 @@ body.xh-on #xhair{display:block}
 .seg.big.g4{display:grid;grid-template-columns:repeat(4,1fr)}.seg.big.g4 button{padding:11px 2px;font-size:.95rem}
 #sSpkCard{margin-top:16px}
 #spAna .vbox{position:relative}#sMeas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;z-index:2}
-#sMeasTip{position:absolute;left:8px;top:8px;z-index:3;pointer-events:none;background:rgba(8,20,28,.72);color:#fff;border-radius:10px;padding:8px 10px;font-size:.82rem;line-height:1.35;max-width:calc(100% - 16px);backdrop-filter:blur(4px)}
+#sMeasTip{position:absolute;left:8px;top:8px;z-index:4;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;background:rgba(8,20,28,.72);color:#fff;border-radius:10px;padding:8px 10px;font-size:.82rem;line-height:1.35;max-width:calc(100% - 16px);backdrop-filter:blur(4px)}
 #sMeasTip ol{margin:4px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:3px}
 #sMeasTip li{display:flex;gap:6px;align-items:center;opacity:.6}#sMeasTip li.cur{opacity:1;font-weight:700}#sMeasTip li.ok{opacity:.45;text-decoration:line-through}
 #sMeasTip li i{font-style:normal;display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:50%;background:#FFD24A;color:#000;font-size:.72rem;font-weight:700}
 #sMeasTip li:nth-child(3) i{background:#3FD07A}
+#sMeasTip .mthd{display:flex;align-items:center;gap:6px}#sMeasTip .mthd span{opacity:.6;font-size:.9rem;letter-spacing:-1px}
+#sMeasTip .mpair{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 2px}#sMeasTip .mpair button{border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;border-radius:7px;padding:3px 7px;font:inherit;font-size:.78rem;cursor:pointer}
+#sMeasTip .mpair button[aria-pressed="true"]{background:#FFD24A;color:#000;border-color:#FFD24A;font-weight:700}
+#sMeasTip .mval{margin-top:6px;font-weight:700;color:#3FD07A}
+#sMeasCtl{position:absolute;right:8px;bottom:8px;z-index:4;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:calc(100% - 16px)}
+#sMeasCtl button{border:0;border-radius:9px;padding:7px 10px;font:inherit;font-size:.8rem;font-weight:600;background:rgba(8,20,28,.78);color:#fff;cursor:pointer;backdrop-filter:blur(4px)}
+#sMeasCtl button.ok{background:#3FD07A;color:#05210f}#sMeasCtl button:disabled{opacity:.4;cursor:default}
+.wcard .wdesct{display:none;border:0;background:transparent;color:var(--accent);font:inherit;font-size:.86rem;padding:0;margin:0 0 8px;cursor:pointer}
+.wcard.meascol .wdesc,.wcard.meascol .wreq{display:none}
+@media (max-width:600px){ #sMeasTip{font-size:.72rem;padding:5px 8px;max-width:64%} #sMeasTip li:not(.cur){display:none} #sMeasTip .mpair button{padding:2px 5px;font-size:.7rem} #sMeasCtl{right:6px;bottom:6px;gap:4px} #sMeasCtl button{padding:6px 9px} #sMeasCtl button span{display:none} }.wcard.meascol .wdesct{display:block}
 .wreq{font-size:.86rem;line-height:1.45;background:color-mix(in srgb,#E8B44A 18%,transparent);border-left:3px solid #E8B44A;border-radius:6px;padding:7px 10px;margin:4px 0 8px}
+.evdl{margin:6px 0 0}.evdl dt{font-weight:700;margin-top:8px}.evdl dd{margin:2px 0 0;line-height:1.45}.evdl i{color:var(--muted)}
 .wmeasb{width:100%;margin:2px 0 10px}.wmeash{margin:-2px 0 10px;padding:8px 10px;border-radius:10px;background:var(--soft);font-size:.92rem}
 .spbars{display:block;width:100%;height:56px;margin:10px 0 0}.spbarl{display:flex;margin-bottom:10px}.spbarl span{flex:1;text-align:center;font-size:.75rem;color:var(--muted);line-height:1.25}.spbarl b{display:block;color:var(--fg);font-size:.85rem}
 #tour.over{z-index:40}
@@ -562,6 +573,9 @@ p.everr{margin:6px 0 10px;line-height:1.4}
 .evsync .testbtn{margin:6px 0 0;flex:none}
 .evcloud{display:inline-flex;width:20px;height:20px;vertical-align:-4px;margin-right:7px;flex:none}
 .evcloud svg{width:100%;height:100%}
+.evtdel{order:9;margin-left:auto;border:0;background:transparent;color:var(--muted);font-size:1.2rem;line-height:1;padding:4px 8px;border-radius:8px;cursor:pointer;flex:none}.evtdel:hover{color:var(--danger)}.evtdel.sure{color:#fff;background:var(--danger);font-size:.8rem;font-weight:700}
+.evaddt{list-style:none;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:2px 0 6px}.evaddt .testbtn{flex:none}.evaddq{font-size:.9rem;color:var(--muted);width:100%}
+.evtl>.evaddt{grid-column:1/-1}
 .evstage{list-style:none;margin:8px 0 -4px -14px;padding:0 0 0 14px;display:flex;flex-direction:column;gap:2px}
 .evstage b{font:600 .9rem var(--display);letter-spacing:-.01em;text-transform:none;color:var(--muted)}
 .evstage span{font-size:.84rem;color:var(--muted);line-height:1.4}
@@ -641,6 +655,10 @@ body.fs-on{overflow:hidden}
 #fsKeys .fsal{flex-basis:100%;color:#E8D49A}
 #fsBar{display:flex;justify-content:center;padding:8px;background:#05090c}
 #fsBar .stepbar{margin:0;max-width:520px;width:100%}
+#fsBar{gap:10px;align-items:center}.fszoom{display:flex;gap:4px;flex:none}.fszoom button{border:0;border-radius:9px;min-width:40px;height:40px;padding:0 10px;background:#16242d;color:#fff;font:inherit;font-weight:600;cursor:pointer}
+#fsOv #sWave{flex:none;height:78px;margin:0;border:0;border-radius:0;background:#0b141a}
+#fsOv #sVid{transform-origin:0 0}#fsOv #sBox.pan{cursor:grabbing}
+#fsBox .evfsact{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}#fsBox .testbtn{color:#fff;background:rgba(255,255,255,.14);box-shadow:none}#fsBox .testbtn.ghost{background:transparent;border:1px solid rgba(255,255,255,.3)}
 @media (max-width:700px){ #fsBox{top:auto;bottom:70px;max-height:42vh} #fsVm{height:110px} }
 .evpers{margin:4px 0 12px}
 .evpers .evpadd{border-style:dashed;color:var(--accent)}
@@ -801,12 +819,12 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
 <section id="evPage" hidden><div id="evTop"></div><div id="evFinishSlot" hidden></div><div id="evBottom"></div></section>
 <div id="fsOv" hidden><div id="fsMain"><div id="fsGrid"></div><div id="fsVm" hidden><canvas id="fsVmC"></canvas></div></div>
   <div id="fsBox"><div class="fsboxhd"><button type="button" id="fsMin" aria-label="Hinweisbox ein- oder ausklappen">–</button><button type="button" id="fsClose">Vollbild beenden</button></div><div id="fsCardSlot"></div><div id="fsKeys"></div></div>
-  <div id="fsBar"></div></div>
+  <div id="fsBar"><span class="fszoom" id="fsZoom"><button type="button" id="fsZo" aria-label="Verkleinern">−</button><button type="button" id="fsZl" aria-label="Zoom zurücksetzen">100 %</button><button type="button" id="fsZi" aria-label="Vergrößern">+</button></span></div></div>
 <section id="spAna" hidden>
   <div id="evAnaHead" hidden></div>
   <h2>Auswertung</h2>
   <div class="vhead"><span id="sFps"></span><span id="sCur"></span><button type="button" class="testbtn small" id="sFull">⛶ Vollbild</button></div>
-  <div class="vbox" id="sBox"><video id="sVid" playsinline muted preload="auto"></video><canvas id="sMeas" hidden></canvas><div id="sMeasTip" hidden></div></div>
+  <div class="vbox" id="sBox"><video id="sVid" playsinline muted preload="auto"></video><canvas id="sMeas" hidden></canvas><div id="sMeasTip" hidden></div><div id="sMeasCtl" hidden></div></div>
   <canvas id="sWave" aria-label="Tonspur"></canvas>
   <div class="stepbar" id="sStepBar">
     <button type="button" data-sstep="-10">−10</button><button type="button" data-sstep="-1">−1</button>
@@ -2452,11 +2470,16 @@ $("wave").addEventListener("pointerdown",e=>{ dragging=true; $("wave").setPointe
 $("wave").addEventListener("pointermove",e=>{ if(dragging) seekFromWave(e); });
 $("wave").addEventListener("pointerup",()=>dragging=false);
 const fps=()=>parseFloat($("fps").value)||240;
-function vStep(k){ vid.pause(); const f=fps(), base=curT();
-  // ein Viertelbild Zuschlag, damit sicher das nächste Bild erscheint
-  vid.currentTime=Math.min(vid.duration||0, Math.max(0, base + k/f + (k>0?0.25:-0.25)/f)); }
+// Genau k Bilder weiter: Ziel ist die Mitte des Zielbilds (Bildbeginn + halbe Bilddauer), so landet man weder ein Bild zu weit noch zu kurz
+function frameStep(v, fT, f, k, st){ const c=v.currentTime; let tg;
+  if(st.t!=null && Math.abs(c-st.t)<1e-4) tg=st.t+k/f;
+  else if(fT!=null && Math.abs(fT-c)<1.5/f) tg=fT+(k+0.5)/f;
+  else tg=c+k/f;
+  tg=Math.min(v.duration||0, Math.max(0, tg)); st.t=tg; v.currentTime=tg; }
+const VST={t:null}, SST={t:null};
+function vStep(k){ vid.pause(); frameStep(vid, V.frameT, fps(), k, VST); }
 document.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>vStep(parseFloat(b.dataset.step)));
-$("vplay").onclick=()=>{ if(vid.paused){ vid.playbackRate=0.25; vid.play(); } else vid.pause(); };
+$("vplay").onclick=()=>{ if(vid.paused){ vid.muted=false; vid.playbackRate=0.25; vid.play(); } else vid.pause(); };
 vid.addEventListener("play",()=>{ $("vplay").textContent="❚❚"; const loop=()=>{ if(!vid.paused){ tickV(); requestAnimationFrame(loop);} }; loop(); });
 vid.addEventListener("pause",()=>{ $("vplay").textContent="▶"; tickV(); });
 vid.addEventListener("seeked",tickV); vid.addEventListener("timeupdate",tickV);
@@ -2864,7 +2887,7 @@ function spStepsSwim(){
     n("jump","Sprungweite","Start distance","Abstand von der Wand bis zur Eintauchstelle deiner Hände. Am genauesten misst du ihn direkt im Video.","Distance from the wall to where your hands entered. Measuring it directly in the video is the most accurate way.",u,
       {meas:{a:[0,()=>L("die Startwand","the start wall")], b:[5,()=>L("die Rückenfähnchen (5 m)","the backstroke flags (5 m)").replace(" m)"," "+u+")")], tg:()=>L("die Stelle, an der deine Hände eintauchen","the spot where your hands enter")}}); }
   if(D>0){
-    if(D>5) t("p5",`5-${u}-Marke`,`5 ${u} mark`,`Das Bild, in dem deine Hände unter den Rückenfähnchen hindurch die 5-${u}-Marke passieren.`,`The frame in which your hands pass the 5 ${u} mark under the backstroke flags.`,{pos:5});
+    if(D>5) t("p5",`5-${u}-Marke`,`5 ${u} mark`,`Das Bild, in dem dein Kopf die 5-${u}-Marke (Linie der Rückenfähnchen) passiert.`,`The frame in which your head passes the 5 ${u} mark (backstroke flag line).`,{pos:5});
     if(!cold){
       t("brk","Auftauchen","Breakout","Das Bild, in dem dein Kopf die Wasseroberfläche durchbricht.","The frame in which your head breaks the surface.",{opt:true});
       n("diveD","Tauchweite","Underwater distance","Abstand von der Wand bis zur Stelle, an der dein Kopf auftaucht.","Distance from the wall to where your head surfaced.",u,
@@ -2912,7 +2935,7 @@ function spStepsTrack(){
     const cnt=[[20,30],[50,60],[80,100]].filter(([a,b])=>b<=D && marks.includes(a) && marks.includes(b));
     marks.forEach(p=>{
       if(p===D) t("fin","Ziel","Finish","Das Bild, in dem dein Oberkörper die Ziellinie überquert.","The frame in which your torso crosses the finish line.",{pos:p,fin:true});
-      else t("p"+p,`${p}-m-Marke`,`${p} m mark`,`Das Bild, in dem dein Oberkörper die ${p}-m-Marke passiert.`,`The frame in which your torso passes the ${p} m mark.`,{pos:p});
+      else t("p"+p,`${p}-m-Marke`,`${p} m mark`,`Das Bild, in dem dein Kopf die ${p}-m-Marke passiert.`,`The frame in which your head passes the ${p} m mark.`,{pos:p});
       cnt.filter(([a,b])=>b===p).forEach(([a,b])=>S1.push({id:"s"+a, k:"num", unit:L("Schritte","steps"), step:0.5, opt:true, seg:{a,b},
         t:()=>L(`Schritte ${a}–${b} m`,`Steps ${a}–${b} m`), x:()=>L(`Zähl deine Schritte zwischen der ${a}- und der ${b}-m-Marke. Jeder Bodenkontakt zählt als ein Schritt. Halbe Schritte gibst du als ,5 ein.`,`Count your steps between the ${a} and ${b} m marks. Every ground contact counts as one step. Enter half steps as .5.`)}));
     });
@@ -2952,7 +2975,7 @@ const sFps=()=>SA.fps||30;
 const sCurT=()=> (SA.frameT!=null && Math.abs(SA.frameT-sVid.currentTime) < 1.5/sFps()) ? SA.frameT : sVid.currentTime;
 function sFrameLoop(){ if(!hasRVFC) return; sVid.requestVideoFrameCallback((n,md)=>{ SA.frameT=md.mediaTime; sFrameLoop(); }); }
 sFrameLoop();
-function sStep(k){ sVid.pause(); const f=sFps(); sVid.currentTime=Math.min(sVid.duration||0, Math.max(0, sCurT()+k/f+(k>0?0.25:-0.25)/f)); }
+function sStep(k){ sVid.pause(); frameStep(sVid, SA.frameT, sFps(), k, SST); }
 document.querySelectorAll("[data-sstep]").forEach(b=>b.onclick=()=>sStep(parseFloat(b.dataset.sstep)));
 // Tastatur in der Videoauswertung: ← → ein Bild, Umschalt + ← → zehn Bilder, Leertaste Abspielen, Enter markiert
 document.addEventListener("keydown",e=>{
@@ -2960,33 +2983,56 @@ document.addEventListener("keydown",e=>{
   if(e.metaKey||e.ctrlKey||e.altKey) return;
   const sa = SA.active && !$("spAna").hidden, vv = !sa && typeof tab!=="undefined" && tab==="video" && !$("vwork").hidden && !$("setup").hidden;
   if(!sa && !vv) return;
+  if(sa && !typing && SA.meas && SA.meas.pts.length>=2){
+    if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ e.preventDefault(); measMove((e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1)); return; }
+    if(e.key==="ArrowUp"||e.key==="ArrowDown"){ e.preventDefault(); SA.meas.dir = e.key==="ArrowUp"?-1:1; measDraw(); measCtl(); return; } }
+  if(sa && FS.on && !typing && (e.key==="+"||e.key==="="||e.key==="-"||e.key==="0")){ e.preventDefault(); if(e.key==="0") fsZoomReset(); else fsZoomAt(e.key==="-"?1/1.25:1.25); return; }
   if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(typing && tg.tagName!=="INPUT") return; if(typing) return; e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
   if(typing) return;
   if(e.key===" " && sa){ e.preventDefault(); $("sPlay").click(); return; }
   if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
 });
-$("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.playbackRate=0.25; sVid.play(); } else sVid.pause(); };
+$("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.muted=false; sVid.playbackRate=0.25; sVid.play(); } else sVid.pause(); };
 sVid.addEventListener("play",()=>{ $("sPlay").textContent="❚❚"; const loop=()=>{ if(!sVid.paused){ if(SA.playTo!=null && sVid.currentTime>=SA.playTo){ sVid.pause(); SA.playTo=null; } spTick(); requestAnimationFrame(loop);} }; loop(); });
 sVid.addEventListener("pause",()=>{ $("sPlay").textContent="▶"; spTick(); });
 sVid.addEventListener("seeked",spTick); sVid.addEventListener("loadedmetadata",()=>{ spDraw(); });
-function spTick(){ $("sCur").textContent=fmtS(sVid.currentTime); spDraw(); if(SA.trialRef&&SA.trialRef.vm) vmDraw(FS.on?$("fsVmC"):$("sVmC")); }
-function seekS(ev){ const c=$("sWave"), r=c.getBoundingClientRect(); if(sVid.duration){ sVid.pause(); sVid.currentTime=Math.min(1,Math.max(0,(ev.clientX-r.left)/r.width))*sVid.duration; } }
-let sDrag=false; $("sWave").addEventListener("pointerdown",e=>{ sDrag=true; $("sWave").setPointerCapture(e.pointerId); seekS(e); });
-$("sWave").addEventListener("pointermove",e=>{ if(sDrag) seekS(e); }); $("sWave").addEventListener("pointerup",()=>sDrag=false);
+function spTick(){ $("sCur").textContent=fmtS(sVid.currentTime); spMoved(); spDraw(); if(SA.trialRef&&SA.trialRef.vm) vmDraw(FS.on?$("fsVmC"):$("sVmC")); }
+function seekS(ev){ const c=$("sWave"), r=c.getBoundingClientRect(), R=WZ.lock||{a:0,b:sVid.duration||0}; if(sVid.duration){ sVid.pause(); const x=Math.min(1,Math.max(0,(ev.clientX-r.left)/r.width)); sVid.currentTime=Math.min(sVid.duration,Math.max(0,R.a+x*(R.b-R.a))); } }
+// Ziehen in der Nahansicht: Bereich bleibt stehen, damit man fein positionieren kann
+let sDrag=false, sDown=false; $("sWave").addEventListener("pointerdown",e=>{ const R=SA.wr; sDown=true; WZ.lock = R&&R.z ? {a:R.a,b:R.b,z:true} : null; sDrag=!WZ.lock; $("sWave").setPointerCapture(e.pointerId); seekS(e); });
+$("sWave").addEventListener("pointermove",e=>{ if(sDown) seekS(e); });
+const sUp=()=>{ if(!sDown) return; sDown=false; if(sDrag) spBig(); sDrag=false; WZ.lock=null; WZ.t=sVid.currentTime; spDraw(); };
+$("sWave").addEventListener("pointerup",sUp); $("sWave").addEventListener("pointercancel",sUp);
 function spSigLabels(){
   if(SA.marks.sig==null || !SA.events) return [];
   let dn=0; const out=[]; SA.events.forEach(e=>{ if(!e.snd) return; const t=SA.marks.sig+(e.t-SA.meta.hornT); if(t<0) return;
     if(e.go) out.push({t,k:"go"}); else if(SA.meta.sig.some(x=>x.t===e.t)) out.push({t,k:"dis",n:++dn,key:e.snd}); }); return out;
 }
+/* Tonspur: Solange sich der Abspielkopf bewegt (Abspielen, Ziehen in der ganzen Spur, große Sprünge), zeigt sie die ganze Aufnahme.
+   Steht er 2,5 s still, zoomt sie auf ±40 Bilder um ihn herum. Einzelne Bildschritte in diesem Bereich behalten die Nahansicht. */
+const WZ={big:0, t:null, lock:null, tm:0};
+function spBig(){ WZ.big=performance.now(); clearTimeout(WZ.tm); WZ.tm=setTimeout(()=>{ if(SA.active) spDraw(); },2600); }
+function spMoved(){ const c=sVid.currentTime, f=sFps();
+  if(!WZ.lock && (!sVid.paused || sDrag || (WZ.t!=null && Math.abs(c-WZ.t)>40/f))) spBig(); WZ.t=c; }
+function spRange(){ const D=sVid.duration||0, f=sFps(); if(WZ.lock) return WZ.lock;
+  if(D>0 && SA.pcm && sVid.paused && !sDrag && performance.now()-WZ.big>=2500){ const c=sCurT(), h=40/f; return {a:c-h, b:c+h, z:true}; }
+  return {a:0, b:D, z:false}; }
 function spDraw(){
   const c=$("sWave"), dpr=devicePixelRatio||1; c.width=Math.round(c.clientWidth*dpr); c.height=Math.round(c.clientHeight*dpr);
-  const g=c.getContext("2d"), W=c.width, H=c.height, D=sVid.duration||0; g.clearRect(0,0,W,H);
-  if(SA.pcm){ const step=SA.pcm.length/W; let mx=0; const w=new Float32Array(W); for(let i=0;i<W;i++){ let m=0; const a=Math.floor(i*step), b=Math.floor((i+1)*step); for(let j=a;j<b;j++){ const v=Math.abs(SA.pcm[j]); if(v>m) m=v; } w[i]=m; if(m>mx) mx=m; }
-    g.fillStyle=css("--muted"); for(let i=0;i<W;i++){ const h=Math.max(1,w[i]/(mx||1)*H*0.8); g.fillRect(i,(H-h)/2,1,h); } }
-  if(!D) return; const X=t=>t/D*W;
+  const g=c.getContext("2d"), W=c.width, H=c.height, D=sVid.duration||0; g.clearRect(0,0,W,H); if(!W||!H) return;
+  const R=spRange(), span=R.b-R.a, dark=!!c.closest("#fsOv"); SA.wr=R;
+  const src = R.z && SA.raw ? {x:SA.raw, r:SA.rawRate} : SA.pcm ? {x:SA.pcm, r:V.rate} : null;
+  if(src && span>0){ const w=new Float32Array(W); let mx=0;
+    for(let i=0;i<W;i++){ const a=Math.floor((R.a+i/W*span)*src.r), b=Math.max(a+1,Math.floor((R.a+(i+1)/W*span)*src.r)); let m=0;
+      for(let j=Math.max(0,a); j<b && j<src.x.length; j++){ const v=Math.abs(src.x[j]); if(v>m) m=v; } w[i]=m; if(m>mx) mx=m; }
+    g.fillStyle=dark?"rgba(207,224,232,.6)":css("--muted"); for(let i=0;i<W;i++){ const h=Math.max(1,w[i]/(mx||1)*H*0.8); g.fillRect(i,(H-h)/2,1,h); } }
+  if(!D || !(span>0)) return; const X=t=>(t-R.a)/span*W;
+  if(R.z){ const f=sFps(), k0=Math.ceil(R.a*f), k1=Math.floor(R.b*f); g.fillStyle=dark?"rgba(207,224,232,.4)":css("--line");
+    for(let k=k0;k<=k1;k++){ const hh=k%10===0?H*0.2:H*0.09; g.fillRect(X(k/f)-dpr/2,H-hh,dpr,hh); }
+    g.font=`600 ${10*dpr}px system-ui`; g.textBaseline="top"; g.fillStyle=dark?"#cfe0e8":css("--muted"); g.fillText(L("Nahansicht ±40 Bilder","Close-up ±40 frames"),5*dpr,4*dpr); }
   spSigLabels().forEach(l=>{ g.fillStyle = l.k==="go" ? css("--signal") : css("--danger"); g.globalAlpha=.5; g.fillRect(X(l.t)-dpr/2,0,dpr,H); g.globalAlpha=1; });
   Object.entries(SA.marks).forEach(([k,t])=>{ if(t==null) return; g.fillStyle = k==="sig" ? css("--signal") : css("--accent"); g.fillRect(X(t)-1.5*dpr,0,3*dpr,H); });
-  g.fillStyle=css("--fg"); g.fillRect(X(sVid.currentTime)-dpr/2,0,dpr,H);
+  g.fillStyle=dark?"#ffffff":css("--fg"); g.fillRect(X(R.z?sCurT():sVid.currentTime)-dpr/2,0,dpr,H);
 }
 // Zeiten relativ zum Startsignal (Schall Lautsprecher → Handy und Ton-Bild-Versatz berücksichtigt)
 function spRel(t){ if(t==null || SA.marks.sig==null) return null; const off=parseFloat((()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } })())||0;
@@ -3089,7 +3135,7 @@ function wizRender(){
       <button type="button" class="wskip" id="wSkip">${L("Nicht zu sehen – überspringen","Not visible – skip")}</button>`; }
   } else if(st.k==="num"){
     const ta=st.seg?mAt(st.seg.a):null, tb=st.seg?mAt(st.seg.b):null;
-    h+=`<p>${st.x()}</p>${st.meas&&st.meas.req?`<p class="wreq">${st.meas.req()}</p>`:""}${st.meas?`<button type="button" class="testbtn wmeasb" id="wMeas">${L("Im Video ausmessen","Measure in the video")}</button><p class="wmeash" id="wMeasH" hidden></p>`:""}
+    h+=`<p class="wdesc">${st.x()}</p>${st.meas&&st.meas.req?`<p class="wreq">${st.meas.req()}</p>`:""}${st.meas?`<button type="button" class="wdesct" id="wDescT">${L("Beschreibung einblenden","Show description")}</button><button type="button" class="testbtn wmeasb" id="wMeas">${L("Im Video ausmessen","Measure in the video")}</button><p class="wmeash" id="wMeasH" hidden></p>`:""}
       ${st.seg && ta!=null && tb!=null && tb>ta ? `<button type="button" class="testbtn wmeasb" id="wSeg">▶ ${L("Abschnitt in Zeitlupe abspielen","Play this section in slow motion")}</button>` : ""}
       <div class="wnum"><input id="wNum" type="number" inputmode="decimal" step="${st.step||(st.unit==="×"?1:0.1)}" min="0" value="${SA.vals[st.id]??""}" placeholder="0"><span>${st.unit}</span></div>
       <button type="button" class="wbig" id="wTake">${L("Übernehmen","Confirm")}</button><button type="button" class="wskip" id="wSkip">${L("Weiß ich nicht – überspringen","Don't know – skip")}</button>`;
@@ -3103,7 +3149,8 @@ function wizRender(){
   const sk=$("wSkip"); if(sk) sk.onclick=()=>{ measEnd(); if(st.k==="time") delete SA.marks[st.id]; else delete SA.vals[st.id]; wizGo(SA.i+1,1); };
   const tk=$("wTake"); if(tk){ const inp=$("wNum"); const take=()=>{ measEnd(); const x=parseFloat(String(inp.value).replace(",",".")); if(x>=0) SA.vals[st.id]=x; adv(); }; tk.onclick=take; inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); take(); } }; }
   const ms=$("wMeas"); if(ms) ms.onclick=()=>measStart(st);
-  const sg=$("wSeg"); if(sg) sg.onclick=()=>{ const ta=mAt(st.seg.a), tb=mAt(st.seg.b); sVid.pause(); sVid.currentTime=ta; SA.playTo=tb; setTimeout(()=>{ sVid.playbackRate=0.5; sVid.play(); },120); };
+  const dt=$("wDescT"); if(dt) dt.onclick=()=>{ c.classList.remove("meascol"); };
+  const sg=$("wSeg"); if(sg) sg.onclick=()=>{ const ta=mAt(st.seg.a), tb=mAt(st.seg.b); sVid.pause(); sVid.muted=false; sVid.currentTime=ta; SA.playTo=tb; setTimeout(()=>{ sVid.playbackRate=0.5; sVid.play(); },120); };
   if(st.k==="time" && SA.marks[st.id]!=null && !sVid.seeking){ try{ if(Math.abs(sVid.currentTime-SA.marks[st.id])>0.001 && st.sig) sVid.currentTime=SA.marks[st.id]; }catch(e){} }
   const sr=$("sRate"); if(sr) sr.querySelectorAll("button").forEach(b=>b.onclick=()=>{ SA.rate = SA.rate===+b.dataset.v ? null : +b.dataset.v; sr.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.v===SA.rate))); });
   const no=$("sNote"); if(no) no.oninput=()=>SA.note=no.value;
@@ -3111,6 +3158,7 @@ function wizRender(){
   const sq=$("sQuit"); if(sq) sq.onclick=()=>{ camClose(true); camOfferClips(); };
   const es=$("eSave"); if(es) es.onclick=evSaveTrial;
   const eb=$("eBack"); if(eb) eb.onclick=()=>{ evCloseAna(); evShow("plan"); };
+  const ek=$("eSkip"); if(ek) ek.onclick=()=>evNextTrial(false);
   // Hochgeladene Videos: Art des Startsignals und Trefferliste
   const ec=$("eCands"); if(ec) ec.querySelectorAll("button").forEach(b=>b.onclick=()=>{ const x=SA.cands[+b.dataset.i]; SA.marks.sig=x.t; SA.sigType=x.type||SA.sigType; SA.sigAuto="manual"; sVid.currentTime=x.t; spDraw(); wizRender(); });
   if(SA.mode==="eval") evAnaHead();
@@ -3129,40 +3177,98 @@ function wizGo(i,dir){
 $("wPrev").onclick=()=>wizGo(SA.i-1,-1); $("wNext").onclick=()=>wizGo(SA.i+1,1);
 { let x0=null; const c=$("wCard"); c.addEventListener("pointerdown",e=>{ if(e.target.closest("input,textarea,button")) return; x0=e.clientX; });
   c.addEventListener("pointerup",e=>{ if(x0==null) return; const dx=e.clientX-x0; x0=null; if(dx<-60) wizGo(SA.i+1,1); else if(dx>60) wizGo(SA.i-1,-1); }); }
-/* ---- Weiten im Video ausmessen: zwei bekannte Marken antippen, dann den Punkt ---- */
+/* ---- Weiten im Video ausmessen ----
+   1. und 2. Punkt: zwei bekannte Marken auf einer Linie (z. B. entlang der Beckenkante bzw. Leine).
+   Danach steht eine Senkrechte zu dieser Linie im Bild; sie wird mit ← → (Umschalt: 10 Pixel) oder durch Ziehen
+   auf das Ereignis geschoben, ↑ ↓ legen fest, ob sie nach oben oder unten zeigt. Die Weite ergibt sich aus der Lage
+   ihres Fußpunkts zwischen den beiden Marken (lineare Interpolation, Seitenansicht). */
+const MREF=()=>({0:L("die Beckenkante (Startwand)","the pool edge (start wall)"),5:L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)"),10:L("die 10-m-Marke","the 10 m mark"),15:L("die 15-m-Marke","the 15 m mark")});
+function measRefs(M){ const g=M.st.meas; if(g.pairs){ const pr=g.pairs[M.pair||0], R=MREF(); return [[pr[0],R[pr[0]]],[pr[1],R[pr[1]]]]; } return [[g.a[0],g.a[1]()],[g.b[0],g.b[1]()]]; }
+const measZ=()=> FS.on && FS.z ? FS.z : {s:1,x:0,y:0};
+// Bildschirmpunkt → Lage im (ungezoomten) Video, 0…1
+function measN(e){ const r=$("sMeas").getBoundingClientRect(), z=measZ(); return [((e.clientX-r.left)-z.x)/z.s/r.width, ((e.clientY-r.top)-z.y)/z.s/r.height]; }
+function measGeo(M){ const r=$("sMeas").getBoundingClientRect(), W=r.width, H=r.height, [A,B]=M.pts.map(p=>[p[0]*W,p[1]*H]);
+  const ab=[B[0]-A[0],B[1]-A[1]], len=Math.hypot(ab[0],ab[1]); return {A,B,ab,len,W,H}; }
+function measDist(M){ const [ra,rb]=measRefs(M); return ra[0]+M.foot*(rb[0]-ra[0]); }
 function measStart(st){
-  sVid.pause(); SA.meas={st, pts:[]}; const cv=$("sMeas"); cv.hidden=false;
+  sVid.pause(); SA.measPair=SA.measPair||{};
+  SA.meas={st, pts:[], pair:SA.measPair[st.id]||0, foot:null, dir:-1};
+  $("sMeas").hidden=false;
+  // Beschreibung einklappen, im Vollbild die Hinweisbox
+  $("wCard").classList.add("meascol");
+  if(FS.on){ const b=$("fsBox"); SA.measFsMin=!b.classList.contains("min"); b.classList.add("min"); $("fsMin").textContent="+"; }
   // zum passenden Bild springen (erster Wasserkontakt bzw. Auftauchen), sofern markiert
   const at=st.meas.at && SA.marks[st.meas.at]; if(at!=null){ try{ sVid.currentTime=at; }catch(e){} }
-  measDraw(); measHint();
-  $("spAna").querySelector(".vbox").scrollIntoView({block:"nearest", behavior:"smooth"});
+  measDraw(); measHint(); measCtl();
+  if(!FS.on) $("spAna").querySelector(".vbox").scrollIntoView({block:"nearest", behavior:"smooth"});
 }
-function measEnd(){ SA.meas=null; const cv=$("sMeas"); if(cv){ cv.hidden=true; } const h=$("wMeasH"); if(h) h.hidden=true; const tp=$("sMeasTip"); if(tp) tp.hidden=true; }
-function measHint(){ const M=SA.meas, h=$("wMeasH"); if(!M||!h) return; const g=M.st.meas, k=M.pts.length;
-  h.hidden=false; h.innerHTML = k===0 ? L(`Stell das Video auf ein Bild, in dem beide Marken zu sehen sind. Tippe dann im Video auf ${g.a[1]()}.`,`Pause on a frame in which both marks are visible. Then tap ${g.a[1]()} in the video.`)
-    : k===1 ? L(`Tippe jetzt auf ${g.b[1]()}.`,`Now tap ${g.b[1]()}.`) : L(`Tippe jetzt auf ${g.tg()}.`,`Now tap ${g.tg()}.`);
-  // Anleitung direkt auf dem Video: alle drei Punkte, der aktuelle hervorgehoben
-  const tp=$("sMeasTip"); if(tp){ tp.hidden=false; const lst=[g.a[1](), g.b[1](), g.tg()];
-    tp.innerHTML=`<b>${L("Klicke nacheinander:","Click in order:")}</b><ol>${lst.map((x,i)=>`<li class="${i<k?"ok":i===k?"cur":""}"><i>${i+1}</i>${x}</li>`).join("")}</ol>`; } }
+function measEnd(){ const was=SA.meas; SA.meas=null; const cv=$("sMeas"); if(cv){ cv.hidden=true; } const h=$("wMeasH"); if(h) h.hidden=true; const tp=$("sMeasTip"); if(tp) tp.hidden=true; const ct=$("sMeasCtl"); if(ct) ct.hidden=true;
+  const c=$("wCard"); if(c) c.classList.remove("meascol");
+  if(was && FS.on && SA.measFsMin){ $("fsBox").classList.remove("min"); $("fsMin").textContent="–"; } SA.measFsMin=false; if(was && FS.on) fsHint(); }
+function measVal(){ const M=SA.meas; if(!M || M.foot==null) return null; const d=measDist(M), inp=$("wNum"); if(inp) inp.value=Math.max(0,Math.round(d*100)/100); return d; }
+function measHint(){ const M=SA.meas, h=$("wMeasH"); if(!M) return; const g=M.st.meas, k=M.pts.length, [ra,rb]=measRefs(M), d=measVal();
+  if(h){ h.hidden=false; h.innerHTML = k===0 ? L(`Stell das Video auf ein Bild, in dem beide Marken zu sehen sind. Tippe dann im Video auf ${ra[1]}.`,`Pause on a frame in which both marks are visible. Then tap ${ra[1]} in the video.`)
+    : k===1 ? L(`Tippe jetzt auf ${rb[1]}.`,`Now tap ${rb[1]}.`)
+    : L(`Schieb die Senkrechte auf ${g.tg()}: mit ← → (Umschalt: schneller), durch Ziehen oder Antippen.`,`Move the perpendicular onto ${g.tg()}: with ← → (Shift: faster), by dragging or by tapping.`)+(d!=null?" "+L(`Gemessen: <b>${n2(Math.max(0,d),spUnitD())}</b>. Übernehmen mit Enter.`,`Measured: <b>${n2(Math.max(0,d),spUnitD())}</b>. Confirm with Enter.`):""); }
+  // Anleitung direkt auf dem Video (verschiebbar): Bezugsmarken wählen, drei Schritte, der aktuelle hervorgehoben
+  const tp=$("sMeasTip"); if(!tp) return; tp.hidden=false;
+  const lst=[ra[1], rb[1], L(`Senkrechte auf ${g.tg()} schieben`,`Move the perpendicular onto ${g.tg()}`)];
+  tp.innerHTML=`<div class="mthd"><span aria-hidden="true">⠿</span><b>${L("Ausmessen","Measuring")}</b></div>`
+    +(g.pairs?`<div class="mpair" role="group" aria-label="${L("Bezugsmarken","Reference marks")}">${g.pairs.map((pr,i)=>`<button type="button" data-pair="${i}" aria-pressed="${(M.pair||0)===i}">${pr[0]} + ${pr[1]} ${U("m")}</button>`).join("")}</div>`:"")
+    +`<ol>${lst.map((x,i)=>`<li class="${i<k?"ok":i===k||(i===2&&k>=2)?"cur":""}"><i>${i+1}</i>${x}</li>`).join("")}</ol>`
+    +(d!=null?`<div class="mval">${n2(Math.max(0,d),spUnitD())}</div>`:"");
+  if(SA.tipPos){ tp.style.left=SA.tipPos[0]+"px"; tp.style.top=SA.tipPos[1]+"px"; measTipClamp(); }
+  tp.querySelectorAll("[data-pair]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); M.pair=+b.dataset.pair; SA.measPair[M.st.id]=M.pair; M.pts=[]; M.foot=null; const inp=$("wNum"); measDraw(); measHint(); measCtl(); });
+  if(FS.on) fsHint();
+}
+// Schaltflächen unten rechts: Punkt entfernen, alle entfernen, Richtung, übernehmen
+function measCtl(){ const M=SA.meas, c=$("sMeasCtl"); if(!c) return; if(!M){ c.hidden=true; return; } c.hidden=false; const k=M.pts.length;
+  c.innerHTML=`${k>=2?`<button type="button" data-mc="dir" title="${L("Richtung der Senkrechten","Direction of the perpendicular")}">${M.dir<0?`↑<span> ${L("Senkrechte nach oben","Perpendicular up")}</span>`:`↓<span> ${L("Senkrechte nach unten","Perpendicular down")}</span>`}</button>`:""}
+    <button type="button" data-mc="undo" title="${L("Letzten Punkt entfernen","Remove last point")}"${k?"":" disabled"}>↶<span> ${L("Letzten Punkt entfernen","Remove last point")}</span></button>
+    <button type="button" data-mc="clear" title="${L("Alle Punkte entfernen","Remove all points")}"${k?"":" disabled"}>×<span> ${L("Alle Punkte entfernen","Remove all points")}</span></button>
+    ${M.foot!=null?`<button type="button" class="ok" data-mc="ok">✓ ${L("Übernehmen","Confirm")}</button>`:""}`;
+  c.querySelectorAll("[data-mc]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const a=b.dataset.mc;
+    if(a==="dir"){ M.dir=-M.dir; } else if(a==="undo"){ M.pts.pop(); M.foot=null; } else if(a==="clear"){ M.pts=[]; M.foot=null; } else if(a==="ok"){ const tk=$("wTake"); if(tk) tk.click(); return; }
+    measDraw(); measHint(); measCtl(); }); }
+function measMove(px){ const M=SA.meas; if(!M || M.pts.length<2) return; const G=measGeo(M); if(G.len<1) return;
+  const z=measZ(), sx = Math.abs(G.ab[0])>=Math.abs(G.ab[1]) ? Math.sign(G.ab[0])||1 : Math.sign(G.ab[1])||1;
+  if(M.foot==null) M.foot=0.5; M.foot+=sx*px/z.s/G.len; measDraw(); measHint(); measCtl(); }
 function measDraw(){ const cv=$("sMeas"), r=cv.getBoundingClientRect(), dpr=devicePixelRatio||1; cv.width=Math.round(r.width*dpr); cv.height=Math.round(r.height*dpr);
-  const g=cv.getContext("2d"); g.clearRect(0,0,cv.width,cv.height); const M=SA.meas; if(!M) return;
-  const P=M.pts.map(p=>[p[0]*cv.width,p[1]*cv.height]);
-  if(P.length>=2){ g.strokeStyle="rgba(255,210,74,.9)"; g.lineWidth=2*dpr; g.setLineDash([6*dpr,4*dpr]); g.beginPath(); g.moveTo(P[0][0],P[0][1]); g.lineTo(P[1][0],P[1][1]); g.stroke(); g.setLineDash([]); }
-  P.forEach((p,i)=>{ g.fillStyle = i<2 ? "#FFD24A" : "#3FD07A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(p[0],p[1],6*dpr,0,7); g.fill(); g.stroke();
+  const g=cv.getContext("2d"); g.clearRect(0,0,cv.width,cv.height); const M=SA.meas; if(!M) return; const z=measZ();
+  const P=p=>[(p[0]*r.width*z.s+z.x)*dpr, (p[1]*r.height*z.s+z.y)*dpr], diag=Math.hypot(cv.width,cv.height)*2;
+  const pts=M.pts.map(P);
+  if(pts.length>=2){ const [A,B]=pts, ab=[B[0]-A[0],B[1]-A[1]], len=Math.hypot(ab[0],ab[1])||1, u=[ab[0]/len,ab[1]/len];
+    // Bezugslinie, verlängert
+    g.strokeStyle="rgba(255,210,74,.35)"; g.lineWidth=1.5*dpr; g.setLineDash([4*dpr,5*dpr]); g.beginPath(); g.moveTo(A[0]-u[0]*diag,A[1]-u[1]*diag); g.lineTo(B[0]+u[0]*diag,B[1]+u[1]*diag); g.stroke();
+    g.strokeStyle="rgba(255,210,74,.95)"; g.lineWidth=2*dpr; g.setLineDash([6*dpr,4*dpr]); g.beginPath(); g.moveTo(A[0],A[1]); g.lineTo(B[0],B[1]); g.stroke(); g.setLineDash([]);
+    if(M.foot!=null){ const F=[A[0]+M.foot*ab[0], A[1]+M.foot*ab[1]]; let n=[-u[1],u[0]]; if(n[1]>0 || (n[1]===0 && n[0]>0)) n=[-n[0],-n[1]]; if(M.dir>0) n=[-n[0],-n[1]];
+      g.strokeStyle="#000"; g.lineWidth=4*dpr; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
+      g.strokeStyle="#3FD07A"; g.lineWidth=2*dpr; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
+      g.fillStyle="#3FD07A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(F[0],F[1],5*dpr,0,7); g.fill(); g.stroke();
+      const lab=n2(Math.max(0,measDist(M)),spUnitD()); g.font=`700 ${13*dpr}px system-ui`; const tw=g.measureText(lab).width, lx=Math.min(cv.width-tw-8*dpr, Math.max(4*dpr, F[0]+n[0]*40*dpr+6*dpr)), ly=Math.min(cv.height-8*dpr, Math.max(16*dpr, F[1]+n[1]*40*dpr));
+      g.fillStyle="rgba(0,0,0,.65)"; g.fillRect(lx-4*dpr,ly-14*dpr,tw+8*dpr,19*dpr); g.fillStyle="#3FD07A"; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(lab,lx,ly); } }
+  pts.forEach((p,i)=>{ g.fillStyle="#FFD24A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(p[0],p[1],6*dpr,0,7); g.fill(); g.stroke();
     g.font=`700 ${12*dpr}px system-ui`; g.fillStyle="#000"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(String(i+1),p[0],p[1]+0.5*dpr); });
 }
-$("sMeas").addEventListener("pointerdown",e=>{ const M=SA.meas; if(!M) return; e.preventDefault(); const r=$("sMeas").getBoundingClientRect();
-  M.pts.push([(e.clientX-r.left)/r.width, (e.clientY-r.top)/r.height]); measDraw();
-  if(M.pts.length<3){ measHint(); return; }
-  // Projektion des Punkts auf die Linie durch beide Marken (Seitenansicht, linear)
-  const W=r.width, H=r.height, [A,B,C]=M.pts.map(p=>[p[0]*W,p[1]*H]), g=M.st.meas;
-  const ab=[B[0]-A[0],B[1]-A[1]], L2=ab[0]*ab[0]+ab[1]*ab[1];
-  if(L2<100){ M.pts=[]; measDraw(); measHint(); return; }
-  const tt=((C[0]-A[0])*ab[0]+(C[1]-A[1])*ab[1])/L2, d=g.a[0]+tt*(g.b[0]-g.a[0]);
-  const inp=$("wNum"); if(inp) inp.value=Math.max(0,Math.round(d*10)/10);
-  const h=$("wMeasH"); if(h) h.innerHTML=L(`Gemessen: <b>${n2(Math.max(0,d),spUnitD())}</b>. Tippe auf Übernehmen oder miss neu.`,`Measured: <b>${n2(Math.max(0,d),spUnitD())}</b>. Tap Confirm or measure again.`);
-  M.pts=[]; setTimeout(()=>{ if(SA.meas===M) measDraw(); },900);
-});
+// Tippen setzt Punkte bzw. den Fußpunkt; Ziehen verschiebt nach zwei Punkten die Senkrechte, davor (gezoomt) das Bild
+{ const cv=$("sMeas"); let down=null;
+  const footAt=e=>{ const M=SA.meas, G=measGeo(M), r=cv.getBoundingClientRect(), q=measN(e), C=[q[0]*G.W,q[1]*G.H]; if(G.len<1) return; M.foot=((C[0]-G.A[0])*G.ab[0]+(C[1]-G.A[1])*G.ab[1])/(G.len*G.len); };
+  cv.addEventListener("pointerdown",e=>{ const M=SA.meas; if(!M) return; e.preventDefault(); down={x:e.clientX,y:e.clientY,moved:false,pan:false}; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove",e=>{ const M=SA.meas; if(!M||!down) return; const dx=e.clientX-down.x, dy=e.clientY-down.y; if(!down.moved && Math.hypot(dx,dy)<6) return; down.moved=true;
+    if(M.pts.length>=2){ footAt(e); measDraw(); measHint(); measCtl(); }
+    else if(fsPan(dx,dy)){ down.x=e.clientX; down.y=e.clientY; } });
+  const up=e=>{ const M=SA.meas, d=down; down=null; if(!M||!d||d.moved) return;
+    if(M.pts.length<2){ M.pts.push(measN(e)); if(M.pts.length===2){ const G=measGeo(M); if(G.len<10){ M.pts=[]; } else M.foot=0.5; } }
+    else footAt(e);
+    measDraw(); measHint(); measCtl(); };
+  cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",()=>{ down=null; }); }
+// Anleitung verschieben
+function measTipClamp(){ const tp=$("sMeasTip"), bx=$("sBox"); if(!tp||tp.hidden) return; const W=bx.clientWidth, H=bx.clientHeight;
+  const x=Math.min(Math.max(0,W-tp.offsetWidth), Math.max(0,parseFloat(tp.style.left)||8)), y=Math.min(Math.max(0,H-tp.offsetHeight), Math.max(0,parseFloat(tp.style.top)||8)); tp.style.left=x+"px"; tp.style.top=y+"px"; }
+{ const tp=$("sMeasTip"); let d=null;
+  tp.addEventListener("pointerdown",e=>{ if(e.target.closest("button")) return; e.preventDefault(); e.stopPropagation(); d={x:e.clientX,y:e.clientY,l:tp.offsetLeft,t:tp.offsetTop}; tp.setPointerCapture(e.pointerId); tp.style.cursor="grabbing"; });
+  tp.addEventListener("pointermove",e=>{ if(!d) return; tp.style.left=(d.l+e.clientX-d.x)+"px"; tp.style.top=(d.t+e.clientY-d.y)+"px"; measTipClamp(); });
+  const up=()=>{ if(!d) return; d=null; tp.style.cursor=""; SA.tipPos=[tp.offsetLeft,tp.offsetTop]; }; tp.addEventListener("pointerup",up); tp.addEventListener("pointercancel",up); }
 addEventListener("resize",()=>{ if(SA.meas) measDraw(); });
 function spSaveRun(){
   const o=spMetrics();
@@ -3320,7 +3426,7 @@ const EVTECH=()=>[["start",L("Startsprung","Start"),true],["swim",L("Sprinttechn
 const evTechName=k=>(EVTECH().find(x=>x[0]===k)||[k,k])[1];
 const evId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const evSave=()=>{ if(EV.cur) STORE.put(EV.cur); };
-const evVidKey=(p,t)=>p.id+":"+t.i;
+const evVidKey=(p,t)=>p.id+":"+(t.uid||(t.uid=evId()));
 function evalToS(){
   const p=EV.cur; const o=Object.assign(structuredClone(DEF), (p&&p.s)||{});
   o.env="water"; o.measure=false; o.resp="tap"; o.vol=S.vol; o.vol2=S.vol2;
@@ -3434,8 +3540,8 @@ function evSetup(){
       <input class="evvname" id="evN${k}" maxlength="24" placeholder="${k==="A"?L("Kurzname, z. B. Hoher Ellbogen","Short name, e.g. High elbow"):L("Kurzname, z. B. Gerader Arm","Short name, e.g. Straight arm")}" value="${esc(p["name"+k]||"")}">
       <textarea class="note-in evdesc" id="ev${k}" maxlength="400" placeholder="${k==="A"?L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit hohem Ellbogen, Unterarm früh senkrecht","Detailed description for standardisation, e.g. first arm pull with a high elbow, forearm vertical early"):L("Genaue Beschreibung zur Standardisierung, z. B. erster Armzug mit gestrecktem Arm unter dem Körper","Detailed description for standardisation, e.g. first arm pull with a straight arm under the body")}">${esc(p[k]||"")}</textarea></div>`).join("")}
     <div class="card" style="margin-top:14px"><div class="row"><div class="lbl"><b>${L("Versuche je Variante","Attempts per variant")}</b><small>${L("Am besten 5 oder mehr.","Ideally 5 or more.")}</small></div>
-      <div class="num"><input id="evN" type="number" inputmode="numeric" min="2" max="20" step="1" value="${p.n||5}"${locked?" disabled":""}></div></div></div>
-    ${p.tech==="start"?segH("evUw",L("Was machst du in der Unterwasserphase?","What do you do underwater?"),[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],p.uw||"fly"):""}
+      <div class="num"><input id="evN" type="number" inputmode="numeric" min="1" max="20" step="1" value="${p.n||5}"${locked?" disabled":""}></div></div></div>
+    ${p.tech==="start"&&p.start!=="back"?segH("evUw",L("Was machst du in der Unterwasserphase?","What do you do underwater?"),[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],p.uw||"fly"):""}
     ${evPersonsSel(p)}
     ${segH("evMode",L("Wie nimmst du die Versuche auf?","How do you record the attempts?"),[["upload",L("Aufnahmen hochladen","Upload recordings")],["cam",L("In der App filmen","Film in the app")]],p.mode)}
     <p class="hint" id="evModeHint"></p>`;
@@ -3450,20 +3556,21 @@ function evSetup(){
   seg("evStart",v=>{ p.start=v; }); seg("evMode",v=>{ p.mode=v; }); seg("evUw",v=>{ p.uw=v; });
   const ps=$("evPerson"); if(ps) ps.onchange=()=>{ p.person=ps.value||null; evSave(); };
   ["A","B"].forEach(k=>{ const el=$("ev"+k), nm=$("evN"+k); el.oninput=()=>{ p[k]=el.value; clearTimeout(EV.tA); EV.tA=setTimeout(evSave,600); }; nm.oninput=()=>{ p["name"+k]=nm.value.trim(); clearTimeout(EV.tA); EV.tA=setTimeout(evSave,600); }; });
-  $("evN").onchange=()=>{ p.n=Math.max(2,Math.min(20,Math.round(+$("evN").value||4))); $("evN").value=p.n; evSave(); };
+  $("evN").onchange=()=>{ p.n=Math.max(1,Math.min(20,Math.round(+$("evN").value||4))); $("evN").value=p.n; evSave(); };
   $("evBack").onclick=()=>evShow("list");
   $("evRen").onclick=()=>{ const h=$("evName"); h.innerHTML=`<input id="evNameIn" maxlength="60" class="evnamein">`; const i=$("evNameIn"); i.value=p.name; i.focus(); i.select();
     const done=()=>{ const v=i.value.trim(); if(v) p.name=v; evSave(); h.textContent=p.name; }; i.onblur=done; i.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); i.blur(); } }; };
   $("evMake").onclick=()=>{
     const miss=[]; if(!p.start) miss.push(L("Startart","start type")); if(!(p.nameA||"").trim()) miss.push(L("Name von Variante A","name of variant A")); if(!(p.nameB||"").trim()) miss.push(L("Name von Variante B","name of variant B")); if(!p.mode) miss.push(L("Aufnahmeart","recording method"));
     if(miss.length){ $("evMsg").textContent=L(`Es fehlt noch: ${miss.join(", ")}.`,`Still missing: ${miss.join(", ")}.`); return; }
-    if(!locked){ p.trials=[...evBase(0), ...evPlan(p.n,1,EV_NBASE)]; } evSave(); evShow("plan"); };
+    const fresh=!locked, tg = fresh && DESK.matches ? pdfTarget("sprintz-protokoll") : null;
+    if(!locked){ p.trials=[...evBase(0), ...evPlan(p.n,1,EV_NBASE)]; } evSave(); evShow("plan"); if(tg) evProtoPdf(p,tg); };
 }
 /* --- Ablauf als Timeline --- */
 function evPlanView(){
   const p=EV.cur, top=$("evTop"), bot=$("evBottom"), up=p.mode==="upload";
   const withVid=p.trials.filter(t=>t.vid).length, done=p.trials.filter(t=>t.status==="done").length;
-  top.innerHTML=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Projekte","‹ Projects")}</button><span class="evhr"><button type="button" class="testbtn ghost small" id="evDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evEdit">${L("Einrichtung","Setup")}</button></span></div>
+  top.innerHTML=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Projekte","‹ Projects")}</button><span class="evhr"><button type="button" class="testbtn ghost small" id="evProto">${L("Testprotokoll (PDF)","Test protocol (PDF)")}</button><button type="button" class="testbtn ghost small" id="evDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evEdit">${L("Einrichtung","Setup")}</button></span></div>
     <h2 class="big">${esc(p.name)}</h2>
     <div class="evvars">${["A","B"].map(k=>`<div><i class="evv ${k}">${k}</i><span><b>${esc(evVN(p,k))}</b>${p[k]?` – ${esc(p[k])}`:""}</span></div>`).join("")}</div>
     <p class="evlead">${up ? L("Nimm die Versuche genau in dieser Reihenfolge mit der Kamera-App auf. Danach lädst du alle Videos gesammelt hoch.","Record the attempts in exactly this order with the camera app. Then upload all videos at once.")
@@ -3471,12 +3578,24 @@ function evPlanView(){
     ${up?`<label class="filebtn evup" id="evUpLbl">${L("Aufnahmen hochladen","Upload recordings")}<input type="file" id="evFiles" accept="video/*" multiple></label><p class="hint" id="evUpMsg"></p>`:""}
     ${p.trials.some(t=>t.stage===0) ? "" : `<button type="button" class="testbtn small" id="evAddBase" style="margin:10px 0 0;flex:none">+ ${L("Baseline hinzufügen","Add baseline")}</button>`}
     <ol class="evtl">${evOrd(p).map((t,k,a)=>{ const st=t.stage??1, pr=a[k-1], head = !pr || (pr.stage??1)!==st;
-      return (head ? `<li class="evstage">${st===0 ? `<b>Baseline</b><span>${L(`${EV_NBASE} freie Versuche in deiner gewohnten Technik, damit du Verbesserungen und Verschlechterungen direkt siehst.`,`${EV_NBASE} free attempts with your usual technique so you can see improvements and deteriorations directly.`)}</span>` : `<b>${L(`Teststufe ${st}`,`Test stage ${st}`)}</b>`}</li>` : "") + evTrialHTML(p,t,k+1); }).join("")}</ol>
+      const last = !a[k+1] || (a[k+1].stage??1)!==st;
+      return (head ? `<li class="evstage">${st===0 ? `<b>Baseline</b><span>${L(`${EV_NBASE} freie Versuche in deiner gewohnten Technik, damit du Verbesserungen und Verschlechterungen direkt siehst.`,`${EV_NBASE} free attempts with your usual technique so you can see improvements and deteriorations directly.`)}</span>` : `<b>${L(`Teststufe ${st}`,`Test stage ${st}`)}</b>`}</li>` : "") + evTrialHTML(p,t,k+1)
+        + (last ? `<li class="evaddt" data-st="${st}"><button type="button" class="testbtn ghost small" data-addt="${st}">+ ${st===0?L("Baseline-Versuch hinzufügen","Add baseline attempt"):L("Versuch hinzufügen","Add attempt")}</button></li>` : ""); }).join("")}</ol>
     <div class="evaddst" id="evAddSt"><button type="button" class="testbtn" id="evAddStB" style="flex:none">+ ${L("Teststufe hinzufügen","Add test stage")}</button></div>`;
   bot.innerHTML=`<div class="evfoot"><p class="hint">${L(`${withVid} von ${p.trials.length} Versuchen mit Video · ${done} ausgewertet`,`${withVid} of ${p.trials.length} attempts with video · ${done} analysed`)}</p>
     <div class="evfootb">${done&&done===withVid?"":`<button type="button" class="evbig" id="evAna"${withVid?"":" disabled"}>${done?L("Weiter auswerten","Continue analysis"):L("Videos auswerten","Analyse videos")}</button>`}
     <button type="button" class="evbig${done&&done===withVid?"":" ghost"}" id="evRep"${done?"":" disabled"}>${L("Ergebnisse ansehen","View results")}</button></div></div>`;
   $("evBack").onclick=()=>evShow("list"); $("evEdit").onclick=()=>evShow("setup"); $("evDl").onclick=()=>evExport(p);
+  $("evProto").onclick=()=>evProtoPdf(p, pdfTarget("sprintz-protokoll"));
+  // Versuch löschen: zweimal tippen; danach Nummern neu vergeben und Protokoll neu erzeugen (am PC)
+  top.querySelectorAll("[data-tdel]").forEach(b=>b.onclick=()=>{ if(!b.classList.contains("sure")){ b.classList.add("sure"); b.textContent=L("Löschen?","Delete?"); setTimeout(()=>{ if(b.isConnected){ b.classList.remove("sure"); b.textContent="×"; } },4000); return; }
+    const tg=DESK.matches?pdfTarget("sprintz-protokoll"):null, i=+b.dataset.tdel; p.trials.splice(i,1); p.trials.forEach((x,k)=>x.i=k); evSave(); evPlanView(); if(tg) evProtoPdf(p,tg); });
+  // Versuch hinzufügen: Baseline direkt, sonst A, B oder ein Paar in zufälliger Reihenfolge
+  top.querySelectorAll("[data-addt]").forEach(b=>b.onclick=()=>{ const st=+b.dataset.addt, li=b.closest(".evaddt");
+    const add=vs=>{ const tg=DESK.matches?pdfTarget("sprintz-protokoll"):null; vs.forEach(v=>p.trials.push({i:p.trials.length, v, stage:st, rating:null, note:"", status:"open"})); evSave(); evPlanView(); if(tg) evProtoPdf(p,tg); };
+    if(st===0){ add(["BL"]); return; }
+    li.innerHTML=`<span class="evaddq">${L("Welche Variante?","Which variant?")}</span><button type="button" class="testbtn small" data-av="A"><i class="evv A">A</i> ${esc(evVN(p,"A"))}</button><button type="button" class="testbtn small" data-av="B"><i class="evv B">B</i> ${esc(evVN(p,"B"))}</button><button type="button" class="testbtn small" data-av="AB">${L("A und B (zufällige Reihenfolge)","A and B (random order)")}</button><button type="button" class="testbtn ghost small" data-av="">${L("Abbrechen","Cancel")}</button>`;
+    li.querySelectorAll("[data-av]").forEach(x=>x.onclick=()=>{ const v=x.dataset.av; if(!v){ evPlanView(); return; } add(v==="AB" ? (Math.random()<0.5?["A","B"]:["B","A"]) : [v]); }); });
   const an=$("evAna"); if(an) an.onclick=()=>{ const o=evOrd(p), next=o.find(t=>t.vid && t.status!=="done") || o.find(t=>t.vid); if(next) evAnalyze(next); };
   $("evRep").onclick=()=>evShow("report");
   const ab=$("evAddBase"); if(ab) ab.onclick=()=>{ p.trials.push(...evBase(p.trials.length)); evSave(); evPlanView(); };
@@ -3506,13 +3625,13 @@ function evTrialHTML(p,t,no){
   const extra=[(t.vids2||[]).length?L(`Weitere Kameras: ${t.vids2.length}`,`More cameras: ${t.vids2.length}`):"", t.vm?"Velocitymeter":""].filter(Boolean).join(" · ");
   const files=Object.keys(EV.files);
   const pick = up && files.length ? `<select class="evpick" data-i="${t.i}" aria-label="${L("Video zuordnen","Assign video")}"><option value="">${L("– kein Video –","– no video –")}</option>${files.map(k=>`<option value="${k}"${t.vid&&t.vid.key===k?" selected":""}>${esc(EV.files[k].name)} · ${evTimeLbl(EV.files[k].t)}</option>`).join("")}</select>` : (t.vid&&up?`<small class="evfile">${esc(t.vid.name||"")}</small>`:"");
-  return `<li class="evt ${t.status}"><div class="evtrow"><span class="evno">${no||evPos(p,t)}</span><i class="evv ${t.v}">${t.v}</i><b class="evtn">${esc(evVN(p,t.v))}</b>${st}
+  return `<li class="evt ${t.status}"><div class="evtrow"><span class="evno">${no||evPos(p,t)}</span><i class="evv ${t.v}">${t.v}</i><b class="evtn">${esc(evVN(p,t.v))}</b>${st}<button type="button" class="evtdel" data-tdel="${t.i}" aria-label="${L("Versuch löschen","Delete attempt")}">×</button>
       <span class="evbtns">${up?`<button type="button" class="testbtn small" data-play="${t.i}">▶ ${L("Startablauf","Start sequence")}</button>`:`<button type="button" class="testbtn small" data-rec="${t.i}">${t.vid?L("Neu aufnehmen","Record again"):L("Aufnehmen","Record")}</button>`}
       ${t.vid&&t.vid.src==="cam"&&EV.files[t.vid.key]?`<button type="button" class="testbtn small ghost" data-vsave="${t.i}">${L("Video sichern","Save video")}</button>`:""}
       ${t.vid?`<button type="button" class="testbtn small" data-ana="${t.i}">${t.status==="done"?L("Ergebnis","Result"):L("Auswerten","Analyse")}</button>`:""}</span></div>
     ${pick}${extra?`<small class="evextra">${extra}</small>`:""}
     ${t.v==="BL" ? "" : `<div class="evq"><span>${L("Qualität des Testlaufs","Quality of the test run")}</span><button type="button" class="evinfo" aria-label="Info" aria-expanded="false">i</button><div class="seg evrate" data-i="${t.i}">${[1,2,3,4,5].map(k=>`<button type="button" data-v="${k}" aria-pressed="${t.rating===k}">${k}</button>`).join("")}</div></div>
-    <p class="evinfot" hidden>${L("Der Athlet bewertet die Qualität und Genauigkeit des Testlaufs nach subjektivem Empfinden von 1 (schlecht) bis 5 (sehr gut).","The athlete rates the quality and precision of the test run by subjective feel from 1 (poor) to 5 (very good).")}</p>`}
+    <p class="evinfot" hidden>${EVQTXT()}</p>`}
     <textarea class="note-in evnote" data-i="${t.i}" maxlength="300" rows="1" placeholder="${L("Bemerkung des Athleten","Athlete's remarks")}">${esc(t.note||"")}</textarea></li>`;
 }
 const evVN=(p,k)=> k==="BL" ? "Baseline" : (p&&p['name'+k]) || k;
@@ -3604,8 +3723,8 @@ async function evBlob(t){
   return null;
 }
 /* --- Auswertung eines Versuchs mit dem Schritt-für-Schritt-Assistenten --- */
-function evSteps(){
-  const back=EV.cur.start==="back", u=U("m"); const {S1,t,n}=mkSteps();
+function evSteps(P){
+  P=P||EV.cur||{}; const back=P.start==="back", u=U("m"); const {S1,t,n}=mkSteps();
   t("move","Erste Reaktion","First reaction","Das erste Bild, in dem du dich sichtbar bewegst.","The first frame in which you visibly move.");
   t("hands","Hände lösen","Hands off", back?"Das Bild, in dem sich deine Hände von den Griffen lösen. Optional.":"Das Bild, in dem sich deine Hände vom Block lösen. Optional.", back?"The frame in which your hands leave the grips. Optional.":"The frame in which your hands leave the block. Optional.",{opt:true});
   if(back) t("off","Abstoß","Push-off","Das Bild, in dem deine Füße die Wand verlassen.","The frame in which your feet leave the wall.");
@@ -3614,13 +3733,13 @@ function evSteps(){
   n("jump","Sprungweite","Start distance","Abstand von der Wand bis zur Eintauchstelle deiner Hände. Am genauesten misst du ihn direkt im Video.","Distance from the wall to where your hands entered. Measuring it directly in the video is the most accurate way.",u,
     {meas:{a:[0,()=>L("die Beckenkante (Startwand)","the pool edge (start wall)")], b:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], tg:()=>L("die Stelle, an der deine Fingerspitzen eintauchen","the spot where your fingertips enter"),
       req:()=>L("Ausmessen geht nur, wenn im Moment des ersten Wasserkontakts die Beckenkante und die Linie der Rückenfähnchen klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if the pool edge and the backstroke flag line are clearly visible in the frame of first water contact. Otherwise enter the value manually or skip it."), at:"entry"}});
-  t("p5",`5-m-Marke`,`5 m mark`,`Das Bild, in dem deine Hände unter den Rückenfähnchen hindurch die 5-m-Marke passieren.`,`The frame in which your hands pass the 5 m mark under the backstroke flags.`,{pos:5});
+  t("p5",`5-m-Marke`,`5 m mark`,`Das Bild, in dem dein Kopf die 5-m-Marke (Linie der Rückenfähnchen) passiert.`,`The frame in which your head passes the 5 m mark (backstroke flag line).`,{pos:5});
   t("p10","10-m-Marke","10 m mark","Das Bild, in dem dein Kopf die 10-m-Marke passiert. Nur wenn eine Markierung zu sehen ist.","The frame in which your head passes the 10 m mark. Only if a marking is visible.",{pos:10, opt:true});
   t("brk","Auftauchen","Breakout","Das Bild, in dem dein Kopf die Wasseroberfläche durchbricht.","The frame in which your head breaks the surface.",{opt:true});
   n("diveD","Tauchweite","Underwater distance","Abstand von der Wand bis zur Stelle, an der dein Kopf auftaucht.","Distance from the wall to where your head surfaced.",u,
-    {opt:true, meas:{a:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], b:[15,()=>L("die 15-m-Marke","the 15 m mark")], tg:()=>L("die Stelle, an der dein Kopf auftaucht","the spot where your head surfaces"),
-      req:()=>L("Ausmessen geht nur, wenn im Moment des Auftauchens die Linie der Rückenfähnchen und die 15-m-Marke klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if the backstroke flag line and the 15 m mark are clearly visible in the frame where you surface. Otherwise enter the value manually or skip it."), at:"brk"}});
-  if(EV.cur.uw==="breast"){
+    {opt:true, meas:{a:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], b:[15,()=>L("die 15-m-Marke","the 15 m mark")], pairs:[[5,15],[5,10],[10,15]], tg:()=>L("die Stelle, an der dein Kopf auftaucht","the spot where your head surfaces"),
+      req:()=>L("Ausmessen geht nur, wenn im Moment des Auftauchens zwei Markierungen (5 m und 15 m, 5 m und 10 m oder 10 m und 15 m) klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if two markings (5 m and 15 m, 5 m and 10 m, or 10 m and 15 m) are clearly visible in the frame where you surface. Otherwise enter the value manually or skip it."), at:"brk"}});
+  if(P.uw==="breast" && !back){
     t("dk","Delfinbeinschlag (Abwärtsbewegung)","Dolphin kick (downbeat)","Das Bild, in dem die Abwärtsbewegung deines Delfinbeinschlags beginnt. Optional.","The frame in which the downbeat of your dolphin kick begins. Optional.",{opt:true});
     t("pull","Beginn des Tauchzugs","Start of the pull-out","Das Bild, in dem deine Arme den Tauchzug beginnen.","The frame in which your arms begin the pull-out.");
     t("bkick","Beginn des ersten Beinschlags","Start of the first kick","Das Bild, in dem du die Fersen für den ersten Brustbeinschlag anziehst.","The frame in which you draw your heels up for the first breaststroke kick.",{opt:true});
@@ -3642,7 +3761,7 @@ async function evAnalyze(t){
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
   detectFps(SA.url).then(f=>{ if(f){ SA.fps=f; t.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f/(SA.slow||1)*10)/10} ms`; } });
-  SA.pcm=null; SA.raw=null; spDraw(); spSpkCard(); measEnd(); vmCard();
+  SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard();
   readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
     if(SA.marks.sig==null) await evFindSig(); spDraw(); wizRender(); }).catch(()=>{ if(SA.marks.sig==null){ SA.marks.sig=t.sigEst||0; SA.sigAuto="est"; } wizRender(); });
   wizRender();
@@ -3683,26 +3802,35 @@ function evSumHTML(){
   h+=`<table class="restbl">`;
   h+=hd(L("Start","Start"))+row(L("Ergebnis","Result"),res)+row(L("Reaktionszeit","Reaction time"),msx(o.rt))+(o.hands!=null?row(L("Hände lösen","Hands off"),msx(o.hands)):"")+row(p.start==="back"?L("Abstoß","Push-off"):L("Blockzeit","Block time"),msx(o.block));
   h+=hd(L("Flug","Flight"))+row(L("Flugzeit","Flight time"),msx(o.flight))+row(L("Sprungweite","Start distance"),n2(o.jump,u))+row(L("Fluggeschwindigkeit","Flight velocity"),n2(o.flightV,us));
-  h+=hd(L("Unter Wasser","Underwater"))+row(L("Tauchzeit","Underwater time"),ms3(o.uwT))+row(L("Tauchweite","Underwater distance"),n2(o.dive,u))+row(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+(p.uw==="breast" ? row(L("Delfinbeinschlag","Dolphin kick"),ms3(o.dk))+row(L("Beginn Tauchzug","Start of pull-out"),ms3(o.pull))+row(L("Erster Beinschlag","First kick"),ms3(o.bkick))+row(L("Gleiten bis zum Tauchzug","Glide until pull-out"),ms3(o.glide))+row(L("Tauchzug bis Beinschlag","Pull-out to kick"),ms3(o.pullK))
+  h+=hd(L("Unter Wasser","Underwater"))+row(L("Tauchzeit","Underwater time"),ms3(o.uwT))+row(L("Tauchweite","Underwater distance"),n2(o.dive,u))+row(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+(p.uw==="breast"&&p.start!=="back" ? row(L("Delfinbeinschlag","Dolphin kick"),ms3(o.dk))+row(L("Beginn Tauchzug","Start of pull-out"),ms3(o.pull))+row(L("Erster Beinschlag","First kick"),ms3(o.bkick))+row(L("Gleiten bis zum Tauchzug","Glide until pull-out"),ms3(o.glide))+row(L("Tauchzug bis Beinschlag","Pull-out to kick"),ms3(o.pullK))
     : row(L("Delfinbeinschläge","Dolphin kicks"),o.kicks!=null?String(o.kicks):"–")+row(L("Beinschlagfrequenz","Kick frequency"),n2(o.kickF,U("Hz"))));
   h+=hd(L("Zeiten","Times"))+row(L("5-m-Zeit","5 m time"),ms3(o.t5))+row(L("10-m-Zeit","10 m time"),ms3(o.t10))+row(L("15-m-Zeit","15 m time"),ms3(o.t15))
     +row(L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),n2(o.v510,us))+row(L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),n2(o.v1015,us))+row(L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),n2(o.v515,us));
   h+=`</table>`;
   const od=evOrd(p), nextT=od.find(x=>evPos(p,x)>evPos(p,t) && x.vid && x.status!=="done") || od.find(x=>x!==t && x.vid && x.status!=="done");
-  h+=`<div class="wrow"><button type="button" class="wbig" id="eSave">${nextT?L("Speichern & nächster Versuch","Save & next attempt"):L("Speichern & zur Übersicht","Save & back to overview")}</button></div>
+  const act=`<div class="wrow"><button type="button" class="wbig" id="eSave">${nextT?L("Speichern und zum nächsten Versuch","Save and go to the next attempt"):L("Speichern & zur Übersicht","Save & back to overview")}</button></div>
+    ${nextT?`<div class="wrow"><button type="button" class="testbtn" id="eSkip">${L("Ohne Speichern fortfahren","Continue without saving")}</button></div>`:""}
     <div class="wrow"><button type="button" class="testbtn ghost" id="eBack">${L("Ohne Speichern zur Übersicht","Back to overview without saving")}</button></div>`;
-  return h;
+  // im Vollbild stehen die Schaltflächen oben, damit sie ohne Scrollen erreichbar sind
+  return FS.on ? h.replace('<table class="restbl">',`<div class="evfsact">${act}</div><table class="restbl">`) : h+act;
 }
 function evSaveTrial(){
   const p=EV.cur, t=p.trials[EV.trial]; const o=evMetrics();
   t.m=o; t.raw={marks:Object.assign({},SA.marks), vals:Object.assign({},SA.vals)}; t.fps=SA.fps; t.status="done"; t.analysed=Date.now(); evSave();
+  evNextTrial(true);
+}
+// zum nächsten offenen Versuch (gespeichert oder nicht); im Vollbild bleibt das Vollbild bestehen
+async function evNextTrial(saved){
+  const p=EV.cur, t=p.trials[EV.trial];
   const od=evOrd(p), nextT=od.find(x=>evPos(p,x)>evPos(p,t) && x.vid && x.status!=="done") || od.find(x=>x!==t && x.vid && x.status!=="done");
-  evCloseAna(); if(nextT) evAnalyze(nextT); else evShow("plan");
+  const keep=FS.on && !!nextT; evCloseAna(keep);
+  if(nextT){ await evAnalyze(nextT); if(keep && SA.active) await fsEnter(); else if(keep){ $("fsOv").hidden=true; try{ document.exitFullscreen&&document.fullscreenElement&&document.exitFullscreen(); }catch(e){} } }
+  else evShow("plan");
 }
 function evAnaHead(){ const h=$("evAnaHead"), p=EV.cur, t=p&&p.trials[EV.trial]; if(!t){ h.hidden=true; return; } h.hidden=false;
   h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
   $("evAnaBack").onclick=()=>{ evCloseAna(); evShow("plan"); }; $("evAnaDl").onclick=()=>evExport(p); }
-function evCloseAna(){ if(FS.on) fsExit(); SA.trialRef=null; SA.active=false; SA.mode=null; $("spAna").hidden=true; $("evAnaHead").hidden=true; document.body.classList.remove("reviewing"); try{ sVid.pause(); sVid.removeAttribute("src"); sVid.load(); }catch(e){} $("evPage").hidden=false; }
+function evCloseAna(soft){ if(FS.on) fsExit(soft); measEnd(); SA.trialRef=null; SA.active=false; SA.mode=null; $("spAna").hidden=true; $("evAnaHead").hidden=true; document.body.classList.remove("reviewing"); try{ sVid.pause(); sVid.removeAttribute("src"); sVid.load(); }catch(e){} $("evPage").hidden=false; }
 function alertMsg(t){ const m=$("evUpMsg")||$("evMsg"); if(m) m.textContent=t; else { const b=$("evBottom"); if(b) b.insertAdjacentHTML("afterbegin",`<p class="hint">${t}</p>`); } }
 /* --- #finish (Ton und Startablauf) in einen Bereich verschieben und zurück --- */
 let finishHome2=null;
@@ -3807,7 +3935,8 @@ function vmCard(){
 const FS={on:false, secs:[], home:null};
 async function fsEnter(){
   if(FS.on) return; FS.on=true; const ov=$("fsOv"), grid=$("fsGrid"); ov.hidden=false; document.body.classList.add("fs-on");
-  FS.home={box:[$("sBox").parentNode,$("sBox").nextSibling], card:[$("wCard").parentNode,$("wCard").nextSibling], nav:[$("wnavBar").parentNode,$("wnavBar").nextSibling], bar:[$("sStepBar").parentNode,$("sStepBar").nextSibling]};
+  FS.home={box:[$("sBox").parentNode,$("sBox").nextSibling], card:[$("wCard").parentNode,$("wCard").nextSibling], nav:[$("wnavBar").parentNode,$("wnavBar").nextSibling], bar:[$("sStepBar").parentNode,$("sStepBar").nextSibling], wave:[$("sWave").parentNode,$("sWave").nextSibling]};
+  $("fsMain").insertBefore($("sWave"), $("fsVm")); FS.z={s:1,x:0,y:0};
   const c0=document.createElement("div"); c0.className="fscell"; c0.appendChild($("sBox")); grid.appendChild(c0);
   $("fsCardSlot").appendChild($("wCard")); $("fsCardSlot").appendChild($("wnavBar")); $("fsBar").prepend($("sStepBar"));
   // weitere Kameras
@@ -3820,17 +3949,20 @@ async function fsEnter(){
     adj.querySelectorAll("button").forEach(x=>x.onclick=()=>{ v.off=(v.off||0)+(+x.dataset.o)/sFps(); v.offAuto=false; evSave(); fsSync(true); });
     el.addEventListener("loadedmetadata",()=>{ fsLayout(); fsSync(true); });
     if(v.off==null) fsAlign(S2); }
-  $("fsVm").hidden=!(tr&&tr.vm); try{ if(ov.requestFullscreen) await ov.requestFullscreen(); else if(ov.webkitRequestFullscreen) ov.webkitRequestFullscreen(); }catch(e){}
-  fsLayout(); fsSync(true); fsHint();
+  $("fsVm").hidden=!(tr&&tr.vm); if(!(document.fullscreenElement||document.webkitFullscreenElement)){ try{ if(ov.requestFullscreen) await ov.requestFullscreen(); else if(ov.webkitRequestFullscreen) ov.webkitRequestFullscreen(); }catch(e){} }
+  fsLayout(); fsSync(true); fsHint(); fsZoomApply(); setTimeout(()=>{ fsLayout(); spDraw(); },60);
 }
-function fsExit(){
-  if(!FS.on) return; FS.on=false; const h=FS.home;
-  h.box[0].insertBefore($("sBox"),h.box[1]); h.card[0].insertBefore($("wCard"),h.card[1]); h.nav[0].insertBefore($("wnavBar"),h.nav[1]); h.bar[0].insertBefore($("sStepBar"),h.bar[1]);
-  FS.secs.forEach(s=>{ try{ s.el.pause(); URL.revokeObjectURL(s.el.src); }catch(e){} }); FS.secs=[]; $("fsGrid").innerHTML=""; $("fsOv").hidden=true; document.body.classList.remove("fs-on");
+// soft: Vollbild der Seite bleibt bestehen (Wechsel zum nächsten Versuch im Vollbild)
+function fsExit(soft){
+  if(!FS.on) return; FS.on=false; const h=FS.home; FS.z={s:1,x:0,y:0}; sVid.style.transform=""; $("fsBox").classList.remove("min"); $("fsMin").textContent="–";
+  h.box[0].insertBefore($("sBox"),h.box[1]); h.card[0].insertBefore($("wCard"),h.card[1]); h.nav[0].insertBefore($("wnavBar"),h.nav[1]); h.bar[0].insertBefore($("sStepBar"),h.bar[1]); h.wave[0].insertBefore($("sWave"),h.wave[1]);
+  FS.secs.forEach(s=>{ try{ s.el.pause(); URL.revokeObjectURL(s.el.src); }catch(e){} }); FS.secs=[]; $("fsGrid").innerHTML=""; document.body.classList.remove("fs-on");
+  if(soft) return;
+  $("fsOv").hidden=true;
   try{ if(document.fullscreenElement) document.exitFullscreen(); else if(document.webkitFullscreenElement) document.webkitExitFullscreen(); }catch(e){}
   measDraw&&SA.meas&&measDraw(); spDraw(); vmCard();
 }
-document.addEventListener("fullscreenchange",()=>{ if(!document.fullscreenElement && FS.on) fsExit(); });
+document.addEventListener("fullscreenchange",()=>{ if(!document.fullscreenElement){ if(FS.on) fsExit(); else $("fsOv").hidden=true; } });
 // Aufteilung nach Format der Videos: nebeneinander oder untereinander, je nachdem, was mehr Bildfläche ergibt
 function fsLayout(){
   if(!FS.on) return; const grid=$("fsGrid"), vmOn=!!(SA.trialRef&&SA.trialRef.vm); $("fsVm").hidden=!vmOn;
@@ -3839,7 +3971,25 @@ function fsLayout(){
   const row=ar.reduce((s,a)=>s+fit(a,W/n,H),0), col=ar.reduce((s,a)=>s+fit(a,W,H/n),0);
   grid.style.gridTemplateColumns = n>1 && row>=col ? `repeat(${n},1fr)` : "1fr"; grid.style.gridTemplateRows = n>1 && row<col ? `repeat(${n},1fr)` : "1fr";
   if(SA.meas) setTimeout(measDraw,30); vmDraw($("fsVmC"));
+  // Hinweisbox nicht über Tonspur und Kurve legen
+  const ovR=$("fsOv").getBoundingClientRect(), gB=grid.getBoundingClientRect().bottom-ovR.top, bx=$("fsBox");
+  if(innerWidth<=700){ bx.style.bottom=Math.round(ovR.height-gB+8)+"px"; bx.style.maxHeight=Math.round(Math.max(150,gB*0.55))+"px"; } else { bx.style.bottom=""; bx.style.maxHeight=Math.round(Math.max(200,gB-24))+"px"; }
+  fsClampZ(); fsZoomApply(); spDraw();
 }
+/* Zoom im Vollbild: Mausrad, + / − / 0, Schaltflächen; Verschieben durch Ziehen */
+function fsZoomApply(){ const z=FS.z||(FS.z={s:1,x:0,y:0}); if(!FS.on || z.s<=1.001){ z.s=1; z.x=0; z.y=0; sVid.style.transform=""; } else sVid.style.transform=`translate(${z.x}px,${z.y}px) scale(${z.s})`;
+  const zl=$("fsZl"); if(zl) zl.textContent=Math.round(z.s*100)+" %"; if(SA.meas) measDraw(); }
+function fsClampZ(){ const z=FS.z; if(!z) return; const r=$("sBox").getBoundingClientRect(); z.x=Math.min(0,Math.max(r.width*(1-z.s),z.x)); z.y=Math.min(0,Math.max(r.height*(1-z.s),z.y)); }
+function fsZoomAt(f,cx,cy){ if(!FS.on) return; const r=$("sBox").getBoundingClientRect(), z=FS.z; const px=(cx??r.left+r.width/2)-r.left, py=(cy??r.top+r.height/2)-r.top, ns=Math.min(8,Math.max(1,z.s*f));
+  z.x=px-(px-z.x)*ns/z.s; z.y=py-(py-z.y)*ns/z.s; z.s=ns; fsClampZ(); fsZoomApply(); }
+function fsZoomReset(){ FS.z={s:1,x:0,y:0}; fsZoomApply(); }
+function fsPan(dx,dy){ const z=FS.z; if(!FS.on||!z||z.s<=1) return false; z.x+=dx; z.y+=dy; fsClampZ(); fsZoomApply(); return true; }
+$("sBox").addEventListener("wheel",e=>{ if(!FS.on) return; e.preventDefault(); fsZoomAt(Math.exp(-e.deltaY*0.0015), e.clientX, e.clientY); },{passive:false});
+{ let pd=null; const bx=$("sBox");
+  bx.addEventListener("pointerdown",e=>{ if(!FS.on || SA.meas || e.target.closest("#sMeasTip,#sMeasCtl") || !(FS.z&&FS.z.s>1)) return; pd={x:e.clientX,y:e.clientY}; bx.setPointerCapture(e.pointerId); bx.classList.add("pan"); });
+  bx.addEventListener("pointermove",e=>{ if(!pd) return; fsPan(e.clientX-pd.x, e.clientY-pd.y); pd={x:e.clientX,y:e.clientY}; });
+  const up=()=>{ pd=null; bx.classList.remove("pan"); }; bx.addEventListener("pointerup",up); bx.addEventListener("pointercancel",up); }
+$("fsZi").onclick=()=>fsZoomAt(1.25); $("fsZo").onclick=()=>fsZoomAt(1/1.25); $("fsZl").onclick=fsZoomReset;
 addEventListener("resize",()=>{ if(FS.on) fsLayout(); });
 // weitere Kameras zeitgleich zum Haupt-Video halten
 function fsSync(force){ if(!FS.on) return; const tp=sVid.currentTime;
@@ -3864,7 +4014,7 @@ async function fsAlign(S2){
 // halbtransparente Box: was ist gerade zu finden, Tastenkürzel
 function fsHint(){ if(!FS.on) return; const st=SA.steps[SA.i], k=$("fsKeys"); if(!k) return;
   const al=FS.secs.map((s,i)=>s.v.offAuto==="audio"?L(`Video ${i+2}: über das Startsignal abgeglichen`,`Video ${i+2}: synced via the start signal`):s.v.offAuto==="time"?L(`Video ${i+2}: über die Aufnahmezeit abgeglichen, bitte prüfen`,`Video ${i+2}: synced via recording time, please check`):L(`Video ${i+2}: Versatz von Hand`,`Video ${i+2}: offset set manually`));
-  k.innerHTML=`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
+  k.innerHTML=`${SA.meas&&SA.meas.pts.length>=2?`<span><kbd>←</kbd><kbd>→</kbd> ${L("Senkrechte verschieben","Move the perpendicular")}</span><span><kbd>↑</kbd><kbd>↓</kbd> ${L("Richtung","Direction")}</span>`:`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span>`}<span><kbd>+</kbd><kbd>−</kbd> Zoom</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
 
 $("sFull").onclick=()=>fsEnter(); $("fsClose").onclick=()=>fsExit();
 $("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin").textContent=b.classList.contains("min")?"+":"–"; };
@@ -4022,7 +4172,7 @@ function evReport(){
   h+=`<h3 class="evh3">${L("Baseline","Baseline")}</h3>`;
   if(BL.length){
     const sT=evRK("blT",D,true), rows=D.have.filter(([k])=>evVals(BL,k).length && (sT==="all"||k===sT));
-    h+=evChips("blT",D,sT,true)+`<div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>${L("Kennwert","Parameter")}</th>${BL.map((t,i)=>`<th class="r">${i+1}</th>`).join("")}<th class="r">M</th><th class="r">SD</th><th class="r">CV</th></tr></thead><tbody>
+    h+=evChips("blT",D,sT,true)+`<div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>${L("Kennwert","Parameter")}</th>${BL.map((t,i)=>`<th class="r">${L(`Versuch ${i+1}`,`Attempt ${i+1}`)}</th>`).join("")}<th class="r">M</th><th class="r">SD</th><th class="r">CV</th></tr></thead><tbody>
       ${rows.length?rows.map(([k,l,u])=>{ const v=evVals(BL,k), m=stM(v), s=stSD(v); return `<tr><td>${l}<small>${u==="n"?"":U(u)}</small></td>${BL.map(t=>`<td class="r">${evFmt(t.m[k],u,true)}</td>`).join("")}<td class="r"><b>${evFmt(m,u,true)}</b></td><td class="r">${evFmt(s,u,true)}</td><td class="r">${s!=null&&m?evPct(s/Math.abs(m)*100):"–"}</td></tr>`; }).join(""):`<tr><td colspan="${BL.length+4}">–</td></tr>`}</tbody></table></div>
       <p class="hint">${L("CV = Variationskoeffizient (SD in % des Mittelwerts): Je kleiner, desto gleichmäßiger startest du.","CV = coefficient of variation (SD as % of the mean): the smaller, the more consistent your starts.")}</p>`;
     const sG=evRK("blG",D,false), bv=evVals(BL,sG);
@@ -4059,7 +4209,7 @@ function evReport(){
   if(tl.rows.length){
     const sQ=evRK("seq",D,false), uq=unit(sQ), pa=v=>tl.rows.filter(r=>r.t.v===v && r.pause!=null).map(r=>r.pause);
     h+=`<h3 class="evh3">${L("Ablauf, Pausen und Testtage","Sequence, rests and test days")}</h3>
-      <p class="hint">${L("Die Pausen berechnet Sprintz aus den Aufnahmezeiten und der Länge der Videos (Ende einer Aufnahme bis Beginn der nächsten). Sie sind deshalb Näherungswerte.","Sprintz calculates the rests from the recording times and lengths of the videos (end of one recording to the start of the next), so they are approximations.")}</p>
+      <p class="hint">${EVPAUSETXT()}</p>
       <p>${["BL","A","B"].map(v=>{ const x=pa(v); return x.length?`<span class="evpill"><i class="evv ${v}">${v}</i> Ø ${L("Pause","rest")} ${evDur(stM(x))}</span>`:""; }).join(" ")}</p>${evChips("seq",D,sQ,false)}
       <div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>Nr.</th><th>${L("Variante","Variant")}</th>${D.stages.length>1?`<th>${L("Stufe","Stage")}</th>`:""}${tl.days>1?`<th>${L("Tag","Day")}</th>`:""}<th class="r">${L("Uhrzeit","Time")}</th><th class="r">${L("Pause davor","Rest before")}</th><th class="r">${lab(sQ)}</th></tr></thead><tbody>
       ${tl.rows.map(r=>`<tr><td>${evPos(p,r.t)}</td><td><i class="evv ${r.t.v}">${r.t.v}</i></td>${D.stages.length>1?`<td>${(r.t.stage??1)||"BL"}</td>`:""}${tl.days>1?`<td>${r.day}</td>`:""}<td class="r">${new Date(r.t0).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"})}</td><td class="r">${r.pause!=null?evDur(r.pause):"–"}</td><td class="r">${r.t.m&&r.t.m[sQ]!=null?evFmt(r.t.m[sQ],uq):"–"}</td></tr>`).join("")}</tbody></table></div>`;
@@ -4069,11 +4219,79 @@ function evReport(){
   top.querySelectorAll("[data-chip]").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{ EV.rk=EV.rk||{}; EV.rk[g.dataset.chip]=b.dataset.k; const y=scrollY; evReport(); scrollTo(0,y); }));
 }
 function evBoxGroups(D,k,p){ return [{k:"BL",lab:"Baseline",vals:evVals(D.BL,k)},{k:"A",lab:evVN(p,"A"),vals:evVals(D.A,k)},{k:"B",lab:evVN(p,"B"),vals:evVals(D.B,k)}].filter(g=>g.k!=="BL"||g.vals.length); }
-const EVX=()=>[
-  L("KI ist das 95-%-Konfidenzintervall: In diesem Bereich liegt der wahre Mittelwert mit 95 % Sicherheit. Δ B−A ist der Unterschied der Mittelwerte mit seinem 95-%-Konfidenzintervall (Welch-t-Test, ungleiche Varianzen). p ist die Wahrscheinlichkeit, einen mindestens so großen Unterschied rein zufällig zu sehen, wenn es keinen echten gibt.","CI is the 95 % confidence interval: the true mean lies in this range with 95 % certainty. Δ B−A is the difference of the means with its 95 % confidence interval (Welch's t-test, unequal variances). p is the probability of seeing a difference at least this large purely by chance if there is no real one."),
-  L("Die Schwelle ist die kleinste bedeutsame Veränderung: 0,4 % des Baseline-Mittelwerts. Das entspricht der halben Leistungsschwankung olympischer Schwimmer zwischen zwei Wettkämpfen (Variationskoeffizient 0,8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). Bei Zeiten gilt mindestens ein Videobild als Schwelle, weil kleinere Unterschiede nicht messbar sind.","The threshold is the smallest worthwhile change: 0.4 % of the baseline mean. This equals half the performance variation of Olympic swimmers between two competitions (coefficient of variation 0.8 %; Pyne, Trewin & Hopkins, 2004, J Sports Sci 22, 613–620). For times, at least one video frame is used, because smaller differences can't be measured."),
-  L("„Bedeutsam“: Das ganze Konfidenzintervall liegt jenseits der Schwelle. „Kein bedeutsamer Unterschied“: Das ganze Intervall liegt innerhalb der Schwelle. „Signifikant, Bedeutsamkeit unsicher“: p < 0,05, aber das Intervall reicht in den Bereich unterhalb der Schwelle. „Unklar“: Die Daten reichen für keine Aussage, mehr Versuche helfen.","“Meaningful”: the whole confidence interval lies beyond the threshold. “No meaningful difference”: the whole interval lies within the threshold. “Significant, relevance uncertain”: p < 0.05, but the interval reaches below the threshold. “Unclear”: the data don't support a conclusion; more attempts help.")];
-function evExplHTML(){ return `<details class="evexpl"><summary>${L("So liest du den Vergleich","How to read the comparison")}</summary>${EVX().map(x=>`<p>${x}</p>`).join("")}</details>`; }
+/* --- Erklärungen: EINE Quelle für die App („So liest du den Vergleich“, „Was die Kennwerte bedeuten“) und die letzte Seite des Ergebnisblatts.
+   Wer hier oder in den Markierungstexten (evSteps) etwas ändert, ändert es automatisch überall. --- */
+const EVQTXT=()=>L("Der Athlet bewertet die Qualität und Genauigkeit des Testlaufs nach subjektivem Empfinden von 1 (schlecht) bis 5 (sehr gut).","The athlete rates the quality and precision of the test run by subjective feel from 1 (poor) to 5 (very good).");
+const EVPAUSETXT=()=>L("Die Pausen berechnet Sprintz aus den Aufnahmezeiten und der Länge der Videos (Ende einer Aufnahme bis Beginn der nächsten). Sie sind deshalb Näherungswerte.","Sprintz calculates the rests from the recording times and lengths of the videos (end of one recording to the start of the next), so they are approximations.");
+const EVSTAT=()=>[
+  {k:"n", t:"n", d:L("Anzahl der ausgewerteten Versuche, aus denen ein Wert berechnet wurde.","Number of analysed attempts a value was calculated from.")},
+  {k:"m", t:L("M (Mittelwert)","M (mean)"), d:L("Arithmetisches Mittel aller Versuche einer Gruppe.","Arithmetic mean of all attempts in a group.")},
+  {k:"sd", t:L("SD (Standardabweichung)","SD (standard deviation)"), d:L("Streuung der Einzelwerte um den Mittelwert (Stichproben-Standardabweichung, geteilt durch n − 1).","Spread of the single values around the mean (sample standard deviation, divided by n − 1).")},
+  {k:"cv", t:L("CV (Variationskoeffizient)","CV (coefficient of variation)"), d:L("SD geteilt durch M, in Prozent. Zeigt, wie konstant die Baseline-Versuche sind: je kleiner, desto gleichmäßiger.","SD divided by M, in percent. Shows how consistent the baseline attempts are: the smaller, the more even.")},
+  {k:"ci", t:L("KI (95-%-Konfidenzintervall)","CI (95 % confidence interval)"), d:L("In diesem Bereich liegt der wahre Mittelwert mit 95 % Sicherheit (t-Verteilung).","The true mean lies in this range with 95 % certainty (t distribution).")},
+  {k:"d", t:"Δ B−A", d:L("Unterschied der Mittelwerte von B und A mit seinem 95-%-Konfidenzintervall (Welch-t-Test, ungleiche Varianzen). Bei Zeiten heißt ein negativer Wert: B war schneller.","Difference between the means of B and A with its 95 % confidence interval (Welch's t-test, unequal variances). For times, a negative value means B was faster.")},
+  {k:"p", t:"p", d:L("Wahrscheinlichkeit, einen mindestens so großen Unterschied rein zufällig zu sehen, wenn es keinen echten gibt. Unter 0,05 gilt er als statistisch signifikant.","Probability of seeing a difference at least this large purely by chance if there is no real one. Below 0.05 it counts as statistically significant.")},
+  {k:"swc", t:L("Schwelle (kleinste bedeutsame Veränderung)","Threshold (smallest worthwhile change)"), d:L(`${String(EV_SWC*100).replace(".",",")} % des Baseline-Mittelwerts. Das entspricht der halben Leistungsschwankung olympischer Schwimmer zwischen zwei Wettkämpfen (Variationskoeffizient 0,8 %; Pyne, Trewin & Hopkins, 2004). Bei Zeiten gilt mindestens ein Videobild als Schwelle, weil kleinere Unterschiede nicht messbar sind.`,`${EV_SWC*100} % of the baseline mean. This equals half the performance variation of Olympic swimmers between two competitions (coefficient of variation 0.8 %; Pyne, Trewin & Hopkins, 2004). For times, at least one video frame is used, because smaller differences can't be measured.`)},
+  {k:"verd", t:L("Bewertung","Verdict"), d:L("„Bedeutsam“: Das ganze Konfidenzintervall liegt jenseits der Schwelle. „Kein bedeutsamer Unterschied“: Das ganze Intervall liegt innerhalb der Schwelle. „Signifikant, Bedeutsamkeit unsicher“: p < 0,05, aber das Intervall reicht in den Bereich unterhalb der Schwelle. „Unklar“: Die Daten reichen für keine Aussage, mehr Versuche helfen.","“Meaningful”: the whole confidence interval lies beyond the threshold. “No meaningful difference”: the whole interval lies within the threshold. “Significant, relevance uncertain”: p < 0.05, but the interval reaches below the threshold. “Unclear”: the data don't support a conclusion; more attempts help.")},
+  {k:"box", t:L("Boxplot","Box plot"), d:L("Box: mittlere 50 % der Werte (1. bis 3. Quartil), Strich: Median, Raute: Mittelwert, Punkte: einzelne Versuche, Antennen: kleinster und größter Wert innerhalb des 1,5-fachen Interquartilsabstands (Tukey).","Box: middle 50 % of the values (1st to 3rd quartile), line: median, diamond: mean, dots: individual attempts, whiskers: smallest and largest value within 1.5 times the interquartile range (Tukey).")},
+  {k:"ord", t:L("Reihenfolge","Order"), d:L("Innerhalb jedes Paares war die Reihenfolge von A und B zufällig (AB oder BA), damit Ermüdung, Aufwärmen und Gewöhnung beide Varianten gleich treffen. Lern- und Ermüdungstrends werden nicht herausgerechnet.","Within each pair the order of A and B was random (AB or BA) so that fatigue, warm-up and familiarisation affect both variants equally. Learning and fatigue trends are not removed.")},
+  {k:"time", t:L("Zeitbezug","Time reference"), d:L("Alle Zeiten zählen ab dem Startsignal in der Tonspur. Die Laufzeit des Schalls vom Lautsprecher zum Aufnahmegerät (343 m/s) wird herausgerechnet. Die Genauigkeit beträgt ein Videobild (1 / Bildrate).","All times count from the start signal in the audio track. The travel time of the sound from the speaker to the recording device (343 m/s) is subtracted. The precision is one video frame (1 / frame rate).")},
+  {k:"q", t:L("Qualität des Testlaufs","Quality of the test run"), d:EVQTXT()},
+  {k:"pause", t:L("Pause","Rest"), d:EVPAUSETXT()}];
+const EVSRC=()=>[
+  "Pyne, D. B., Trewin, C. B. & Hopkins, W. G. (2004). Progression and variability of competitive performance of Olympic swimmers. Journal of Sports Sciences, 22(7), 613–620. "+L("(Schwelle)","(threshold)"),
+  "Hopkins, W. G. (2000). Measures of reliability in sports medicine and science. Sports Medicine, 30(1), 1–15. "+L("(Variationskoeffizient, Zuverlässigkeit)","(coefficient of variation, reliability)"),
+  "Batterham, A. M. & Hopkins, W. G. (2006). Making meaningful inferences about magnitudes. International Journal of Sports Physiology and Performance, 1(1), 50–57. "+L("(Bewertung über Konfidenzintervall und Schwelle)","(verdict via confidence interval and threshold)"),
+  "Welch, B. L. (1947). The generalization of “Student's” problem when several different population variances are involved. Biometrika, 34(1–2), 28–35. "+L("(Welch-t-Test)","(Welch's t-test)")];
+// Definition jedes Kennwerts; die Markierungen, auf denen er beruht, werden aus den Schritttexten der Auswertung übernommen
+function evDefs(p){
+  p=p||EV.cur||{}; const back=p.start==="back", breast=p.uw==="breast" && !back, S={}; evSteps(p).forEach(s=>S[s.id]=s);
+  const mk=(...ids)=>ids.filter(i=>S[i]).map(i=>`„${S[i].t()}“`).join(L(" und "," and "));
+  const D={
+    rt:[L("Zeit vom Startsignal bis zur ersten sichtbaren Bewegung.","Time from the start signal to the first visible movement."),["move"]],
+    hands:[back?L("Zeit vom Startsignal, bis sich die Hände von den Griffen lösen.","Time from the start signal until the hands leave the grips."):L("Zeit vom Startsignal, bis sich die Hände vom Block lösen.","Time from the start signal until the hands leave the block."),["hands"]],
+    block:[back?L("Zeit vom Startsignal, bis die Füße die Wand verlassen.","Time from the start signal until the feet leave the wall."):L("Zeit vom Startsignal, bis sich der zweite Fuß vom Block löst.","Time from the start signal until the second foot leaves the block."),["off"]],
+    flight:[L("Zeit vom Verlassen des Blocks bzw. der Wand bis zum ersten Wasserkontakt.","Time from leaving the block or wall to the first water contact."),["off","entry"]],
+    jump:[L("Abstand von der Wand bis zur Eintauchstelle der Hände.","Distance from the wall to where the hands enter.")+" "+(S.jump?S.jump.x():""),[]],
+    flightV:[L("Sprungweite geteilt durch Flugzeit: mittlere horizontale Geschwindigkeit in der Luft.","Start distance divided by flight time: mean horizontal velocity in the air."),[]],
+    uwT:[L("Zeit vom ersten Wasserkontakt bis zum Auftauchen des Kopfes.","Time from the first water contact until the head surfaces."),["entry","brk"]],
+    dive:[L("Abstand von der Wand bis zur Stelle, an der der Kopf auftaucht, im Video ausgemessen oder von Hand eingetragen.","Distance from the wall to where the head surfaces, measured in the video or entered manually."),[]],
+    uwV:[L("(Tauchweite − Sprungweite) geteilt durch Tauchzeit: mittlere Geschwindigkeit unter Wasser.","(Underwater distance − start distance) divided by underwater time: mean velocity underwater."),[]],
+    kicks:[L("Anzahl der Delfinbeinschläge bis zum Auftauchen, von Hand gezählt.","Number of dolphin kicks before breaking out, counted manually."),[]],
+    kickF:[L("Beinschläge geteilt durch Tauchzeit, in Schlägen pro Sekunde.","Kicks divided by underwater time, in kicks per second."),[]],
+    dk:[L("Zeit vom Startsignal bis zum Beginn der Abwärtsbewegung des Delfinbeinschlags.","Time from the start signal to the start of the dolphin kick's downbeat."),["dk"]],
+    pull:[L("Zeit vom Startsignal bis zum Beginn des Tauchzugs.","Time from the start signal to the start of the pull-out."),["pull"]],
+    bkick:[L("Zeit vom Startsignal bis zum Beginn des ersten Brustbeinschlags.","Time from the start signal to the start of the first breaststroke kick."),["bkick"]],
+    glide:[L("Zeit vom ersten Wasserkontakt bis zum Beginn des Tauchzugs.","Time from the first water contact to the start of the pull-out."),["entry","pull"]],
+    pullK:[L("Zeit vom Beginn des Tauchzugs bis zum Beginn des ersten Beinschlags.","Time from the start of the pull-out to the start of the first kick."),["pull","bkick"]],
+    t5:[L("Zeit vom Startsignal, bis der Kopf die 5-m-Marke passiert.","Time from the start signal until the head passes the 5 m mark."),["p5"]],
+    t10:[L("Zeit vom Startsignal, bis der Kopf die 10-m-Marke passiert.","Time from the start signal until the head passes the 10 m mark."),["p10"]],
+    t15:[L("Zeit vom Startsignal, bis der Kopf die 15-m-Marke passiert.","Time from the start signal until the head passes the 15 m mark."),["p15"]],
+    v510:[L("5 m geteilt durch die Zeit zwischen 5-m- und 10-m-Marke.","5 m divided by the time between the 5 m and 10 m marks."),[]],
+    v1015:[L("5 m geteilt durch die Zeit zwischen 10-m- und 15-m-Marke.","5 m divided by the time between the 10 m and 15 m marks."),[]],
+    v515:[L("10 m geteilt durch die Zeit zwischen 5-m- und 15-m-Marke.","10 m divided by the time between the 5 m and 15 m marks."),[]]};
+  const skip=new Set(breast?["kicks","kickF"]:["dk","pull","bkick","glide","pullK"]);
+  return EVM().filter(x=>!skip.has(x[0])).map(([k,l,u,dir])=>{ const e=D[k]||["",[]], m=mk(...e[1]);
+    return {k,l,u,dir, def:e[0]+(m?" "+L(`Markierung im Video: ${m}.`,`Video mark: ${m}.`):"")}; });
+}
+const evExecName=p=> p.tech==="start" ? (p.start==="back" ? L("Rückenstart","Backstroke start") : p.uw==="breast" ? L("Startsprung mit Brust-Tauchzug","Dive start with breaststroke pull-out") : L("Startsprung","Dive start"))
+  : p.tech==="turn" ? ({flip:L("Rollwende","Flip turn"), open:L("Kippwende","Open turn")}[p.turn]||"") : "";
+const evSubtitle=p=>["Sprintz Test", evTechName(p.tech), evExecName(p)].filter(Boolean).join(" · ");
+// letzte Seite(n) des Ergebnisblatts: alle Kennwerte, Markierungen und statistischen Werte
+function evPdfDefs(F,p){
+  F.newPage(); F.h1(L("Erklärung der Kennwerte und statistischen Werte","Explanation of the parameters and statistical values"));
+  F.h2(L("Kennwerte","Parameters"));
+  F.table([{h:L("Kennwert","Parameter"),w:2.2},{h:L("Definition","Definition"),w:6.2},{h:L("Besser","Better"),w:1.1}],
+    evDefs(p).map(x=>[{t:x.l+(x.u&&x.u!=="n"?` (${U(x.u)})`:""),f:"b"}, x.def, x.dir==="low"?L("kleiner","lower"):x.dir==="high"?L("größer","higher"):"–"]),{size:7.6});
+  F.h2(L("Markierungen im Video","Video marks"));
+  F.table([{h:L("Markierung","Mark"),w:2.2},{h:L("Was markiert wird","What is marked"),w:7.3}], evSteps(p).filter(s=>s.k!=="sum").map(s=>[{t:s.t(),f:"b"}, s.x()]),{size:7.6});
+  F.h2(L("Statistische Werte","Statistical values"));
+  F.table([{h:L("Begriff","Term"),w:2.2},{h:L("Erklärung","Explanation"),w:7.3}], EVSTAT().map(x=>[{t:x.t,f:"b"}, x.d]),{size:7.6});
+  F.h2(L("Quellen","Sources")); EVSRC().forEach(x=>F.para(x,{size:7.6,color:"#355262",after:3}));
+}
+function evExplHTML(){ const p=EV.cur;
+  return `<details class="evexpl"><summary>${L("So liest du den Vergleich","How to read the comparison")}</summary><dl class="evdl">${EVSTAT().map(x=>`<dt>${x.t}</dt><dd>${x.d}</dd>`).join("")}</dl></details>
+    <details class="evexpl"><summary>${L("Was die Kennwerte bedeuten","What the parameters mean")}</summary><dl class="evdl">${evDefs(p).map(x=>`<dt>${x.l}${x.u&&x.u!=="n"?` (${U(x.u)})`:""}</dt><dd>${x.def}${x.dir?` <i>${x.dir==="low"?L("Kleiner ist besser.","Lower is better."):L("Größer ist besser.","Higher is better.")}</i>`:""}</dd>`).join("")}</dl></details>`; }
 
 /* --- Datei an den Nutzer geben: Claude-Vorschau, Teilen-Menü oder Download --- */
 async function evSaveFile(blob, name, title){
@@ -4081,6 +4299,60 @@ async function evSaveFile(blob, name, title){
   if(window.claude && window.claude.use){ try{ const dl=await window.claude.use("downloads"); if(dl){ try{ await dl.save({filename:name, data:blob}); }catch(e){} return; } }catch(e){} }
   try{ if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:title||name}); return; } }catch(e){ if(e && e.name==="AbortError") return; }
   const a=document.createElement("a"); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),8000);
+}
+
+/* --- PDF ausgeben: herunterladen und gleichzeitig öffnen.
+   Am PC in einem neuen Tab (pro Art ein fester Tab, der beim Neuerstellen ersetzt wird), am Handy im gleichen Tab.
+   pdfTarget() muss direkt im Klick aufgerufen werden, sonst blockiert der Browser das neue Fenster. --- */
+const evSlug=p=>(p.name||"projekt").replace(/[^\w\-äöüÄÖÜß]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60)||"projekt";
+const isStandalone=()=>{ try{ return matchMedia("(display-mode: standalone)").matches || navigator.standalone===true; }catch(e){ return false; } };
+function pdfTarget(name){
+  if(window.claude && window.claude.use) return {mode:"claude"};
+  const mobile = !DESK.matches && (matchMedia("(pointer:coarse)").matches || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+  if(mobile) return {mode: isStandalone() ? "share" : "same"};
+  let w=null; try{ w=window.open("", name||"_blank"); if(w){ try{ w.document.title="Sprintz"; w.document.body.innerHTML=`<p style="font:16px system-ui;padding:2em;color:#355262">${L("PDF wird erstellt …","Creating PDF …")}</p>`; }catch(e){} } }catch(e){ w=null; }
+  return {mode:"desk", w};
+}
+function pdfAbort(tg){ try{ if(tg && tg.w && !tg.w.closed && tg.w.location.href==="about:blank") tg.w.close(); }catch(e){} }
+async function pdfDeliver(tg, blob, name, title){
+  tg=tg||{mode:"desk"};
+  if(tg.mode==="claude"){ try{ const dl=await window.claude.use("downloads"); if(dl){ try{ await dl.save({filename:name, data:blob}); }catch(e){} return; } }catch(e){} }
+  const file=new File([blob], name, {type:"application/pdf"});
+  if(tg.mode==="share"){ try{ if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:title||name}); return; } }catch(e){ if(e && e.name==="AbortError") return; } }
+  const url=URL.createObjectURL(file);
+  if(tg.mode==="same"){ location.assign(url); return; }
+  // herunterladen …
+  const a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  // … und im Tab öffnen
+  try{ if(tg.w && !tg.w.closed){ tg.w.location.href=url; tg.w.focus&&tg.w.focus(); } }catch(e){}
+  setTimeout(()=>URL.revokeObjectURL(url), 10*60*1000);
+}
+
+/* --- Testprotokoll: Übersichtsblatt zum Mitnehmen an den Beckenrand --- */
+async function evProtoBuild(p){
+  const dt=new Date(), dts=dt.toLocaleDateString(L("de-DE","en-GB"));
+  const doc=new PdfDoc(), F=new PdfFlow(doc, `Sprintz · ${p.name} · ${L("Testprotokoll","Test protocol")} · ${dts}`);
+  F.h1(L(`Testprotokoll ${p.name}`,`Test protocol ${p.name}`));
+  F.para(evSubtitle(p),{size:11,f:"b",after:2,color:"#0A7A9F"});
+  const who=p.person && PERS.name(p.person);
+  F.para([who?L(`Athlet: ${who}`,`Athlete: ${who}`):"", L(`Stand: ${dts}`,`As of: ${dts}`), p.mode==="upload"?L("Aufnahme mit der Kamera-App, danach hochladen","Recorded with the camera app, uploaded afterwards"):p.mode==="cam"?L("Aufnahme in Sprintz","Recorded in Sprintz"):""].filter(Boolean).join(" · "),{color:"#557080",after:8});
+  F.table([{h:L("Variante","Variant"),w:1.1},{h:L("Name","Name"),w:2},{h:L("Beschreibung zur Standardisierung","Description for standardisation"),w:5}],
+    [["A",evVN(p,"A"),p.A||"–"],["B",evVN(p,"B"),p.B||"–"]].map(r=>[{t:r[0],f:"b",c:r[0]==="A"?EVC.A:EVC.B},{t:r[1],f:"b"},r[2]]));
+  const ord=evOrd(p), nb=ord.filter(t=>t.v==="BL").length, stg=[...new Set(ord.map(t=>t.stage??1))];
+  F.h2(L("Ablauf","Procedure"));
+  F.para(L(`${ord.length} Versuche: ${nb} Baseline-Versuche in der gewohnten Technik, danach ${stg.filter(x=>x!==0).length} Teststufe(n). Führe die Versuche genau in dieser Reihenfolge durch. Die Reihenfolge von A und B ist innerhalb jedes Paares zufällig, damit Ermüdung, Aufwärmen und Gewöhnung beide Varianten gleich treffen.`,
+    `${ord.length} attempts: ${nb} baseline attempts with the usual technique, then ${stg.filter(x=>x!==0).length} test stage(s). Do the attempts in exactly this order. The order of A and B is random within each pair so that fatigue, warm-up and familiarisation affect both variants equally.`),{size:9});
+  F.para(L("Qualität: ","Quality: ")+EVQTXT(),{size:8.5,color:"#355262"});
+  let no=0;
+  for(const s of stg){ const ts=ord.filter(t=>(t.stage??1)===s); F.h3(evStageName(s)+` (${ts.length})`);
+    F.table([{h:"Nr.",w:0.55},{h:L("Var.","Var."),w:0.6},{h:L("Name","Name"),w:2},{h:L("Uhrzeit","Time"),w:0.9},{h:"✓",w:0.45,a:"r"},{h:L("Qualität 1–5","Quality 1–5"),w:1.3},{h:L("Bemerkung","Remark"),w:3.4}],
+      ts.map(t=>{ no++; return [{t:String(no),f:"b"}, {t:t.v,f:"b",c:EVC[t.v]}, evVN(p,t.v), "", t.status==="done"?"✓":t.vid?"•":"", t.v==="BL"?"–":(t.rating?String(t.rating):"1  2  3  4  5"), t.note||""]; }),{size:8.2,minH:22}); }
+  F.footer();
+  return doc.output();
+}
+async function evProtoPdf(p, tg){
+  try{ const blob=await evProtoBuild(p); await pdfDeliver(tg, blob, `${evSlug(p)}-${L("testprotokoll","test-protocol")}.pdf`, p.name); }
+  catch(e){ console.error(e); pdfAbort(tg); toast(L("Das Testprotokoll konnte nicht erstellt werden.","The test protocol could not be created.")); }
 }
 
 /* --- Ergebnisblatt als PDF: zuerst die Kennwerte wählen --- */
@@ -4099,10 +4371,11 @@ function evPdfAsk(p){
   $("evPdfNo").onclick=()=>{ d.hidden=true; };
   d.onclick=e=>{ if(e.target===d) d.hidden=true; };
   $("evPdfGo").onclick=async()=>{ const ks=boxes().filter(b=>b.checked).map(b=>b.value); if(!ks.length){ $("evPdfMsg").textContent=L("Wähle mindestens einen Kennwert.","Choose at least one parameter."); return; }
+    const tg=pdfTarget("sprintz-ergebnis");
     EV.pdfK=ks; const go=$("evPdfGo"); go.disabled=true; $("evPdfMsg").textContent=L("PDF wird erstellt …","Creating PDF …");
-    try{ const blob=await evPdfBuild(p,ks); const slug=(p.name||"projekt").replace(/[^\w\-äöüÄÖÜß]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60)||"projekt";
-      d.hidden=true; await evSaveFile(blob, `${slug}-${L("ergebnisblatt","results")}.pdf`, p.name); }
-    catch(e){ console.error(e); $("evPdfMsg").textContent=L("Das PDF konnte nicht erstellt werden.","The PDF could not be created."); }
+    try{ const blob=await evPdfBuild(p,ks);
+      d.hidden=true; await pdfDeliver(tg, blob, `${evSlug(p)}-${L("ergebnisblatt","results")}.pdf`, p.name); }
+    catch(e){ console.error(e); pdfAbort(tg); $("evPdfMsg").textContent=L("Das PDF konnte nicht erstellt werden.","The PDF could not be created."); }
     finally{ go.disabled=false; } };
 }
 
@@ -4161,7 +4434,7 @@ class PdfFlow{
       const t=line?line+" "+w:w; if(this.d.tw(t,size,f)<=width || !line) line=t; else { out.push(line); line=w; } }); out.push(line); }); return out; }
   para(str,o={}){ const size=o.size||9.5, f=o.f||"r", lh=size*1.38, x=this.M+(o.indent||0), lines=this.wrap(str,size,f,this.cw-(o.indent||0));
     lines.forEach(l=>{ this.need(lh); this.d.text(x,this.y+size,l,{size,f,color:o.color}); this.y+=lh; }); this.y+=o.after??4; }
-  h1(str){ this.need(40); this.d.text(this.M,this.y+20,str,{size:20,f:"b",color:"#0D2230"}); this.y+=30; }
+  h1(str){ const ls=this.wrap(str,20,"b",this.cw); this.need(14+ls.length*25); ls.forEach(l=>{ this.d.text(this.M,this.y+20,l,{size:20,f:"b",color:"#0D2230"}); this.y+=25; }); this.y+=5; }
   h2(str){ this.need(48); this.y+=8; this.d.text(this.M,this.y+12,str.toUpperCase(),{size:11.5,f:"b",color:"#0A7A9F"}); this.y+=16; this.d.line(this.M,this.y,this.M+this.cw,this.y,{color:"#C9D8E0",lw:0.8}); this.y+=8; }
   h3(str){ this.need(34); this.y+=4; this.d.text(this.M,this.y+10,str,{size:10,f:"b",color:"#0D2230"}); this.y+=16; }
   // Tabelle: cols=[{h, w (Anteil), a:"l"|"r"}], rows=[[zelle]], zelle = Text oder {t, f, c}
@@ -4173,7 +4446,7 @@ class PdfFlow{
       let x=this.M; cs.forEach((c,i)=>{ c.lines.forEach((l,k)=>{ const al=cols[i].a==="r"; this.d.text(al?x+W[i]-pad:x+pad, this.y+pad+size*0.95+k*lh, l, {size, f:isHead?"b":(c.f||"r"), color:isHead?"#355262":(c.c||"#0D2230"), align:al?"right":"left"}); }); x+=W[i]; });
       this.y+=h; this.d.line(this.M,this.y,this.M+this.cw,this.y,{color:"#D3E0E7",lw:0.5}); };
     this.need(hh+lh+2*pad); drawRow(head,hh,true);
-    rows.forEach((r,ri)=>{ const cs=lay(r,"r"), h=Math.max(...cs.map(c=>c.lines.length))*lh+2*pad; if(this.need(h)){ drawRow(head,hh,true); } drawRow(cs,h,false,ri%2===1); });
+    rows.forEach((r,ri)=>{ const cs=lay(r,"r"), h=Math.max(o.minH||0, Math.max(...cs.map(c=>c.lines.length))*lh+2*pad); if(this.need(h)){ drawRow(head,hh,true); } drawRow(cs,h,false,ri%2===1); });
     this.y+=o.after??10; }
   img(id,w,h,x){ this.d.image(id, x??this.M, this.y, w, h); }
   footer(){ const n=this.d.pages.length; this.d.pages.forEach((pg,i)=>{ this.d.pg=pg; this.d.line(this.M,this.d.H-34,this.M+this.cw,this.d.H-34,{color:"#D3E0E7",lw:0.5});
@@ -4196,8 +4469,9 @@ async function evPdfBuild(p, keys){
   const doc=new PdfDoc(), F=new PdfFlow(doc, `Sprintz · ${p.name} · ${dt.toLocaleDateString(L("de-DE","en-GB"))}`);
   const tm=ms=>new Date(ms).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"}), dy=ms=>new Date(ms).toLocaleDateString(L("de-DE","en-GB"));
   // Kopf
-  F.h1(L("Ergebnisblatt Technikevaluation","Technique evaluation results sheet"));
-  F.para(`${p.name} · ${evTechName(p.tech)} · ${p.start==="back"?L("Rückenstart","Backstroke start"):L("Start vom Block","Start from the block")}`,{size:11,f:"b",after:2});
+  F.h1(L(`Ergebnisblatt ${p.name}`,`Results sheet ${p.name}`));
+  F.para(evSubtitle(p),{size:11,f:"b",after:2,color:"#0A7A9F"});
+  if(p.person && PERS.name(p.person)) F.para(L(`Athlet: ${PERS.name(p.person)}`,`Athlete: ${PERS.name(p.person)}`),{after:2});
   const tdays=tl.rows.length?[...new Set(tl.rows.map(r=>new Date(r.t0).toDateString()))].map(s=>dy(Date.parse(s))):[];
   const dts=dt.toLocaleDateString(L("de-DE","en-GB")), tds=tdays.join(", ");
   F.para(L(`Erstellt am ${dts}`,`Created on ${dts}`)+(tdays.length?" · "+L(`Testtage: ${tds}`,`Test days: ${tds}`):""),{color:"#557080",after:8});
@@ -4209,11 +4483,11 @@ async function evPdfBuild(p, keys){
   F.para(L(`Ablauf: ${nb} Baseline-Versuche in der gewohnten Technik, danach Teststufen mit Versuchen je Variante (${perSt}).`,`Procedure: ${nb} baseline attempts with the usual technique, followed by test stages with attempts per variant (${perSt}).`)+" "
     +L("Die Reihenfolge von A und B war innerhalb jedes Paares zufällig (AB oder BA), damit Ermüdung, Aufwärmen und Gewöhnung beide Varianten gleich treffen.","The order of A and B was random within each pair (AB or BA) so that fatigue, warm-up and familiarisation affect both variants equally.")+" "
     +L(`Ausgewertet wurden ${nd} von ${nt} Versuchen, Bild für Bild im Video.`,`${nd} of ${nt} attempts were analysed frame by frame in the video.`)+(fps?" "+L(`Höchste Bildrate: ${fps} Bilder pro Sekunde.`,`Highest frame rate: ${fps} frames per second.`):"")+" "+L("Alle Zeiten beziehen sich auf das Startsignal.","All times refer to the start signal."));
-  EVX().forEach(x=>F.para(x,{size:8.5,color:"#355262"}));
+  F.para(L("Was die Kennwerte und statistischen Werte bedeuten, steht auf der letzten Seite.","What the parameters and statistical values mean is explained on the last page."),{size:8.5,color:"#355262"});
   // Baseline
   if(BL.length){
     F.h2(L("Baseline","Baseline"));
-    F.table([{h:L("Kennwert","Parameter"),w:3.2},...BL.map((t,i)=>({h:String(i+1),w:1,a:"r"})),{h:"M",w:1.1,a:"r"},{h:"SD",w:1,a:"r"},{h:"CV",w:1,a:"r"}],
+    F.table([{h:L("Kennwert","Parameter"),w:3.2},...BL.map((t,i)=>({h:L(`Versuch ${i+1}`,`Attempt ${i+1}`),w:1.15,a:"r"})),{h:"M",w:1.1,a:"r"},{h:"SD",w:1,a:"r"},{h:"CV",w:1,a:"r"}],
       ks.filter(k=>evVals(BL,k).length).map(k=>{ const [,l,u]=info(k), v=evVals(BL,k), m=stM(v), s=stSD(v); return [l+uL(u), ...BL.map(t=>fmtU(t.m[k],u)), {t:fmtU(m,u),f:"b"}, fmtU(s,u), s!=null&&m?evPct(s/Math.abs(m)*100):"–"]; }));
   }
   // Vergleich gesamt und je Teststufe
@@ -4253,7 +4527,7 @@ async function evPdfBuild(p, keys){
     const m=t.m||{}, key=ks.slice(0,4).filter(k=>m[k]!=null).map(k=>`${info(k)[1]} ${evFmt(m[k],info(k)[2])}`);
     let txt=parts.filter(Boolean).join(" · "); if(key.length) txt+="\n"+key.join(" · "); if(t.note) txt+="\n"+L("Bemerkung: ","Remark: ")+t.note;
     F.need(30); F.para(txt,{size:8.5,after:5}); });
-  F.para(L("Quelle der Schwelle: Pyne, D. B., Trewin, C. B. & Hopkins, W. G. (2004). Progression and variability of competitive performance of Olympic swimmers. Journal of Sports Sciences, 22(7), 613–620.","Source of the threshold: Pyne, D. B., Trewin, C. B. & Hopkins, W. G. (2004). Progression and variability of competitive performance of Olympic swimmers. Journal of Sports Sciences, 22(7), 613–620."),{size:7.5,color:"#557080"});
+  evPdfDefs(F,p);
   F.footer();
   return doc.output();
 }

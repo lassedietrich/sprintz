@@ -1,0 +1,650 @@
+[
+[
+"The frame in which your head passes the 5 {0} mark (backstroke flag line).",
+"Başının 5 {0} işaretini (sırtüstü bayraklarının hizası) geçtiği kare.",
+"Кадр, в котором голова проходит отметку 5 {0} (линию флажков для плавания на спине).",
+"Het beeld waarin je hoofd de 5-{0}-markering (lijn van de rugslagvlaggetjes) passeert."
+],
+[
+"The frame in which your head passes the {0} m mark.",
+"Başının {0} m işaretini geçtiği kare.",
+"Кадр, в котором голова проходит отметку {0} м.",
+"Het beeld waarin je hoofd de {0}-m-markering passeert."
+],
+[
+"Close-up ±40 frames",
+"Yakın görünüm ±40 kare",
+"Крупно ±40 кадров",
+"Detail ±40 beelden"
+],
+[
+"Show description",
+"Açıklamayı göster",
+"Показать описание",
+"Beschrijving tonen"
+],
+[
+"the 10 m mark",
+"10 m işaretine",
+"отметку 10 м",
+"de 10-m-markering"
+],
+[
+"Move the perpendicular onto {0}: with ← → (Shift: faster), by dragging or by tapping.",
+"Dikmeyi {0} üzerine getir: ← → ile (Shift: daha hızlı), sürükleyerek ya da dokunarak.",
+"Перемести перпендикуляр на {0}: клавишами ← → (Shift: быстрее), перетаскиванием или касанием.",
+"Schuif de loodlijn naar {0}: met ← → (Shift: sneller), door te slepen of te tikken."
+],
+[
+"Measured: <b>{0}</b>. Confirm with Enter.",
+"Ölçülen: <b>{0}</b>. Enter ile onayla.",
+"Измерено: <b>{0}</b>. Подтверди клавишей Enter.",
+"Gemeten: <b>{0}</b>. Bevestig met Enter."
+],
+[
+"Move the perpendicular onto {0}",
+"Dikmeyi {0} üzerine getir",
+"Перемести перпендикуляр на {0}",
+"Schuif de loodlijn naar {0}"
+],
+[
+"Measuring",
+"Ölçüm",
+"Измерение",
+"Meten"
+],
+[
+"Reference marks",
+"Referans işaretleri",
+"Опорные отметки",
+"Referentiemarkeringen"
+],
+[
+"Direction of the perpendicular",
+"Dikmenin yönü",
+"Направление перпендикуляра",
+"Richting van de loodlijn"
+],
+[
+"Perpendicular up",
+"Dikme yukarı",
+"Перпендикуляр вверх",
+"Loodlijn omhoog"
+],
+[
+"Perpendicular down",
+"Dikme aşağı",
+"Перпендикуляр вниз",
+"Loodlijn omlaag"
+],
+[
+"Remove last point",
+"Son noktayı kaldır",
+"Удалить последнюю точку",
+"Laatste punt verwijderen"
+],
+[
+"Remove all points",
+"Tüm noktaları kaldır",
+"Удалить все точки",
+"Alle punten verwijderen"
+],
+[
+"Test protocol (PDF)",
+"Test protokolü (PDF)",
+"Протокол теста (PDF)",
+"Testprotocol (pdf)"
+],
+[
+"Add baseline attempt",
+"Baseline denemesi ekle",
+"Добавить попытку базовой линии",
+"Baseline-poging toevoegen"
+],
+[
+"Add attempt",
+"Deneme ekle",
+"Добавить попытку",
+"Poging toevoegen"
+],
+[
+"Which variant?",
+"Hangi varyant?",
+"Какой вариант?",
+"Welke variant?"
+],
+[
+"A and B (random order)",
+"A ve B (rastgele sıra)",
+"A и B (в случайном порядке)",
+"A en B (willekeurige volgorde)"
+],
+[
+"Delete attempt",
+"Denemeyi sil",
+"Удалить попытку",
+"Poging verwijderen"
+],
+[
+"The frame in which your head passes the 5 m mark (backstroke flag line).",
+"Başının 5 m işaretini (sırtüstü bayraklarının hizası) geçtiği kare.",
+"Кадр, в котором голова проходит отметку 5 м (линию флажков для плавания на спине).",
+"Het beeld waarin je hoofd de 5-m-markering (lijn van de rugslagvlaggetjes) passeert."
+],
+[
+"Measuring only works if two markings (5 m and 15 m, 5 m and 10 m, or 10 m and 15 m) are clearly visible in the frame where you surface. Otherwise enter the value manually or skip it.",
+"Ölçüm yalnızca yüzeye çıktığın karede iki işaret (5 m ve 15 m, 5 m ve 10 m ya da 10 m ve 15 m) açıkça görünüyorsa mümkündür. Aksi halde değeri elle gir ya da atla.",
+"Измерить можно, только если в кадре всплытия чётко видны две отметки (5 м и 15 м, 5 м и 10 м или 10 м и 15 м). Иначе введи значение вручную или пропусти его.",
+"Meten lukt alleen als in het beeld waarin je bovenkomt twee markeringen (5 m en 15 m, 5 m en 10 m of 10 m en 15 m) duidelijk te zien zijn. Vul de waarde anders handmatig in of sla haar over."
+],
+[
+"Save and go to the next attempt",
+"Kaydet ve sonraki denemeye geç",
+"Сохранить и перейти к следующей попытке",
+"Opslaan en naar de volgende poging"
+],
+[
+"Continue without saving",
+"Kaydetmeden devam et",
+"Продолжить без сохранения",
+"Doorgaan zonder opslaan"
+],
+[
+"Move the perpendicular",
+"Dikmeyi kaydır",
+"Сдвинуть перпендикуляр",
+"Loodlijn verschuiven"
+],
+[
+"Direction",
+"Yön",
+"Направление",
+"Richting"
+],
+[
+"Attempt {0}",
+"Deneme {0}",
+"Попытка {0}",
+"Poging {0}"
+],
+[
+"Number of analysed attempts a value was calculated from.",
+"Bir değerin hesaplandığı analiz edilmiş deneme sayısı.",
+"Число проанализированных попыток, по которым рассчитано значение.",
+"Aantal geanalyseerde pogingen waaruit een waarde is berekend."
+],
+[
+"M (mean)",
+"M (ortalama)",
+"M (среднее)",
+"M (gemiddelde)"
+],
+[
+"Arithmetic mean of all attempts in a group.",
+"Bir gruptaki tüm denemelerin aritmetik ortalaması.",
+"Среднее арифметическое всех попыток группы.",
+"Rekenkundig gemiddelde van alle pogingen in een groep."
+],
+[
+"SD (standard deviation)",
+"SD (standart sapma)",
+"SD (стандартное отклонение)",
+"SD (standaardafwijking)"
+],
+[
+"Spread of the single values around the mean (sample standard deviation, divided by n − 1).",
+"Tek tek değerlerin ortalama etrafındaki dağılımı (örneklem standart sapması, n − 1'e bölünür).",
+"Разброс отдельных значений вокруг среднего (выборочное стандартное отклонение, деление на n − 1).",
+"Spreiding van de afzonderlijke waarden rond het gemiddelde (steekproefstandaardafwijking, gedeeld door n − 1)."
+],
+[
+"CV (coefficient of variation)",
+"CV (varyasyon katsayısı)",
+"CV (коэффициент вариации)",
+"CV (variatiecoëfficiënt)"
+],
+[
+"SD divided by M, in percent. Shows how consistent the baseline attempts are: the smaller, the more even.",
+"SD'nin M'ye bölümü, yüzde olarak. Baseline denemelerinin ne kadar tutarlı olduğunu gösterir: ne kadar küçükse o kadar düzenli.",
+"SD, делённое на M, в процентах. Показывает, насколько стабильны попытки базовой линии: чем меньше, тем ровнее.",
+"SD gedeeld door M, in procenten. Laat zien hoe constant de baseline-pogingen zijn: hoe kleiner, hoe gelijkmatiger."
+],
+[
+"CI (95 % confidence interval)",
+"GA (%95 güven aralığı)",
+"ДИ (95-процентный доверительный интервал)",
+"BI (95%-betrouwbaarheidsinterval)"
+],
+[
+"The true mean lies in this range with 95 % certainty (t distribution).",
+"Gerçek ortalama %95 olasılıkla bu aralıktadır (t dağılımı).",
+"Истинное среднее с вероятностью 95 % лежит в этом диапазоне (t-распределение).",
+"Het werkelijke gemiddelde ligt met 95 % zekerheid in dit bereik (t-verdeling)."
+],
+[
+"Difference between the means of B and A with its 95 % confidence interval (Welch's t-test, unequal variances). For times, a negative value means B was faster.",
+"B ve A ortalamaları arasındaki fark ve %95 güven aralığı (Welch t-testi, eşit olmayan varyanslar). Sürelerde negatif değer B'nin daha hızlı olduğu anlamına gelir.",
+"Разница средних B и A с 95-процентным доверительным интервалом (t-критерий Уэлча, неравные дисперсии). Для времени отрицательное значение означает, что B был быстрее.",
+"Verschil tussen de gemiddelden van B en A met het 95%-betrouwbaarheidsinterval (t-toets van Welch, ongelijke varianties). Bij tijden betekent een negatieve waarde dat B sneller was."
+],
+[
+"Probability of seeing a difference at least this large purely by chance if there is no real one. Below 0.05 it counts as statistically significant.",
+"Gerçek bir fark yokken en az bu büyüklükte bir farkı tamamen tesadüfen görme olasılığı. 0,05'in altında istatistiksel olarak anlamlı sayılır.",
+"Вероятность увидеть разницу не меньше этой чисто случайно, если реальной разницы нет. Ниже 0,05 она считается статистически значимой.",
+"Kans om puur toevallig een minstens zo groot verschil te zien als er geen echt verschil is. Onder 0,05 geldt het als statistisch significant."
+],
+[
+"Threshold (smallest worthwhile change)",
+"Eşik (en küçük anlamlı değişim)",
+"Порог (наименьшее значимое изменение)",
+"Drempel (kleinste relevante verandering)"
+],
+[
+"{0} % of the baseline mean. This equals half the performance variation of Olympic swimmers between two competitions (coefficient of variation 0.8 %; Pyne, Trewin & Hopkins, 2004). For times, at least one video frame is used, because smaller differences can't be measured.",
+"Baseline ortalamasının %{0}'ı. Bu, olimpik yüzücülerin iki yarış arasındaki performans dalgalanmasının yarısına eşittir (varyasyon katsayısı %0,8; Pyne, Trewin & Hopkins, 2004). Sürelerde eşik en az bir video karesidir, çünkü daha küçük farklar ölçülemez.",
+"{0} % от среднего базовой линии. Это половина колебаний результатов олимпийских пловцов между двумя соревнованиями (коэффициент вариации 0,8 %; Pyne, Trewin & Hopkins, 2004). Для времени порог не меньше одного кадра видео, потому что меньшие различия измерить нельзя.",
+"{0} % van het baseline-gemiddelde. Dat is de helft van de prestatieschommeling van olympische zwemmers tussen twee wedstrijden (variatiecoëfficiënt 0,8 %; Pyne, Trewin & Hopkins, 2004). Bij tijden geldt minstens één videobeeld als drempel, omdat kleinere verschillen niet meetbaar zijn."
+],
+[
+"Box plot",
+"Kutu grafiği",
+"Диаграмма размаха",
+"Boxplot"
+],
+[
+"Box: middle 50 % of the values (1st to 3rd quartile), line: median, diamond: mean, dots: individual attempts, whiskers: smallest and largest value within 1.5 times the interquartile range (Tukey).",
+"Kutu: değerlerin ortadaki %50'si (1. ile 3. çeyrek), çizgi: medyan, eşkenar dörtgen: ortalama, noktalar: tek tek denemeler, bıyıklar: çeyrekler açıklığının 1,5 katı içindeki en küçük ve en büyük değer (Tukey).",
+"Ящик: средние 50 % значений (от 1-го до 3-го квартиля), линия: медиана, ромб: среднее, точки: отдельные попытки, усы: наименьшее и наибольшее значение в пределах 1,5 межквартильного размаха (Тьюки).",
+"Box: middelste 50 % van de waarden (1e tot 3e kwartiel), streep: mediaan, ruit: gemiddelde, punten: afzonderlijke pogingen, snorharen: kleinste en grootste waarde binnen 1,5 keer de interkwartielafstand (Tukey)."
+],
+[
+"Order",
+"Sıra",
+"Порядок",
+"Volgorde"
+],
+[
+"Within each pair the order of A and B was random (AB or BA) so that fatigue, warm-up and familiarisation affect both variants equally. Learning and fatigue trends are not removed.",
+"Her çiftte A ve B'nin sırası rastgeleydi (AB ya da BA); böylece yorgunluk, ısınma ve alışma iki varyantı eşit etkiler. Öğrenme ve yorgunluk eğilimleri hesaptan çıkarılmaz.",
+"В каждой паре порядок A и B был случайным (AB или BA), чтобы усталость, разминка и привыкание одинаково влияли на оба варианта. Тренды обучения и утомления не исключаются.",
+"Binnen elk paar was de volgorde van A en B willekeurig (AB of BA), zodat vermoeidheid, opwarming en gewenning beide varianten even sterk raken. Leer- en vermoeidheidstrends worden niet weggerekend."
+],
+[
+"Time reference",
+"Zaman referansı",
+"Отсчёт времени",
+"Tijdsreferentie"
+],
+[
+"All times count from the start signal in the audio track. The travel time of the sound from the speaker to the recording device (343 m/s) is subtracted. The precision is one video frame (1 / frame rate).",
+"Tüm süreler ses kaydındaki start sinyalinden itibaren sayılır. Sesin hoparlörden kayıt cihazına ulaşma süresi (343 m/s) çıkarılır. Doğruluk bir video karesidir (1 / kare hızı).",
+"Всё время отсчитывается от стартового сигнала на звуковой дорожке. Время прохождения звука от динамика до записывающего устройства (343 м/с) вычитается. Точность составляет один кадр видео (1 / частота кадров).",
+"Alle tijden tellen vanaf het startsignaal in het geluidsspoor. De looptijd van het geluid van de luidspreker naar het opnameapparaat (343 m/s) wordt eraf gehaald. De nauwkeurigheid is één videobeeld (1 / beeldsnelheid)."
+],
+[
+"(threshold)",
+"(eşik)",
+"(порог)",
+"(drempel)"
+],
+[
+"(coefficient of variation, reliability)",
+"(varyasyon katsayısı, güvenilirlik)",
+"(коэффициент вариации, надёжность)",
+"(variatiecoëfficiënt, betrouwbaarheid)"
+],
+[
+"(verdict via confidence interval and threshold)",
+"(güven aralığı ve eşiğe göre değerlendirme)",
+"(оценка по доверительному интервалу и порогу)",
+"(beoordeling via betrouwbaarheidsinterval en drempel)"
+],
+[
+"(Welch's t-test)",
+"(Welch t-testi)",
+"(t-критерий Уэлча)",
+"(t-toets van Welch)"
+],
+[
+" and ",
+" ve ",
+" и ",
+" en "
+],
+[
+"Time from the start signal to the first visible movement.",
+"Start sinyalinden ilk görünür harekete kadar geçen süre.",
+"Время от стартового сигнала до первого видимого движения.",
+"Tijd van het startsignaal tot de eerste zichtbare beweging."
+],
+[
+"Time from the start signal until the hands leave the grips.",
+"Start sinyalinden ellerin tutamaklardan ayrılmasına kadar geçen süre.",
+"Время от стартового сигнала до момента, когда руки отпускают поручни.",
+"Tijd van het startsignaal tot de handen de handgrepen loslaten."
+],
+[
+"Time from the start signal until the hands leave the block.",
+"Start sinyalinden ellerin bloktan ayrılmasına kadar geçen süre.",
+"Время от стартового сигнала до отрыва рук от тумбочки.",
+"Tijd van het startsignaal tot de handen het startblok loslaten."
+],
+[
+"Time from the start signal until the feet leave the wall.",
+"Start sinyalinden ayakların duvardan ayrılmasına kadar geçen süre.",
+"Время от стартового сигнала до отрыва стоп от стенки.",
+"Tijd van het startsignaal tot de voeten de wand verlaten."
+],
+[
+"Time from the start signal until the second foot leaves the block.",
+"Start sinyalinden ikinci ayağın bloktan ayrılmasına kadar geçen süre.",
+"Время от стартового сигнала до отрыва второй ноги от тумбочки.",
+"Tijd van het startsignaal tot de tweede voet het startblok verlaat."
+],
+[
+"Time from leaving the block or wall to the first water contact.",
+"Bloktan ya da duvardan ayrılmadan ilk su temasına kadar geçen süre.",
+"Время от отрыва от тумбочки или стенки до первого касания воды.",
+"Tijd van het verlaten van het startblok of de wand tot het eerste watercontact."
+],
+[
+"Distance from the wall to where the hands enter.",
+"Duvardan ellerin suya girdiği yere kadar olan mesafe.",
+"Расстояние от стенки до места входа рук в воду.",
+"Afstand van de wand tot de plek waar de handen het water ingaan."
+],
+[
+"Start distance divided by flight time: mean horizontal velocity in the air.",
+"Atlama mesafesinin uçuş süresine bölümü: havadaki ortalama yatay hız.",
+"Дальность прыжка, делённая на время полёта: средняя горизонтальная скорость в воздухе.",
+"Sprongafstand gedeeld door vluchttijd: gemiddelde horizontale snelheid in de lucht."
+],
+[
+"Time from the first water contact until the head surfaces.",
+"İlk su temasından başın yüzeye çıkmasına kadar geçen süre.",
+"Время от первого касания воды до всплытия головы.",
+"Tijd van het eerste watercontact tot het hoofd bovenkomt."
+],
+[
+"Distance from the wall to where the head surfaces, measured in the video or entered manually.",
+"Duvardan başın yüzeye çıktığı yere kadar olan mesafe; videoda ölçülür ya da elle girilir.",
+"Расстояние от стенки до места всплытия головы, измеренное на видео или введённое вручную.",
+"Afstand van de wand tot de plek waar het hoofd bovenkomt, gemeten in de video of handmatig ingevuld."
+],
+[
+"(Underwater distance − start distance) divided by underwater time: mean velocity underwater.",
+"(Su altı mesafesi − atlama mesafesi) bölü su altı süresi: su altındaki ortalama hız.",
+"(Дистанция под водой − дальность прыжка), делённая на время под водой: средняя скорость под водой.",
+"(Onderwaterafstand − sprongafstand) gedeeld door onderwatertijd: gemiddelde snelheid onder water."
+],
+[
+"Number of dolphin kicks before breaking out, counted manually.",
+"Yüzeye çıkmadan önceki yunus vuruşu sayısı, elle sayılır.",
+"Количество ударов ногами дельфином до выхода на поверхность, подсчитанное вручную.",
+"Aantal dolfijnslagen tot het bovenkomen, met de hand geteld."
+],
+[
+"Kicks divided by underwater time, in kicks per second.",
+"Vuruş sayısının su altı süresine bölümü, saniyedeki vuruş olarak.",
+"Удары, делённые на время под водой, в ударах в секунду.",
+"Slagen gedeeld door onderwatertijd, in slagen per seconde."
+],
+[
+"Time from the start signal to the start of the dolphin kick's downbeat.",
+"Start sinyalinden yunus vuruşunun aşağı hareketinin başlangıcına kadar geçen süre.",
+"Время от стартового сигнала до начала движения ног вниз при ударе дельфином.",
+"Tijd van het startsignaal tot het begin van de neerwaartse beweging van de dolfijnslag."
+],
+[
+"Time from the start signal to the start of the pull-out.",
+"Start sinyalinden kurbağalama su altı çekişinin başlangıcına kadar geçen süre.",
+"Время от стартового сигнала до начала подводного гребка брассом.",
+"Tijd van het startsignaal tot het begin van de onderwaterarmslag."
+],
+[
+"Time from the start signal to the start of the first breaststroke kick.",
+"Start sinyalinden ilk kurbağalama bacak vuruşunun başlangıcına kadar geçen süre.",
+"Время от стартового сигнала до начала первого толчка ногами брассом.",
+"Tijd van het startsignaal tot het begin van de eerste schoolslagbeenslag."
+],
+[
+"Time from the first water contact to the start of the pull-out.",
+"İlk su temasından su altı çekişinin başlangıcına kadar geçen süre.",
+"Время от первого касания воды до начала подводного гребка.",
+"Tijd van het eerste watercontact tot het begin van de onderwaterarmslag."
+],
+[
+"Time from the start of the pull-out to the start of the first kick.",
+"Su altı çekişinin başlangıcından ilk bacak vuruşunun başlangıcına kadar geçen süre.",
+"Время от начала подводного гребка до начала первого толчка ногами.",
+"Tijd van het begin van de onderwaterarmslag tot het begin van de eerste beenslag."
+],
+[
+"Time from the start signal until the head passes the 5 m mark.",
+"Start sinyalinden başın 5 m işaretini geçmesine kadar geçen süre.",
+"Время от стартового сигнала до прохождения головой отметки 5 м.",
+"Tijd van het startsignaal tot het hoofd de 5-m-markering passeert."
+],
+[
+"Time from the start signal until the head passes the 10 m mark.",
+"Start sinyalinden başın 10 m işaretini geçmesine kadar geçen süre.",
+"Время от стартового сигнала до прохождения головой отметки 10 м.",
+"Tijd van het startsignaal tot het hoofd de 10-m-markering passeert."
+],
+[
+"Time from the start signal until the head passes the 15 m mark.",
+"Start sinyalinden başın 15 m işaretini geçmesine kadar geçen süre.",
+"Время от стартового сигнала до прохождения головой отметки 15 м.",
+"Tijd van het startsignaal tot het hoofd de 15-m-markering passeert."
+],
+[
+"5 m divided by the time between the 5 m and 10 m marks.",
+"5 m'nin 5 m ile 10 m işaretleri arasındaki süreye bölümü.",
+"5 м, делённые на время между отметками 5 м и 10 м.",
+"5 m gedeeld door de tijd tussen de 5-m- en de 10-m-markering."
+],
+[
+"5 m divided by the time between the 10 m and 15 m marks.",
+"5 m'nin 10 m ile 15 m işaretleri arasındaki süreye bölümü.",
+"5 м, делённые на время между отметками 10 м и 15 м.",
+"5 m gedeeld door de tijd tussen de 10-m- en de 15-m-markering."
+],
+[
+"10 m divided by the time between the 5 m and 15 m marks.",
+"10 m'nin 5 m ile 15 m işaretleri arasındaki süreye bölümü.",
+"10 м, делённые на время между отметками 5 м и 15 м.",
+"10 m gedeeld door de tijd tussen de 5-m- en de 15-m-markering."
+],
+[
+"Video mark: {0}.",
+"Videodaki işaret: {0}.",
+"Отметка на видео: {0}.",
+"Markering in de video: {0}."
+],
+[
+"Dive start with breaststroke pull-out",
+"Kurbağalama su altı çekişli dalış startı",
+"Стартовый прыжок с подводным гребком брассом",
+"Startsprong met onderwaterarmslag schoolslag"
+],
+[
+"Flip turn",
+"Takla dönüş",
+"Поворот сальто",
+"Koprolkeerpunt"
+],
+[
+"Open turn",
+"Açık dönüş",
+"Открытый поворот",
+"Open keerpunt"
+],
+[
+"Explanation of the parameters and statistical values",
+"Ölçütlerin ve istatistiksel değerlerin açıklaması",
+"Пояснение показателей и статистических величин",
+"Uitleg van de kenmerken en statistische waarden"
+],
+[
+"Parameters",
+"Ölçütler",
+"Показатели",
+"Kenmerken"
+],
+[
+"Definition",
+"Tanım",
+"Определение",
+"Definitie"
+],
+[
+"Better",
+"Daha iyi",
+"Лучше",
+"Beter"
+],
+[
+"lower",
+"daha küçük",
+"меньше",
+"lager"
+],
+[
+"higher",
+"daha büyük",
+"больше",
+"hoger"
+],
+[
+"Video marks",
+"Videodaki işaretler",
+"Отметки на видео",
+"Markeringen in de video"
+],
+[
+"What is marked",
+"Ne işaretlenir",
+"Что отмечается",
+"Wat wordt gemarkeerd"
+],
+[
+"Statistical values",
+"İstatistiksel değerler",
+"Статистические величины",
+"Statistische waarden"
+],
+[
+"Term",
+"Terim",
+"Термин",
+"Begrip"
+],
+[
+"Explanation",
+"Açıklama",
+"Пояснение",
+"Uitleg"
+],
+[
+"What the parameters mean",
+"Ölçütlerin anlamı",
+"Что означают показатели",
+"Wat de kenmerken betekenen"
+],
+[
+"Lower is better.",
+"Küçük olan daha iyi.",
+"Меньше — лучше.",
+"Lager is beter."
+],
+[
+"Higher is better.",
+"Büyük olan daha iyi.",
+"Больше — лучше.",
+"Hoger is beter."
+],
+[
+"Test protocol",
+"Test protokolü",
+"Протокол теста",
+"Testprotocol"
+],
+[
+"Test protocol {0}",
+"Test protokolü {0}",
+"Протокол теста {0}",
+"Testprotocol {0}"
+],
+[
+"Athlete: {0}",
+"Sporcu: {0}",
+"Спортсмен: {0}",
+"Atleet: {0}"
+],
+[
+"As of: {0}",
+"Tarih: {0}",
+"По состоянию на {0}",
+"Stand: {0}"
+],
+[
+"Recorded with the camera app, uploaded afterwards",
+"Kamera uygulamasıyla kaydedildi, ardından yüklendi",
+"Снято в приложении камеры, затем загружено",
+"Opgenomen met de camera-app, daarna geüpload"
+],
+[
+"Recorded in Sprintz",
+"Sprintz'te kaydedildi",
+"Снято в Sprintz",
+"Opgenomen in Sprintz"
+],
+[
+"{0} attempts: {1} baseline attempts with the usual technique, then {2} test stage(s). Do the attempts in exactly this order. The order of A and B is random within each pair so that fatigue, warm-up and familiarisation affect both variants equally.",
+"{0} deneme: alışılmış teknikle {1} baseline denemesi, ardından {2} test aşaması. Denemeleri tam olarak bu sırayla yap. Her çiftte A ve B'nin sırası rastgeledir; böylece yorgunluk, ısınma ve alışma iki varyantı eşit etkiler.",
+"Попыток: {0}. Сначала {1} попытки базовой линии привычной техникой, затем этапов теста: {2}. Выполняй попытки строго в этом порядке. В каждой паре порядок A и B случайный, чтобы усталость, разминка и привыкание одинаково влияли на оба варианта.",
+"{0} pogingen: {1} baseline-pogingen met de gewone techniek, daarna {2} teststap(pen). Doe de pogingen precies in deze volgorde. Binnen elk paar is de volgorde van A en B willekeurig, zodat vermoeidheid, opwarming en gewenning beide varianten even sterk raken."
+],
+[
+"Quality: ",
+"Kalite: ",
+"Качество: ",
+"Kwaliteit: "
+],
+[
+"Quality 1–5",
+"Kalite 1–5",
+"Качество 1–5",
+"Kwaliteit 1–5"
+],
+[
+"Remark",
+"Not",
+"Примечание",
+"Opmerking"
+],
+[
+"test-protocol",
+"test-protokolu",
+"protokol-testa",
+"testprotocol"
+],
+[
+"The test protocol could not be created.",
+"Test protokolü oluşturulamadı.",
+"Не удалось создать протокол теста.",
+"Het testprotocol kon niet worden gemaakt."
+],
+[
+"Results sheet {0}",
+"Sonuç sayfası {0}",
+"Лист результатов {0}",
+"Resultatenblad {0}"
+],
+[
+"What the parameters and statistical values mean is explained on the last page.",
+"Ölçütlerin ve istatistiksel değerlerin anlamı son sayfada açıklanmıştır.",
+"Значение показателей и статистических величин объяснено на последней странице.",
+"Wat de kenmerken en statistische waarden betekenen, staat op de laatste pagina."
+]
+]
