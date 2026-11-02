@@ -1,0 +1,50 @@
+[
+[
+"The next rep only starts when you trigger it manually.",
+"Bir sonraki tekrar ancak sen elle başlattığında başlar.",
+"Следующий повтор начнётся, только когда ты запустишь его вручную.",
+"De volgende herhaling start pas als je hem handmatig start."
+],
+[
+"{0} × in coach mode",
+"{0} × antrenör modunda",
+"{0} × в режиме тренера",
+"{0} × in trainersmodus"
+],
+[
+"Next: rep {0}",
+"Sıradaki: tekrar {0}",
+"Далее: повтор {0}",
+"Volgende: herhaling {0}"
+],
+[
+"Coach mode: manual start",
+"Antrenör modu: elle başlatma",
+"Режим тренера: ручной запуск",
+"Trainersmodus: handmatig starten"
+],
+[
+"Fixed rest",
+"Sabit dinlenme",
+"Фиксированный отдых",
+"Vaste rust"
+],
+[
+"Coach mode",
+"Antrenör modu",
+"Режим тренера",
+"Trainersmodus"
+],
+[
+"Rest duration",
+"Dinlenme süresi",
+"Длительность отдыха",
+"Rustduur"
+],
+[
+"Next rep ▶",
+"Sonraki tekrar ▶",
+"Следующий повтор ▶",
+"Volgende herhaling ▶"
+]
+]
