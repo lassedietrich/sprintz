@@ -11,8 +11,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Sprintz</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: one narrow column of settings (phone first), sticky start button; full-screen run view while a sequence plays */
 :root{
@@ -3235,11 +3233,13 @@ function vidAuto(){ const c=navigator.connection; if(c && c.saveData) return fal
 // nur Videos, die auf diesem Gerät liegen (jedes Gerät lädt seine eigenen Aufnahmen hoch)
 var DEVID=(()=>{ try{ let d=localStorage.getItem("sprintz-dev"); if(!d){ d=Math.random().toString(36).slice(2,10); localStorage.setItem("sprintz-dev",d); } return d; }catch(e){ return "x"; } })();
 const tVids=t=> t&&t.vid ? [t.vid, ...(t.vids2||[])] : [];
-function vidPending(){ return STORE._all().flatMap(p=>(p.trials||[]).flatMap(t=>tVids(t).filter(v=>!v.cloud && !v.big && (!v.dev || v.dev===DEVID)).map(v=>({p,t,v})))); }
-function vidBig(){ return STORE._all().reduce((a,p)=>a+(p.trials||[]).reduce((b,t)=>b+tVids(t).filter(v=>v.big).length,0),0); }
+function vidPending(){ return []; }
+function vidPendingOld(){ return STORE._all().flatMap(p=>(p.trials||[]).flatMap(t=>tVids(t).filter(v=>!v.cloud && !v.big && (!v.dev || v.dev===DEVID)).map(v=>({p,t,v})))); }
+function vidBig(){ return 0; }
+function vidBigOld(){ return STORE._all().reduce((a,p)=>a+(p.trials||[]).reduce((b,t)=>b+tVids(t).filter(v=>v.big).length,0),0); }
 const vidPath=(p,v)=>`${SESS.uid}/${p.id}/${v.key.replace(/[^\w.\-]+/g,"_")}`;
 var VSYNC={busy:false};
-async function vidSync(force){
+async function vidSync(force){ return; /* Videos werden nicht hochgeladen */
   if(VSYNC.busy || !STORE.online() || !navigator.onLine || !(force || vidAuto())) return; VSYNC.busy=true; evSyncNote();
   try{ await sbReady(); if(!SESS.uid) return;
     for(const {p,t,v} of vidPending()){
@@ -3259,7 +3259,7 @@ async function vidSync(force){
 }
 // Video aus dem Online-Speicher holen, wenn es auf diesem Gerät fehlt (z. B. am Mac ausgewertet, am Handy gefilmt)
 async function vidFetch(t){ return t&&t.vid ? vidFetchV(t.vid) : null; }
-async function vidFetchV(v){
+async function vidFetchV(v){ return null; /* keine Videos im Online-Speicher */
   if(!v || !v.cloud || !STORE.online()) return null;
   try{ await sbReady(); const r=await sbRaw(`/storage/v1/object/authenticated/${VBUCKET}/${v.cloud}`); const b=await r.blob();
     try{ await IDB.put(v.src==="cam" ? v.key : "file:"+v.key, b); }catch(e){} return b; }catch(e){ return null; }
@@ -3281,9 +3281,18 @@ async function logSync(){
 }
 var syncT=null, syncing=false;
 function syncSoon(ms){ clearTimeout(syncT); syncT=setTimeout(syncAll, ms||1500); }
+async function videoCleanup(){
+  try{ if(!localStorage.getItem("sprintz-novideo-local")){ indexedDB.deleteDatabase("sprintz"); localStorage.setItem("sprintz-novideo-local","1"); } }catch(e){}
+  if(!STORE.online() || !navigator.onLine) return;
+  try{ if(localStorage.getItem("sprintz-novideo-cloud-"+USER)) return; }catch(e){}
+  try{ await sbReady(); const paths=[]; const ps=STORE._all();
+    for(const p of ps){ let ch=false; for(const t of p.trials||[]) for(const v of tVids(t)){ if(v.cloud){ paths.push(v.cloud); delete v.cloud; ch=true; } delete v.big; } if(ch) await STORE.put(p); }
+    if(paths.length) await sbFetch("/storage/v1/object/"+VBUCKET,{method:"DELETE", body:{prefixes:paths}});
+    localStorage.setItem("sprintz-novideo-cloud-"+USER,"1"); }catch(e){}
+}
 async function syncAll(){
   if(syncing || !STORE.online() || !navigator.onLine) { evSyncNote(); return; } syncing=true;
-  try{ await STORE.list(); await logSync(); await persSync(); await vidSync(false); if(appMode==="eval" && EV.view==="list" && !$("evPage").hidden) evCloudIcons(); }
+  try{ await STORE.list(); await logSync(); await persSync(); await videoCleanup(); if(appMode==="eval" && EV.view==="list" && !$("evPage").hidden) evCloudIcons(); }
   finally{ syncing=false; evSyncNote(); }
 }
 addEventListener("online", ()=>syncSoon(800)); addEventListener("offline", ()=>{ EV.syncErr={net:true}; evSyncNote(); });
@@ -3293,7 +3302,7 @@ try{ const c=navigator.connection; if(c && c.addEventListener) c.addEventListene
 // Wolkensymbol je Projekt: auf dem Server gespeichert (inkl. Videos) oder nicht
 const CLOUD_OK=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10.5a4.5 4.5 0 0 0 .6-8.96A6 6 0 0 0 6.4 8.1 5 5 0 0 0 7 18z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.2 13.2l2 2 3.8-3.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const CLOUD_NO=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10.5a4.5 4.5 0 0 0 .6-8.96A6 6 0 0 0 6.4 8.1 5 5 0 0 0 7 18z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
-function evCloudState(p){ const open=(p.trials||[]).reduce((a,t)=>a+tVids(t).filter(v=>!v.cloud).length,0);
+function evCloudState(p){ const open=0;
   if(p._pending || !STORE.online()) return {ok:false, tip:L("Noch nicht hochgeladen, nur auf diesem Gerät gespeichert","Not uploaded yet, saved on this device only")};
   if(open) return {ok:false, tip:L(`Projekt hochgeladen, Videos nur auf dem Gerät: ${open}`,`Project uploaded, videos on the device only: ${open}`)};
   return {ok:true, tip:L("Auf dem Server gespeichert","Saved on the server")}; }
@@ -3386,6 +3395,7 @@ function evPersonsBar(ps){ if(!canPersons()) return ""; const pl=PERS.list(), f=
     ${pl.map(x=>`<button type="button" data-p="${x.id}" aria-pressed="${f===x.id}">${esc(x.name)} (${cnt(x.id)})</button>`).join("")}
     ${un&&pl.length?`<button type="button" data-p="none" aria-pressed="${f==="none"}">${L("Ohne Zuordnung","Not assigned")} (${un})</button>`:""}
     <button type="button" data-p="add" class="evpadd">+ ${L("Person","Person")}</button></div>
+    <p class="hint" style="margin:6px 0 0">${L("Tipp: Solange keine Einwilligung vorliegt, Kürzel statt Klarnamen verwenden.","Tip: as long as there's no consent, use initials instead of full names.")}</p>
     <div id="evPersEd"></div>
     ${sel?`<div class="evpact"><button type="button" class="testbtn ghost small" id="evPRen">${L("Umbenennen","Rename")}</button><button type="button" class="testbtn ghost small" id="evPDel">${L("Person löschen","Delete person")}</button></div>`:""}</div>`; }
 function evPersonsBind(){ const box=$("evPersF"); if(!box) return;
@@ -3484,6 +3494,9 @@ function evPlanView(){
   top.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>evRecord(+b.dataset.rec));
   top.querySelectorAll("[data-play]").forEach(b=>b.onclick=()=>evPlay(+b.dataset.play, b));
   top.querySelectorAll("[data-ana]").forEach(b=>b.onclick=()=>evAnalyze(p.trials[+b.dataset.ana]));
+  top.querySelectorAll("[data-vsave]").forEach(b=>b.onclick=async()=>{ const t=p.trials[+b.dataset.vsave], f=EV.files[t.vid.key]; if(!f) return;
+    const ext=(f.blob.type||"").includes("mp4")?"mp4":"webm", name=`sprintz-${(p.name||"projekt").replace(/[^\w\-äöüÄÖÜß]+/g,"-").slice(0,40)}-${evPos(p,t)}-${t.v}.${ext}`;
+    t.vid.file=name; evSave(); await evSaveFile(f.blob, name, p.name); });
   top.querySelectorAll(".evpick").forEach(s=>s.onchange=()=>evAssign(+s.dataset.i, s.value));
 }
 function evTrialHTML(p,t,no){
@@ -3495,6 +3508,7 @@ function evTrialHTML(p,t,no){
   const pick = up && files.length ? `<select class="evpick" data-i="${t.i}" aria-label="${L("Video zuordnen","Assign video")}"><option value="">${L("– kein Video –","– no video –")}</option>${files.map(k=>`<option value="${k}"${t.vid&&t.vid.key===k?" selected":""}>${esc(EV.files[k].name)} · ${evTimeLbl(EV.files[k].t)}</option>`).join("")}</select>` : (t.vid&&up?`<small class="evfile">${esc(t.vid.name||"")}</small>`:"");
   return `<li class="evt ${t.status}"><div class="evtrow"><span class="evno">${no||evPos(p,t)}</span><i class="evv ${t.v}">${t.v}</i><b class="evtn">${esc(evVN(p,t.v))}</b>${st}
       <span class="evbtns">${up?`<button type="button" class="testbtn small" data-play="${t.i}">▶ ${L("Startablauf","Start sequence")}</button>`:`<button type="button" class="testbtn small" data-rec="${t.i}">${t.vid?L("Neu aufnehmen","Record again"):L("Aufnehmen","Record")}</button>`}
+      ${t.vid&&t.vid.src==="cam"&&EV.files[t.vid.key]?`<button type="button" class="testbtn small ghost" data-vsave="${t.i}">${L("Video sichern","Save video")}</button>`:""}
       ${t.vid?`<button type="button" class="testbtn small" data-ana="${t.i}">${t.status==="done"?L("Ergebnis","Result"):L("Auswerten","Analyse")}</button>`:""}</span></div>
     ${pick}${extra?`<small class="evextra">${extra}</small>`:""}
     ${t.v==="BL" ? "" : `<div class="evq"><span>${L("Qualität des Testlaufs","Quality of the test run")}</span><button type="button" class="evinfo" aria-label="Info" aria-expanded="false">i</button><div class="seg evrate" data-i="${t.i}">${[1,2,3,4,5].map(k=>`<button type="button" data-v="${k}" aria-pressed="${t.rating===k}">${k}</button>`).join("")}</div></div>
@@ -3517,7 +3531,7 @@ async function evRecorded(blob){
   $("setup").hidden=false; $("fab").hidden=false; $("fabL").hidden=false;
   if(t){ const k=evVidKey(p,t); const dur=CAM.recT0!=null && ctx ? Math.max(0,ctx.currentTime-CAM.recT0) : 0; t.vid={key:k, src:"cam", name:`${p.name} #${evPos(p,t)} ${evVN(p,t.v)}`, type:blob.type, size:blob.size, t:Date.now()-dur*1000, dur, dev:DEVID};
     t.sigEst=Math.max(0,(meta.hornT||0)-(CAM.recT0||0)); t.fps=CAM.fps||30; t.status="rec"; EV.files["cam-"+t.i]={blob, name:t.vid.name, t:t.vid.t};
-    try{ await IDB.put(k, blob); t.vid.stored=true; }catch(e){ t.vid.stored=false; }
+    EV.files[k]={blob, name:t.vid.name, t:t.vid.t, dur};
     evSave(); }
   evShow("plan");
 }
@@ -3556,6 +3570,11 @@ async function evUpload(files){
   msg.textContent=L("Videos werden gelesen …","Reading videos …");
   const list=[]; for(const f of files){ const {t,src,dur}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur}; list.push({key,t,src,f,dur}); }
   list.sort((a,b)=>a.t-b.t);
+  // schon bekannte Videos (früher zugeordnet, nach Neuladen erneut gewählt) nur wieder öffnen
+  let known=0; for(let i=list.length-1;i>=0;i--){ const x=list[i]; let hit=false;
+    for(const t of p.trials){ for(const v of tVids(t)){ if(v.key===x.key || (v.file && v.file===x.f.name)){ EV.files[v.key]=Object.assign({}, EV.files[x.key]); hit=true; } } }
+    if(hit){ known++; list.splice(i,1); } }
+  if(!list.length){ evPlanView(); $("evUpMsg").textContent=L(`Wieder geöffnet: ${known}. Die Videos sind den bisherigen Versuchen zugeordnet.`,`Reopened: ${known}. The videos are matched to their previous attempts.`); return; }
   const noMeta=list.filter(x=>x.src!=="meta");
   if(noMeta.length){
     evSave(); evPlanView();
@@ -3572,7 +3591,6 @@ async function evUpload(files){
     $("evUpMsg").textContent = L(`Nach Aufnahmezeit zugeordnet: ${runs.length} Läufe.`,`Assigned by recording time: ${runs.length} runs.`)+(multi?" "+L(`Bei ${multi} Läufen gibt es mehrere gleichzeitige Aufnahmen. Sie werden im Vollbild nebeneinander gezeigt und über das Startsignal abgeglichen.`,`${multi} runs have several simultaneous recordings. They are shown side by side in full screen and synced via the start signal.`):"")+" "
       +L("Prüf die Zuordnung und ändere sie notfalls im Auswahlfeld des Versuchs.","Check the assignment and change it in the attempt's selection box if needed.");
   }
-  for(const x of list){ try{ await IDB.put("file:"+x.key, x.f); }catch(e){} }
 }
 function evSetVid(p,t,key){ const f=EV.files[key]; if(!f){ t.vid=null; if(t.status!=="done") t.status="open"; return; }
   p.trials.forEach(o=>{ if(o!==t && o.vid && o.vid.key===key){ o.vid=null; if(o.status!=="done") o.status="open"; } });
@@ -3613,7 +3631,7 @@ function evSteps(){
 }
 async function evAnalyze(t){
   const p=EV.cur, blob=await evBlob(t);
-  if(!blob){ alertMsg(L("Das Video dieses Versuchs ist auf diesem Gerät nicht mehr vorhanden. Lade es erneut hoch.","This attempt's video is no longer on this device. Please upload it again.")); return; }
+  if(!blob){ alertMsg(L("Sprintz speichert keine Videos, nur die Daten daraus. Lade das Video über „Aufnahmen hochladen“ erneut, es wird automatisch wieder diesem Versuch zugeordnet.","Sprintz doesn't store videos, only the data from them. Upload the video again via “Upload recordings”; it is automatically matched to this attempt again.")); return; }
   EV.trial=t.i; SA.trialRef=t; finishBack(); $("evPage").hidden=true;
   SA.active=true; SA.mode="eval"; SA.upload = t.vid.src==="upload"; SA.slow = 1;
   SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
