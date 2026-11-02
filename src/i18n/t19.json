@@ -1,0 +1,1430 @@
+[
+[
+"The first frame in which you visibly move on the block.",
+"Blok üzerinde gözle görülür şekilde hareket ettiğin ilk kare.",
+"Первый кадр, в котором ты заметно двигаешься на тумбочке.",
+"Het eerste beeld waarin je zichtbaar beweegt op het startblok."
+],
+[
+"Rear foot leaves",
+"Arka ayak ayrılıyor",
+"Отрыв задней ноги",
+"Achterste voet los"
+],
+[
+"The last frame in which your rear foot still touches the wedge. Optional.",
+"Arka ayağının takozla hâlâ temas ettiği son kare. İsteğe bağlı.",
+"Последний кадр, в котором задняя нога ещё касается упора. Необязательно.",
+"Het laatste beeld waarin je achterste voet de wig nog raakt. Optioneel."
+],
+[
+"The last frame in which your feet still touch the wall.",
+"Ayaklarının duvara hâlâ temas ettiği son kare.",
+"Последний кадр, в котором стопы ещё касаются стенки.",
+"Het laatste beeld waarin je voeten de wand nog raken."
+],
+[
+"Front foot take-off",
+"Ön ayağın ayrılışı",
+"Отрыв передней ноги",
+"Afzet voorste voet"
+],
+[
+"The last frame in which your front foot still touches the block (last foot contact). This gives the block time.",
+"Ön ayağının bloğa hâlâ temas ettiği son kare (son ayak teması). Blok süresi buradan çıkar.",
+"Последний кадр, в котором передняя нога ещё касается тумбочки (последний контакт стопы). Из него получается время на тумбочке.",
+"Het laatste beeld waarin je voorste voet het startblok nog raakt (laatste voetcontact). Hieruit volgt de bloktijd."
+],
+[
+"The first frame in which your fingertips touch the water.",
+"Parmak uçlarının suya değdiği ilk kare.",
+"Первый кадр, в котором кончики пальцев касаются воды.",
+"Het eerste beeld waarin je vingertoppen het water raken."
+],
+[
+"Flight distance",
+"Uçuş mesafesi",
+"Дальность полёта",
+"Vluchtafstand"
+],
+[
+"Horizontal distance from the block edge to where your fingertips enter. Measuring it directly in the video is the most accurate way.",
+"Blok kenarından parmak uçlarının suya girdiği yere kadar yatay mesafe. En doğru ölçümü doğrudan videoda yaparsın.",
+"Горизонтальное расстояние от края тумбочки до места входа кончиков пальцев в воду. Точнее всего измерять прямо на видео.",
+"Horizontale afstand van de rand van het startblok tot waar je vingertoppen het water ingaan. Het nauwkeurigst meet je dit direct in de video."
+],
+[
+"Head enters",
+"Baş suya giriyor",
+"Вход головы",
+"Hoofd gaat erin"
+],
+[
+"The first frame in which the top of your head reaches the water surface. Optional.",
+"Başının üst kısmının su yüzeyine ulaştığı ilk kare. İsteğe bağlı.",
+"Первый кадр, в котором макушка достигает поверхности воды. Необязательно.",
+"Het eerste beeld waarin de bovenkant van je hoofd het wateroppervlak bereikt. Optioneel."
+],
+[
+"Entry distance",
+"Suya giriş mesafesi",
+"Дистанция входа",
+"Inzwemafstand"
+],
+[
+"Distance from the wall to where the top of your head enters. Optional.",
+"Duvardan başının üst kısmının suya girdiği yere kadar olan mesafe. İsteğe bağlı.",
+"Расстояние от стенки до места, где макушка входит в воду. Необязательно.",
+"Afstand van de wand tot waar de bovenkant van je hoofd het water ingaat. Optioneel."
+],
+[
+"the spot where the top of your head enters",
+"başının üst kısmının suya girdiği yer",
+"место, где макушка входит в воду",
+"de plek waar de bovenkant van je hoofd het water ingaat"
+],
+[
+"Measuring only works if the pool edge and the backstroke flag line are clearly visible in the frame in which your head enters.",
+"Ölçüm yalnızca başının suya girdiği karede havuz kenarı ve sırtüstü bayraklarının hizası açıkça görünüyorsa mümkündür.",
+"Измерить можно, только если в кадре входа головы чётко видны край бассейна и линия флажков для плавания на спине.",
+"Meten lukt alleen als de badrand en de lijn van de rugslagvlaggetjes duidelijk te zien zijn in het beeld waarin je hoofd het water ingaat."
+],
+[
+"First dolphin kick",
+"İlk yunus vuruşu",
+"Первый удар дельфином",
+"Eerste dolfijnslag"
+],
+[
+"Distance at 1st dolphin kick",
+"İlk yunus vuruşundaki mesafe",
+"Дистанция при первом ударе дельфином",
+"Afstand bij de 1e dolfijnslag"
+],
+[
+"Distance from the wall to the centre of your head at the first dolphin kick. Optional.",
+"İlk yunus vuruşunda duvardan başının ortasına kadar olan mesafe. İsteğe bağlı.",
+"Расстояние от стенки до центра головы при первом ударе дельфином. Необязательно.",
+"Afstand van de wand tot het midden van je hoofd bij de eerste dolfijnslag. Optioneel."
+],
+[
+"the centre of your head",
+"başının ortası",
+"центр головы",
+"het midden van je hoofd"
+],
+[
+"Measuring only works if two markings (wall and 5 m, 5 m and 10 m, or wall and 10 m) are clearly visible in the frame of the first dolphin kick.",
+"Ölçüm yalnızca ilk yunus vuruşu karesinde iki işaret (duvar ve 5 m, 5 m ve 10 m ya da duvar ve 10 m) açıkça görünüyorsa mümkündür.",
+"Измерить можно, только если в кадре первого удара дельфином чётко видны две отметки (стенка и 5 м, 5 м и 10 м или стенка и 10 м).",
+"Meten lukt alleen als in het beeld van de eerste dolfijnslag twee markeringen (wand en 5 m, 5 m en 10 m, of wand en 10 m) duidelijk te zien zijn."
+],
+[
+"The first frame in which the top of your head reaches the 5 m mark (backstroke flag line).",
+"Başının üst kısmının 5 m işaretine (sırtüstü bayraklarının hizası) ulaştığı ilk kare.",
+"Первый кадр, в котором макушка достигает отметки 5 м (линии флажков для плавания на спине).",
+"Het eerste beeld waarin de bovenkant van je hoofd de 5-m-markering (lijn van de rugslagvlaggetjes) bereikt."
+],
+[
+"The first frame in which the top of your head reaches the 10 m mark. Only if a marking is visible.",
+"Başının üst kısmının 10 m işaretine ulaştığı ilk kare. Yalnızca bir işaret görünüyorsa.",
+"Первый кадр, в котором макушка достигает отметки 10 м. Только если отметка видна.",
+"Het eerste beeld waarin de bovenkant van je hoofd de 10-m-markering bereikt. Alleen als er een markering te zien is."
+],
+[
+"The first frame in which the top of your head breaks the water surface.",
+"Başının üst kısmının su yüzeyini deldiği ilk kare.",
+"Первый кадр, в котором макушка пробивает поверхность воды.",
+"Het eerste beeld waarin de bovenkant van je hoofd door het wateroppervlak breekt."
+],
+[
+"Breakout distance",
+"Yüzeye çıkış mesafesi",
+"Дистанция выхода на поверхность",
+"Bovenkomafstand"
+],
+[
+"Distance from the wall to where the top of your head breaks out.",
+"Duvardan başının üst kısmının yüzeye çıktığı yere kadar olan mesafe.",
+"Расстояние от стенки до места, где макушка выходит на поверхность.",
+"Afstand van de wand tot waar de bovenkant van je hoofd bovenkomt."
+],
+[
+"the spot where the top of your head breaks out",
+"başının üst kısmının yüzeye çıktığı yer",
+"место, где макушка выходит на поверхность",
+"de plek waar de bovenkant van je hoofd bovenkomt"
+],
+[
+"The first frame in which the top of your head reaches the 15 m mark.",
+"Başının üst kısmının 15 m işaretine ulaştığı ilk kare.",
+"Первый кадр, в котором макушка достигает отметки 15 м.",
+"Het eerste beeld waarin de bovenkant van je hoofd de 15-m-markering bereikt."
+],
+[
+"Block phase",
+"Blok fazı",
+"Фаза на тумбочке",
+"Blokfase"
+],
+[
+"Flight phase",
+"Uçuş fazı",
+"Фаза полёта",
+"Vluchtfase"
+],
+[
+"Underwater phase",
+"Su altı fazı",
+"Подводная фаза",
+"Onderwaterfase"
+],
+[
+"Splits and sections",
+"Zaman işaretleri ve bölümler",
+"Отметки времени и отрезки",
+"Tussentijden en trajecten"
+],
+[
+"Force and power on the starting block",
+"Start bloğunda kuvvet ve güç",
+"Сила и мощность на стартовой тумбочке",
+"Kracht en vermogen op het startblok"
+],
+[
+"Supplementary dry-land tests",
+"Tamamlayıcı kara testleri",
+"Дополнительные тесты на суше",
+"Aanvullende landtests"
+],
+[
+"Shows how well you hold your speed after entry and whether you lose time on the way to 15 m.",
+"Suya girdikten sonra hızını ne kadar iyi koruduğunu ve 15 m'ye giderken zaman kaybedip kaybetmediğini gösterir.",
+"Показывает, насколько хорошо ты сохраняешь скорость после входа в воду и теряешь ли время на пути к 15 м.",
+"Laat zien hoe goed je je snelheid na het inzwemmen vasthoudt en of je onderweg naar 15 m tijd verliest."
+],
+[
+"Flight ends at about 3.0–3.5 m and covers most of the first 5 m. Almost nothing slows you down in the air, so flying far saves time to 5 m and 15 m.",
+"Uçuş yaklaşık 3,0–3,5 m'de biter ve ilk 5 m'nin büyük kısmını kapsar. Havada neredeyse hiçbir şey yavaşlatmaz; uzağa uçmak bu yüzden 5 m ve 15 m'ye kadar zaman kazandırır.",
+"Полёт заканчивается примерно на 3,0–3,5 м и покрывает большую часть первых 5 м. В воздухе почти ничто не тормозит, поэтому дальний полёт экономит время до 5 м и 15 м.",
+"De vlucht eindigt bij ongeveer 3,0–3,5 m en dekt het grootste deel van de eerste 5 m. In de lucht remt bijna niets, ver vliegen spaart dus tijd tot 5 m en 15 m."
+],
+[
+"The first kick often comes near the 5 m mark. Kicking a little later preserves the high initial speed and helps the 15 m time; kicking too early increases drag.",
+"İlk vuruş çoğu zaman 5 m işaretine yakın gelir. Biraz daha geç vurmak yüksek başlangıç hızını korur ve 15 m süresine yardımcı olur; çok erken vurmak direnci artırır.",
+"Первый удар часто приходится примерно на отметку 5 м. Чуть более поздний удар сохраняет высокую начальную скорость и помогает времени на 15 м, слишком ранний увеличивает сопротивление.",
+"De eerste slag valt vaak rond de 5-m-markering. Iets later slaan behoudt de hoge beginsnelheid en helpt de 15-m-tijd; te vroeg verhoogt de weerstand."
+],
+[
+"Shows how well you use the start energy without unnecessary drag. Affects 5 m and 15 m.",
+"Start enerjisini gereksiz direnç olmadan ne kadar iyi kullandığını gösterir. 5 m ve 15 m'yi etkiler.",
+"Показывает, насколько хорошо ты используешь энергию старта без лишнего сопротивления. Влияет на 5 м и 15 м.",
+"Laat zien hoe goed je de startenergie zonder onnodige weerstand benut. Werkt door op 5 m en 15 m."
+],
+[
+"Timing of the underwater phase in the breaststroke pull-out.",
+"Kurbağalama su altı çekişinde su altı fazının zamanlaması.",
+"Ритм подводной фазы при подводном гребке брассом.",
+"Timing van de onderwaterfase bij de onderwaterarmslag schoolslag."
+],
+[
+"Measured in the video or entered manually.",
+"Videoda ölçülür ya da elle girilir.",
+"Измеряется на видео или вводится вручную.",
+"Gemeten in de video of handmatig ingevuld."
+],
+[
+"Time from the start signal to the first visible movement on the block.",
+"Start sinyalinden blok üzerindeki ilk görünür harekete kadar geçen süre.",
+"Время от стартового сигнала до первого видимого движения на тумбочке.",
+"Tijd van het startsignaal tot de eerste zichtbare beweging op het startblok."
+],
+[
+"Reacting faster starts everything else earlier. It is part of the block time and affects 5 m and 15 m.",
+"Daha hızlı tepki veren her şeyi daha erken başlatır. Blok süresinin bir parçasıdır ve 5 m ile 15 m'yi etkiler.",
+"Кто быстрее реагирует, раньше начинает всё остальное. Время реакции входит во время на тумбочке и влияет на 5 м и 15 м.",
+"Wie sneller reageert, begint alles daarna eerder. De reactietijd zit in de bloktijd en werkt door op 5 m en 15 m."
+],
+[
+"Time from the start signal to the last contact of the hands with the grips.",
+"Start sinyalinden ellerin tutamaklarla son temasına kadar geçen süre.",
+"Время от стартового сигнала до последнего контакта рук с поручнями.",
+"Tijd van het startsignaal tot het laatste contact van de handen met de handgrepen."
+],
+[
+"Time from the start signal to the last contact of the hands with the block.",
+"Start sinyalinden ellerin blokla son temasına kadar geçen süre.",
+"Время от стартового сигнала до последнего контакта рук с тумбочкой.",
+"Tijd van het startsignaal tot het laatste contact van de handen met het startblok."
+],
+[
+"Together with the foot take-off times, shows the order in which hands and feet push off.",
+"Ayak ayrılış zamanlarıyla birlikte ellerin ve ayakların hangi sırayla ittiğini gösterir.",
+"Вместе с моментами отрыва стоп показывает, в каком порядке отталкиваются руки и ноги.",
+"Laat samen met de afzettijden van de voeten zien in welke volgorde handen en voeten afzetten."
+],
+[
+"Rear foot take-off",
+"Arka ayağın ayrılışı",
+"Отрыв задней ноги",
+"Afzet achterste voet"
+],
+[
+"Moment the rear foot leaves the wedge, as a percentage of the block time (0 % = start signal, 100 % = take-off).",
+"Arka ayağın takozdan ayrıldığı an, blok süresinin yüzdesi olarak (%0 = start sinyali, %100 = itiş).",
+"Момент отрыва задней ноги от упора в процентах от времени на тумбочке (0 % = стартовый сигнал, 100 % = отталкивание).",
+"Moment waarop de achterste voet de wig verlaat, in procent van de bloktijd (0 % = startsignaal, 100 % = afzet)."
+],
+[
+"Time to rear foot take-off divided by the block time, times 100.",
+"Arka ayağın ayrılmasına kadar geçen sürenin blok süresine bölümü, çarpı 100.",
+"Время до отрыва задней ноги, делённое на время на тумбочке, умноженное на 100.",
+"Tijd tot de afzet van de achterste voet gedeeld door de bloktijd, maal 100."
+],
+[
+"If the rear foot leaves too late, 5 m and 15 m get slower.",
+"Arka ayak çok geç ayrılırsa 5 m ve 15 m yavaşlar.",
+"Если задняя нога отрывается слишком поздно, 5 м и 15 м становятся медленнее.",
+"Komt de achterste voet te laat los, dan worden 5 m en 15 m trager."
+],
+[
+"Front foot only",
+"Yalnızca ön ayak blokta",
+"Только передняя нога на тумбочке",
+"Alleen voorste voet op het blok"
+],
+[
+"Time during which only the front foot is in contact with the block after the rear foot has left.",
+"Arka ayak ayrıldıktan sonra yalnızca ön ayağın blokla temas ettiği süre.",
+"Время, в течение которого после отрыва задней ноги с тумбочкой контактирует только передняя нога.",
+"Tijd waarin na het loskomen van de achterste voet alleen nog de voorste voet contact met het startblok heeft."
+],
+[
+"Block time minus the time to rear foot take-off.",
+"Blok süresi eksi arka ayağın ayrılmasına kadar geçen süre.",
+"Время на тумбочке минус время до отрыва задней ноги.",
+"Bloktijd min de tijd tot de afzet van de achterste voet."
+],
+[
+"Shows how long the front leg delivers the final push on its own.",
+"Ön bacağın son itişi ne kadar süre tek başına verdiğini gösterir.",
+"Показывает, как долго передняя нога в одиночку даёт последний толчок.",
+"Laat zien hoe lang het voorste been de laatste afzet alleen levert."
+],
+[
+"Time from the start signal until the feet push off the wall.",
+"Start sinyalinden ayakların duvardan itmesine kadar geçen süre.",
+"Время от стартового сигнала до отталкивания стоп от стенки.",
+"Tijd van het startsignaal tot de voeten van de wand afzetten."
+],
+[
+"Time from the start signal to the take-off of the front foot (last foot contact with the block).",
+"Start sinyalinden ön ayağın itişine (blokla son ayak teması) kadar geçen süre.",
+"Время от стартового сигнала до отрыва передней ноги (последний контакт стопы с тумбочкой).",
+"Tijd van het startsignaal tot de afzet van de voorste voet (laatste voetcontact met het startblok)."
+],
+[
+"Makes up about half (46–56 %) of the 5 m time but only 11–12 % at 15 m. Leaving the block faster at the cost of less momentum is a net loss.",
+"5 m süresinin yaklaşık yarısını (%46–56) oluşturur, 15 m'de ise yalnızca %11–12'sini. Daha az ivme pahasına bloktan daha hızlı ayrılmak sonuçta kayıptır.",
+"Составляет около половины (46–56 %) времени на 5 м, но лишь 11–12 % на 15 м. Быстрее уйти с тумбочки ценой меньшего разгона в итоге невыгодно.",
+"Maakt ongeveer de helft (46–56 %) van de 5-m-tijd uit, maar slechts 11–12 % bij 15 m. Sneller van het blok gaan ten koste van minder vaart is per saldo verlies."
+],
+[
+"Movement time",
+"Hareket süresi",
+"Время движения",
+"Bewegingstijd"
+],
+[
+"Pure movement time on the block without the reaction.",
+"Tepki olmadan blok üzerindeki saf hareket süresi.",
+"Чистая длительность движения на тумбочке без реакции.",
+"Zuivere bewegingsduur op het startblok zonder de reactie."
+],
+[
+"Block time minus reaction time.",
+"Blok süresi eksi tepki süresi.",
+"Время на тумбочке минус время реакции.",
+"Bloktijd min reactietijd."
+],
+[
+"Part of the block time; mainly affects 5 m.",
+"Blok süresinin bir parçasıdır; özellikle 5 m'yi etkiler.",
+"Часть времени на тумбочке; влияет прежде всего на 5 м.",
+"Deel van de bloktijd; werkt vooral door op 5 m."
+],
+[
+"Time from the last foot contact to the first water contact of the hands.",
+"Son ayak temasından ellerin ilk su temasına kadar geçen süre.",
+"Время от последнего контакта стопы до первого касания воды руками.",
+"Tijd van het laatste voetcontact tot het eerste watercontact van de handen."
+],
+[
+"Horizontal distance from the block edge to where the hands enter the water.",
+"Blok kenarından ellerin suya girdiği yere kadar yatay mesafe.",
+"Горизонтальное расстояние от края тумбочки до места входа рук в воду.",
+"Horizontale afstand van de rand van het startblok tot waar de handen het water ingaan."
+],
+[
+"Measured in the video (start wall as 0 m, 5 m mark) or entered manually.",
+"Videoda ölçülür (başlangıç duvarı 0 m, 5 m işareti) ya da elle girilir.",
+"Измеряется на видео (стартовая стенка как 0 м, отметка 5 м) или вводится вручную.",
+"Gemeten in de video (startwand als 0 m, 5-m-markering) of handmatig ingevuld."
+],
+[
+"Mean flight velocity",
+"Ortalama uçuş hızı",
+"Средняя скорость полёта",
+"Gemiddelde vluchtsnelheid"
+],
+[
+"Mean horizontal velocity in the flight phase.",
+"Uçuş fazındaki ortalama yatay hız.",
+"Средняя горизонтальная скорость в фазе полёта.",
+"Gemiddelde horizontale snelheid in de vluchtfase."
+],
+[
+"Flight distance divided by flight time. Approximates the horizontal take-off velocity but is not identical, because the flight distance is measured at the hands rather than the centre of mass.",
+"Uçuş mesafesinin uçuş süresine bölümü. Yatay ayrılış hızına yaklaşır ama aynı değildir, çünkü uçuş mesafesi ağırlık merkezinde değil ellerde ölçülür.",
+"Дальность полёта, делённая на время полёта. Приближение к горизонтальной скорости отталкивания, но не то же самое, потому что дальность измеряется по рукам, а не по центру масс.",
+"Vluchtafstand gedeeld door vluchttijd. Benadert de horizontale afzetsnelheid, maar is niet gelijk, omdat de vluchtafstand aan de handen en niet aan het lichaamszwaartepunt wordt gemeten."
+],
+[
+"The horizontal take-off velocity is the single most important variable of the start.",
+"Yatay ayrılış hızı, startın en önemli tekil değişkenidir.",
+"Горизонтальная скорость отталкивания — самая важная отдельная величина старта.",
+"De horizontale afzetsnelheid is de belangrijkste afzonderlijke grootheid van de start."
+],
+[
+"Horizontal take-off velocity",
+"Yatay ayrılış hızı",
+"Горизонтальная скорость отталкивания",
+"Horizontale afzetsnelheid"
+],
+[
+"Forward velocity at the moment of take-off from the block.",
+"Bloktan ayrılış anındaki ileri hız.",
+"Скорость вперёд в момент отрыва от тумбочки.",
+"Voorwaartse snelheid op het moment van afzet van het startblok."
+],
+[
+"Read from the velocity meter data in the take-off frame (belt attachment as an approximation of the centre of mass). Only with a velocity meter.",
+"Ayrılış karesinde velocimetre verilerinden okunur (ağırlık merkezine yaklaşım olarak kemerdeki ölçüm noktası). Yalnızca velocimetreyle.",
+"Считывается из данных велосиметра в кадре отталкивания (точка крепления на поясе как приближение центра масс). Только с велосиметром.",
+"Afgelezen uit de velocitymeter-gegevens in het beeld van de afzet (meetpunt aan de riem als benadering van het lichaamszwaartepunt). Alleen met velocitymeter."
+],
+[
+"Most important single variable: taking off forwards faster gets you to 5 m earlier and sets the pace for the whole start, including 15 m.",
+"En önemli tekil değişken: İleriye daha hızlı ayrılan 5 m'ye daha erken varır ve 15 m dahil tüm startın hızını belirler.",
+"Самая важная отдельная величина: кто быстрее отрывается вперёд, раньше достигает 5 м и задаёт темп всему старту, в том числе до 15 м.",
+"Belangrijkste afzonderlijke grootheid: wie sneller naar voren afzet, is eerder bij 5 m en bepaalt het tempo van de hele start, ook tot 15 m."
+],
+[
+"Entry time",
+"Suya giriş zamanı",
+"Время входа в воду",
+"Inzwemtijd"
+],
+[
+"Time from the start signal until the top of the head reaches the water surface.",
+"Start sinyalinden başın üst kısmının su yüzeyine ulaşmasına kadar geçen süre.",
+"Время от стартового сигнала до момента, когда макушка достигает поверхности воды.",
+"Tijd van het startsignaal tot de bovenkant van het hoofd het wateroppervlak bereikt."
+],
+[
+"Shows when you enter the water. Fast swimmers often fly a little longer and further. Marks the transition from air to water.",
+"Suya ne zaman girdiğini gösterir. Hızlı yüzücüler çoğu zaman biraz daha uzun ve uzağa uçar. Havadan suya geçişi işaretler.",
+"Показывает, когда ты входишь в воду. Быстрые пловцы часто летят чуть дольше и дальше. Отмечает переход из воздуха в воду.",
+"Laat zien wanneer je het water ingaat. Snelle zwemmers vliegen vaak iets langer en verder. Markeert de overgang van lucht naar water."
+],
+[
+"Distance from the pool wall to where the top of the head enters.",
+"Havuz duvarından başın üst kısmının suya girdiği yere kadar olan mesafe.",
+"Расстояние от стенки бассейна до места, где макушка входит в воду.",
+"Afstand van de badwand tot waar de bovenkant van het hoofd het water ingaat."
+],
+[
+"Shows where you enter the water; basis for glide distance and underwater velocity.",
+"Suya nerede girdiğini gösterir; kayma mesafesi ve su altı hızı için temeldir.",
+"Показывает, где ты входишь в воду; основа для дистанции скольжения и подводной скорости.",
+"Laat zien waar je het water ingaat; basis voor glijafstand en onderwatersnelheid."
+],
+[
+"Time to 1st dolphin kick",
+"İlk yunus vuruşuna kadar süre",
+"Время до первого удара дельфином",
+"Tijd tot de 1e dolfijnslag"
+],
+[
+"Time from the start signal to the first underwater kick (start of the downbeat).",
+"Start sinyalinden ilk su altı vuruşuna (aşağı hareketin başlangıcı) kadar geçen süre.",
+"Время от стартового сигнала до первого подводного удара ногами (начало движения вниз).",
+"Tijd van het startsignaal tot de eerste onderwaterbeenslag (begin van de neerwaartse beweging)."
+],
+[
+"Distance from the pool wall to the centre of the head at the first underwater kick.",
+"İlk su altı vuruşunda havuz duvarından başın ortasına kadar olan mesafe.",
+"Расстояние от стенки бассейна до центра головы при первом подводном ударе.",
+"Afstand van de badwand tot het midden van het hoofd bij de eerste onderwaterbeenslag."
+],
+[
+"Glide time",
+"Kayma süresi",
+"Время скольжения",
+"Glijtijd"
+],
+[
+"Duration of the glide after entry until the kick begins.",
+"Suya girdikten sonra vuruş başlayana kadar kaymanın süresi.",
+"Длительность скольжения после входа в воду до начала работы ног.",
+"Duur van het glijden na het inzwemmen tot de beenslag begint."
+],
+[
+"Time to the 1st dolphin kick minus entry time.",
+"İlk yunus vuruşuna kadar süre eksi suya giriş zamanı.",
+"Время до первого удара дельфином минус время входа в воду.",
+"Tijd tot de 1e dolfijnslag min inzwemtijd."
+],
+[
+"Glide distance",
+"Kayma mesafesi",
+"Дистанция скольжения",
+"Glijafstand"
+],
+[
+"Distance you glide after entry until the kick begins.",
+"Suya girdikten sonra vuruş başlayana kadar kaydığın mesafe.",
+"Расстояние, которое ты скользишь после входа в воду до начала работы ног.",
+"Afstand die je na het inzwemmen glijdt tot de beenslag begint."
+],
+[
+"Distance at the 1st dolphin kick minus entry distance.",
+"İlk yunus vuruşundaki mesafe eksi suya giriş mesafesi.",
+"Дистанция при первом ударе дельфином минус дистанция входа.",
+"Afstand bij de 1e dolfijnslag min inzwemafstand."
+],
+[
+"Glide velocity",
+"Kayma hızı",
+"Скорость скольжения",
+"Glijsnelheid"
+],
+[
+"Mean velocity during the glide.",
+"Kayma sırasındaki ortalama hız.",
+"Средняя скорость во время скольжения.",
+"Gemiddelde snelheid tijdens het glijden."
+],
+[
+"Glide distance divided by glide time.",
+"Kayma mesafesinin kayma süresine bölümü.",
+"Дистанция скольжения, делённая на время скольжения.",
+"Glijafstand gedeeld door glijtijd."
+],
+[
+"Time from the head entering to the head breaking out.",
+"Başın suya girişinden yüzeye çıkışına kadar geçen süre.",
+"Время от входа головы в воду до её выхода на поверхность.",
+"Tijd van het ingaan van het hoofd tot het bovenkomen van het hoofd."
+],
+[
+"Breakout time minus entry time.",
+"Yüzeye çıkış zamanı eksi suya giriş zamanı.",
+"Время выхода на поверхность минус время входа в воду.",
+"Bovenkomtijd min inzwemtijd."
+],
+[
+"Together with the underwater velocity, determines how much of the 15 m you cover underwater.",
+"Su altı hızıyla birlikte 15 m'nin ne kadarını su altında geçtiğini belirler.",
+"Вместе с подводной скоростью определяет, какую часть 15 м ты проходишь под водой.",
+"Bepaalt samen met de onderwatersnelheid hoeveel van de 15 m je onder water aflegt."
+],
+[
+"Mean underwater velocity",
+"Su altında ortalama hız",
+"Средняя скорость под водой",
+"Gemiddelde snelheid onder water"
+],
+[
+"Mean velocity from entry to breakout.",
+"Suya girişten yüzeye çıkışa kadar ortalama hız.",
+"Средняя скорость от входа в воду до выхода на поверхность.",
+"Gemiddelde snelheid van inzwemmen tot bovenkomen."
+],
+[
+"(Breakout distance − entry distance) divided by (breakout time − entry time), both measured at the head.",
+"(Yüzeye çıkış mesafesi − suya giriş mesafesi) bölü (yüzeye çıkış zamanı − suya giriş zamanı); ikisi de başta ölçülür.",
+"(Дистанция выхода − дистанция входа), делённая на (время выхода − время входа), оба значения измеряются по голове.",
+"(Bovenkomafstand − inzwemafstand) gedeeld door (bovenkomtijd − inzwemtijd), beide aan het hoofd gemeten."
+],
+[
+"Staying faster underwater gives the better 15 m time.",
+"Su altında daha hızlı kalan 15 m'de daha iyi süre yapar.",
+"Кто под водой остаётся быстрее, показывает лучшее время на 15 м.",
+"Wie onder water sneller blijft, heeft de betere 15-m-tijd."
+],
+[
+"Number of dolphin kicks before breakout.",
+"Yüzeye çıkmadan önceki yunus vuruşu sayısı.",
+"Количество ударов дельфином до выхода на поверхность.",
+"Aantal dolfijnslagen tot het bovenkomen."
+],
+[
+"Counted manually.",
+"Elle sayılır.",
+"Подсчитывается вручную.",
+"Met de hand geteld."
+],
+[
+"Basis for kick frequency and kick length.",
+"Vuruş frekansı ve vuruş uzunluğu için temeldir.",
+"Основа для частоты и длины ударов ногами.",
+"Basis voor beenslagfrequentie en beenslaglengte."
+],
+[
+"Kick cycles per minute (reciprocal of the cycle duration, times 60).",
+"Dakikadaki vuruş döngüsü (döngü süresinin tersi, çarpı 60).",
+"Циклов ударов ногами в минуту (величина, обратная длительности цикла, умноженная на 60).",
+"Beenslagcycli per minuut (omgekeerde van de cyclusduur, maal 60)."
+],
+[
+"Number of dolphin kicks divided by the time from the 1st dolphin kick to breakout, times 60.",
+"Yunus vuruşu sayısının ilk yunus vuruşundan yüzeye çıkışa kadar geçen süreye bölümü, çarpı 60.",
+"Число ударов дельфином, делённое на время от первого удара до выхода на поверхность, умноженное на 60.",
+"Aantal dolfijnslagen gedeeld door de tijd van de 1e dolfijnslag tot het bovenkomen, maal 60."
+],
+[
+"Keeps the underwater speed high. Indirect effect, mainly on 15 m.",
+"Su altında hızı yüksek tutar. Dolaylı etki, özellikle 15 m'de.",
+"Поддерживает высокую скорость под водой. Косвенное влияние, прежде всего на 15 м.",
+"Houdt de snelheid onder water hoog. Indirect effect, vooral op 15 m."
+],
+[
+"Kick length",
+"Vuruş uzunluğu",
+"Длина удара ногами",
+"Beenslaglengte"
+],
+[
+"Distance covered per kick cycle.",
+"Bir vuruş döngüsünde katedilen mesafe.",
+"Расстояние, пройденное за один цикл ударов ногами.",
+"Afstand per beenslagcyclus."
+],
+[
+"(Breakout distance − distance at the 1st dolphin kick) divided by the number of dolphin kicks.",
+"(Yüzeye çıkış mesafesi − ilk yunus vuruşundaki mesafe) bölü yunus vuruşu sayısı.",
+"(Дистанция выхода − дистанция при первом ударе дельфином), делённая на число ударов дельфином.",
+"(Bovenkomafstand − afstand bij de 1e dolfijnslag) gedeeld door het aantal dolfijnslagen."
+],
+[
+"Shows how effective each kick is. Indirect effect, mainly on 15 m.",
+"Her vuruşun ne kadar etkili olduğunu gösterir. Dolaylı etki, özellikle 15 m'de.",
+"Показывает, насколько эффективен каждый удар. Косвенное влияние, прежде всего на 15 м.",
+"Laat zien hoe effectief elke beenslag is. Indirect effect, vooral op 15 m."
+],
+[
+"First breaststroke kick",
+"İlk kurbağalama bacak vuruşu",
+"Первый толчок ногами брассом",
+"Eerste schoolslagbeenslag"
+],
+[
+"Time from the start of the pull-out to the start of the first breaststroke kick.",
+"Su altı çekişinin başlangıcından ilk kurbağalama bacak vuruşunun başlangıcına kadar geçen süre.",
+"Время от начала подводного гребка до начала первого толчка ногами брассом.",
+"Tijd van het begin van de onderwaterarmslag tot het begin van de eerste schoolslagbeenslag."
+],
+[
+"Breakout time",
+"Yüzeye çıkış zamanı",
+"Время выхода на поверхность",
+"Bovenkomtijd"
+],
+[
+"Time from the start signal until the top of the head breaks the water surface.",
+"Start sinyalinden başın üst kısmının su yüzeyini delmesine kadar geçen süre.",
+"Время от стартового сигнала до момента, когда макушка пробивает поверхность воды.",
+"Tijd van het startsignaal tot de bovenkant van het hoofd door het wateroppervlak breekt."
+],
+[
+"Breakout is usually beyond the 5 m mark. One of the most important variables for 15 m: a longer, clean underwater phase shortens the 15 m time.",
+"Yüzeye çıkış çoğunlukla 5 m işaretinin ötesindedir. 15 m için en önemli değişkenlerden biridir: Daha uzun ve temiz bir su altı fazı 15 m süresini kısaltır.",
+"Выход на поверхность обычно происходит за отметкой 5 м. Для 15 м одна из важнейших величин: более длинная и чистая подводная фаза сокращает время на 15 м.",
+"Het bovenkomen ligt meestal voorbij de 5-m-markering. Voor 15 m een van de belangrijkste grootheden: een langere, zuivere onderwaterfase verkort de 15-m-tijd."
+],
+[
+"Distance from the pool wall to where the top of the head breaks out.",
+"Havuz duvarından başın üst kısmının yüzeye çıktığı yere kadar olan mesafe.",
+"Расстояние от стенки бассейна до места, где макушка выходит на поверхность.",
+"Afstand van de badwand tot waar de bovenkant van het hoofd bovenkomt."
+],
+[
+"One of the most important variables for 15 m.",
+"15 m için en önemli değişkenlerden biri.",
+"Одна из важнейших величин для 15 м.",
+"Een van de belangrijkste grootheden voor 15 m."
+],
+[
+"Time from the start signal until the top of the head reaches the 5 m mark.",
+"Start sinyalinden başın üst kısmının 5 m işaretine ulaşmasına kadar geçen süre.",
+"Время от стартового сигнала до момента, когда макушка достигает отметки 5 м.",
+"Tijd van het startsignaal tot de bovenkant van het hoofd de 5-m-markering bereikt."
+],
+[
+"Target variable for block, flight and entry. Gives an early indication of how the start will develop.",
+"Blok, uçuş ve suya giriş için hedef değişken. Startın nasıl gelişeceğine dair erken bir ipucu verir.",
+"Целевая величина для тумбочки, полёта и входа в воду. Рано подсказывает, как пойдёт старт дальше.",
+"Doelgrootheid voor blok, vlucht en inzwemmen. Geeft vroeg een aanwijzing hoe de start zich verder ontwikkelt."
+],
+[
+"Time from the start signal until the top of the head reaches the 10 m mark.",
+"Start sinyalinden başın üst kısmının 10 m işaretine ulaşmasına kadar geçen süre.",
+"Время от стартового сигнала до момента, когда макушка достигает отметки 10 м.",
+"Tijd van het startsignaal tot de bovenkant van het hoofd de 10-m-markering bereikt."
+],
+[
+"Captures the underwater phase and, together with the following sections, almost determines the full 15 m time.",
+"Su altı fazını kapsar ve sonraki bölümlerle birlikte 15 m süresinin neredeyse tamamını belirler.",
+"Охватывает подводную фазу и вместе с последующими отрезками почти полностью определяет время на 15 м.",
+"Omvat de onderwaterfase en bepaalt samen met de trajecten daarna bijna de volledige 15-m-tijd."
+],
+[
+"Time from the start signal until the top of the head reaches the 15 m mark.",
+"Start sinyalinden başın üst kısmının 15 m işaretine ulaşmasına kadar geçen süre.",
+"Время от стартового сигнала до момента, когда макушка достигает отметки 15 м.",
+"Tijd van het startsignaal tot de bovenkant van het hoofd de 15-m-markering bereikt."
+],
+[
+"The overall measure of the start: it combines all phases from block to breakout.",
+"Startın genel ölçüsü: Bloktan yüzeye çıkışa kadar tüm fazları birleştirir.",
+"Общая мера старта: объединяет все фазы от тумбочки до выхода на поверхность.",
+"De totaalmaat van de start: combineert alle fasen van blok tot bovenkomen."
+],
+[
+"Split 5–10 m",
+"Ara süre 5–10 m",
+"Отрезок 5–10 м",
+"Tussentijd 5–10 m"
+],
+[
+"Time between the 5 m and 10 m marks.",
+"5 m ile 10 m işaretleri arasındaki süre.",
+"Время между отметками 5 м и 10 м.",
+"Tijd tussen de 5-m- en de 10-m-markering."
+],
+[
+"10 m time minus 5 m time.",
+"10 m süresi eksi 5 m süresi.",
+"Время на 10 м минус время на 5 м.",
+"10-m-tijd min 5-m-tijd."
+],
+[
+"Split 10–15 m",
+"Ara süre 10–15 m",
+"Отрезок 10–15 м",
+"Tussentijd 10–15 m"
+],
+[
+"Time between the 10 m and 15 m marks.",
+"10 m ile 15 m işaretleri arasındaki süre.",
+"Время между отметками 10 м и 15 м.",
+"Tijd tussen de 10-m- en de 15-m-markering."
+],
+[
+"15 m time minus 10 m time.",
+"15 m süresi eksi 10 m süresi.",
+"Время на 15 м минус время на 10 м.",
+"15-m-tijd min 10-m-tijd."
+],
+[
+"Mean velocity between 5 and 10 m.",
+"5 ile 10 m arasındaki ortalama hız.",
+"Средняя скорость между 5 и 10 м.",
+"Gemiddelde snelheid tussen 5 en 10 m."
+],
+[
+"5 m divided by the 5–10 m split.",
+"5 m bölü 5–10 m ara süresi.",
+"5 м, делённые на отрезок 5–10 м.",
+"5 m gedeeld door de tussentijd 5–10 m."
+],
+[
+"Mean velocity between 10 and 15 m.",
+"10 ile 15 m arasındaki ortalama hız.",
+"Средняя скорость между 10 и 15 м.",
+"Gemiddelde snelheid tussen 10 en 15 m."
+],
+[
+"5 m divided by the 10–15 m split.",
+"5 m bölü 10–15 m ara süresi.",
+"5 м, делённые на отрезок 10–15 м.",
+"5 m gedeeld door de tussentijd 10–15 m."
+],
+[
+"Mean velocity between 5 and 15 m.",
+"5 ile 15 m arasındaki ortalama hız.",
+"Средняя скорость между 5 и 15 м.",
+"Gemiddelde snelheid tussen 5 en 15 m."
+],
+[
+"Only with an instrumented starting block (force plates).",
+"Yalnızca ölçüm donanımlı start bloğuyla (kuvvet platformları).",
+"Только с оснащённой датчиками стартовой тумбочкой (силовые платформы).",
+"Alleen met een geïnstrumenteerd startblok (krachtplaten)."
+],
+[
+"2D video analysis with digitisation of the centre of mass.",
+"Ağırlık merkezinin dijitalleştirildiği 2B video analizi.",
+"2D-видеоанализ с оцифровкой центра масс.",
+"2D-videoanalyse met digitalisering van het lichaamszwaartepunt."
+],
+[
+"2D video analysis with angle measurement (camera perpendicular to the plane of motion).",
+"Açı ölçümlü 2B video analizi (kamera hareket düzlemine dik).",
+"2D-видеоанализ с измерением углов (камера перпендикулярно плоскости движения).",
+"2D-videoanalyse met hoekmeting (camera loodrecht op het bewegingsvlak)."
+],
+[
+"Lateral underwater camera with a depth or length reference.",
+"Derinlik ya da uzunluk referanslı yandan su altı kamerası.",
+"Боковая подводная камера с привязкой по глубине или длине.",
+"Zijdelingse onderwatercamera met diepte- of lengtereferentie."
+],
+[
+"Peak power",
+"Tepe güç",
+"Пиковая мощность",
+"Piekvermogen"
+],
+[
+"Highest mechanical power on the starting block relative to body mass, from the start signal to take-off.",
+"Start bloğundaki en yüksek mekanik gücün vücut kütlesine oranı, start sinyalinden ayrılışa kadar.",
+"Наибольшая механическая мощность на стартовой тумбочке относительно массы тела, от стартового сигнала до отталкивания.",
+"Hoogste mechanische vermogen op het startblok ten opzichte van de lichaamsmassa, van het startsignaal tot de afzet."
+],
+[
+"More power means faster initial acceleration and thus better times at 5 m and 15 m.",
+"Daha fazla güç, daha hızlı başlangıç ivmesi ve dolayısıyla 5 m ile 15 m'de daha iyi süreler demektir.",
+"Больше мощности — быстрее начальное ускорение и лучше время на 5 м и 15 м.",
+"Meer vermogen betekent snellere beginversnelling en dus betere tijden op 5 m en 15 m."
+],
+[
+"Mean power",
+"Ortalama güç",
+"Средняя мощность",
+"Gemiddeld vermogen"
+],
+[
+"Mean power per kg body mass over the whole time on the block.",
+"Blokta geçen tüm süre boyunca vücut ağırlığının kg'ı başına ortalama güç.",
+"Средняя мощность на кг массы тела за всё время на тумбочке.",
+"Gemiddeld vermogen per kg lichaamsmassa over de hele tijd op het startblok."
+],
+[
+"Shows whether you build pressure evenly over the whole block time. Helps at 5 m and especially at 15 m.",
+"Tüm blok süresi boyunca baskıyı eşit şekilde oluşturup oluşturmadığını gösterir. 5 m'de ve özellikle 15 m'de yardımcı olur.",
+"Показывает, равномерно ли ты наращиваешь давление за всё время на тумбочке. Помогает на 5 м и особенно на 15 м.",
+"Laat zien of je over de hele bloktijd gelijkmatig druk opbouwt. Helpt bij 5 m en vooral bij 15 m."
+],
+[
+"Timing of peak power",
+"Tepe gücün zamanlaması",
+"Момент пиковой мощности",
+"Moment van het piekvermogen"
+],
+[
+"When peak power occurs, as a percentage of the block time.",
+"Tepe gücün ne zaman oluştuğu, blok süresinin yüzdesi olarak.",
+"Когда наступает пиковая мощность, в процентах от времени на тумбочке.",
+"Wanneer het piekvermogen optreedt, in procent van de bloktijd."
+],
+[
+"The earlier the peak, the earlier you get going.",
+"Tepe ne kadar erken gelirse o kadar erken hızlanırsın.",
+"Чем раньше пик, тем раньше ты набираешь ход.",
+"Hoe eerder de piek, hoe eerder je op gang komt."
+],
+[
+"Peak horizontal force of the rear leg",
+"Arka bacağın yatay tepe kuvveti",
+"Пиковая горизонтальная сила задней ноги",
+"Horizontale piekkracht van het achterste been"
+],
+[
+"Largest forward force of the rear leg on the wedge and its timing.",
+"Arka bacağın takoza uyguladığı en büyük ileri yönlü kuvvet ve zamanlaması.",
+"Наибольшая направленная вперёд сила задней ноги на упор и её момент.",
+"Grootste voorwaarts gerichte kracht van het achterste been op de wig en het moment ervan."
+],
+[
+"The rear leg initiates propulsion. More force applied earlier brings speed immediately.",
+"Arka bacak itişi başlatır. Daha erken uygulanan daha fazla kuvvet hemen hız getirir.",
+"Задняя нога запускает продвижение. Большая и более ранняя сила сразу даёт скорость.",
+"Het achterste been zet de voortstuwing in gang. Meer en eerder uitgeoefende kracht levert direct snelheid."
+],
+[
+"Peak forces of the front leg",
+"Ön bacağın tepe kuvvetleri",
+"Пиковые силы передней ноги",
+"Piekkrachten van het voorste been"
+],
+[
+"Largest horizontal and vertical force of the front foot at the block edge.",
+"Ön ayağın blok kenarındaki en büyük yatay ve dikey kuvveti.",
+"Наибольшая горизонтальная и вертикальная сила передней стопы на краю тумбочки.",
+"Grootste horizontale en verticale kracht van de voorste voet aan de rand van het startblok."
+],
+[
+"The front leg delivers the final push: decisive for take-off at 5 m and for the trajectory at 15 m.",
+"Ön bacak son itişi verir: 5 m'de ayrılış için, 15 m'de uçuş yörüngesi için belirleyicidir.",
+"Передняя нога даёт последний толчок: решающе для отталкивания на 5 м и для траектории полёта на 15 м.",
+"Het voorste been levert de laatste afzet: beslissend voor de afzet bij 5 m en voor de vluchtbaan bij 15 m."
+],
+[
+"Total peak forces",
+"Toplam tepe kuvvetler",
+"Суммарные пиковые силы",
+"Totale piekkrachten"
+],
+[
+"Largest total force on the block, vertical and horizontal. Decide beforehand whether the grip force counts.",
+"Bloğa uygulanan en büyük toplam kuvvet, dikey ve yatay. Tutma kuvvetinin sayılıp sayılmayacağına önceden karar ver.",
+"Наибольшая суммарная сила на тумбочку, вертикальная и горизонтальная. Заранее реши, учитывается ли сила хвата.",
+"Grootste totale kracht op het startblok, verticaal en horizontaal. Leg vooraf vast of de grijpkracht meetelt."
+],
+[
+"TotalHpk is pure propulsion (5 m); TotalVpk controls the trajectory (rather 15 m).",
+"TotalHpk saf itiştir (5 m); TotalVpk uçuş yörüngesini yönetir (daha çok 15 m).",
+"TotalHpk — чистое продвижение (5 м); TotalVpk управляет траекторией полёта (скорее 15 м).",
+"TotalHpk is pure voortstuwing (5 m); TotalVpk stuurt de vluchtbaan (eerder 15 m)."
+],
+[
+"Hand pulling forces",
+"Ellerin çekme kuvvetleri",
+"Тянущие силы рук",
+"Trekkrachten van de handen"
+],
+[
+"Mean and peak pulling force of the arms on the edge or grip, and timing of the peak.",
+"Kolların kenara ya da tutamağa uyguladığı ortalama ve en büyük çekme kuvveti ve tepenin zamanlaması.",
+"Средняя и наибольшая тянущая сила рук на край или поручень и момент пика.",
+"Gemiddelde en grootste trekkracht van de armen aan rand of handgreep en het moment van de piek."
+],
+[
+"The arms pull the upper body forwards. Fast starters reach the peak of the arm pull slightly later.",
+"Kollar üst gövdeyi öne çeker. Hızlı startçılar kol çekişinin tepesine biraz daha geç ulaşır.",
+"Руки тянут корпус вперёд. Быстрые стартующие достигают пика тяги руками чуть позже.",
+"De armen trekken het bovenlichaam naar voren. Snelle starters bereiken de piek van de armtrek iets later."
+],
+[
+"Horizontal impulse per segment",
+"Segment başına yatay impuls",
+"Горизонтальный импульс по сегментам",
+"Horizontale impuls per segment"
+],
+[
+"Forward force over time for the rear wedge, front plate and hand grip.",
+"Arka takoz, ön plaka ve tutamak için zaman içindeki ileri yönlü kuvvet.",
+"Сила вперёд во времени для заднего упора, передней площадки и поручня.",
+"Voorwaartse kracht over de tijd voor achterste wig, voorste plaat en handgreep."
+],
+[
+"The rear foot contributes the largest share and so determines the take-off velocity. Mainly for 5 m.",
+"En büyük payı arka ayak sağlar ve böylece ayrılış hızını belirler. Özellikle 5 m için.",
+"Наибольшую долю даёт задняя нога и тем самым определяет скорость отталкивания. Прежде всего для 5 м.",
+"De achterste voet levert het grootste aandeel en bepaalt zo de afzetsnelheid. Vooral voor 5 m."
+],
+[
+"Resultant total forces",
+"Bileşke toplam kuvvetler",
+"Результирующие суммарные силы",
+"Resulterende totale krachten"
+],
+[
+"Peak and mean of the total force from horizontal and vertical components.",
+"Yatay ve dikey bileşenlerden oluşan toplam kuvvetin tepe ve ortalama değeri.",
+"Пиковое и среднее значение суммарной силы из горизонтальной и вертикальной составляющих.",
+"Piek- en gemiddelde waarde van de totale kracht uit horizontale en verticale component."
+],
+[
+"Closely related to take-off velocity; adds little on its own.",
+"Ayrılış hızıyla yakından ilişkilidir; tek başına pek ek bilgi vermez.",
+"Тесно связаны со скоростью отталкивания; сами по себе мало что добавляют.",
+"Hangt nauw samen met de afzetsnelheid; voegt op zichzelf weinig toe."
+],
+[
+"Work on the block",
+"Blok üzerindeki iş",
+"Работа на тумбочке",
+"Arbeid op het startblok"
+],
+[
+"Total work on the block relative to body mass.",
+"Blok üzerindeki toplam işin vücut kütlesine oranı.",
+"Общая работа на тумбочке относительно массы тела.",
+"Totale arbeid op het startblok ten opzichte van de lichaamsmassa."
+],
+[
+"More energy in the take-off usually means a higher take-off velocity.",
+"İtişe konan daha fazla enerji genellikle daha yüksek ayrılış hızı demektir.",
+"Больше энергии в отталкивании обычно означает более высокую скорость отталкивания.",
+"Meer energie in de afzet betekent meestal een hogere afzetsnelheid."
+],
+[
+"First movement of the segments",
+"Segmentlerin ilk hareketi",
+"Первое движение сегментов",
+"Eerste beweging van de segmenten"
+],
+[
+"Time from the start signal to the first movement of the rear leg, arms and front leg.",
+"Start sinyalinden arka bacağın, kolların ve ön bacağın ilk hareketine kadar geçen süre.",
+"Время от стартового сигнала до первого движения задней ноги, рук и передней ноги.",
+"Tijd van het startsignaal tot de eerste beweging van achterste been, armen en voorste been."
+],
+[
+"Describes the sequence, without a direct effect on time.",
+"Doğrudan zaman etkisi olmadan sıralamayı tanımlar.",
+"Описывает последовательность, без прямого влияния на время.",
+"Beschrijft de volgorde, zonder direct effect op de tijd."
+],
+[
+"High frame rate video (120 fps or more) or force-plate block.",
+"Yüksek kare hızlı video (saniyede 120 kare ve üzeri) ya da kuvvet platformlu blok.",
+"Видео с высокой частотой кадров (от 120 кадров в секунду) или тумбочка с силовыми платформами.",
+"Video met hoge beeldsnelheid (120 beelden per seconde of meer) of startblok met krachtplaten."
+],
+[
+"Joint angles in the set position",
+"Start pozisyonundaki eklem açıları",
+"Углы в суставах в стартовой позиции",
+"Gewrichtshoeken in de starthouding"
+],
+[
+"Knee, ankle and hip angles in the set position after “Take your mark”, in side view.",
+"„Take your mark“ sonrasındaki duruşta yandan görünüşte diz, ayak bileği ve kalça açıları.",
+"Углы колена, голеностопа и тазобедренного сустава в позе после «Take your mark», вид сбоку.",
+"Knie-, enkel- en heuphoeken in de houding na „Take your mark“, in zijaanzicht."
+],
+[
+"Determine pre-tension and acceleration path, mainly for the 5 m time.",
+"Ön gerilimi ve ivmelenme yolunu belirler, özellikle 5 m süresi için.",
+"Определяют преднапряжение и путь разгона, прежде всего для времени на 5 м.",
+"Bepalen voorspanning en versnellingsweg, vooral voor de 5-m-tijd."
+],
+[
+"Hip or CoM height at the start signal",
+"Start sinyalinde kalça ya da ağırlık merkezi yüksekliği",
+"Высота таза или центра масс в момент стартового сигнала",
+"Heup- of zwaartepunthoogte bij het startsignaal"
+],
+[
+"Height of the hip or centre of mass above the water surface in the set position.",
+"Start pozisyonunda kalçanın ya da ağırlık merkezinin su yüzeyinden yüksekliği.",
+"Высота таза или центра масс над поверхностью воды в стартовой позиции.",
+"Hoogte van de heup of het lichaamszwaartepunt boven het wateroppervlak in de starthouding."
+],
+[
+"A higher hip gives more path and momentum forwards and downwards.",
+"Daha yüksek kalça ileri-aşağı daha fazla yol ve ivme sağlar.",
+"Более высокий таз даёт больше пути и разгона вперёд-вниз.",
+"Een hogere heup geeft meer weg en vaart naar voren en omlaag."
+],
+[
+"2D video analysis with a height reference (e.g. block height).",
+"Yükseklik referanslı 2B video analizi (ör. blok yüksekliği).",
+"2D-видеоанализ с привязкой по высоте (например, высота тумбочки).",
+"2D-videoanalyse met hoogtereferentie (bijv. blokhoogte)."
+],
+[
+"Vertical take-off velocity",
+"Dikey ayrılış hızı",
+"Вертикальная скорость отталкивания",
+"Verticale afzetsnelheid"
+],
+[
+"Upward or downward velocity when leaving the block.",
+"Bloktan ayrılırken yukarı ya da aşağı yöndeki hız.",
+"Скорость вверх или вниз при отрыве от тумбочки.",
+"Snelheid omhoog of omlaag bij het verlaten van het startblok."
+],
+[
+"Jumping too high costs time; a flat, long take-off is better.",
+"Fazla yukarı sıçramak zaman kaybettirir; alçak ve uzun ayrılmak daha iyidir.",
+"Слишком высокий прыжок вверх стоит времени; лучше отталкиваться плоско и далеко.",
+"Te veel omhoog springen kost tijd; beter vlak en ver afzetten."
+],
+[
+"Resultant take-off velocity",
+"Bileşke ayrılış hızı",
+"Результирующая скорость отталкивания",
+"Resulterende afzetsnelheid"
+],
+[
+"Total velocity of the centre of mass at take-off.",
+"Ayrılışta ağırlık merkezinin toplam hızı.",
+"Суммарная скорость центра масс при отталкивании.",
+"Totale snelheid van het lichaamszwaartepunt bij de afzet."
+],
+[
+"Composite value, largely determined by the forward velocity.",
+"Büyük ölçüde ileri hız tarafından belirlenen bileşik değer.",
+"Сводная величина, во многом определяемая скоростью вперёд.",
+"Samengestelde waarde, grotendeels bepaald door de voorwaartse snelheid."
+],
+[
+"CoM height at take-off",
+"Ayrılışta ağırlık merkezi yüksekliği",
+"Высота центра масс при отталкивании",
+"Zwaartepunthoogte bij de afzet"
+],
+[
+"Height of the centre of mass above the water when leaving the block edge.",
+"Blok kenarından ayrılırken ağırlık merkezinin su üstündeki yüksekliği.",
+"Высота центра масс над водой при отрыве от края тумбочки.",
+"Hoogte van het lichaamszwaartepunt boven het water bij het verlaten van de blokrand."
+],
+[
+"Taking off higher gives a flatter and longer trajectory.",
+"Daha yüksekten ayrılan daha düz ve daha uzun bir yörünge elde eder.",
+"Кто отрывается выше, получает более пологую и длинную траекторию.",
+"Wie hoger afzet, krijgt een vlakkere en langere vluchtbaan."
+],
+[
+"CoM distance to the block edge at take-off",
+"Ayrılışta ağırlık merkezinin blok kenarına uzaklığı",
+"Расстояние центра масс до края тумбочки при отталкивании",
+"Afstand van het zwaartepunt tot de blokrand bij de afzet"
+],
+[
+"Horizontal distance of the centre of mass from the block edge at take-off.",
+"Ayrılışta ağırlık merkezinin blok kenarına yatay uzaklığı.",
+"Горизонтальное расстояние центра масс от края тумбочки при отталкивании.",
+"Horizontale afstand van het lichaamszwaartepunt tot de blokrand bij de afzet."
+],
+[
+"Acts indirectly via the flight distance.",
+"Uçuş mesafesi üzerinden dolaylı etki eder.",
+"Влияет косвенно через дальность полёта.",
+"Werkt indirect via de vluchtafstand."
+],
+[
+"Take-off angle",
+"Ayrılış açısı",
+"Угол отталкивания",
+"Afzethoek"
+],
+[
+"Angle at which the body leaves the block, relative to the horizontal.",
+"Vücudun bloktan ayrıldığı açı, yataya göre.",
+"Угол, под которым тело покидает тумбочку, относительно горизонтали.",
+"Hoek waaronder het lichaam het startblok verlaat, ten opzichte van de horizontaal."
+],
+[
+"Balance between distance and a fast entry: too steep wastes distance, too flat brakes on entry.",
+"Mesafe ile hızlı suya giriş arasındaki denge: Çok dik mesafe kaybettirir, çok düz girişte frenler.",
+"Баланс между дальностью и быстрым входом: слишком круто — теряешь дальность, слишком плоско — тормозишь при входе.",
+"Balans tussen afstand en snel inzwemmen: te steil verspilt afstand, te vlak remt bij het inzwemmen."
+],
+[
+"Entry angle",
+"Suya giriş açısı",
+"Угол входа в воду",
+"Inzwemhoek"
+],
+[
+"Angle of the trajectory or the body when breaking the water surface.",
+"Su yüzeyini delerken yörüngenin ya da vücudun açısı.",
+"Угол траектории или тела при прохождении поверхности воды.",
+"Hoek van de vluchtbaan of het lichaam bij het doorbreken van het wateroppervlak."
+],
+[
+"A suitable, clean angle lets you enter through a single hole and brakes less.",
+"Uygun ve temiz bir açı tek bir delikten girmeni sağlar ve daha az frenler.",
+"Подходящий чистый угол позволяет войти в воду через одно отверстие и меньше тормозит.",
+"Een passende, zuivere hoek laat je door één enkel gat inzwemmen en remt minder."
+],
+[
+"Resultant entry velocity",
+"Bileşke suya giriş hızı",
+"Результирующая скорость входа в воду",
+"Resulterende inzwemsnelheid"
+],
+[
+"Total velocity of the centre of mass on hitting the water.",
+"Suya çarparken ağırlık merkezinin toplam hızı.",
+"Суммарная скорость центра масс при касании воды.",
+"Totale snelheid van het lichaamszwaartepunt bij het raken van het water."
+],
+[
+"The speed you carry from the air into the water.",
+"Havadan suya taşıdığın hız.",
+"Скорость, которую ты переносишь из воздуха в воду.",
+"De snelheid die je uit de lucht meeneemt het water in."
+],
+[
+"Size of the entry hole",
+"Giriş deliğinin büyüklüğü",
+"Размер входного отверстия",
+"Grootte van het insteekgat"
+],
+[
+"Size of the opening in the water surface on entry.",
+"Suya girişte su yüzeyindeki açıklığın büyüklüğü.",
+"Размер отверстия в поверхности воды при входе.",
+"Grootte van de opening in het wateroppervlak bij het inzwemmen."
+],
+[
+"A small hole means a clean entry with little braking.",
+"Küçük bir delik, az frenleyen temiz bir giriş demektir.",
+"Маленькое отверстие означает чистый вход с малым торможением.",
+"Een klein gat betekent een zuiver inzwemmen met weinig remwerking."
+],
+[
+"Video from above or the side with a length reference.",
+"Uzunluk referanslı, yukarıdan ya da yandan video.",
+"Видео сверху или сбоку с привязкой по длине.",
+"Video van boven of van opzij met lengtereferentie."
+],
+[
+"Depth at the 1st kick",
+"İlk vuruştaki derinlik",
+"Глубина при первом ударе",
+"Diepte bij de 1e beenslag"
+],
+[
+"Vertical distance of the head below the surface at the first underwater kick.",
+"İlk su altı vuruşunda başın su yüzeyine dikey uzaklığı.",
+"Вертикальное расстояние головы до поверхности воды при первом подводном ударе.",
+"Verticale afstand van het hoofd tot het wateroppervlak bij de eerste onderwaterbeenslag."
+],
+[
+"Affects 5 m and 15 m via drag.",
+"Direnç üzerinden 5 m ve 15 m'yi etkiler.",
+"Через сопротивление влияет на 5 м и 15 м.",
+"Werkt via de weerstand door op 5 m en 15 m."
+],
+[
+"Maximum depth, time and position",
+"Maksimum derinlik, zaman ve konum",
+"Максимальная глубина, время и место",
+"Maximale diepte, tijd en positie"
+],
+[
+"Deepest point of the head underwater, time from the start signal to it and distance from the wall.",
+"Başın su altındaki en derin noktası, start sinyalinden oraya kadar geçen süre ve duvara uzaklık.",
+"Самая глубокая точка головы под водой, время от стартового сигнала до неё и расстояние от стенки.",
+"Diepste punt van het hoofd onder water, tijd van het startsignaal tot daar en afstand tot de wand."
+],
+[
+"A slightly deeper path (about −0.9 to −1.2 m) reduces wave and surface drag.",
+"Biraz daha derin bir yol (yaklaşık −0,9 ile −1,2 m) dalga ve yüzey direncini azaltır.",
+"Чуть более глубокая траектория (примерно от −0,9 до −1,2 м) снижает волновое и поверхностное сопротивление.",
+"Een iets diepere baan (ongeveer −0,9 tot −1,2 m) vermindert golf- en oppervlakteweerstand."
+],
+[
+"Kick amplitude",
+"Vuruş genliği",
+"Амплитуда ударов ногами",
+"Beenslagamplitude"
+],
+[
+"Vertical distance between the highest and lowest foot position within one cycle.",
+"Bir döngü içinde ayağın en yüksek ve en alçak konumu arasındaki dikey mesafe.",
+"Вертикальное расстояние между самым высоким и самым низким положением стопы в одном цикле.",
+"Verticale afstand tussen de hoogste en laagste voetpositie binnen één cyclus."
+],
+[
+"Too small wastes propulsion, too large costs drag.",
+"Çok küçükse itiş kaybolur, çok büyükse direnç artar.",
+"Слишком малая теряет продвижение, слишком большая стоит сопротивления.",
+"Te klein verspilt voortstuwing, te groot kost weerstand."
+],
+[
+"Strouhal number",
+"Strouhal sayısı",
+"Число Струхаля",
+"Strouhalgetal"
+],
+[
+"Amplitude times frequency divided by velocity.",
+"Genlik çarpı frekansın hıza bölümü.",
+"Амплитуда, умноженная на частоту и делённая на скорость.",
+"Amplitude maal frequentie gedeeld door snelheid."
+],
+[
+"Index of kick efficiency.",
+"Vuruş verimliliğinin göstergesi.",
+"Показатель эффективности удара ногами.",
+"Maat voor de efficiëntie van de beenslag."
+],
+[
+"Toe velocity symmetry",
+"Parmak ucu hızı simetrisi",
+"Симметрия скорости носков",
+"Symmetrie van de teensnelheid"
+],
+[
+"Vertical foot velocity in the downkick divided by that in the upkick.",
+"Aşağı vuruştaki dikey ayak hızının yukarı vuruştakine bölümü.",
+"Вертикальная скорость стопы при ударе вниз, делённая на скорость при ударе вверх.",
+"Verticale voetsnelheid in de neerwaartse slag gedeeld door die in de opwaartse slag."
+],
+[
+"A balanced kick is associated with higher underwater speed.",
+"Dengeli bir vuruş su altında daha yüksek hızla ilişkilidir.",
+"Сбалансированный удар связан с более высокой скоростью под водой.",
+"Een evenwichtige beenslag hangt samen met een hogere snelheid onder water."
+],
+[
+"Underwater camera with digitisation of the toe.",
+"Ayak ucunun dijitalleştirildiği su altı kamerası.",
+"Подводная камера с оцифровкой носка.",
+"Onderwatercamera met digitalisering van de teen."
+],
+[
+"7.5 m time",
+"7,5 m süresi",
+"Время на 7,5 м",
+"7,5-m-tijd"
+],
+[
+"Time from the start signal until the top of the head reaches the 7.5 m mark.",
+"Start sinyalinden başın üst kısmının 7,5 m işaretine ulaşmasına kadar geçen süre.",
+"Время от стартового сигнала до момента, когда макушка достигает отметки 7,5 м.",
+"Tijd van het startsignaal tot de bovenkant van het hoofd de 7,5-m-markering bereikt."
+],
+[
+"Intermediate time of the underwater phase.",
+"Su altı fazının ara süresi.",
+"Промежуточное время подводной фазы.",
+"Tussentijd van de onderwaterfase."
+],
+[
+"In the video, if the 7.5 m mark is marked on the pool side.",
+"Videoda, 7,5 m işareti havuz kenarında işaretlenmişse.",
+"На видео, если отметка 7,5 м нанесена на бортике бассейна.",
+"In de video, als de 7,5-m-markering aan de badrand is aangebracht."
+],
+[
+"Jump height and take-off velocity",
+"Sıçrama yüksekliği ve ayrılış hızı",
+"Высота прыжка и скорость отталкивания",
+"Spronghoogte en afzetsnelheid"
+],
+[
+"Jump height or take-off velocity from body-weight jumps (countermovement jump, squat jump).",
+"Vücut ağırlığıyla yapılan sıçramalardan (countermovement jump, squat jump) elde edilen sıçrama yüksekliği ya da ayrılış hızı.",
+"Высота прыжка или скорость отталкивания в прыжках с собственным весом (прыжок с подседом, прыжок из приседа).",
+"Spronghoogte of afzetsnelheid uit sprongen met eigen lichaamsgewicht (countermovement jump, squat jump)."
+],
+[
+"Those who jump higher and faster on land usually also start faster in the water.",
+"Karada daha yüksek ve hızlı sıçrayan genellikle suda da daha hızlı start alır.",
+"Кто на суше прыгает выше и быстрее, обычно и в воде стартует быстрее.",
+"Wie op het land hoger en sneller afzet, start meestal ook in het water sneller."
+],
+[
+"Force plate, contact mat or video (flight-time method).",
+"Kuvvet platformu, temas matı ya da video (uçuş süresi yöntemi).",
+"Силовая платформа, контактный коврик или видео (метод времени полёта).",
+"Krachtplatform, contactmat of video (vluchttijdmethode)."
+],
+[
+"Captured with Sprintz",
+"Sprintz ile ölçülenler",
+"Измеряется в Sprintz",
+"Gemeten met Sprintz"
+],
+[
+"Further parameters",
+"Diğer ölçütler",
+"Другие показатели",
+"Overige kenmerken"
+],
+[
+"Sprintz measures or calculates these parameters from your marks in the video. All times count from the start signal; positions are taken at the head.",
+"Sprintz bu ölçütleri videodaki işaretlerinden ölçer ya da hesaplar. Tüm süreler start sinyalinden itibaren sayılır, konumlar başta belirlenir.",
+"Sprintz измеряет или рассчитывает эти показатели по твоим отметкам на видео. Всё время отсчитывается от стартового сигнала, положения определяются по голове.",
+"Sprintz meet of berekent deze kenmerken uit je markeringen in de video. Alle tijden tellen vanaf het startsignaal, posities worden aan het hoofd bepaald."
+],
+[
+"Relevance for 5 m and 15 m:",
+"5 m ve 15 m için önemi:",
+"Значение для 5 м и 15 м:",
+"Belang voor 5 m en 15 m:"
+],
+[
+"Sprintz doesn't capture these parameters. They help to understand a start fully and usually need additional measuring equipment.",
+"Sprintz bu ölçütleri ölçmez. Bir startı tam anlamak için yardımcı olurlar ve çoğunlukla ek ölçüm donanımı gerektirirler.",
+"Sprintz не измеряет эти показатели. Они помогают полностью понять старт и обычно требуют дополнительной измерительной техники.",
+"Sprintz legt deze kenmerken niet vast. Ze helpen een start volledig te begrijpen en vragen meestal extra meetapparatuur."
+],
+[
+"How it is captured:",
+"Nasıl ölçülür:",
+"Как измеряется:",
+"Hoe het wordt gemeten:"
+],
+[
+"Start parameters",
+"Start ölçütleri",
+"Показатели старта",
+"Startkenmerken"
+],
+[
+"Parameters explained",
+"Ölçütlerin açıklaması",
+"Пояснение показателей",
+"Uitleg van de kenmerken"
+],
+[
+"Parameters captured with Sprintz",
+"Sprintz ile ölçülen ölçütler",
+"Показатели, измеряемые в Sprintz",
+"Met Sprintz gemeten kenmerken"
+],
+[
+"All times count from the start signal; positions are taken at the head. “Leaving” is always the last frame with contact; “reaching” and “contact” the first frame.",
+"Tüm süreler start sinyalinden itibaren sayılır, konumlar başta belirlenir. „Ayrılış“ her zaman temasın olduğu son karedir, „ulaşma“ ve „temas“ ise ilk karedir.",
+"Всё время отсчитывается от стартового сигнала, положения определяются по голове. «Отрыв» — всегда последний кадр с контактом, «достижение» и «контакт» — первый кадр.",
+"Alle tijden tellen vanaf het startsignaal, posities worden aan het hoofd bepaald. „Loskomen“ is steeds het laatste beeld met contact, „bereiken“ en „contact“ het eerste beeld."
+],
+[
+"Definition and capture",
+"Tanım ve ölçüm",
+"Определение и измерение",
+"Definitie en meting"
+],
+[
+"Relevance for 5 m and 15 m",
+"5 m ve 15 m için önemi",
+"Значение для 5 м и 15 м",
+"Belang voor 5 m en 15 m"
+],
+[
+"Further parameters worth knowing",
+"Bilinmesi gereken diğer ölçütler",
+"Другие показатели, которые стоит знать",
+"Overige kenmerken die je moet kennen"
+],
+[
+"Sprintz doesn't capture these parameters; they usually need additional measuring equipment.",
+"Sprintz bu ölçütleri ölçmez; çoğunlukla ek ölçüm donanımı gerektirirler.",
+"Sprintz не измеряет эти показатели; обычно для них нужна дополнительная измерительная техника.",
+"Sprintz legt deze kenmerken niet vast; ze vragen meestal extra meetapparatuur."
+],
+[
+"Description",
+"Açıklama",
+"Описание",
+"Beschrijving"
+],
+[
+"Capture",
+"Ölçüm",
+"Измерение",
+"Meting"
+]
+]

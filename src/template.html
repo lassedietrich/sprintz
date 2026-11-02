@@ -421,6 +421,13 @@ body.xh-on #xhair{display:block}
 .wcard.meascol .wdesc,.wcard.meascol .wreq{display:none}
 @media (max-width:600px){ #sMeasTip{font-size:.72rem;padding:5px 8px;max-width:64%} #sMeasTip li:not(.cur){display:none} #sMeasTip .mpair button{padding:2px 5px;font-size:.7rem} #sMeasCtl{right:6px;bottom:6px;gap:4px} #sMeasCtl button{padding:6px 9px} #sMeasCtl button span{display:none} }.wcard.meascol .wdesct{display:block}
 .wreq{font-size:.86rem;line-height:1.45;background:color-mix(in srgb,#E8B44A 18%,transparent);border-left:3px solid #E8B44A;border-radius:6px;padding:7px 10px;margin:4px 0 8px}
+.minfo{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font:700 .78rem/1 Georgia,serif;font-style:italic;cursor:pointer;vertical-align:middle;padding:0;margin-left:4px}
+h2 .minfo{width:26px;height:26px;font-size:.95rem}
+.mibox{max-width:720px;max-height:min(86vh,900px);padding-bottom:14px}.mihd{display:flex;align-items:center;justify-content:space-between;gap:10px}.mihd h2{margin:0;font-size:1.2rem}
+.mibody{overflow:auto;min-height:0;margin:0 -4px;padding:0 4px}.mitabs{display:flex;gap:6px;margin:2px 0 8px;flex-wrap:wrap}.mitabs button{flex:1;border:1px solid var(--line);background:var(--soft);color:var(--fg);border-radius:10px;padding:8px 10px;font:inherit;font-size:.86rem;font-weight:600;cursor:pointer}
+.mitabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.mih{margin:14px 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.mi{border-bottom:1px solid var(--line);padding:7px 0}.mi summary{cursor:pointer;line-height:1.35}.mi summary span{color:var(--muted);font-size:.82rem}.mi p{margin:6px 0 0;font-size:.9rem;line-height:1.45}.mi .mir{color:var(--muted)}
 .evdl{margin:6px 0 0}.evdl dt{font-weight:700;margin-top:8px}.evdl dd{margin:2px 0 0;line-height:1.45}.evdl i{color:var(--muted)}
 .wmeasb{width:100%;margin:2px 0 10px}.wmeash{margin:-2px 0 10px;padding:8px 10px;border-radius:10px;background:var(--soft);font-size:.92rem}
 .spbars{display:block;width:100%;height:56px;margin:10px 0 0}.spbarl{display:flex;margin-bottom:10px}.spbarl span{flex:1;text-align:center;font-size:.75rem;color:var(--muted);line-height:1.25}.spbarl b{display:block;color:var(--fg);font-size:.85rem}
@@ -3756,27 +3763,38 @@ async function evBlob(t){
 }
 /* --- Auswertung eines Versuchs mit dem Schritt-für-Schritt-Assistenten --- */
 function evSteps(P){
-  P=P||EV.cur||{}; const back=P.start==="back", u=U("m"); const {S1,t,n}=mkSteps();
-  t("move","Erste Reaktion","First reaction","Das erste Bild, in dem du dich sichtbar bewegst.","The first frame in which you visibly move.");
-  t("hands","Hände lösen","Hands off", back?"Das Bild, in dem sich deine Hände von den Griffen lösen. Optional.":"Das Bild, in dem sich deine Hände vom Block lösen. Optional.", back?"The frame in which your hands leave the grips. Optional.":"The frame in which your hands leave the block. Optional.",{opt:true});
-  if(back) t("off","Abstoß","Push-off","Das Bild, in dem deine Füße die Wand verlassen.","The frame in which your feet leave the wall.");
-  else t("off","Lösen des zweiten Fußes vom Block","Second foot leaves the block","Das Bild, in dem sich dein zweiter (hinterer bzw. letzter) Fuß vom Startblock löst. Daraus ergibt sich die Blockzeit.","The frame in which your second (rear or last) foot leaves the block. This gives the block time.");
-  t("entry","Erster Wasserkontakt","First water contact","Das Bild, in dem deine Fingerspitzen zum ersten Mal das Wasser berühren.","The frame in which your fingertips first touch the water.");
-  n("jump","Sprungweite","Start distance","Abstand von der Wand bis zur Eintauchstelle deiner Hände. Am genauesten misst du ihn direkt im Video.","Distance from the wall to where your hands entered. Measuring it directly in the video is the most accurate way.",u,
-    {meas:{a:[0,()=>L("die Beckenkante (Startwand)","the pool edge (start wall)")], b:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], tg:()=>L("die Stelle, an der deine Fingerspitzen eintauchen","the spot where your fingertips enter"),
+  P=P||EV.cur||{}; const back=P.start==="back", breast=P.uw==="breast" && !back, u=U("m"); const {S1,t,n}=mkSteps();
+  const R0=()=>L("die Beckenkante (Startwand)","the pool edge (start wall)"), R5=()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)");
+  // Standard: „Lösen“ = letztes Bild mit Kontakt, „Kontakt/Erreichen“ = erstes Bild mit Kontakt; Positionen am Kopf
+  t("move","Erste Reaktion","First reaction","Das erste Bild, in dem du dich auf dem Block sichtbar bewegst.","The first frame in which you visibly move on the block.");
+  t("hands","Hände lösen","Hands off", back?"Das letzte Bild, in dem deine Hände die Griffe noch berühren. Optional.":"Das letzte Bild, in dem deine Hände den Block noch berühren. Optional.", back?"The last frame in which your hands still touch the grips. Optional.":"The last frame in which your hands still touch the block. Optional.",{opt:true});
+  if(!back) t("rear","Hinterer Fuß löst sich","Rear foot leaves","Das letzte Bild, in dem dein hinterer Fuß den Keil noch berührt. Optional.","The last frame in which your rear foot still touches the wedge. Optional.",{opt:true});
+  if(back) t("off","Abstoß","Push-off","Das letzte Bild, in dem deine Füße die Wand noch berühren.","The last frame in which your feet still touch the wall.");
+  else t("off","Abstoß des vorderen Fußes","Front foot take-off","Das letzte Bild, in dem dein vorderer Fuß den Block noch berührt (letzter Fußkontakt). Daraus ergibt sich die Blockzeit.","The last frame in which your front foot still touches the block (last foot contact). This gives the block time.");
+  t("entry","Erster Wasserkontakt","First water contact","Das erste Bild, in dem deine Fingerspitzen das Wasser berühren.","The first frame in which your fingertips touch the water.");
+  n("jump","Flugweite","Flight distance","Waagerechter Abstand von der Blockkante bis zur Eintauchstelle deiner Fingerspitzen. Am genauesten misst du ihn direkt im Video.","Horizontal distance from the block edge to where your fingertips enter. Measuring it directly in the video is the most accurate way.",u,
+    {meas:{a:[0,R0], b:[5,R5], tg:()=>L("die Stelle, an der deine Fingerspitzen eintauchen","the spot where your fingertips enter"),
       req:()=>L("Ausmessen geht nur, wenn im Moment des ersten Wasserkontakts die Beckenkante und die Linie der Rückenfähnchen klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if the pool edge and the backstroke flag line are clearly visible in the frame of first water contact. Otherwise enter the value manually or skip it."), at:"entry"}});
-  t("p5",`5-m-Marke`,`5 m mark`,`Das Bild, in dem dein Kopf die 5-m-Marke (Linie der Rückenfähnchen) passiert.`,`The frame in which your head passes the 5 m mark (backstroke flag line).`,{pos:5});
-  t("p10","10-m-Marke","10 m mark","Das Bild, in dem dein Kopf die 10-m-Marke passiert. Nur wenn eine Markierung zu sehen ist.","The frame in which your head passes the 10 m mark. Only if a marking is visible.",{pos:10, opt:true});
-  t("brk","Auftauchen","Breakout","Das Bild, in dem dein Kopf die Wasseroberfläche durchbricht.","The frame in which your head breaks the surface.",{opt:true});
-  n("diveD","Tauchweite","Underwater distance","Abstand von der Wand bis zur Stelle, an der dein Kopf auftaucht.","Distance from the wall to where your head surfaced.",u,
-    {opt:true, meas:{a:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], b:[15,()=>L("die 15-m-Marke","the 15 m mark")], pairs:[[5,15],[5,10],[10,15]], tg:()=>L("die Stelle, an der dein Kopf auftaucht","the spot where your head surfaces"),
-      req:()=>L("Ausmessen geht nur, wenn im Moment des Auftauchens zwei Markierungen (5 m und 15 m, 5 m und 10 m oder 10 m und 15 m) klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if two markings (5 m and 15 m, 5 m and 10 m, or 10 m and 15 m) are clearly visible in the frame where you surface. Otherwise enter the value manually or skip it."), at:"brk"}});
-  if(P.uw==="breast" && !back){
-    t("dk","Delfinbeinschlag (Abwärtsbewegung)","Dolphin kick (downbeat)","Das Bild, in dem die Abwärtsbewegung deines Delfinbeinschlags beginnt. Optional.","The frame in which the downbeat of your dolphin kick begins. Optional.",{opt:true});
+  t("headIn","Kopf taucht ein","Head enters","Das erste Bild, in dem deine Kopfoberseite die Wasseroberfläche erreicht. Optional.","The first frame in which the top of your head reaches the water surface. Optional.",{opt:true});
+  n("entryD","Eintauchdistanz","Entry distance","Abstand von der Wand bis zur Stelle, an der deine Kopfoberseite eintaucht. Optional.","Distance from the wall to where the top of your head enters. Optional.",u,
+    {opt:true, meas:{a:[0,R0], b:[5,R5], tg:()=>L("die Stelle, an der deine Kopfoberseite eintaucht","the spot where the top of your head enters"),
+      req:()=>L("Ausmessen geht nur, wenn im Moment, in dem der Kopf eintaucht, die Beckenkante und die Linie der Rückenfähnchen klar im Bild zu erkennen sind.","Measuring only works if the pool edge and the backstroke flag line are clearly visible in the frame in which your head enters."), at:"headIn"}});
+  t("kick1","Erster Delfinkick","First dolphin kick", breast?"Das Bild, in dem die Abwärtsbewegung deines Delfinkicks beim Tauchzug beginnt. Optional.":"Das Bild, in dem die Abwärtsbewegung deines ersten Delfinkicks unter Wasser beginnt. Optional.", breast?"The frame in which the downbeat of your dolphin kick during the pull-out begins. Optional.":"The frame in which the downbeat of your first underwater dolphin kick begins. Optional.",{opt:true});
+  n("kick1D","Distanz beim 1. Delfinkick","Distance at 1st dolphin kick","Abstand von der Wand bis zu deiner Kopfmitte beim ersten Delfinkick. Optional.","Distance from the wall to the centre of your head at the first dolphin kick. Optional.",u,
+    {opt:true, meas:{a:[0,R0], b:[5,R5], pairs:[[0,5],[5,10],[0,10]], tg:()=>L("deine Kopfmitte","the centre of your head"),
+      req:()=>L("Ausmessen geht nur, wenn im Moment des ersten Delfinkicks zwei Markierungen (Wand und 5 m, 5 m und 10 m oder Wand und 10 m) klar im Bild zu erkennen sind.","Measuring only works if two markings (wall and 5 m, 5 m and 10 m, or wall and 10 m) are clearly visible in the frame of the first dolphin kick."), at:"kick1"}});
+  t("p5",`5-m-Marke`,`5 m mark`,`Das erste Bild, in dem deine Kopfoberseite die 5-m-Marke (Linie der Rückenfähnchen) erreicht.`,`The first frame in which the top of your head reaches the 5 m mark (backstroke flag line).`,{pos:5});
+  if(breast){
     t("pull","Beginn des Tauchzugs","Start of the pull-out","Das Bild, in dem deine Arme den Tauchzug beginnen.","The frame in which your arms begin the pull-out.");
     t("bkick","Beginn des ersten Beinschlags","Start of the first kick","Das Bild, in dem du die Fersen für den ersten Brustbeinschlag anziehst.","The frame in which you draw your heels up for the first breaststroke kick.",{opt:true});
-  } else n("kicks","Delfinbeinschläge unter Wasser","Underwater dolphin kicks","Wie viele Delfinbeinschläge hast du bis zum Auftauchen gemacht?","How many dolphin kicks did you do before breaking out?","×",{opt:true});
-  t("p15","15-m-Marke","15 m mark","Das Bild, in dem dein Kopf die 15-m-Marke passiert.","The frame in which your head passes the 15 m mark.",{pos:15});
+  }
+  t("p10","10-m-Marke","10 m mark","Das erste Bild, in dem deine Kopfoberseite die 10-m-Marke erreicht. Nur wenn eine Markierung zu sehen ist.","The first frame in which the top of your head reaches the 10 m mark. Only if a marking is visible.",{pos:10, opt:true});
+  t("brk","Auftauchen","Breakout","Das erste Bild, in dem deine Kopfoberseite die Wasseroberfläche durchbricht.","The first frame in which the top of your head breaks the water surface.",{opt:true});
+  n("diveD","Auftauchdistanz","Breakout distance","Abstand von der Wand bis zur Stelle, an der deine Kopfoberseite auftaucht.","Distance from the wall to where the top of your head breaks out.",u,
+    {opt:true, meas:{a:[5,()=>L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)")], b:[15,()=>L("die 15-m-Marke","the 15 m mark")], pairs:[[5,15],[5,10],[10,15]], tg:()=>L("die Stelle, an der deine Kopfoberseite auftaucht","the spot where the top of your head breaks out"),
+      req:()=>L("Ausmessen geht nur, wenn im Moment des Auftauchens zwei Markierungen (5 m und 15 m, 5 m und 10 m oder 10 m und 15 m) klar im Bild zu erkennen sind. Sonst trag den Wert von Hand ein oder überspring ihn.","Measuring only works if two markings (5 m and 15 m, 5 m and 10 m, or 10 m and 15 m) are clearly visible in the frame where you surface. Otherwise enter the value manually or skip it."), at:"brk"}});
+  if(!breast) n("kicks","Delfinkicks unter Wasser","Underwater dolphin kicks","Wie viele Delfinkicks hast du bis zum Auftauchen gemacht?","How many dolphin kicks did you do before breaking out?","×",{opt:true});
+  t("p15","15-m-Marke","15 m mark","Das erste Bild, in dem deine Kopfoberseite die 15-m-Marke erreicht.","The first frame in which the top of your head reaches the 15 m mark.",{pos:15});
   S1.push({id:"sum",k:"sum",t:()=>L("Deine Auswertung","Your analysis"),x:()=>""});
   return S1;
 }
@@ -3788,7 +3806,7 @@ async function evAnalyze(t){
   SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
   SA.meta={hornT:t.sigEst||0, sig:[]}; SA.events=[]; SA.recT0=0; SA.sigType=null; SA.cands=null; SA.fps=t.fps||30;
   // gespeicherte Markierungen wiederherstellen
-  if(t.raw){ SA.marks=Object.assign({}, t.raw.marks); SA.vals=Object.assign({spk:SA.vals.spk}, t.raw.vals); SA.sigAuto="manual"; }
+  if(t.raw){ SA.marks=Object.assign({}, t.raw.marks); SA.vals=Object.assign({spk:SA.vals.spk}, t.raw.vals); SA.sigAuto="manual"; if(SA.marks.dk!=null && SA.marks.kick1==null){ SA.marks.kick1=SA.marks.dk; delete SA.marks.dk; } }
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; document.body.classList.add("reviewing"); scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
@@ -3812,32 +3830,38 @@ async function evFindSig(){
   if(sel.length){ SA.marks.sig=sel[0].t; SA.sigType=sel[0].type; SA.sigAuto="found"; } else { SA.marks.sig=0; SA.sigType=null; SA.sigAuto="est"; }
 }
 // Kennwerte des Starts (Zeiten in Echtzeit, Zeitlupen-Faktor berücksichtigt)
+// Kennwerte eines Versuchs nach den Definitionen in SPMET (Zeiten ab Startsignal, Positionen am Kopf)
 function evMetrics(){
-  const m=SA.marks, v=SA.vals, R=k=>spRel(m[k]), k=SA.slow||1, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a])/k : null, o={};
+  const m=SA.marks, v=SA.vals, R=k=>spRel(m[k]), k=SA.slow||1, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a])/k : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null;
   o.rt=R("move"); o.hands=R("hands"); o.block=R("off");
   const tm = m.move!=null ? m.move : m.off; o.result = tm!=null && m.sig!=null ? (tm>=m.sig?"clean":"early") : null;
+  if(ok(o.block)&&ok(o.rt)) o.mt=o.block-o.rt;
+  const rear=R("rear"); if(ok(rear) && o.block>0){ o.rft=rear/o.block*100; o.ffs=o.block-rear; }
   o.flight=d("off","entry"); o.jump=v.jump||null; if(o.flight>0 && o.jump) o.flightV=o.jump/o.flight;
+  const vm=SA.trialRef&&SA.trialRef.vm; if(vm && m.off!=null){ try{ const x=vmAt(vm,m.off); if(ok(x)) o.vxTO=x; }catch(e){} }
+  o.entryT=R("headIn"); o.entryD=v.entryD||null;
+  o.kick1=R("kick1"); o.kick1D=v.kick1D||null;
+  o.gt=pos(d("headIn","kick1")); if(o.gt && o.kick1D!=null && o.entryD!=null){ o.gd=o.kick1D-o.entryD; o.gv=o.gd/o.gt; }
+  o.brkT=R("brk"); o.dive=v.diveD||null; o.kicks=v.kicks||null;
+  o.uwT=pos(d("headIn","brk")); if(o.uwT && o.dive && o.entryD!=null) o.uwV=(o.dive-o.entryD)/o.uwT;
+  const kt=pos(d("kick1","brk")); if(kt && o.kicks) o.kickF=o.kicks/kt*60; if(o.kicks && o.dive && o.kick1D!=null && o.dive>o.kick1D) o.kl=(o.dive-o.kick1D)/o.kicks;
+  o.pull=R("pull"); o.bkick=R("bkick"); o.pullK=d("pull","bkick");
   o.t5=R("p5"); o.t10=R("p10"); o.t15=R("p15");
-  o.uwT=d("entry","brk"); o.dive=v.diveD||null; o.kicks=v.kicks||null;
-  if(o.uwT>0){ if(o.dive) o.uwV=(o.dive-(o.jump||0))/o.uwT; if(o.kicks) o.kickF=o.kicks/o.uwT*60; }
-  o.dk=R("dk"); o.pull=R("pull"); o.bkick=R("bkick"); o.glide=d("entry","pull"); o.pullK=d("pull","bkick");
-  if(o.t5!=null && o.t15!=null && o.t15>o.t5) o.v515=10/(o.t15-o.t5);
-  if(o.t10!=null && o.t15!=null && o.t15>o.t10) o.v1015=5/(o.t15-o.t10);
-  if(o.t5!=null && o.t10!=null && o.t10>o.t5) o.v510=5/(o.t10-o.t5);
+  if(ok(o.t5) && ok(o.t10) && o.t10>o.t5){ o.s510=o.t10-o.t5; o.v510=5/o.s510; }
+  if(ok(o.t10) && ok(o.t15) && o.t15>o.t10){ o.s1015=o.t15-o.t10; o.v1015=5/o.s1015; }
+  if(ok(o.t5) && ok(o.t15) && o.t15>o.t5) o.v515=10/(o.t15-o.t5);
   return o;
 }
 function evSumHTML(){
-  const o=evMetrics(), p=EV.cur, t=p.trials[EV.trial], u=U("m"), us=U("m/s"), row=spRow, hd=spHd;
+  const o=evMetrics(), p=EV.cur, t=p.trials[EV.trial], row=spRow, hd=spHd, PH=SPPH();
   const res={clean:L("Sauber","Clean"),early:L("Zu früh","Too early")}[o.result]||"–";
-  let h=`<p class="evlead" style="margin:0 0 8px"><i class="evv ${t.v}">${t.v}</i> <b>${esc(evVN(p,t.v))}</b> · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)}</p>`;
+  let h=`<p class="evlead" style="margin:0 0 8px"><i class="evv ${t.v}">${t.v}</i> <b>${esc(evVN(p,t.v))}</b> · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)} ${spInfoBtn()}</p>`;
   if((o.block!=null && o.block>1.6) || (o.rt!=null && o.rt>1.2)) h+=`<p class="everr evwarn">${L("Die Zeiten sind unrealistisch lang. Wahrscheinlich ist das Video eine umgewandelte Zeitlupe statt der Originaldatei. Sende das Video mit „Alle Fotodaten“ und lade es erneut hoch.","The times are unrealistically long. The video is probably a converted slow-motion copy instead of the original file. Send the video with “All Photos Data” and upload it again.")}</p>`;
-  h+=`<table class="restbl">`;
-  h+=hd(L("Start","Start"))+row(L("Ergebnis","Result"),res)+row(L("Reaktionszeit","Reaction time"),msx(o.rt))+(o.hands!=null?row(L("Hände lösen","Hands off"),msx(o.hands)):"")+row(p.start==="back"?L("Abstoß","Push-off"):L("Blockzeit","Block time"),msx(o.block));
-  h+=hd(L("Flug","Flight"))+row(L("Flugzeit","Flight time"),msx(o.flight))+row(L("Sprungweite","Start distance"),n2(o.jump,u))+row(L("Fluggeschwindigkeit","Flight velocity"),n2(o.flightV,us));
-  h+=hd(L("Unter Wasser","Underwater"))+row(L("Tauchzeit","Underwater time"),ms3(o.uwT))+row(L("Tauchweite","Underwater distance"),n2(o.dive,u))+row(L("Tauchgeschwindigkeit","Underwater velocity"),n2(o.uwV,us))+(p.uw==="breast"&&p.start!=="back" ? row(L("Delfinbeinschlag","Dolphin kick"),ms3(o.dk))+row(L("Beginn Tauchzug","Start of pull-out"),ms3(o.pull))+row(L("Erster Beinschlag","First kick"),ms3(o.bkick))+row(L("Gleiten bis zum Tauchzug","Glide until pull-out"),ms3(o.glide))+row(L("Tauchzug bis Beinschlag","Pull-out to kick"),ms3(o.pullK))
-    : row(L("Delfinbeinschläge","Dolphin kicks"),o.kicks!=null?String(o.kicks):"–")+row(L("Beinschlagfrequenz","Kick frequency"),kpm(o.kickF)));
-  h+=hd(L("Zeiten","Times"))+row(L("5-m-Zeit","5 m time"),ms3(o.t5))+row(L("10-m-Zeit","10 m time"),ms3(o.t10))+row(L("15-m-Zeit","15 m time"),ms3(o.t15))
-    +row(L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),n2(o.v510,us))+row(L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),n2(o.v1015,us))+row(L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),n2(o.v515,us));
+  // Kernwerte immer, weitere nur, wenn sie berechnet werden konnten
+  const core=new Set(["rt","block","flight","jump","t5","t15"]); let cur="block";
+  h+=`<table class="restbl">`+hd(PH.block)+row(L("Ergebnis","Result"),res);
+  SPMET(p).filter(x=>spApplies(x,p,!!t.vm)).forEach(x=>{ const v=o[x.k]; if(v==null && !core.has(x.k)) return;
+    if(x.ph!==cur){ cur=x.ph; h+=hd(PH[x.ph]); } h+=row(x.l, x.u==="n" ? (v!=null?String(v):"–") : evFmt(v,x.u)); });
   h+=`</table>`;
   const od=evOrd(p), nextT=od.find(x=>evPos(p,x)>evPos(p,t) && x.vid && x.status!=="done") || od.find(x=>x!==t && x.vid && x.status!=="done");
   const act=`<div class="wrow"><button type="button" class="wbig" id="eSave">${nextT?L("Speichern und zum nächsten Versuch","Save and go to the next attempt"):L("Speichern & zur Übersicht","Save & back to overview")}</button></div>
@@ -3860,7 +3884,7 @@ async function evNextTrial(saved){
   else evShow("plan");
 }
 function evAnaHead(){ const h=$("evAnaHead"), p=EV.cur, t=p&&p.trials[EV.trial]; if(!t){ h.hidden=true; return; } h.hidden=false;
-  h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
+  h.innerHTML=`<span><i class="evv ${t.v}">${t.v}</i> ${esc(evVN(p,t.v))} · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)} ${p.tech==="start"?spInfoBtn():""}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="evAnaDl">${L("Projekt herunterladen","Download project")}</button><button type="button" class="testbtn ghost small" id="evAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
   $("evAnaBack").onclick=()=>{ evCloseAna(); evShow("plan"); }; $("evAnaDl").onclick=()=>evExport(p); }
 function evCloseAna(soft){ if(FS.on) fsExit(soft); measEnd(); SA.trialRef=null; SA.active=false; SA.mode=null; $("spAna").hidden=true; $("evAnaHead").hidden=true; document.body.classList.remove("reviewing"); try{ sVid.pause(); sVid.removeAttribute("src"); sVid.load(); }catch(e){} $("evPage").hidden=false; }
 function alertMsg(t){ const m=$("evUpMsg")||$("evMsg"); if(m) m.textContent=t; else { const b=$("evBottom"); if(b) b.insertAdjacentHTML("afterbegin",`<p class="hint">${t}</p>`); } }
@@ -4053,34 +4077,12 @@ $("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && FS.on){ e.preventDefault(); fsExit(); } });
 /* --- Ergebnisblatt der Technikevaluation: Baseline, Vergleich A/B, Verlauf, Boxplot, Pausen und Testtage --- */
 // Kennwerte: Schlüssel, Bezeichnung, Einheit/Format, bessere Richtung (low = kleiner ist besser, high = größer ist besser, null = neutral)
-const EVM=()=>[
-  ["rt",L("Reaktionszeit","Reaction time"),"ms","low"],
-  ["hands",L("Hände lösen","Hands off"),"ms","low"],
-  ["block",EV.cur&&EV.cur.start==="back"?L("Abstoß","Push-off"):L("Blockzeit","Block time"),"ms","low"],
-  ["flight",L("Flugzeit","Flight time"),"ms",null],
-  ["jump",L("Sprungweite","Start distance"),"m","high"],
-  ["flightV",L("Fluggeschwindigkeit","Flight velocity"),"m/s","high"],
-  ["uwT",L("Tauchzeit","Underwater time"),"s",null],
-  ["dive",L("Tauchweite","Underwater distance"),"m",null],
-  ["uwV",L("Tauchgeschwindigkeit","Underwater velocity"),"m/s","high"],
-  ["kicks",L("Beinschläge","Kicks"),"n",null],
-  ["kickF",L("Beinschlagfrequenz","Kick frequency"),"spm",null],
-  ["dk",L("Delfinbeinschlag","Dolphin kick"),"s",null],
-  ["pull",L("Beginn Tauchzug","Start of pull-out"),"s",null],
-  ["bkick",L("Erster Beinschlag","First kick"),"s",null],
-  ["glide",L("Gleiten bis zum Tauchzug","Glide until pull-out"),"s",null],
-  ["pullK",L("Tauchzug bis Beinschlag","Pull-out to kick"),"s",null],
-  ["t5",L("5-m-Zeit","5 m time"),"s","low"],
-  ["t10",L("10-m-Zeit","10 m time"),"s","low"],
-  ["t15",L("15-m-Zeit","15 m time"),"s","low"],
-  ["v510",L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),"m/s","high"],
-  ["v1015",L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),"m/s","high"],
-  ["v515",L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),"m/s","high"]];
-const EV_TIMEK=["rt","hands","block","flight","uwT","t5","t10","t15","dk","pull","bkick","glide","pullK"];
+const EVM=()=>{ const p=EV.cur||{}; return SPMET(p).filter(x=>spApplies(x,p)).map(x=>[x.k,x.l,x.u,x.dir]); };
+const EV_TIMEK=["rt","hands","ffs","block","mt","flight","entryT","kick1","gt","uwT","pull","bkick","pullK","brkT","t5","t10","t15","s510","s1015"];
 // Kleinste bedeutsame Veränderung: halbe Leistungsschwankung olympischer Schwimmer zwischen Wettkämpfen (CV 0,8 % → 0,4 %; Pyne, Trewin & Hopkins 2004)
 const EV_SWC=0.004;
 function evFmt(v,u,sd){ if(v==null || !isFinite(v)) return "–"; const dec=(x,n)=>LANG==="en"?x.toFixed(n):x.toFixed(n).replace(".",",");
-  if(u==="ms") return Math.round(v*1000)+(sd?"":" "+U("ms")); if(u==="spm") return Math.round(v)+(sd?"":" "+U("spm")); if(u==="s") return dec(v,2)+(sd?"":" "+U("s")); if(u==="n") return dec(v,1);
+  if(u==="%") return dec(v,1)+" %"; if(u==="n" && Number.isInteger(v)) return String(v); if(u==="ms") return Math.round(v*1000)+(sd?"":" "+U("ms")); if(u==="spm") return Math.round(v)+(sd?"":" "+U("spm")); if(u==="s") return dec(v,2)+(sd?"":" "+U("s")); if(u==="n") return dec(v,1);
   return dec(v,2)+(sd?"":" "+U(u)); }
 /* Statistik */
 const stM=a=>a.reduce((x,y)=>x+y,0)/a.length;
@@ -4163,7 +4165,7 @@ function evVerdict(w,thr,better){
 }
 // Daten des Projekts für Ergebnisblatt und PDF
 function evData(p){
-  p.trials.forEach(t=>{ if(t.m && t.m.kickF!=null && t.m.kickF<20) t.m.kickF*=60; });
+  p.trials.forEach(t=>{ if(t.m && t.m.kickF!=null && t.m.kickF<20) t.m.kickF*=60; if(t.m && t.m.dk!=null && t.m.kick1==null) t.m.kick1=t.m.dk; });
   const done=p.trials.filter(t=>t.status==="done" && t.m), grp=v=>done.filter(t=>t.v===v), M=EVM();
   const have=M.filter(([k])=>done.some(t=>t.m[k]!=null && isFinite(t.m[k])));
   const stages=[...new Set(done.filter(t=>t.v!=="BL").map(t=>t.stage??1))].sort((a,b)=>a-b);
@@ -4196,7 +4198,7 @@ function evReport(){
   const p=EV.cur, top=$("evTop"), bot=$("evBottom"); bot.innerHTML=""; finishBack();
   const D=evData(p), {BL,A,B,tl,M}=D, lab=k=>M.find(x=>x[0]===k)[1], unit=k=>M.find(x=>x[0]===k)[2];
   let h=`<div class="evhead"><button type="button" class="testbtn ghost small" id="evBack">${L("‹ Ablauf","‹ Sequence")}</button><span class="evhr"><button type="button" class="testbtn ghost small" id="evDl">${L("Projekt herunterladen","Download project")}</button></span></div>
-    <h2 class="big">${L("Ergebnisse","Results")}</h2><p class="evlead">${esc(p.name)} · ${evTechName(p.tech)}</p>
+    <h2 class="big">${L("Ergebnisse","Results")} ${p.tech==="start"?spInfoBtn():""}</h2><p class="evlead">${esc(p.name)} · ${evTechName(p.tech)}</p>
     <div class="evvars">${["A","B"].map(k=>`<div><i class="evv ${k}">${k}</i><span><b>${esc(evVN(p,k))}</b>${p[k]?` – ${esc(p[k])}`:""}</span></div>`).join("")}</div>
     <p class="hint">${L(`Ausgewertet: Baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`,`Analysed: baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`)}${tl.days>1?" · "+L(`${tl.days} Testtage`,`${tl.days} test days`):""}</p>`;
   if(!D.done.length){ top.innerHTML=h+`<p class="hint">${L("Noch keine ausgewerteten Versuche.","No analysed attempts yet.")}</p>`; $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); return; }
@@ -4276,55 +4278,211 @@ const EVSRC=()=>[
   "Hopkins, W. G. (2000). Measures of reliability in sports medicine and science. Sports Medicine, 30(1), 1–15. "+L("(Variationskoeffizient, Zuverlässigkeit)","(coefficient of variation, reliability)"),
   "Batterham, A. M. & Hopkins, W. G. (2006). Making meaningful inferences about magnitudes. International Journal of Sports Physiology and Performance, 1(1), 50–57. "+L("(Bewertung über Konfidenzintervall und Schwelle)","(verdict via confidence interval and threshold)"),
   "Welch, B. L. (1947). The generalization of “Student's” problem when several different population variances are involved. Biometrika, 34(1–2), 28–35. "+L("(Welch-t-Test)","(Welch's t-test)")];
-// Definition jedes Kennwerts; die Markierungen, auf denen er beruht, werden aus den Schritttexten der Auswertung übernommen
-function evDefs(p){
-  p=p||EV.cur||{}; const back=p.start==="back", breast=p.uw==="breast" && !back, S={}; evSteps(p).forEach(s=>S[s.id]=s);
-  const mk=(...ids)=>ids.filter(i=>S[i]).map(i=>`„${S[i].t()}“`).join(L(" und "," and "));
-  const D={
-    rt:[L("Zeit vom Startsignal bis zur ersten sichtbaren Bewegung.","Time from the start signal to the first visible movement."),["move"]],
-    hands:[back?L("Zeit vom Startsignal, bis sich die Hände von den Griffen lösen.","Time from the start signal until the hands leave the grips."):L("Zeit vom Startsignal, bis sich die Hände vom Block lösen.","Time from the start signal until the hands leave the block."),["hands"]],
-    block:[back?L("Zeit vom Startsignal, bis die Füße die Wand verlassen.","Time from the start signal until the feet leave the wall."):L("Zeit vom Startsignal, bis sich der zweite Fuß vom Block löst.","Time from the start signal until the second foot leaves the block."),["off"]],
-    flight:[L("Zeit vom Verlassen des Blocks bzw. der Wand bis zum ersten Wasserkontakt.","Time from leaving the block or wall to the first water contact."),["off","entry"]],
-    jump:[L("Abstand von der Wand bis zur Eintauchstelle der Hände.","Distance from the wall to where the hands enter.")+" "+(S.jump?S.jump.x():""),[]],
-    flightV:[L("Sprungweite geteilt durch Flugzeit: mittlere horizontale Geschwindigkeit in der Luft.","Start distance divided by flight time: mean horizontal velocity in the air."),[]],
-    uwT:[L("Zeit vom ersten Wasserkontakt bis zum Auftauchen des Kopfes.","Time from the first water contact until the head surfaces."),["entry","brk"]],
-    dive:[L("Abstand von der Wand bis zur Stelle, an der der Kopf auftaucht, im Video ausgemessen oder von Hand eingetragen.","Distance from the wall to where the head surfaces, measured in the video or entered manually."),[]],
-    uwV:[L("(Tauchweite − Sprungweite) geteilt durch Tauchzeit: mittlere Geschwindigkeit unter Wasser.","(Underwater distance − start distance) divided by underwater time: mean velocity underwater."),[]],
-    kicks:[L("Anzahl der Delfinbeinschläge bis zum Auftauchen, von Hand gezählt.","Number of dolphin kicks before breaking out, counted manually."),[]],
-    kickF:[L("Beinschläge geteilt durch Tauchzeit, mal 60: Schläge pro Minute.","Kicks divided by underwater time, times 60: kicks per minute."),[]],
-    dk:[L("Zeit vom Startsignal bis zum Beginn der Abwärtsbewegung des Delfinbeinschlags.","Time from the start signal to the start of the dolphin kick's downbeat."),["dk"]],
-    pull:[L("Zeit vom Startsignal bis zum Beginn des Tauchzugs.","Time from the start signal to the start of the pull-out."),["pull"]],
-    bkick:[L("Zeit vom Startsignal bis zum Beginn des ersten Brustbeinschlags.","Time from the start signal to the start of the first breaststroke kick."),["bkick"]],
-    glide:[L("Zeit vom ersten Wasserkontakt bis zum Beginn des Tauchzugs.","Time from the first water contact to the start of the pull-out."),["entry","pull"]],
-    pullK:[L("Zeit vom Beginn des Tauchzugs bis zum Beginn des ersten Beinschlags.","Time from the start of the pull-out to the start of the first kick."),["pull","bkick"]],
-    t5:[L("Zeit vom Startsignal, bis der Kopf die 5-m-Marke passiert.","Time from the start signal until the head passes the 5 m mark."),["p5"]],
-    t10:[L("Zeit vom Startsignal, bis der Kopf die 10-m-Marke passiert.","Time from the start signal until the head passes the 10 m mark."),["p10"]],
-    t15:[L("Zeit vom Startsignal, bis der Kopf die 15-m-Marke passiert.","Time from the start signal until the head passes the 15 m mark."),["p15"]],
-    v510:[L("5 m geteilt durch die Zeit zwischen 5-m- und 10-m-Marke.","5 m divided by the time between the 5 m and 10 m marks."),[]],
-    v1015:[L("5 m geteilt durch die Zeit zwischen 10-m- und 15-m-Marke.","5 m divided by the time between the 10 m and 15 m marks."),[]],
-    v515:[L("10 m geteilt durch die Zeit zwischen 5-m- und 15-m-Marke.","10 m divided by the time between the 5 m and 15 m marks."),[]]};
-  const skip=new Set(breast?["kicks","kickF"]:["dk","pull","bkick","glide","pullK"]);
-  return EVM().filter(x=>!skip.has(x[0])).map(([k,l,u,dir])=>{ const e=D[k]||["",[]], m=mk(...e[1]);
-    return {k,l,u,dir, def:e[0]+(m?" "+L(`Markierung im Video: ${m}.`,`Video mark: ${m}.`):"")}; });
+/* --- Kennwerte Startsprung: EINE Quelle für Auswertung, Info-Knopf, Bericht und Ergebnisblatt.
+   Definitionen nach der Metrikenübersicht „Kenndaten und Metriken Startsprung“ (Zeiten ab Startsignal, Positionen am Kopf).
+   Felder: k Schlüssel, kz Kürzel, ph Phase, l Name, u Einheit, dir bessere Richtung, d Beschreibung, h Berechnung/Erfassung, r Bedeutung für 5 m und 15 m,
+   m Markierungen im Video, w Bedingung (block = nur Startsprung vom Block, fly = Delfinkicks, breast = Brust-Tauchzug, vm = nur mit Velocitymeter) --- */
+const SPPH=()=>({block:L("Blockphase","Block phase"), flight:L("Flugphase","Flight phase"), entry:L("Eintauchen","Entry"), uw:L("Unterwasserphase","Underwater phase"), brk:L("Auftauchen","Breakout"), split:L("Zeitmarken und Abschnitte","Splits and sections"), kin:L("Kraft und Leistung auf dem Startblock","Force and power on the starting block"), dry:L("Ergänzende Trockentests","Supplementary dry-land tests")});
+function SPMET(p){
+  p=p||EV.cur||{}; const back=p.start==="back";
+  const R5=L("Zeigt, wie gut du das Tempo nach dem Eintauchen hältst und ob du auf dem Weg zu 15 m Zeit verlierst.","Shows how well you hold your speed after entry and whether you lose time on the way to 15 m.");
+  const RFL=L("Der Flug endet bei etwa 3,0–3,5 m und deckt den Großteil der ersten 5 m ab. In der Luft bremst kaum etwas, weit fliegen spart daher Zeit bis 5 m und 15 m.","Flight ends at about 3.0–3.5 m and covers most of the first 5 m. Almost nothing slows you down in the air, so flying far saves time to 5 m and 15 m.");
+  const RK1=L("Der erste Kick kommt oft nahe der 5-m-Marke. Etwas später zu kicken schont das hohe Anfangstempo und hilft der 15-m-Zeit, zu früh erhöht den Widerstand.","The first kick often comes near the 5 m mark. Kicking a little later preserves the high initial speed and helps the 15 m time; kicking too early increases drag.");
+  const RGL=L("Zeigt, wie gut du die Startenergie ohne unnötigen Widerstand nutzt. Wirkt auf 5 m und 15 m.","Shows how well you use the start energy without unnecessary drag. Affects 5 m and 15 m.");
+  const RBP=L("Taktung der Unterwasserphase beim Brust-Tauchzug.","Timing of the underwater phase in the breaststroke pull-out.");
+  const ME=L("Im Video ausgemessen oder von Hand eingetragen.","Measured in the video or entered manually.");
+  return [
+    {k:"rt",kz:"RT, Time1stMove",ph:"block",l:L("Reaktionszeit","Reaction time"),u:"ms",dir:"low",m:["move"],
+     d:L("Zeit vom Startsignal bis zur ersten sichtbaren Bewegung auf dem Block.","Time from the start signal to the first visible movement on the block."),
+     r:L("Wer schneller reagiert, startet alles Weitere früher. Sie steckt in der Blockzeit und wirkt auf 5 m und 15 m.","Reacting faster starts everything else earlier. It is part of the block time and affects 5 m and 15 m.")},
+    {k:"hands",kz:"HandsOff",ph:"block",l:L("Hände lösen","Hands off"),u:"ms",dir:null,m:["hands"],
+     d:back?L("Zeit vom Startsignal bis zum letzten Kontakt der Hände mit den Griffen.","Time from the start signal to the last contact of the hands with the grips."):L("Zeit vom Startsignal bis zum letzten Kontakt der Hände mit dem Block.","Time from the start signal to the last contact of the hands with the block."),
+     r:L("Zeigt zusammen mit den Fußabstoßzeiten, in welcher Reihenfolge Hände und Füße abdrücken.","Together with the foot take-off times, shows the order in which hands and feet push off.")},
+    {k:"rft",kz:"ToeOffRear (RFT)",ph:"block",l:L("Lösen des hinteren Fußes","Rear foot take-off"),u:"%",dir:null,m:["rear","off"],w:"block",
+     d:L("Zeitpunkt, an dem der hintere Fuß den Keil verlässt, in Prozent der Blockzeit (0 % = Startsignal, 100 % = Abstoß).","Moment the rear foot leaves the wedge, as a percentage of the block time (0 % = start signal, 100 % = take-off)."),
+     h:L("Zeit bis zum Lösen des hinteren Fußes geteilt durch die Blockzeit, mal 100.","Time to rear foot take-off divided by the block time, times 100."),
+     r:L("Löst sich der hintere Fuß zu spät, werden 5 m und 15 m langsamer.","If the rear foot leaves too late, 5 m and 15 m get slower.")},
+    {k:"ffs",kz:"FFS",ph:"block",l:L("Nur vorderer Fuß am Block","Front foot only"),u:"ms",dir:null,m:["rear","off"],w:"block",
+     d:L("Dauer, in der nach dem Lösen des hinteren Fußes nur noch der vordere Fuß Kontakt zum Block hat.","Time during which only the front foot is in contact with the block after the rear foot has left."),
+     h:L("Blockzeit minus Zeit bis zum Lösen des hinteren Fußes.","Block time minus the time to rear foot take-off."),
+     r:L("Zeigt, wie lange das vordere Bein den letzten Schub allein gibt.","Shows how long the front leg delivers the final push on its own.")},
+    {k:"block",kz:back?"TimeOnWall":"BZ, TimeOnBlock",ph:"block",l:back?L("Abstoß","Push-off"):L("Blockzeit","Block time"),u:"ms",dir:"low",m:["off"],
+     d:back?L("Zeit vom Startsignal bis zum Abstoß der Füße von der Wand.","Time from the start signal until the feet push off the wall."):L("Zeit vom Startsignal bis zum Abstoß des vorderen Fußes (letzter Fußkontakt mit dem Block).","Time from the start signal to the take-off of the front foot (last foot contact with the block)."),
+     r:L("Macht etwa die Hälfte (46–56 %) der 5-m-Zeit aus, bei 15 m nur 11–12 %. Wer nur schneller vom Block will und dafür weniger Schwung mitnimmt, verliert unterm Strich.","Makes up about half (46–56 %) of the 5 m time but only 11–12 % at 15 m. Leaving the block faster at the cost of less momentum is a net loss.")},
+    {k:"mt",kz:"MT",ph:"block",l:L("Bewegungszeit","Movement time"),u:"ms",dir:"low",m:["move","off"],
+     d:L("Reine Bewegungsdauer auf dem Block ohne Reaktion.","Pure movement time on the block without the reaction."),
+     h:L("Blockzeit minus Reaktionszeit.","Block time minus reaction time."),
+     r:L("Teil der Blockzeit, wirkt vor allem auf 5 m.","Part of the block time; mainly affects 5 m.")},
+    {k:"flight",kz:"FT",ph:"flight",l:L("Flugzeit","Flight time"),u:"ms",dir:null,m:["off","entry"],
+     d:L("Zeit vom letzten Fußkontakt bis zum ersten Wasserkontakt der Hände.","Time from the last foot contact to the first water contact of the hands."),r:RFL},
+    {k:"jump",kz:"FD",ph:"flight",l:L("Flugweite","Flight distance"),u:"m",dir:"high",m:[],
+     d:L("Waagerechte Strecke von der Blockkante bis zum Wassereintritt der Hände.","Horizontal distance from the block edge to where the hands enter the water."),
+     h:L("Im Video ausgemessen (Startwand als 0 m, 5-m-Marke) oder von Hand eingetragen.","Measured in the video (start wall as 0 m, 5 m mark) or entered manually."),r:RFL},
+    {k:"flightV",kz:"FD/FT",ph:"flight",l:L("Mittlere Fluggeschwindigkeit","Mean flight velocity"),u:"m/s",dir:"high",m:[],
+     d:L("Mittlere waagerechte Geschwindigkeit in der Flugphase.","Mean horizontal velocity in the flight phase."),
+     h:L("Flugweite geteilt durch Flugzeit. Näherung für die horizontale Abstoßgeschwindigkeit, aber nicht identisch, weil die Flugweite an den Händen und nicht am Körperschwerpunkt gemessen wird.","Flight distance divided by flight time. Approximates the horizontal take-off velocity but is not identical, because the flight distance is measured at the hands rather than the centre of mass."),
+     r:L("Die horizontale Abstoßgeschwindigkeit ist die wichtigste Einzelgröße des Starts.","The horizontal take-off velocity is the single most important variable of the start.")},
+    {k:"vxTO",kz:"TakeOffHVel, Vx",ph:"flight",l:L("Horizontale Abstoßgeschwindigkeit","Horizontal take-off velocity"),u:"m/s",dir:"high",m:["off"],w:"vm",
+     d:L("Vorwärtsgeschwindigkeit im Moment des Abstoßes vom Block.","Forward velocity at the moment of take-off from the block."),
+     h:L("Aus den Velocitymeter-Daten im Bild des Abstoßes abgelesen (Messpunkt am Gürtel als Näherung für den Körperschwerpunkt). Nur mit Velocitymeter.","Read from the velocity meter data in the take-off frame (belt attachment as an approximation of the centre of mass). Only with a velocity meter."),
+     r:L("Wichtigste Einzelgröße: Wer schneller nach vorn abhebt, ist früher bei 5 m und gibt das Tempo für den gesamten Start vor, auch für 15 m.","Most important single variable: taking off forwards faster gets you to 5 m earlier and sets the pace for the whole start, including 15 m.")},
+    {k:"entryT",kz:"EntryTime",ph:"entry",l:L("Eintauchzeit","Entry time"),u:"s",dir:null,m:["headIn"],
+     d:L("Zeit vom Startsignal, bis die Kopfoberseite die Wasseroberfläche erreicht.","Time from the start signal until the top of the head reaches the water surface."),
+     r:L("Zeigt, wann du ins Wasser gehst. Schnelle Schwimmer fliegen oft etwas länger und weiter. Markiert den Übergang von Luft zu Wasser.","Shows when you enter the water. Fast swimmers often fly a little longer and further. Marks the transition from air to water.")},
+    {k:"entryD",kz:"EntryDistance",ph:"entry",l:L("Eintauchdistanz","Entry distance"),u:"m",dir:null,m:[],
+     d:L("Abstand von der Beckenwand zur Stelle, an der die Kopfoberseite eintaucht.","Distance from the pool wall to where the top of the head enters."),h:ME,
+     r:L("Zeigt, wo du ins Wasser gehst; Grundlage für Gleitdistanz und Unterwassergeschwindigkeit.","Shows where you enter the water; basis for glide distance and underwater velocity.")},
+    {k:"kick1",kz:"1stKick",ph:"uw",l:L("Zeit bis zum 1. Delfinkick","Time to 1st dolphin kick"),u:"s",dir:null,m:["kick1"],
+     d:L("Zeit vom Startsignal bis zum ersten Unterwasserbeinschlag (Beginn der Abwärtsbewegung).","Time from the start signal to the first underwater kick (start of the downbeat)."),r:RK1},
+    {k:"kick1D",kz:"1stKickHDist",ph:"uw",l:L("Distanz beim 1. Delfinkick","Distance at 1st dolphin kick"),u:"m",dir:null,m:[],
+     d:L("Abstand von der Beckenwand bis zur Kopfmitte beim ersten Unterwasserbeinschlag.","Distance from the pool wall to the centre of the head at the first underwater kick."),h:ME,r:RK1},
+    {k:"gt",kz:"GT",ph:"uw",l:L("Gleitzeit","Glide time"),u:"s",dir:null,m:["headIn","kick1"],
+     d:L("Dauer des Gleitens nach dem Eintauchen, bis der Beinschlag beginnt.","Duration of the glide after entry until the kick begins."),
+     h:L("Zeit bis zum 1. Delfinkick minus Eintauchzeit.","Time to the 1st dolphin kick minus entry time."),r:RGL},
+    {k:"gd",kz:"GD",ph:"uw",l:L("Gleitdistanz","Glide distance"),u:"m",dir:null,m:[],
+     d:L("Strecke, die du nach dem Eintauchen gleitest, bis der Beinschlag beginnt.","Distance you glide after entry until the kick begins."),
+     h:L("Distanz beim 1. Delfinkick minus Eintauchdistanz.","Distance at the 1st dolphin kick minus entry distance."),r:RGL},
+    {k:"gv",kz:"GV",ph:"uw",l:L("Gleitgeschwindigkeit","Glide velocity"),u:"m/s",dir:"high",m:[],
+     d:L("Mittlere Geschwindigkeit beim Gleiten.","Mean velocity during the glide."),h:L("Gleitdistanz geteilt durch Gleitzeit.","Glide distance divided by glide time."),r:RGL},
+    {k:"uwT",kz:"",ph:"uw",l:L("Unterwasserzeit","Underwater time"),u:"s",dir:null,m:["headIn","brk"],
+     d:L("Zeit vom Eintauchen bis zum Auftauchen des Kopfes.","Time from the head entering to the head breaking out."),
+     h:L("Auftauchzeit minus Eintauchzeit.","Breakout time minus entry time."),
+     r:L("Bestimmt mit der Unterwassergeschwindigkeit, wie viel der 15 m du unter Wasser zurücklegst.","Together with the underwater velocity, determines how much of the 15 m you cover underwater.")},
+    {k:"uwV",kz:"UV",ph:"uw",l:L("Mittlere Geschwindigkeit unter Wasser","Mean underwater velocity"),u:"m/s",dir:"high",m:[],
+     d:L("Durchschnittsgeschwindigkeit vom Eintauchen bis zum Auftauchen.","Mean velocity from entry to breakout."),
+     h:L("(Auftauchdistanz − Eintauchdistanz) geteilt durch (Auftauchzeit − Eintauchzeit), jeweils am Kopf gemessen.","(Breakout distance − entry distance) divided by (breakout time − entry time), both measured at the head."),
+     r:L("Wer unter Wasser schneller bleibt, hat bei 15 m die bessere Zeit.","Staying faster underwater gives the better 15 m time.")},
+    {k:"kicks",kz:"n",ph:"uw",l:L("Delfinkicks","Dolphin kicks"),u:"n",dir:null,m:[],w:"fly",
+     d:L("Anzahl der Delfinkicks bis zum Auftauchen.","Number of dolphin kicks before breakout."),h:L("Von Hand gezählt.","Counted manually."),
+     r:L("Grundlage für Beinschlagfrequenz und Beinschlaglänge.","Basis for kick frequency and kick length.")},
+    {k:"kickF",kz:"f",ph:"uw",l:L("Beinschlagfrequenz","Kick frequency"),u:"spm",dir:null,m:["kick1","brk"],w:"fly",
+     d:L("Beinschlagzyklen pro Minute (Kehrwert der Dauer eines Zyklus, mal 60).","Kick cycles per minute (reciprocal of the cycle duration, times 60)."),
+     h:L("Anzahl der Delfinkicks geteilt durch die Zeit vom 1. Delfinkick bis zum Auftauchen, mal 60.","Number of dolphin kicks divided by the time from the 1st dolphin kick to breakout, times 60."),
+     r:L("Hält das Tempo unter Wasser hoch. Wirkt indirekt, vor allem auf 15 m.","Keeps the underwater speed high. Indirect effect, mainly on 15 m.")},
+    {k:"kl",kz:"KL",ph:"uw",l:L("Beinschlaglänge","Kick length"),u:"m",dir:null,m:[],w:"fly",
+     d:L("Strecke, die du pro Beinschlagzyklus zurücklegst.","Distance covered per kick cycle."),
+     h:L("(Auftauchdistanz − Distanz beim 1. Delfinkick) geteilt durch die Anzahl der Delfinkicks.","(Breakout distance − distance at the 1st dolphin kick) divided by the number of dolphin kicks."),
+     r:L("Zeigt, wie effektiv jeder Beinschlag ist. Wirkt indirekt, vor allem auf 15 m.","Shows how effective each kick is. Indirect effect, mainly on 15 m.")},
+    {k:"pull",kz:"",ph:"uw",l:L("Beginn Tauchzug","Start of pull-out"),u:"s",dir:null,m:["pull"],w:"breast",
+     d:L("Zeit vom Startsignal bis zum Beginn des Tauchzugs.","Time from the start signal to the start of the pull-out."),r:RBP},
+    {k:"bkick",kz:"",ph:"uw",l:L("Erster Brustbeinschlag","First breaststroke kick"),u:"s",dir:null,m:["bkick"],w:"breast",
+     d:L("Zeit vom Startsignal bis zum Beginn des ersten Brustbeinschlags.","Time from the start signal to the start of the first breaststroke kick."),r:RBP},
+    {k:"pullK",kz:"",ph:"uw",l:L("Tauchzug bis Beinschlag","Pull-out to kick"),u:"s",dir:null,m:["pull","bkick"],w:"breast",
+     d:L("Zeit vom Beginn des Tauchzugs bis zum Beginn des ersten Brustbeinschlags.","Time from the start of the pull-out to the start of the first breaststroke kick."),r:RBP},
+    {k:"brkT",kz:"Breakout",ph:"brk",l:L("Auftauchzeit","Breakout time"),u:"s",dir:null,m:["brk"],
+     d:L("Zeit vom Startsignal, bis die Kopfoberseite die Wasseroberfläche durchbricht.","Time from the start signal until the top of the head breaks the water surface."),
+     r:L("Das Auftauchen liegt meist hinter der 5-m-Marke. Für 15 m eine der wichtigsten Größen: Eine längere, saubere Unterwasserphase verkürzt die 15-m-Zeit.","Breakout is usually beyond the 5 m mark. One of the most important variables for 15 m: a longer, clean underwater phase shortens the 15 m time.")},
+    {k:"dive",kz:"BreakoutDist",ph:"brk",l:L("Auftauchdistanz","Breakout distance"),u:"m",dir:null,m:[],
+     d:L("Abstand von der Beckenwand zur Stelle, an der die Kopfoberseite auftaucht.","Distance from the pool wall to where the top of the head breaks out."),h:ME,
+     r:L("Für 15 m eine der wichtigsten Größen.","One of the most important variables for 15 m.")},
+    {k:"t5",kz:"T5, Split5",ph:"split",l:L("5-m-Zeit","5 m time"),u:"s",dir:"low",m:["p5"],
+     d:L("Zeit vom Startsignal, bis die Kopfoberseite die 5-m-Marke erreicht.","Time from the start signal until the top of the head reaches the 5 m mark."),
+     r:L("Zielgröße für Block, Flug und Eintauchen. Gibt früh einen Hinweis auf den weiteren Verlauf des Starts.","Target variable for block, flight and entry. Gives an early indication of how the start will develop.")},
+    {k:"t10",kz:"T10, Split10",ph:"split",l:L("10-m-Zeit","10 m time"),u:"s",dir:"low",m:["p10"],
+     d:L("Zeit vom Startsignal, bis die Kopfoberseite die 10-m-Marke erreicht.","Time from the start signal until the top of the head reaches the 10 m mark."),
+     r:L("Erfasst die Unterwasserphase und gibt mit den Abschnitten danach fast die komplette 15-m-Zeit vor.","Captures the underwater phase and, together with the following sections, almost determines the full 15 m time.")},
+    {k:"t15",kz:"T15, Split15",ph:"split",l:L("15-m-Zeit","15 m time"),u:"s",dir:"low",m:["p15"],
+     d:L("Zeit vom Startsignal, bis die Kopfoberseite die 15-m-Marke erreicht.","Time from the start signal until the top of the head reaches the 15 m mark."),
+     r:L("Das Gesamtmaß für den Start: Sie fasst alle Phasen von Block bis Auftauchen zusammen.","The overall measure of the start: it combines all phases from block to breakout.")},
+    {k:"s510",kz:"5–10 m",ph:"split",l:L("Teilzeit 5–10 m","Split 5–10 m"),u:"s",dir:"low",m:["p5","p10"],
+     d:L("Zeit zwischen der 5-m- und der 10-m-Marke.","Time between the 5 m and 10 m marks."),h:L("10-m-Zeit minus 5-m-Zeit.","10 m time minus 5 m time."),r:R5},
+    {k:"s1015",kz:"10–15 m",ph:"split",l:L("Teilzeit 10–15 m","Split 10–15 m"),u:"s",dir:"low",m:["p10","p15"],
+     d:L("Zeit zwischen der 10-m- und der 15-m-Marke.","Time between the 10 m and 15 m marks."),h:L("15-m-Zeit minus 10-m-Zeit.","15 m time minus 10 m time."),r:R5},
+    {k:"v510",kz:"v 5–10 m",ph:"split",l:L("Geschwindigkeit 5–10 m","Velocity 5–10 m"),u:"m/s",dir:"high",m:[],
+     d:L("Mittlere Geschwindigkeit zwischen 5 und 10 m.","Mean velocity between 5 and 10 m."),h:L("5 m geteilt durch die Teilzeit 5–10 m.","5 m divided by the 5–10 m split."),r:R5},
+    {k:"v1015",kz:"v 10–15 m",ph:"split",l:L("Geschwindigkeit 10–15 m","Velocity 10–15 m"),u:"m/s",dir:"high",m:[],
+     d:L("Mittlere Geschwindigkeit zwischen 10 und 15 m.","Mean velocity between 10 and 15 m."),h:L("5 m geteilt durch die Teilzeit 10–15 m.","5 m divided by the 10–15 m split."),r:R5},
+    {k:"v515",kz:"v 5–15 m",ph:"split",l:L("Geschwindigkeit 5–15 m","Velocity 5–15 m"),u:"m/s",dir:"high",m:[],
+     d:L("Mittlere Geschwindigkeit zwischen 5 und 15 m.","Mean velocity between 5 and 15 m."),h:L("10 m geteilt durch die Zeit zwischen 5-m- und 15-m-Marke.","10 m divided by the time between the 5 m and 15 m marks."),r:R5}];
 }
+// gilt der Kennwert für dieses Projekt?
+const spApplies=(x,p,vm)=>{ const back=p.start==="back", breast=p.uw==="breast"&&!back;
+  return !x.w || (x.w==="block"&&!back) || (x.w==="fly"&&!breast) || (x.w==="breast"&&breast) || (x.w==="vm"&&vm!==false); };
+// weitere Kennwerte, die man kennen sollte (mit Sprintz derzeit nicht erfasst); e = womit sie erfasst werden
+function SPMORE(){
+  const FP=L("Nur mit instrumentiertem Startblock (Kraftmessplatten).","Only with an instrumented starting block (force plates).");
+  const DG=L("2D-Videoanalyse mit Digitalisierung des Körperschwerpunkts.","2D video analysis with digitisation of the centre of mass.");
+  const AN=L("2D-Videoanalyse mit Winkelmessung (Kamera senkrecht zur Bewegungsebene).","2D video analysis with angle measurement (camera perpendicular to the plane of motion).");
+  const UW=L("Seitliche Unterwasserkamera mit Tiefen- bzw. Längenbezug.","Lateral underwater camera with a depth or length reference.");
+  return [
+    {ph:"kin",l:L("Spitzenleistung","Peak power"),kz:"PowerPk, W/kg",d:L("Höchste mechanische Leistung auf dem Startblock, bezogen auf das Körpergewicht, vom Startsignal bis zum Abstoß.","Highest mechanical power on the starting block relative to body mass, from the start signal to take-off."),r:L("Mehr Leistung heißt schnellere Anfangsbeschleunigung und damit bessere Zeiten bei 5 m und 15 m.","More power means faster initial acceleration and thus better times at 5 m and 15 m."),e:FP},
+    {ph:"kin",l:L("Durchschnittsleistung","Mean power"),kz:"PowerAv, W/kg",d:L("Mittlere Leistung pro kg Körpergewicht über die gesamte Zeit auf dem Block.","Mean power per kg body mass over the whole time on the block."),r:L("Zeigt, ob du über die ganze Blockzeit gleichmäßig Druck aufbaust. Hilft bei 5 m und vor allem bei 15 m.","Shows whether you build pressure evenly over the whole block time. Helps at 5 m and especially at 15 m."),e:FP},
+    {ph:"kin",l:L("Zeitpunkt der Spitzenleistung","Timing of peak power"),kz:"PowerPk, %BZ",d:L("Wann die Spitzenleistung auftritt, in Prozent der Blockzeit.","When peak power occurs, as a percentage of the block time."),r:L("Je früher die Spitze kommt, desto früher bist du in Fahrt.","The earlier the peak, the earlier you get going."),e:FP},
+    {ph:"kin",l:L("Horizontale Maximalkraft des hinteren Beins","Peak horizontal force of the rear leg"),kz:"RearHpk, × KG; %BZ",d:L("Größte nach vorn gerichtete Kraft des hinteren Beins auf den Keil und ihr Zeitpunkt.","Largest forward force of the rear leg on the wedge and its timing."),r:L("Das hintere Bein setzt den Vortrieb in Gang. Mehr Kraft und früherer Einsatz bringen sofort Tempo.","The rear leg initiates propulsion. More force applied earlier brings speed immediately."),e:FP},
+    {ph:"kin",l:L("Maximalkräfte des vorderen Beins","Peak forces of the front leg"),kz:"FrontHpk, FrontVpk, × KG",d:L("Größte horizontale und vertikale Kraft des vorderen Fußes an der Blockkante.","Largest horizontal and vertical force of the front foot at the block edge."),r:L("Das vordere Bein übernimmt den letzten Schub: entscheidend bei 5 m für den Abstoß und bei 15 m für die Flugbahn.","The front leg delivers the final push: decisive for take-off at 5 m and for the trajectory at 15 m."),e:FP},
+    {ph:"kin",l:L("Gesamt-Maximalkräfte","Total peak forces"),kz:"TotalVpk, TotalHpk, × KG",d:L("Größte Gesamtkraft auf den Block, vertikal und horizontal. Vorab festlegen, ob die Griffkraft mitzählt.","Largest total force on the block, vertical and horizontal. Decide beforehand whether the grip force counts."),r:L("TotalHpk ist der reine Vortrieb (5 m), TotalVpk steuert die Flugbahn (eher 15 m).","TotalHpk is pure propulsion (5 m); TotalVpk controls the trajectory (rather 15 m)."),e:FP},
+    {ph:"kin",l:L("Zugkräfte der Hände","Hand pulling forces"),kz:"GrabResAv, × KG; GrabResPk, %BZ",d:L("Mittlere und größte Zugkraft der Arme an Kante bzw. Griff und Zeitpunkt der größten Kraft.","Mean and peak pulling force of the arms on the edge or grip, and timing of the peak."),r:L("Die Arme ziehen den Oberkörper nach vorn. Schnelle Starter erreichen den Höhepunkt des Armzugs etwas später.","The arms pull the upper body forwards. Fast starters reach the peak of the arm pull slightly later."),e:FP},
+    {ph:"kin",l:L("Horizontaler Impuls der Teilsegmente","Horizontal impulse per segment"),kz:"Ns/BW",d:L("Vorwärtskraft über die Zeit für hinteren Keil, vordere Platte und Handgriff.","Forward force over time for the rear wedge, front plate and hand grip."),r:L("Der hintere Fuß liefert den größten Anteil und bestimmt so die Abstoßgeschwindigkeit. Vor allem für 5 m.","The rear foot contributes the largest share and so determines the take-off velocity. Mainly for 5 m."),e:FP},
+    {ph:"kin",l:L("Resultierende Gesamtkräfte","Resultant total forces"),kz:"TotalResPk, TotalResAv, × KG",d:L("Spitzen- und Durchschnittswert der Gesamtkraft aus horizontaler und vertikaler Richtung.","Peak and mean of the total force from horizontal and vertical components."),r:L("Hängt eng mit der Abstoßgeschwindigkeit zusammen und sagt allein wenig Zusätzliches.","Closely related to take-off velocity; adds little on its own."),e:FP},
+    {ph:"kin",l:L("Arbeit auf dem Block","Work on the block"),kz:"Work/kg, J/kg",d:L("Gesamtarbeit auf dem Block, bezogen auf das Körpergewicht.","Total work on the block relative to body mass."),r:L("Mehr Energie im Abstoß bedeutet meist ein höheres Abstoßtempo.","More energy in the take-off usually means a higher take-off velocity."),e:FP},
+    {ph:"block",l:L("Erste Bewegung der Segmente","First movement of the segments"),kz:"1stMoveRear, 1stMoveGrab, 1stMoveFront, s",d:L("Zeit vom Startsignal bis zur ersten Bewegung von hinterem Bein, Armen und vorderem Bein.","Time from the start signal to the first movement of the rear leg, arms and front leg."),r:L("Beschreibt die Abfolge, ohne direkten Zeiteffekt.","Describes the sequence, without a direct effect on time."),e:L("Video mit hoher Bildrate (ab 120 Bildern pro Sekunde) oder Kraftmessblock.","High frame rate video (120 fps or more) or force-plate block.")},
+    {ph:"block",l:L("Gelenkwinkel in der Startstellung","Joint angles in the set position"),kz:"FKA, RKA, FAA, RAA, HA, °",d:L("Knie-, Sprunggelenk- und Hüftwinkel in der Haltung nach „Take your mark“, in der Seitenansicht.","Knee, ankle and hip angles in the set position after “Take your mark”, in side view."),r:L("Bestimmen Vorspannung und Beschleunigungsweg, vor allem für die 5-m-Zeit.","Determine pre-tension and acceleration path, mainly for the 5 m time."),e:AN},
+    {ph:"block",l:L("Hüft- bzw. KSP-Höhe beim Startsignal","Hip or CoM height at the start signal"),kz:"HP, m",d:L("Höhe der Hüfte bzw. des Körperschwerpunkts über der Wasseroberfläche in der Starthaltung.","Height of the hip or centre of mass above the water surface in the set position."),r:L("Eine höhere Hüfte gibt mehr Weg und Schwung nach vorn-unten.","A higher hip gives more path and momentum forwards and downwards."),e:L("2D-Videoanalyse mit Höhenbezug (z. B. Blockhöhe).","2D video analysis with a height reference (e.g. block height).")},
+    {ph:"flight",l:L("Vertikale Abstoßgeschwindigkeit","Vertical take-off velocity"),kz:"TakeOffVVel, Vy, m/s",d:L("Geschwindigkeit nach oben bzw. unten beim Verlassen des Blocks.","Upward or downward velocity when leaving the block."),r:L("Zu viel Sprung nach oben kostet Zeit; besser flach und weit abspringen.","Jumping too high costs time; a flat, long take-off is better."),e:DG},
+    {ph:"flight",l:L("Resultierende Abstoßgeschwindigkeit","Resultant take-off velocity"),kz:"TakeOffResVel, m/s",d:L("Gesamtgeschwindigkeit des Körperschwerpunkts beim Abstoß.","Total velocity of the centre of mass at take-off."),r:L("Sammelwert, der stark von der Vorwärtsgeschwindigkeit bestimmt wird.","Composite value, largely determined by the forward velocity."),e:DG},
+    {ph:"flight",l:L("Höhe des Körperschwerpunkts beim Abstoß","CoM height at take-off"),kz:"TakeOffCOGHeight, m",d:L("Höhe des Körperschwerpunkts über dem Wasser beim Verlassen der Blockkante.","Height of the centre of mass above the water when leaving the block edge."),r:L("Wer höher abhebt, erreicht eine flachere und weitere Flugbahn.","Taking off higher gives a flatter and longer trajectory."),e:DG},
+    {ph:"flight",l:L("Abstand des KSP zur Blockkante beim Abstoß","CoM distance to the block edge at take-off"),kz:"TakeOffCOGDist, m",d:L("Waagerechter Abstand des Körperschwerpunkts zur Blockkante beim Abstoß.","Horizontal distance of the centre of mass from the block edge at take-off."),r:L("Wirkt indirekt über die Flugweite.","Acts indirectly via the flight distance."),e:DG},
+    {ph:"flight",l:L("Abstoßwinkel","Take-off angle"),kz:"TakeOffAngle, TA, °",d:L("Winkel, mit dem der Körper den Block verlässt, zur Waagerechten.","Angle at which the body leaves the block, relative to the horizontal."),r:L("Balance zwischen Weite und schnellem Eintauchen: zu steil verschenkt Weite, zu flach bremst beim Eintauchen.","Balance between distance and a fast entry: too steep wastes distance, too flat brakes on entry."),e:AN},
+    {ph:"entry",l:L("Eintauchwinkel","Entry angle"),kz:"EntryAngle, EA, °",d:L("Winkel der Flugbahn bzw. des Körpers beim Durchbrechen der Wasseroberfläche.","Angle of the trajectory or the body when breaking the water surface."),r:L("Ein passender, sauberer Winkel lässt dich durch ein einziges Loch eintauchen und bremst weniger.","A suitable, clean angle lets you enter through a single hole and brakes less."),e:AN},
+    {ph:"entry",l:L("Resultierende Eintauchgeschwindigkeit","Resultant entry velocity"),kz:"EntryVelRes, EV, m/s",d:L("Gesamtgeschwindigkeit des Körperschwerpunkts beim Auftreffen auf das Wasser.","Total velocity of the centre of mass on hitting the water."),r:L("Das Tempo, das du aus der Luft mit ins Wasser nimmst.","The speed you carry from the air into the water."),e:DG},
+    {ph:"entry",l:L("Größe der Eintauchöffnung","Size of the entry hole"),kz:"SizeEntryHole, m",d:L("Größe der Öffnung in der Wasseroberfläche beim Eintauchen.","Size of the opening in the water surface on entry."),r:L("Eine kleine Öffnung bedeutet sauberes Eintauchen mit wenig Bremswirkung.","A small hole means a clean entry with little braking."),e:L("Video von oben bzw. seitlich mit Längenbezug.","Video from above or the side with a length reference.")},
+    {ph:"uw",l:L("Tiefe beim 1. Beinschlag","Depth at the 1st kick"),kz:"1stKickDepth, m",d:L("Senkrechter Abstand des Kopfes zur Wasseroberfläche beim ersten Unterwasserbeinschlag.","Vertical distance of the head below the surface at the first underwater kick."),r:L("Wirkt über den Widerstand auf 5 m und 15 m.","Affects 5 m and 15 m via drag."),e:UW},
+    {ph:"uw",l:L("Maximale Tiefe, Zeit und Ort","Maximum depth, time and position"),kz:"MaxDepth, m; s; MaxDepthHDist, m",d:L("Tiefster Punkt des Kopfes unter Wasser, Zeit vom Startsignal bis dorthin und Abstand zur Wand.","Deepest point of the head underwater, time from the start signal to it and distance from the wall."),r:L("Eine etwas tiefere Bahn (etwa −0,9 bis −1,2 m) verringert Wellen- und Oberflächenwiderstand.","A slightly deeper path (about −0.9 to −1.2 m) reduces wave and surface drag."),e:UW},
+    {ph:"uw",l:L("Beinschlagamplitude","Kick amplitude"),kz:"A, m",d:L("Senkrechter Abstand zwischen höchster und tiefster Fußposition innerhalb eines Zyklus.","Vertical distance between the highest and lowest foot position within one cycle."),r:L("Zu klein verschenkt Vortrieb, zu groß kostet Widerstand.","Too small wastes propulsion, too large costs drag."),e:UW},
+    {ph:"uw",l:L("Strouhal-Zahl","Strouhal number"),kz:"St = A × f / v",d:L("Amplitude mal Frequenz geteilt durch Geschwindigkeit.","Amplitude times frequency divided by velocity."),r:L("Kennzahl für die Effizienz des Kicks.","Index of kick efficiency."),e:UW},
+    {ph:"uw",l:L("Symmetrie der Zehengeschwindigkeit","Toe velocity symmetry"),kz:"Toe Velocity Symmetry",d:L("Senkrechte Fußgeschwindigkeit im Abwärtskick geteilt durch die im Aufwärtskick.","Vertical foot velocity in the downkick divided by that in the upkick."),r:L("Ein ausgeglichener Kick hängt mit höherem Tempo unter Wasser zusammen.","A balanced kick is associated with higher underwater speed."),e:L("Unterwasserkamera mit Digitalisierung der Fußspitze.","Underwater camera with digitisation of the toe.")},
+    {ph:"split",l:L("7,5-m-Zeit","7.5 m time"),kz:"Split7.5, s",d:L("Zeit vom Startsignal, bis die Kopfoberseite die 7,5-m-Marke erreicht.","Time from the start signal until the top of the head reaches the 7.5 m mark."),r:L("Zwischenzeit der Unterwasserphase.","Intermediate time of the underwater phase."),e:L("Im Video, wenn die 7,5-m-Marke am Beckenrand markiert ist.","In the video, if the 7.5 m mark is marked on the pool side.")},
+    {ph:"dry",l:L("Sprunghöhe und Abstoßgeschwindigkeit","Jump height and take-off velocity"),kz:"CMJ, SJ, cm; m/s",d:L("Sprunghöhe bzw. Abstoßgeschwindigkeit aus Sprüngen mit dem Körpergewicht (Countermovement Jump, Squat Jump).","Jump height or take-off velocity from body-weight jumps (countermovement jump, squat jump)."),r:L("Wer an Land höher und schneller abspringt, startet meist auch im Wasser schneller.","Those who jump higher and faster on land usually also start faster in the water."),e:L("Kraftmessplatte, Kontaktmatte oder Video (Flugzeitmethode).","Force plate, contact mat or video (flight-time method).")}];
+}
+// Kompatibel zu früher: Definition je Kennwert mit Markierungen aus den Schritttexten
+function evDefs(p){
+  p=p||EV.cur||{}; const S={}; evSteps(p).forEach(s=>S[s.id]=s);
+  return SPMET(p).filter(x=>spApplies(x,p)).map(x=>{ const mk=(x.m||[]).filter(i=>S[i]).map(i=>`„${S[i].t()}“`).join(L(" und "," and "));
+    return {...x, def:[x.d, x.h||"", mk?L(`Markierung im Video: ${mk}.`,`Video mark: ${mk}.`):""].filter(Boolean).join(" ")}; });
+}
+// Info-Knopf: Kennwerte erklärt, getrennt nach „mit Sprintz erfasst“ und „weitere Kennwerte“
+function spInfoHTML(p){
+  const PH=SPPH(), uL=u=>u&&u!=="n"?`, ${U(u)}`:"", grp=(arr,f)=>{ const out=[]; arr.forEach(x=>{ let g=out.find(o=>o.ph===x.ph); if(!g){ g={ph:x.ph,a:[]}; out.push(g); } g.a.push(x); }); return out.map(g=>`<h4 class="mih">${PH[g.ph]||""}</h4>${g.a.map(f).join("")}`).join(""); };
+  const A=evDefs(p), M=SPMORE();
+  return `<div class="mitabs" role="tablist"><button type="button" role="tab" data-mt="0" aria-selected="true">${L("Mit Sprintz erfasst","Captured with Sprintz")} (${A.length})</button><button type="button" role="tab" data-mt="1" aria-selected="false">${L("Weitere Kennwerte","Further parameters")} (${M.length})</button></div>
+    <div class="mipane" data-mp="0"><p class="hint">${L("Diese Kennwerte misst oder berechnet Sprintz aus deinen Markierungen im Video. Alle Zeiten zählen ab dem Startsignal, Positionen werden am Kopf bestimmt.","Sprintz measures or calculates these parameters from your marks in the video. All times count from the start signal; positions are taken at the head.")}</p>
+      ${grp(A,x=>`<details class="mi"><summary><b>${x.l}</b> <span>${[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ")}</span></summary><p>${x.def}</p><p class="mir"><b>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")}</b> ${x.r||"–"}</p>${x.dir?`<p class="mir">${x.dir==="low"?L("Kleiner ist besser.","Lower is better."):L("Größer ist besser.","Higher is better.")}</p>`:""}</details>`)}</div>
+    <div class="mipane" data-mp="1" hidden><p class="hint">${L("Diese Kennwerte erfasst Sprintz nicht. Sie helfen, einen Start vollständig zu verstehen, und brauchen meist zusätzliche Messtechnik.","Sprintz doesn't capture these parameters. They help to understand a start fully and usually need additional measuring equipment.")}</p>
+      ${grp(M,x=>`<details class="mi"><summary><b>${x.l}</b> <span>${x.kz}</span></summary><p>${x.d}</p><p class="mir"><b>${L("Bedeutung für 5 m und 15 m:","Relevance for 5 m and 15 m:")}</b> ${x.r}</p><p class="mir"><b>${L("Erfassung:","How it is captured:")}</b> ${x.e}</p></details>`)}</div>`;
+}
+function spInfo(p){
+  let d=$("spInfoDlg"); if(!d){ d=document.createElement("div"); d.id="spInfoDlg"; d.className="dlg"; d.setAttribute("role","dialog"); d.setAttribute("aria-modal","true"); document.body.appendChild(d); }
+  d.innerHTML=`<div class="dlgbox mibox"><div class="mihd"><h2>${L("Kennwerte Startsprung","Start parameters")}</h2><button type="button" class="testbtn ghost small" id="spInfoX">${L("Schließen","Close")}</button></div><div class="mibody">${spInfoHTML(p||EV.cur)}</div></div>`;
+  d.hidden=false; const close=()=>{ d.hidden=true; }; $("spInfoX").onclick=close; d.onclick=e=>{ if(e.target===d) close(); };
+  d.querySelectorAll("[data-mt]").forEach(b=>b.onclick=()=>{ d.querySelectorAll("[data-mt]").forEach(x=>x.setAttribute("aria-selected",String(x===b))); d.querySelectorAll("[data-mp]").forEach(x=>x.hidden=x.dataset.mp!==b.dataset.mt); });
+}
+const spInfoBtn=()=>`<button type="button" class="minfo" data-spinfo aria-label="${L("Kennwerte erklärt","Parameters explained")}" title="${L("Kennwerte erklärt","Parameters explained")}">i</button>`;
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-spinfo]"); if(b){ e.preventDefault(); spInfo(EV.cur); } });
+document.addEventListener("keydown",e=>{ const d=$("spInfoDlg"); if(e.key==="Escape" && d && !d.hidden) d.hidden=true; });
 const evExecName=p=> p.tech==="start" ? (p.start==="back" ? L("Rückenstart","Backstroke start") : p.uw==="breast" ? L("Startsprung mit Brust-Tauchzug","Dive start with breaststroke pull-out") : L("Startsprung","Dive start"))
   : p.tech==="turn" ? ({flip:L("Rollwende","Flip turn"), open:L("Kippwende","Open turn")}[p.turn]||"") : "";
 const evSubtitle=p=>["Sprintz Test", evTechName(p.tech), evExecName(p)].filter(Boolean).join(" · ");
 // letzte Seite(n) des Ergebnisblatts: alle Kennwerte, Markierungen und statistischen Werte
 function evPdfDefs(F,p){
   F.newPage(); F.h1(L("Erklärung der Kennwerte und statistischen Werte","Explanation of the parameters and statistical values"));
-  F.h2(L("Kennwerte","Parameters"));
-  F.table([{h:L("Kennwert","Parameter"),w:2.2},{h:L("Definition","Definition"),w:6.2},{h:L("Besser","Better"),w:1.1}],
-    evDefs(p).map(x=>[{t:x.l+(x.u&&x.u!=="n"?` (${U(x.u)})`:""),f:"b"}, x.def, x.dir==="low"?L("kleiner","lower"):x.dir==="high"?L("größer","higher"):"–"]),{size:7.6});
+  const PH=SPPH(), un=x=>[x.kz,x.u&&x.u!=="n"?U(x.u):""].filter(Boolean).join(", ");
+  F.h2(L("Mit Sprintz erfasste Kennwerte","Parameters captured with Sprintz"));
+  F.para(L("Alle Zeiten zählen ab dem Startsignal, Positionen werden am Kopf bestimmt. „Lösen“ ist jeweils das letzte Bild mit Kontakt, „Erreichen“ und „Kontakt“ das erste Bild.","All times count from the start signal; positions are taken at the head. “Leaving” is always the last frame with contact; “reaching” and “contact” the first frame."),{size:8,color:"#355262"});
+  F.table([{h:L("Kennwert","Parameter"),w:2.1},{h:L("Definition und Erfassung","Definition and capture"),w:4.4},{h:L("Bedeutung für 5 m und 15 m","Relevance for 5 m and 15 m"),w:3.2},{h:L("Besser","Better"),w:0.9}],
+    evDefs(p).map(x=>[{t:x.l+(un(x)?` (${un(x)})`:""),f:"b"}, x.def, x.r||"–", x.dir==="low"?L("kleiner","lower"):x.dir==="high"?L("größer","higher"):"–"]),{size:7.2});
   F.h2(L("Markierungen im Video","Video marks"));
-  F.table([{h:L("Markierung","Mark"),w:2.2},{h:L("Was markiert wird","What is marked"),w:7.3}], evSteps(p).filter(s=>s.k!=="sum").map(s=>[{t:s.t(),f:"b"}, s.x()]),{size:7.6});
+  F.table([{h:L("Markierung","Mark"),w:2.2},{h:L("Was markiert wird","What is marked"),w:7.3}], evSteps(p).filter(s=>s.k!=="sum").map(s=>[{t:s.t(),f:"b"}, s.x()]),{size:7.4});
+  F.h2(L("Weitere Kennwerte, die man kennen sollte","Further parameters worth knowing"));
+  F.para(L("Diese Kennwerte erfasst Sprintz nicht; sie brauchen meist zusätzliche Messtechnik.","Sprintz doesn't capture these parameters; they usually need additional measuring equipment."),{size:8,color:"#355262"});
+  F.table([{h:L("Kennwert","Parameter"),w:2.3},{h:L("Beschreibung","Description"),w:3.6},{h:L("Bedeutung für 5 m und 15 m","Relevance for 5 m and 15 m"),w:2.8},{h:L("Erfassung","Capture"),w:1.9}],
+    SPMORE().map(x=>[{t:`${x.l} (${x.kz})`,f:"b"}, `${PH[x.ph]}: ${x.d}`, x.r, x.e]),{size:7});
   F.h2(L("Statistische Werte","Statistical values"));
-  F.table([{h:L("Begriff","Term"),w:2.2},{h:L("Erklärung","Explanation"),w:7.3}], EVSTAT().map(x=>[{t:x.t,f:"b"}, x.d]),{size:7.6});
+  F.table([{h:L("Begriff","Term"),w:2.2},{h:L("Erklärung","Explanation"),w:7.3}], EVSTAT().map(x=>[{t:x.t,f:"b"}, x.d]),{size:7.4});
   F.h2(L("Quellen","Sources")); EVSRC().forEach(x=>F.para(x,{size:7.6,color:"#355262",after:3}));
 }
 function evExplHTML(){ const p=EV.cur;
   return `<details class="evexpl"><summary>${L("So liest du den Vergleich","How to read the comparison")}</summary><dl class="evdl">${EVSTAT().map(x=>`<dt>${x.t}</dt><dd>${x.d}</dd>`).join("")}</dl></details>
-    <details class="evexpl"><summary>${L("Was die Kennwerte bedeuten","What the parameters mean")}</summary><dl class="evdl">${evDefs(p).map(x=>`<dt>${x.l}${x.u&&x.u!=="n"?` (${U(x.u)})`:""}</dt><dd>${x.def}${x.dir?` <i>${x.dir==="low"?L("Kleiner ist besser.","Lower is better."):L("Größer ist besser.","Higher is better.")}</i>`:""}</dd>`).join("")}</dl></details>`; }
+    <button type="button" class="testbtn ghost small" data-spinfo style="margin-top:8px">${L("Was die Kennwerte bedeuten","What the parameters mean")}</button>`; }
 
 /* --- Datei an den Nutzer geben: Claude-Vorschau, Teilen-Menü oder Download --- */
 async function evSaveFile(blob, name, title){
