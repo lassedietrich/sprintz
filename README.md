@@ -32,3 +32,14 @@ Das Programm übernimmt beim Bauen die aktuelle `index.html` aus dem Repo.
 - `index.html` – fertige Web-App (wird aus `src/template.html` mit `src/build.py` erzeugt)
 - `src/` – Quelltext, Töne, Übersetzungen (`src/i18n`), PDF-Schrift
 - `desktop/` – Electron-Hülle (`main.js`, `preload.js`), Videoverarbeitung mit FFmpeg
+
+## Testen im Desktop-Programm (Entwicklermodus, Konto host289)
+
+Das Desktop-Programm lädt die Web-App bei jedem Start von GitHub Pages; ein neuer Installer ist nur bei Änderungen im Ordner `desktop/` nötig.
+Im Menü **Entwicklung** lässt sich die Fassung umschalten:
+
+- **Testversion: GitHub-Zweig test** – lädt `index.html` aus dem Zweig `test`. Neu laden mit Cmd/Strg + R.
+- **Testversion: Ordner Sprintz-Test** – lädt `~/Sprintz-Test/index.html` und lädt automatisch neu, sobald die Datei sich ändert.
+- **Normale Fassung** – der veröffentlichte Stand.
+
+Solange eine Testversion läuft, zeigt oben ein orangefarbenes Schild „TESTVERSION“. Funktioniert alles, wird der Stand aus `test` nach `main` übernommen.

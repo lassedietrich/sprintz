@@ -9,5 +9,7 @@ contextBridge.exposeInMainWorld('sprintzDesktop', {
   onProgress: (cb) => { const h = (e, d) => cb(d); ipcRenderer.on('proxy-progress', h); return () => ipcRenderer.removeListener('proxy-progress', h); },
   saveFile: (name, data) => ipcRenderer.invoke('save-file', name, data),
   version: () => ipcRenderer.invoke('version'),
+  setDev: (on) => ipcRenderer.invoke('set-dev', !!on),
+  channel: () => ipcRenderer.invoke('channel'),
   openExternal: (url) => ipcRenderer.invoke('open-external', url)
 });

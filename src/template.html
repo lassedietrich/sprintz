@@ -5809,7 +5809,7 @@ setLang(LANG);
    bis ein Online-Dienst mit echter Anmeldung angebunden ist. */
 function lgUI(){ $("lgUserL").textContent=L("Benutzername","Username"); $("lgPassL").textContent=L("Passwort","Password"); $("lgGo").textContent=L("Anmelden","Log in");
   $("lgLang").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===LANG))); }
-function userUI(){ const db=$("devBtn"); if(db){ db.hidden=!isDev(); if((appMode==="dev"||appMode==="kraft") && !isDev() && typeof setMode==="function") setMode("start"); }
+function userUI(){ try{ if(isDev() && window.sprintzDesktop && sprintzDesktop.setDev) sprintzDesktop.setDev(true); }catch(e){} const db=$("devBtn"); if(db){ db.hidden=!isDev(); if((appMode==="dev"||appMode==="kraft") && !isDev() && typeof setMode==="function") setMode("start"); }
   const n=$("userName"); if(!n) return; n.textContent = USER ? (SESS && SESS.offline ? L(`${USER} · offline`,`${USER} · offline`) : L(`Angemeldet als ${USER}`,`Logged in as ${USER}`)) : ""; $("logoutBtn").textContent=L("Abmelden","Log out"); $("logoutBtn").hidden=!USER; if(!$("login").hidden) lgUI(); }
 function showLogin(msg){ const o=$("login"); o.hidden=false; lgUI(); $("lgPrev").hidden=true; $("lgErr").textContent=msg||""; if(USER) $("lgUser").value=USER; setTimeout(()=>$("lgUser").focus(),50); }
 function lgDone(u){ USER=u; try{ localStorage.setItem("sprintz-user",u); }catch(err){} $("login").hidden=true; $("lgPass").value=""; $("lgErr").textContent=""; lgMigrate(u); userUI(); syncSoon(300); if(appMode==="eval") evEnter(); appStart(); }

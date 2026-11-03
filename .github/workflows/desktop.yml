@@ -6,7 +6,7 @@ name: Desktop-App
 on:
   push:
     branches: [main]
-    paths: ['desktop/**', '.github/workflows/desktop.yml', 'index.html']
+    paths: ['desktop/**', '.github/workflows/desktop.yml']
     tags: ['v*']
   workflow_dispatch:
 permissions:

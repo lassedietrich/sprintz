@@ -4,7 +4,100 @@ const path = require('path'), fs = require('fs'), crypto = require('crypto'), { 
 const unpack = p => p.replace('app.asar', 'app.asar.unpacked');
 const FFMPEG = unpack(require('ffmpeg-static'));
 const REPO = 'lassedietrich/sprintz';
+const os = require('os');
 let win;
+
+// --- Welche Fassung der Web-App läuft? ---
+// stable  = aktueller Stand von GitHub Pages (wird bei jedem Start geholt, offline die zuletzt geholte Fassung)
+// test    = Test-Zweig "test" auf GitHub (nur Entwicklermodus)
+// local   = Datei ~/Sprintz-Test/index.html, die Claude direkt auf den Rechner schreibt (nur Entwicklermodus)
+// bundled = die im Installer enthaltene Fassung
+const SET_FILE = () => path.join(app.getPath('userData'), 'einstellungen.json');
+let SET = { channel: 'stable', dev: false };
+const loadSet = () => { try { SET = Object.assign(SET, JSON.parse(fs.readFileSync(SET_FILE(), 'utf8'))); } catch (e) {} };
+const saveSet = () => { try { fs.writeFileSync(SET_FILE(), JSON.stringify(SET, null, 1)); } catch (e) {} };
+const webDir = () => { const d = path.join(app.getPath('userData'), 'web'); fs.mkdirSync(d, { recursive: true });
+  for (const f of ['manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png']) { const a = path.join(__dirname, 'app', f), b = path.join(d, f); try { if (fs.existsSync(a) && !fs.existsSync(b)) fs.copyFileSync(a, b); } catch (e) {} }
+  return d; };
+const TEST_DIR = () => path.join(os.homedir(), 'Sprintz-Test');
+const BUNDLED = () => path.join(__dirname, 'app', 'index.html');
+const validHtml = t => typeof t === 'string' && t.length > 100000 && /<html/i.test(t) && /Sprintz/.test(t);
+async function fetchText(url, headers, ms) {
+  const ac = new AbortController(), to = setTimeout(() => ac.abort(), ms || 8000);
+  try { const r = await net.fetch(url, { headers: Object.assign({ 'User-Agent': 'Sprintz-Desktop', 'Cache-Control': 'no-cache' }, headers || {}), signal: ac.signal, cache: 'no-store' }); return r.ok ? await r.text() : null; }
+  catch (e) { return null; } finally { clearTimeout(to); }
+}
+let loaded = { channel: 'bundled', note: '' }, watching = null;
+async function resolvePage(ch) {
+  if (ch === 'local') {
+    const f = path.join(TEST_DIR(), 'index.html');
+    if (fs.existsSync(f)) { fs.copyFileSync(f, path.join(webDir(), 'local.html')); return { file: path.join(webDir(), 'local.html'), channel: 'local', note: 'Ordner Sprintz-Test, Stand ' + new Date(fs.statSync(f).mtimeMs).toLocaleString('de-DE') }; }
+    fs.mkdirSync(TEST_DIR(), { recursive: true });
+    dialog.showMessageBox(win, { type: 'info', message: 'Im Ordner Sprintz-Test liegt noch keine Testversion', detail: TEST_DIR() + '\n\nSobald dort eine index.html liegt, lädt Sprintz sie automatisch. Bis dahin läuft die normale Fassung.' });
+    return resolvePage('stable');
+  }
+  if (ch === 'test') {
+    const t = await fetchText(`https://api.github.com/repos/${REPO}/contents/index.html?ref=test&t=${Date.now()}`, { Accept: 'application/vnd.github.raw' }, 15000);
+    if (validHtml(t)) { const f = path.join(webDir(), 'test.html'); fs.writeFileSync(f, t); return { file: f, channel: 'test', note: 'GitHub-Zweig test, geladen ' + new Date().toLocaleString('de-DE') }; }
+    const old = path.join(webDir(), 'test.html');
+    if (fs.existsSync(old)) return { file: old, channel: 'test', note: 'GitHub nicht erreichbar, zuletzt geladene Testversion' };
+    dialog.showMessageBox(win, { type: 'warning', message: 'Testversion nicht erreichbar', detail: 'Der Test-Zweig auf GitHub konnte nicht geladen werden. Es läuft die normale Fassung.' });
+    return resolvePage('stable');
+  }
+  if (ch === 'stable') {
+    const t = await fetchText(`https://lassedietrich.github.io/sprintz/index.html?t=${Date.now()}`, null, 6000), f = path.join(webDir(), 'stable.html');
+    if (validHtml(t)) { fs.writeFileSync(f, t); return { file: f, channel: 'stable', note: '' }; }
+    if (fs.existsSync(f)) return { file: f, channel: 'stable', note: '' };
+  }
+  return { file: BUNDLED(), channel: 'bundled', note: '' };
+}
+async function loadApp() {
+  const ch = SET.dev ? SET.channel : 'stable';
+  const r = await resolvePage(ch); loaded = r;
+  await win.loadFile(r.file).catch(() => {});
+  watchLocal(); menu();
+}
+// Testordner beobachten: schreibt Claude eine neue index.html hinein, lädt Sprintz sofort neu
+function watchLocal() {
+  if (watching) { fs.unwatchFile(watching); watching = null; }
+  if (!(SET.dev && SET.channel === 'local')) return;
+  watching = path.join(TEST_DIR(), 'index.html'); let t = null;
+  fs.watchFile(watching, { interval: 1000 }, (cur, prev) => { if (cur.mtimeMs !== prev.mtimeMs && cur.size > 100000) { clearTimeout(t); t = setTimeout(loadApp, 800); } });
+}
+// Deutliches Schild, solange eine Testversion läuft
+function badge() {
+  if (!win || (loaded.channel !== 'test' && loaded.channel !== 'local')) return;
+  const txt = JSON.stringify('TESTVERSION · ' + loaded.note);
+  win.webContents.executeJavaScript(`(()=>{ let b=document.getElementById('dskTestBadge'); if(!b){ b=document.createElement('div'); b.id='dskTestBadge'; document.body.appendChild(b); }
+    b.textContent=${txt}; b.title='Umschalten im Menü Entwicklung';
+    b.style.cssText='position:fixed;left:50%;top:0;transform:translateX(-50%);z-index:2147483647;background:#E8590C;color:#fff;font:600 11px/1.2 system-ui,sans-serif;padding:4px 12px;border-radius:0 0 8px 8px;pointer-events:none;letter-spacing:.04em;box-shadow:0 2px 6px rgba(0,0,0,.25)'; })()`).catch(() => {});
+}
+function setChannel(ch) { SET.channel = ch; saveSet(); loadApp(); }
+function menu() {
+  const isMac = process.platform === 'darwin';
+  const view = { label: 'Darstellung', submenu: [
+    { label: 'Neu laden', accelerator: 'CmdOrCtrl+R', click: () => loadApp() },
+    { type: 'separator' }, { role: 'resetZoom', label: 'Originalgröße' }, { role: 'zoomIn', label: 'Vergrößern' }, { role: 'zoomOut', label: 'Verkleinern' },
+    { type: 'separator' }, { role: 'togglefullscreen', label: 'Vollbild' }] };
+  const t = [];
+  if (isMac) t.push({ role: 'appMenu' });
+  else t.push({ label: 'Datei', submenu: [{ role: 'quit', label: 'Beenden' }] });
+  t.push({ role: 'editMenu', label: 'Bearbeiten' }, view);
+  if (SET.dev) {
+    const r = (id, label) => ({ label, type: 'radio', checked: SET.channel === id, click: () => setChannel(id) });
+    t.push({ label: 'Entwicklung', submenu: [
+      r('stable', 'Normale Fassung (GitHub Pages)'), r('test', 'Testversion: GitHub-Zweig test'), r('local', 'Testversion: Ordner Sprintz-Test'), r('bundled', 'Fassung aus dem Installer'),
+      { type: 'separator' },
+      { label: 'Ordner Sprintz-Test öffnen', click: () => { fs.mkdirSync(TEST_DIR(), { recursive: true }); shell.openPath(TEST_DIR()); } },
+      { label: 'Entwicklerwerkzeuge', accelerator: isMac ? 'Alt+Cmd+I' : 'Ctrl+Shift+I', click: () => win && win.webContents.toggleDevTools() },
+      { type: 'separator' },
+      { label: 'Aktuell: ' + ({ stable: 'normale Fassung', test: 'Testversion GitHub', local: 'Testversion Ordner', bundled: 'Fassung aus dem Installer' }[loaded.channel] || loaded.channel), enabled: false }] });
+  }
+  t.push({ role: 'windowMenu', label: 'Fenster' });
+  Menu.setApplicationMenu(Menu.buildFromTemplate(t));
+}
+ipcMain.handle('set-dev', (e, on) => { if (on && !SET.dev) { SET.dev = true; saveSet(); menu(); } return SET.dev; });
+ipcMain.handle('channel', () => ({ channel: loaded.channel, note: loaded.note }));
 
 function createWindow() {
   win = new BrowserWindow({
@@ -12,7 +105,8 @@ function createWindow() {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, sandbox: false, spellcheck: false }
   });
   win.once('ready-to-show', () => win.show());
-  win.loadFile(path.join(__dirname, 'app', 'index.html'));
+  win.webContents.on('did-finish-load', badge);
+  loadApp();
   // Externe Links im Browser öffnen, PDFs und interne Fenster in der App
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:/i.test(url)) { shell.openExternal(url); return { action: 'deny' }; }
@@ -96,7 +190,7 @@ async function checkUpdate() {
 }
 
 app.whenReady().then(() => {
-  permissions(); createWindow(); cleanup(); setTimeout(checkUpdate, 4000);
+  loadSet(); permissions(); createWindow(); cleanup(); setTimeout(checkUpdate, 4000);
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
