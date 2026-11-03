@@ -5281,8 +5281,8 @@ function openMenu(o){ if(DESK.matches && !o){ document.body.classList.remove("me
 $("menuBtn").onclick=()=>openMenu(!document.body.classList.contains("menu-open"));
 $("drawerClose").onclick=()=>openMenu(false); $("drawerBg").onclick=()=>openMenu(false);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && document.body.classList.contains("menu-open")) openMenu(false); });
-// Entwicklermodus: nur für das Konto host289 (reine Anzeige, keine Schutzfunktion)
-const DEV_USERS=["host289"]; const isDev=()=>!!USER && DEV_USERS.includes(USER);
+// Entwicklermodus: nur für die Konten host289 und freaky200 (reine Anzeige, keine Schutzfunktion)
+const DEV_USERS=["host289","freaky200"]; const isDev=()=>!!USER && DEV_USERS.includes(USER);
 function setMode(m){ if(m==="sprint") m="eval"; if((m==="dev"||m==="kraft") && !isDev()) m="start"; const was=appMode; appMode=m; try{ localStorage.setItem("startz-mode",m); }catch(e){}
   $("modeNav").querySelectorAll("button").forEach(b=>b.setAttribute("aria-current",String(b.dataset.m===(m==="kraft"?"dev":m))));
   const other=m!=="start"; document.body.classList.toggle("mode-other",other); $("modeSoon").hidden = !(m==="kraft"||m==="dev"); $("devList").hidden = m!=="dev"; $("devBack").hidden = m!=="kraft";

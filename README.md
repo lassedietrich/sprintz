@@ -33,7 +33,7 @@ Das Programm übernimmt beim Bauen die aktuelle `index.html` aus dem Repo.
 - `src/` – Quelltext, Töne, Übersetzungen (`src/i18n`), PDF-Schrift
 - `desktop/` – Electron-Hülle (`main.js`, `preload.js`), Videoverarbeitung mit FFmpeg
 
-## Testen im Desktop-Programm (Entwicklermodus, Konto host289)
+## Testen im Desktop-Programm (Entwicklermodus, Konten host289 und freaky200)
 
 Das Desktop-Programm lädt die Web-App bei jedem Start von GitHub Pages; ein neuer Installer ist nur bei Änderungen im Ordner `desktop/` nötig.
 Im Menü **Entwicklung** lässt sich die Fassung umschalten:
