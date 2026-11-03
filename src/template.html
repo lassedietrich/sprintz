@@ -440,6 +440,7 @@ h2 .minfo{width:26px;height:26px;font-size:.95rem}
 .msi{flex:none;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted);font:700 .7rem/1 Georgia,serif;font-style:italic;padding:0;cursor:pointer;opacity:.7}.msi[aria-expanded="true"]{opacity:1;color:var(--accent);border-color:var(--accent)}
 .msx{flex-basis:100%;margin:2px 0 4px 24px;font-size:.84rem;line-height:1.45}.msx span{color:var(--muted)}
 .evdl{margin:6px 0 0}
+.upq{margin:6px 2px 0;font-size:.82rem}.upq[hidden]{display:none}
 #evMetBar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:flex;justify-content:center;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
 #evMetBtn{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:12px;padding:8px 14px;font:inherit;text-align:left;cursor:pointer}
 #evMetBtn span{display:flex;flex-direction:column;min-width:0}#evMetBtn small{font-size:.72rem;color:var(--muted)}#evMetBtn b{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#evMetBtn i{font-style:normal;color:var(--accent)}
@@ -1086,7 +1087,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
       <button type="button" data-v="water" aria-pressed="true">Start ins Wasser</button>
       <button type="button" data-v="land" aria-pressed="false">Trockensprung an Land</button>
     </div>
-    <label class="filebtn" id="fileLbl">Video auswählen<input type="file" id="vfile" accept="video/*"></label>
+    <label class="filebtn" id="fileLbl">Video auswählen<input type="file" id="vfile" accept="video/*,.mov,.mp4,.m4v,.webm"></label><p class="hint upq" data-upq></p>
     <div id="vMetSlot"></div>
 
   </section>
@@ -3519,6 +3520,13 @@ const EVTECH=()=>[["start",L("Startsprung","Start"),true],["swim",L("Sprinttechn
 const evTechName=k=>(EVTECH().find(x=>x[0]===k)||[k,k])[1];
 const evId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const evSave=()=>{ if(EV.cur) STORE.put(EV.cur); };
+/* Originalqualität beim Hochladen: iOS verkleinert Videos aus der Mediathek (Umwandlung in H.264, Zeitlupe teils nur 30 Bilder/s).
+   Aus der Dateien-App („Durchsuchen“) kommt das Original unverändert. Sprintz selbst verändert hochgeladene Videos nie. */
+const isIOS=()=>/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+const UPQ=()=>L("iPhone/iPad: Wähle das Video über „Durchsuchen“ (Dateien) statt aus der Mediathek, sonst verkleinert iOS es und Zeitlupen verlieren Bilder. Dazu in Fotos: Teilen → „In Dateien sichern“.","iPhone/iPad: choose the video via “Browse” (Files) instead of the photo library, otherwise iOS shrinks it and slow-motion videos lose frames. To do so, in Photos: Share → “Save to Files”.");
+function upqHints(){ document.querySelectorAll("[data-upq]").forEach(el=>{ el.hidden=!isIOS(); el.textContent=isIOS()?UPQ():""; }); }
+new MutationObserver(()=>{ const x=[...document.querySelectorAll("[data-upq]")].some(el=>!el.textContent && isIOS()); if(x) upqHints(); }).observe(document.body,{childList:true,subtree:true});
+function upqCheck(f){ if(!isIOS() || !f) return; if(f<=31) toast(L(`Das Video hat nur ${f} Bilder pro Sekunde. Wurde es als Zeitlupe gefilmt, hat iOS es beim Auswählen umgewandelt. Wähle es über „Durchsuchen“ (Dateien) aus, dann bleibt die Originalqualität erhalten.`,`The video only has ${f} frames per second. If it was filmed in slow motion, iOS converted it when you selected it. Choose it via “Browse” (Files) to keep the original quality.`),9000); }
 const evVidKey=(p,t)=>p.id+":"+(t.uid||(t.uid=evId()));
 function evalToS(){
   const p=EV.cur; const o=Object.assign(structuredClone(DEF), (p&&p.s)||{});
@@ -3674,7 +3682,7 @@ function evPlanView(){
     <div class="evvars">${["A","B"].map(k=>`<div><i class="evv ${k}">${k}</i><span><b>${esc(evVN(p,k))}</b>${p[k]?` – ${esc(p[k])}`:""}</span></div>`).join("")}</div>
     <p class="evlead">${up ? L("Nimm die Versuche genau in dieser Reihenfolge mit der Kamera-App auf. Danach lädst du alle Videos gesammelt hoch.","Record the attempts in exactly this order with the camera app. Then upload all videos at once.")
       : L("Tippe auf einen Versuch, um ihn aufzunehmen. Die Reihenfolge ist ausgewogen und zufällig, damit Ermüdung und Gewöhnung beide Varianten gleich treffen.","Tap an attempt to record it. The order is balanced and random so that fatigue and familiarisation affect both variants equally.")}</p>
-    ${up?`<label class="filebtn evup" id="evUpLbl">${L("Aufnahmen hochladen","Upload recordings")}<input type="file" id="evFiles" accept="video/*" multiple></label><p class="hint" id="evUpMsg"></p>`:""}
+    ${up?`<label class="filebtn evup" id="evUpLbl">${L("Aufnahmen hochladen","Upload recordings")}<input type="file" id="evFiles" accept="video/*,.mov,.mp4,.m4v,.webm" multiple></label><p class="hint upq" data-upq></p><p class="hint" id="evUpMsg"></p>`:""}
     ${p.trials.some(t=>t.stage===0) ? "" : `<button type="button" class="testbtn small" id="evAddBase" style="margin:10px 0 0;flex:none">+ ${L("Baseline hinzufügen","Add baseline")}</button>`}
     <ol class="evtl">${evOrd(p).map((t,k,a)=>{ const st=t.stage??1, pr=a[k-1], head = !pr || (pr.stage??1)!==st;
       const last = !a[k+1] || (a[k+1].stage??1)!==st;
@@ -3871,7 +3879,7 @@ async function evAnalyze(t){
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; document.body.classList.add("reviewing"); scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
-  detectFps(SA.url).then(f=>{ if(f){ SA.fps=f; t.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f/(SA.slow||1)*10)/10} ms`; } });
+  detectFps(SA.url).then(f=>{ if(f && SA.upload) upqCheck(f); if(f){ SA.fps=f; t.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f/(SA.slow||1)*10)/10} ms`; } });
   SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard();
   readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
     if(SA.marks.sig==null && !isTurn(p)) await evFindSig(); spDraw(); wizRender(); }).catch(()=>{ if(SA.marks.sig==null && !isTurn(p)){ SA.marks.sig=t.sigEst||0; SA.sigAuto="est"; } wizRender(); });
@@ -4774,7 +4782,7 @@ function trainAna(blob, cam){
   SA.meta = cam ? CAM.meta : {hornT:0, sig:[]}; SA.events = cam ? CAM.events : []; SA.recT0 = cam ? CAM.recT0 : 0; SA.sigType=null; SA.cands=null; SA.fps = cam ? (CAM.fps||30) : 30;
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
-  detectFps(SA.url).then(f=>{ if(f){ SA.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f*10)/10} ${U("ms")}`; trainSync(); } });
+  detectFps(SA.url).then(f=>{ if(f && !cam) upqCheck(f); if(f){ SA.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f*10)/10} ${U("ms")}`; trainSync(); } });
   SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard();
   readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
       V.pcm=SA.pcm; V.raw=SA.raw; V.rawRate=SA.rawRate;
@@ -5416,13 +5424,14 @@ function onMotion(e){
 function camMotion(on){ removeEventListener("devicemotion", onMotion); motionBuf=[]; if(on) addEventListener("devicemotion", onMotion); }
 $("camGo").onclick=()=>{ $("camHint").hidden=true; CAM.auto=true; camTake(); };
 $("camClose").onclick=()=>{ camClose(true); camOfferClips(); if(appMode==="eval"){ $("evPage").hidden=false; evShow(EV.cur?"plan":"list"); } };
-function camMime(){ const c=["video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
+function camMime(){ const c=["video/mp4;codecs=hvc1","video/mp4;codecs=avc1.640033","video/mp4;codecs=avc1","video/mp4","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
   return c.find(m=>{ try{ return MediaRecorder.isTypeSupported(m); }catch(e){ return false; } }) || ""; }
 async function camTake(){
   if(CAM.busy) return; CAM.busy=true; CAM.stillSince=null; CAM.discard=false;
   await initAudio();
   const mime=camMime(); CAM.chunks=[]; CAM.recT0=null;
-  try{ CAM.rec = new MediaRecorder(CAM.stream, mime ? {mimeType:mime, videoBitsPerSecond:16e6} : {videoBitsPerSecond:16e6}); }
+  const RQ={videoBitsPerSecond:50e6, audioBitsPerSecond:256000}; // höchste Qualität; der Browser begrenzt selbst auf sein Maximum
+  try{ CAM.rec = new MediaRecorder(CAM.stream, mime ? {mimeType:mime, ...RQ} : RQ); }
   catch(e){ CAM.rec = new MediaRecorder(CAM.stream); }
   CAM.rec.ondataavailable=e=>{ if(e.data && e.data.size) CAM.chunks.push(e.data); };
   CAM.rec.onstart=()=>{ CAM.recT0=ctx.currentTime; $("typeLbl").innerHTML=`<span class="rec">● REC</span>`; };
@@ -5645,7 +5654,7 @@ function setLang(v){
     if(typeof SA!=="undefined" && SA.active && !$("spAna").hidden){ wizRender(); if(SA.mode==="eval") evAnaHead(); if(SA.meas){ measHint(); measCtl(); } spDraw(); if(typeof vmCard==="function" && SA.mode==="eval") vmCard(); }
     else if(typeof EV!=="undefined" && !$("evPage").hidden && EV.cur && EV.view){ const y=scrollY; ({list:evList, setup:evSetup, plan:evPlanView, report:evReport})[EV.view](); scrollTo(0,y); }
     else if(typeof EV!=="undefined" && !$("evPage").hidden && EV.view==="list") evList();
-    const di=$("spInfoDlg"); if(di && !di.hidden) spInfo(EV.cur); if(typeof trainSelUI==="function") trainSelUI();
+    const di=$("spInfoDlg"); if(di && !di.hidden) spInfo(EV.cur); upqHints(); if(typeof trainSelUI==="function") trainSelUI();
     if(typeof FS!=="undefined" && FS.on) fsHint(); }catch(e){ console.error(e); }
   if(v!=="de") trTree(document.body);
 }

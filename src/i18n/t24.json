@@ -1,0 +1,14 @@
+[
+[
+"iPhone/iPad: choose the video via “Browse” (Files) instead of the photo library, otherwise iOS shrinks it and slow-motion videos lose frames. To do so, in Photos: Share → “Save to Files”.",
+"iPhone/iPad: Videoyu Fotoğraflar arşivinden değil „Gözat“ (Dosyalar) üzerinden seç; aksi halde iOS onu küçültür ve ağır çekim videolar kare kaybeder. Bunun için Fotoğraflar'da: Paylaş → „Dosyalar'a Kaydet“.",
+"iPhone/iPad: выбирай видео через «Обзор» (Файлы), а не из медиатеки, иначе iOS сжимает его, а замедленные видео теряют кадры. Для этого в «Фото»: Поделиться → «Сохранить в Файлы».",
+"iPhone/iPad: kies de video via „Bladeren“ (Bestanden) in plaats van uit de fotobibliotheek, anders verkleint iOS hem en verliezen slowmotionvideo's beelden. Daarvoor in Foto's: Deel → „Bewaar in Bestanden“."
+],
+[
+"The video only has {0} frames per second. If it was filmed in slow motion, iOS converted it when you selected it. Choose it via “Browse” (Files) to keep the original quality.",
+"Videoda saniyede yalnızca {0} kare var. Ağır çekimle çekildiyse iOS onu seçerken dönüştürdü. Orijinal kaliteyi korumak için „Gözat“ (Dosyalar) üzerinden seç.",
+"В видео всего {0} кадров в секунду. Если оно снято в замедленном режиме, iOS преобразовала его при выборе. Выбери его через «Обзор» (Файлы), чтобы сохранить исходное качество.",
+"De video heeft maar {0} beelden per seconde. Als hij in slowmotion is gefilmd, heeft iOS hem bij het kiezen omgezet. Kies hem via „Bladeren“ (Bestanden) om de originele kwaliteit te behouden."
+]
+]
