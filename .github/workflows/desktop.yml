@@ -1,8 +1,12 @@
 # Baut das Desktop-Programm für macOS (Apple Silicon und Intel) und Windows.
-# Bei einem Tag v* (z. B. v1.0.1) entsteht automatisch eine Veröffentlichung mit den Installationsdateien.
+# Bei jeder Änderung im Ordner desktop/ auf main (oder manuell) wird gebaut und unter der
+# Version aus desktop/package.json veröffentlicht (Tag v<Version> legt die Aktion selbst an).
+# Neue Version: in desktop/package.json "version" erhöhen.
 name: Desktop-App
 on:
   push:
+    branches: [main]
+    paths: ['desktop/**', '.github/workflows/desktop.yml', 'index.html']
     tags: ['v*']
   workflow_dispatch:
 permissions:
@@ -50,10 +54,17 @@ jobs:
             desktop/dist/*.dmg
             desktop/dist/*.zip
             desktop/dist/*.exe
+      - name: Version lesen
+        id: ver
+        shell: bash
+        run: echo "v=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
       - name: Veröffentlichen
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.ver.outputs.v }}
+          name: Sprintz ${{ steps.ver.outputs.v }}
+          target_commitish: ${{ github.sha }}
+          make_latest: true
           files: |
             desktop/dist/*.dmg
             desktop/dist/*.zip
