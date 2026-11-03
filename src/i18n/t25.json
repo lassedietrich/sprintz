@@ -1,0 +1,92 @@
+[
+[
+"Note",
+"Not",
+"Заметка",
+"Notitie"
+],
+[
+"Technique notes",
+"Teknik notları",
+"Заметки о технике",
+"Techniekaantekeningen"
+],
+[
+"Slow motion detected ({0} to {1}, {2}×). Sprintz converts times in it to real time.",
+"Ağır çekim algılandı ({0} – {1}, {2}×). Sprintz buradaki süreleri gerçek zamana çevirir.",
+"Обнаружено замедление ({0}–{1}, {2}×). Sprintz пересчитывает время в нём в реальное.",
+"Slowmotion herkend ({0} tot {1}, {2}×). Sprintz rekent de tijden daarin om naar echte tijd."
+],
+[
+"Slow-motion section",
+"Ağır çekim bölümü",
+"Замедленный отрезок",
+"Slowmotion-deel"
+],
+[
+"{0}: {1} to {2} in the video, slowed down {3}×. Sprintz converts times in this section to real time; during playback it runs {4}× faster so the sound is normal.",
+"{0}: videoda {1} – {2}, {3}× yavaşlatılmış. Sprintz bu bölümdeki süreleri gerçek zamana çevirir; oynatırken ses normal duyulsun diye {4}× hızlı oynatır.",
+"{0}: {1}–{2} в видео, замедлено в {3} раз. Sprintz пересчитывает время в этом отрезке в реальное; при воспроизведении он идёт в {4} раз быстрее, чтобы звук был нормальным.",
+"{0}: {1} tot {2} in de video, {3}× vertraagd. Sprintz rekent de tijden in dit deel om naar echte tijd; bij het afspelen loopt het {4}× sneller, zodat het geluid normaal klinkt."
+],
+[
+"Detected automatically",
+"Otomatik algılandı",
+"Обнаружено автоматически",
+"Automatisch herkend"
+],
+[
+"Set manually",
+"Elle belirlendi",
+"Задано вручную",
+"Handmatig ingesteld"
+],
+[
+"Does the video have a slowed-down section (e.g. an exported iPhone slow-motion video)? Set it here so times and sound are correct.",
+"Videoda yavaşlatılmış bir bölüm var mı (ör. dışa aktarılmış iPhone ağır çekimi)? Süreler ve ses doğru olsun diye burada belirle.",
+"Есть ли в видео замедленный отрезок (например, экспортированное замедленное видео с iPhone)? Задай его здесь, чтобы время и звук были верными.",
+"Heeft de video een vertraagd deel (bijv. een geëxporteerde iPhone-slowmotion)? Stel het hier in, zodat tijden en geluid kloppen."
+],
+[
+"Start here",
+"Başlangıç burada",
+"Начало здесь",
+"Begin hier"
+],
+[
+"End here",
+"Bitiş burada",
+"Конец здесь",
+"Einde hier"
+],
+[
+"No slow motion",
+"Ağır çekim yok",
+"Без замедления",
+"Geen slowmotion"
+],
+[
+"Delete note",
+"Notu sil",
+"Удалить заметку",
+"Notitie verwijderen"
+],
+[
+"Technique note",
+"Teknik notu",
+"Заметка о технике",
+"Techniekaantekening"
+],
+[
+"What do you notice about the technique here?",
+"Burada teknikte neyi fark ediyorsun?",
+"Что ты замечаешь здесь в технике?",
+"Wat valt je hier op aan de techniek?"
+],
+[
+"Assigned to: {0}",
+"Atanır: {0}",
+"Относится к: {0}",
+"Toegewezen aan: {0}"
+]
+]

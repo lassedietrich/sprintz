@@ -440,6 +440,13 @@ h2 .minfo{width:26px;height:26px;font-size:.95rem}
 .msi{flex:none;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted);font:700 .7rem/1 Georgia,serif;font-style:italic;padding:0;cursor:pointer;opacity:.7}.msi[aria-expanded="true"]{opacity:1;color:var(--accent);border-color:var(--accent)}
 .msx{flex-basis:100%;margin:2px 0 4px 24px;font-size:.84rem;line-height:1.45}.msx span{color:var(--muted)}
 .evdl{margin:6px 0 0}
+.fsboxhd{cursor:grab;touch-action:none}#fsBox.drag{opacity:.85}#fsBox.drag .fsboxhd{cursor:grabbing}
+.wnotes{margin-top:10px;display:flex;flex-direction:column;gap:6px}.wnoteb{align-self:flex-start;border:0;background:transparent;color:var(--accent);font:inherit;font-size:.88rem;padding:2px 0;cursor:pointer}.wnoteb small{color:var(--muted)}
+.wnote{font-size:.86rem;background:var(--soft);border-radius:8px;padding:5px 8px}.wnote button{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:1rem}
+.wnoterow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}.wnoterow small{color:var(--muted)}
+#fsBox .wnote{background:rgba(255,255,255,.12)}#fsBox .wnoteb{color:#8fd3ff}
+.wnotesum h4{margin:12px 0 4px}.wnotesum p{margin:6px 0 2px}.wnotesum ul{margin:0 0 4px;padding-left:18px}.wnotesum small{color:var(--muted)}
+.smorow{flex-wrap:wrap;gap:6px;align-items:center}.smorow .testbtn{flex:none}.smof{display:inline-flex}.smof button{min-width:38px}
 .upq{margin:6px 2px 0;font-size:.82rem}.upq[hidden]{display:none}
 #evMetBar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:flex;justify-content:center;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
 #evMetBtn{width:100%;max-width:560px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:12px;padding:8px 14px;font:inherit;text-align:left;cursor:pointer}
@@ -856,7 +863,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
 <section id="spAna" hidden>
   <div id="evAnaHead" hidden></div>
   <h2>Auswertung</h2>
-  <div class="vhead"><span id="sFps"></span><span id="sCur"></span><button type="button" class="testbtn small" id="sFull">⛶ Vollbild</button></div>
+  <div class="vhead"><span id="sFps"></span><span id="sCur"></span><button type="button" class="testbtn small" id="sSpd" title="Abspielgeschwindigkeit">¼×</button><button type="button" class="testbtn small" id="sFull">⛶ Vollbild</button></div>
   <div class="vbox" id="sBox"><video id="sVid" playsinline muted preload="auto"></video><canvas id="sMeas" hidden></canvas><div id="sMeasTip" hidden></div><div id="sMeasCtl" hidden></div></div>
   <canvas id="sWave" aria-label="Tonspur"></canvas>
   <div class="stepbar" id="sStepBar">
@@ -867,6 +874,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
   <div class="wiz"><div class="wcard" id="wCard"></div></div>
   <div class="card" id="sVmCard" hidden></div>
   <div class="wnav" id="wnavBar"><button type="button" id="wPrev">‹ Zurück</button><div class="wprog" id="wProg"></div><button type="button" id="wNext">Weiter ›</button></div>
+  <div class="card" id="sSmoCard" hidden></div>
   <div class="card" id="sSpkCard"></div>
 </section>
 <section id="modeSoon" hidden><button type="button" class="testbtn ghost small" id="devBack" hidden style="margin:0 0 10px">‹ Entwicklermodus</button><div class="card"><div class="ic" id="soonIc"></div><h2 id="soonT"></h2><p id="soonX"></p></div>
@@ -2686,7 +2694,7 @@ function renderLinkBox(){
 $("vEnv").addEventListener("click",()=>setTimeout(renderLinkBox,0));
 $("vsave").onclick=()=>{ if(CAM.reviewing){ camSave(true); return; } const ms=blockMs(); if(ms==null){ vmsg(L(`Setze zuerst ${SIGa()} und den Take-off.`,`First mark ${SIGa()} and the take-off.`)); return; }
   const vid={id:Date.now(), date:new Date().toISOString(), sport, env:vEnv, ms, rt:since(V.move), hands:since(V.hands), name:$("vname").value.trim(), rate:vRate, fps:fps()};
-  if(SA.mode==="train"){ try{ vid.m=evMetrics(); vid.marks=Object.assign({},SA.marks); vid.vals=Object.assign({},SA.vals); }catch(e){} }
+  if(SA.mode==="train"){ try{ vid.m=evMetrics(); vid.marks=Object.assign({},SA.marks); vid.vals=Object.assign({},SA.vals); vid.notes=(SA.notes||[]).slice(); vid.smo=SA.smo||null; }catch(e){} }
   if(vEnv==="water"){
     if(!linkSel){ vmsg(L("Wähle aus, zu welchem Start das Video gehört.","Choose which start this video belongs to.")); $("linkBox").scrollIntoView({block:"center"}); return; }
     if(linkSel==="new"){
@@ -3039,7 +3047,7 @@ function spStepsTrack(){
 }
 function spReview(blob){
   if(typeof trainHome==="function") trainHome();
-  SA.active=true; SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.meta=CAM.meta; SA.events=CAM.events; SA.recT0=CAM.recT0; SA.steps=spSteps(); SA.frameT=null; SA.fps=CAM.fps||30; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
+  SA.active=true; SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.meta=CAM.meta; SA.events=CAM.events; SA.recT0=CAM.recT0; SA.steps=spSteps(); SA.frameT=null; SA.fps=CAM.fps||30; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null; SA.notes=[]; SA.smo=null; SA.smoChecked=true; SA.fpsKnown=true;
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
@@ -3089,10 +3097,13 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(textlike) return; if(tg && tg.tagName==="INPUT" && tg.type!=="range") tg.blur(); e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
   if(typing) return;
   if(e.key===" " && sa){ e.preventDefault(); $("sPlay").click(); return; }
+  if((e.key==="n"||e.key==="N") && sa){ const b=$("wNoteB"); if(b){ e.preventDefault(); const bx=$("wNoteBox"); if(FS.on && $("fsBox").classList.contains("min")){ $("fsBox").classList.remove("min"); $("fsMin").textContent="–"; } if(bx.hidden) b.click(); else $("wNoteT").focus(); } return; }
   if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
 });
-$("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.muted=false; sVid.playbackRate=0.25; sVid.play(); } else sVid.pause(); };
-sVid.addEventListener("play",()=>{ $("sPlay").textContent="❚❚"; const loop=()=>{ if(!sVid.paused){ if(SA.playTo!=null && sVid.currentTime>=SA.playTo){ sVid.pause(); SA.playTo=null; } spTick(); requestAnimationFrame(loop);} }; loop(); });
+$("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.muted=false; SA.curBase=SA.playBase||0.25; smoRate(); sVid.play(); } else sVid.pause(); };
+$("sSpd").onclick=()=>{ const i=SPD.indexOf(SA.playBase||0.25); SA.playBase=SPD[(i+1)%SPD.length]; try{ localStorage.setItem("sprintz-spd",String(SA.playBase)); }catch(e){} spdLabel(); if(!sVid.paused){ SA.curBase=SA.playBase; smoRate(); } };
+try{ const v=parseFloat(localStorage.getItem("sprintz-spd")); if(SPD.includes(v)) SA.playBase=v; }catch(e){} spdLabel();
+sVid.addEventListener("play",()=>{ $("sPlay").textContent="❚❚"; const loop=()=>{ if(!sVid.paused){ smoRate(); if(SA.playTo!=null && sVid.currentTime>=SA.playTo){ sVid.pause(); SA.playTo=null; } spTick(); requestAnimationFrame(loop);} }; loop(); });
 sVid.addEventListener("pause",()=>{ $("sPlay").textContent="▶"; spTick(); });
 sVid.addEventListener("seeked",spTick); sVid.addEventListener("loadedmetadata",()=>{ spDraw(); });
 function spTick(){ $("sCur").textContent=fmtS(sVid.currentTime); spMoved(); spDraw(); if(SA.trialRef&&SA.trialRef.vm) vmDraw(FS.on?$("fsVmC"):$("sVmC")); }
@@ -3129,13 +3140,14 @@ function spDraw(){
   if(R.z){ const f=sFps(), k0=Math.ceil(R.a*f), k1=Math.floor(R.b*f); g.fillStyle=dark?"rgba(207,224,232,.4)":css("--line");
     for(let k=k0;k<=k1;k++){ const hh=k%10===0?H*0.2:H*0.09; g.fillRect(X(k/f)-dpr/2,H-hh,dpr,hh); }
     g.font=`600 ${10*dpr}px system-ui`; g.textBaseline="top"; g.fillStyle=dark?"#cfe0e8":css("--muted"); g.fillText(L("Nahansicht ±40 Bilder","Close-up ±40 frames"),5*dpr,4*dpr); }
+  if(SA.smo && SA.smo.f>1){ g.fillStyle="rgba(232,180,74,.16)"; g.fillRect(X(SA.smo.s0),0,X(SA.smo.s1)-X(SA.smo.s0),H); }
   spSigLabels().forEach(l=>{ g.fillStyle = l.k==="go" ? css("--signal") : css("--danger"); g.globalAlpha=.5; g.fillRect(X(l.t)-dpr/2,0,dpr,H); g.globalAlpha=1; });
   Object.entries(SA.marks).forEach(([k,t])=>{ if(t==null) return; g.fillStyle = k==="sig" ? css("--signal") : css("--accent"); g.fillRect(X(t)-1.5*dpr,0,3*dpr,H); });
   g.fillStyle=dark?"#ffffff":css("--fg"); g.fillRect(X(R.z?sCurT():sVid.currentTime)-dpr/2,0,dpr,H);
 }
 // Zeiten relativ zum Startsignal (Schall Lautsprecher → Handy und Ton-Bild-Versatz berücksichtigt)
 function spRel(t){ if(t==null || SA.marks.sig==null) return null; const off=parseFloat((()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } })())||0;
-  return (t-SA.marks.sig)/(SA.slow||1) - off/1000 + (SA.vals.spk||0)/343; }
+  return t==null||SA.marks.sig==null ? null : (RT(t)-RT(SA.marks.sig)) - off/1000 + (SA.vals.spk||0)/343; }
 const ms3 = v => v==null ? "–" : (LANG==="en" ? v.toFixed(2) : v.toFixed(2).replace(".",","))+" "+U("s");
 const msx = v => v==null ? "–" : Math.round(v*1000)+" "+U("ms");
 const n2 = (v,u) => v==null || !isFinite(v) ? "–" : (LANG==="en" ? v.toFixed(2) : v.toFixed(2).replace(".",","))+(u?" "+u:"");
@@ -3146,7 +3158,7 @@ function spResult(out){
   if(tm!=null && m.sig!=null){ if(tm>=m.sig) out.result="clean"; else { const d=spSigLabels().filter(x=>x.k==="dis" && x.t<=tm && tm-x.t<1).pop(); out.result = d ? "dis" : "early"; out.disN = d && d.n; } }
 }
 function spMetricsSwim(){
-  const m=SA.marks, v=SA.vals, R=k=>spRel(m[k]), u=spUnitD(), out={};
+  const m=smoMarks(), v=SA.vals, R=k=>relR(m[k]), u=spUnitD(), out={};
   out.rt=R("move"); out.hands=R("hands"); out.block=R("off"); spResult(out);
   if(m.entry!=null && m.off!=null){ out.flight=m.entry-m.off; if(v.jump>0) out.flightV=v.jump/out.flight; }
   out.jump=v.jump||null; out.t5=R("p5"); out.t15=R("p15"); out.t25=R("p25");
@@ -3170,7 +3182,7 @@ function spMetricsSwim(){
   return out;
 }
 function spMetricsTrack(){
-  const m=SA.marks, v=SA.vals, R=k=>spRel(m[k]), out={};
+  const m=smoMarks(), v=SA.vals, R=k=>relR(m[k]), out={};
   out.rt=R("move"); out.hands=R("hands"); out.block=R("off"); out.c1=R("c1"); spResult(out);
   out.splits=SA.steps.filter(s=>s.pos!=null && m[s.id]!=null).map(s=>({pos:s.pos, t:R(s.id), raw:m[s.id]}));
   out.segs=[]; for(let i=1;i<out.splits.length;i++){ const a=out.splits[i-1], b=out.splits[i], dt=b.raw-a.raw; if(dt>0) out.segs.push({seg:`${a.pos}–${b.pos}`, t:dt, v:(b.pos-a.pos)/dt}); }
@@ -3239,7 +3251,8 @@ function wizRender(){
       <div class="wnum"><input id="wNum" type="number" inputmode="decimal" step="${st.step||(st.unit==="×"?1:0.1)}" min="0" value="${SA.vals[st.id]??""}" placeholder="0"><span>${st.unit}</span></div>
       <button type="button" class="wbig" id="wTake">${L("Übernehmen","Confirm")}</button><button type="button" class="wskip" id="wSkip">${L("Weiß ich nicht – überspringen","Don't know – skip")}</button>`;
   } else h+= SA.mode==="eval" ? evSumHTML() : SA.mode==="train" ? trainSumHTML() : spSumHTML();
-  c.innerHTML=h; wizProgress();
+  if(st.k!=="sum") h+=noteUI(st); else h+=notesSumHTML();
+  c.innerHTML=h; wizProgress(); if(st.k!=="sum") noteBind(st);
   const adv=()=>setTimeout(()=>wizGo(SA.i+1,1),380);
   const mk=$("wMark"); if(mk) mk.onclick=()=>{ SA.marks[st.id]=sCurT(); if(st.sig) SA.sigAuto="manual"; spDraw(); wizRender(); adv(); };
   const ok=$("wOk"); if(ok) ok.onclick=()=>adv();
@@ -3249,7 +3262,7 @@ function wizRender(){
   const tk=$("wTake"); if(tk){ const inp=$("wNum"); const take=()=>{ measEnd(); const x=parseFloat(String(inp.value).replace(",",".")); if(x>=0) SA.vals[st.id]=x; adv(); }; tk.onclick=take; inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); take(); } }; }
   const ms=$("wMeas"); if(ms) ms.onclick=()=>measStart(st);
   const dt=$("wDescT"); if(dt) dt.onclick=()=>{ c.classList.remove("meascol"); };
-  const sg=$("wSeg"); if(sg) sg.onclick=()=>{ const ta=mAt(st.seg.a), tb=mAt(st.seg.b); sVid.pause(); sVid.muted=false; sVid.currentTime=ta; SA.playTo=tb; setTimeout(()=>{ sVid.playbackRate=0.5; sVid.play(); },120); };
+  const sg=$("wSeg"); if(sg) sg.onclick=()=>{ const ta=mAt(st.seg.a), tb=mAt(st.seg.b); sVid.pause(); sVid.muted=false; sVid.currentTime=ta; SA.playTo=tb; setTimeout(()=>{ SA.curBase=0.5; smoRate(); sVid.play(); },120); };
   if(st.k==="time" && SA.marks[st.id]!=null && !sVid.seeking){ try{ if(Math.abs(sVid.currentTime-SA.marks[st.id])>0.001 && st.sig) sVid.currentTime=SA.marks[st.id]; }catch(e){} }
   const sr=$("sRate"); if(sr) sr.querySelectorAll("button").forEach(b=>b.onclick=()=>{ SA.rate = SA.rate===+b.dataset.v ? null : +b.dataset.v; sr.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.v===SA.rate))); });
   const no=$("sNote"); if(no) no.oninput=()=>SA.note=no.value;
@@ -3379,7 +3392,7 @@ addEventListener("resize",()=>{ if(SA.meas) measDraw(); });
 function spSaveRun(){
   const o=spMetrics();
   if(!LOG.sprints) LOG.sprints=[];
-  LOG.sprints.push({id:Date.now(), date:new Date().toISOString(), sport:T()?"track":"swim", start:SP.start, stroke:T()?null:SP.stroke, dist:SP.dist, pool:T()?null:SP.pool, unit:spUnit(), dis:(SA.meta.sig||[]).map(x=>x.k),
+  LOG.sprints.push({notes:(SA.notes||[]).slice(), id:Date.now(), date:new Date().toISOString(), sport:T()?"track":"swim", start:SP.start, stroke:T()?null:SP.stroke, dist:SP.dist, pool:T()?null:SP.pool, unit:spUnit(), dis:(SA.meta.sig||[]).map(x=>x.k),
     marks:Object.fromEntries(Object.entries(SA.marks).map(([k,t])=>[k, spRel(t)])), vals:SA.vals, m:o, rate:SA.rate, note:(SA.note||"").trim(), fps:SA.fps});
   saveLog(); spRenderList();
   camNext();
@@ -3884,16 +3897,16 @@ async function evAnalyze(t){
   if(!blob){ alertMsg(L("Sprintz speichert keine Videos, nur die Daten daraus. Lade das Video über „Aufnahmen hochladen“ erneut, es wird automatisch wieder diesem Versuch zugeordnet.","Sprintz doesn't store videos, only the data from them. Upload the video again via “Upload recordings”; it is automatically matched to this attempt again.")); return; }
   if(typeof trainHome==="function") trainHome(); EV.trial=t.i; SA.trialRef=t; finishBack(); evMetHide(); $("evPage").hidden=true;
   SA.active=true; SA.mode="eval"; SA.upload = t.vid.src==="upload"; SA.slow = 1;
-  SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
+  SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null; SA.notes=[]; SA.smo=null; SA.smoChecked=false; SA.fpsKnown=false;
   SA.meta={hornT:t.sigEst||0, sig:[]}; SA.events=[]; SA.recT0=0; SA.sigType=null; SA.cands=null; SA.fps=t.fps||30;
   // gespeicherte Markierungen wiederherstellen
-  if(t.raw){ SA.marks=Object.assign({}, t.raw.marks); SA.vals=Object.assign({spk:SA.vals.spk}, t.raw.vals); SA.sigAuto="manual"; if(SA.marks.dk!=null && SA.marks.kick1==null){ SA.marks.kick1=SA.marks.dk; delete SA.marks.dk; } }
+  if(t.raw){ SA.marks=Object.assign({}, t.raw.marks); SA.vals=Object.assign({spk:SA.vals.spk}, t.raw.vals); SA.sigAuto="manual"; if(SA.marks.dk!=null && SA.marks.kick1==null){ SA.marks.kick1=SA.marks.dk; delete SA.marks.dk; } SA.notes=(t.raw.notes||[]).slice(); if(t.raw.smo){ SA.smo=Object.assign({},t.raw.smo); SA.smoChecked=true; } }
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; document.body.classList.add("reviewing"); scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
-  detectFps(SA.url).then(f=>{ if(f && SA.upload) upqCheck(f); if(f){ SA.fps=f; t.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f/(SA.slow||1)*10)/10} ms`; } });
-  SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard();
-  readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
+  detectFps(SA.url).then(f=>{ if(f && SA.upload) upqCheck(f); if(f){ SA.fps=f; t.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f/(SA.slow||1)*10)/10} ms`; } SA.fpsKnown=true; smoAuto(); });
+  SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard(); smoCard();
+  readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){} smoAuto();
     if(SA.marks.sig==null && !isTurn(p)) await evFindSig(); spDraw(); wizRender(); }).catch(()=>{ if(SA.marks.sig==null && !isTurn(p)){ SA.marks.sig=t.sigEst||0; SA.sigAuto="est"; } wizRender(); });
   wizRender();
 }
@@ -3914,14 +3927,14 @@ async function evFindSig(){
 // Kennwerte eines Versuchs nach den Definitionen in SPMET (Zeiten ab Startsignal, Positionen am Kopf)
 function evMetrics(){
   if(SA.mode!=="train" && isTurn(EV.cur)) return turnMetrics();
-  const m=SA.marks, v=SA.vals, R=k=>spRel(m[k]), k=SA.slow||1, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a])/k : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null;
+  const m=smoMarks(), v=SA.vals, R=k=>relR(m[k]), d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a]) : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null;
   o.rt=R("move"); o.hands=R("hands"); o.block=R("off");
   const tm = m.move!=null ? m.move : m.off; o.result = tm!=null && m.sig!=null ? (tm>=m.sig?"clean":"early") : null;
   if(ok(o.block)&&ok(o.rt)) o.mt=o.block-o.rt;
   const rear=R("rear"); if(ok(rear) && o.block>0){ o.rft=rear/o.block*100; o.ffs=o.block-rear; }
   o.flight=d("off","entry"); o.jump=v.jump||null; if(o.flight>0 && o.jump) o.flightV=o.jump/o.flight;
-  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ try{ if(m.off!=null){ const x=vmAt(vm,m.off); if(ok(x)) o.vxTO=x; } if(m.entry!=null){ const x=vmAt(vm,m.entry); if(ok(x)) o.vxEntry=x; }
-    const g=vmMean(vm,m.headIn,m.kick1); if(ok(g)) o.gvVm=g; const u=vmMean(vm,m.headIn,m.brk); if(ok(u)) o.uwVvm=u; }catch(e){} }
+  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ const M=SA.marks; try{ if(M.off!=null){ const x=vmAt(vm,M.off); if(ok(x)) o.vxTO=x; } if(M.entry!=null){ const x=vmAt(vm,M.entry); if(ok(x)) o.vxEntry=x; }
+    const g=vmMean(vm,M.headIn,M.kick1); if(ok(g)) o.gvVm=g; const u=vmMean(vm,M.headIn,M.brk); if(ok(u)) o.uwVvm=u; }catch(e){} }
   o.entryT=R("headIn"); o.entryD=v.entryD||null;
   o.kick1=R("kick1"); o.kick1D=v.kick1D||null;
   o.gt=pos(d("headIn","kick1")); if(o.gt && o.kick1D!=null && o.entryD!=null){ o.gd=o.kick1D-o.entryD; o.gv=o.gd/o.gt; }
@@ -3955,7 +3968,7 @@ function evSumHTML(){
 }
 function evSaveTrial(){
   const p=EV.cur, t=p.trials[EV.trial]; const o=evMetrics();
-  t.m=o; t.raw={marks:Object.assign({},SA.marks), vals:Object.assign({},SA.vals)}; t.fps=SA.fps; t.status="done"; t.analysed=Date.now(); evSave();
+  t.m=o; t.raw={marks:Object.assign({},SA.marks), vals:Object.assign({},SA.vals), notes:(SA.notes||[]).slice(), smo:SA.smo||null}; t.notes=(SA.notes||[]).slice(); t.fps=SA.fps; t.status="done"; t.analysed=Date.now(); evSave();
   evNextTrial(true);
 }
 // zum nächsten offenen Versuch (gespeichert oder nicht); im Vollbild bleibt das Vollbild bestehen
@@ -4089,7 +4102,7 @@ async function fsEnter(){
     el.addEventListener("loadedmetadata",()=>{ fsLayout(); fsSync(true); });
     if(v.off==null) fsAlign(S2); }
   $("fsVm").hidden=!(tr&&tr.vm); if(!(document.fullscreenElement||document.webkitFullscreenElement)){ try{ if(ov.requestFullscreen) await ov.requestFullscreen(); else if(ov.webkitRequestFullscreen) ov.webkitRequestFullscreen(); }catch(e){} }
-  fsLayout(); fsSync(true); fsHint(); fsZoomApply(); setTimeout(()=>{ fsLayout(); spDraw(); },60);
+  fsLayout(); fsSync(true); fsHint(); fsZoomApply(); setTimeout(()=>{ try{ if(localStorage.getItem("sprintz-fsbox")) $("fsBox").dataset.user="1"; }catch(e){} fsLayout(); spDraw(); },60);
 }
 // soft: Vollbild der Seite bleibt bestehen (Wechsel zum nächsten Versuch im Vollbild)
 function fsExit(soft){
@@ -4112,7 +4125,8 @@ function fsLayout(){
   if(SA.meas) setTimeout(measDraw,30); vmDraw($("fsVmC"));
   // Hinweisbox nicht über Tonspur und Kurve legen
   const ovR=$("fsOv").getBoundingClientRect(), gB=grid.getBoundingClientRect().bottom-ovR.top, bx=$("fsBox");
-  if(innerWidth<=700){ bx.style.bottom=Math.round(ovR.height-gB+8)+"px"; bx.style.maxHeight=Math.round(Math.max(150,gB*0.55))+"px"; } else { bx.style.bottom=""; bx.style.maxHeight=Math.round(Math.max(200,gB-24))+"px"; }
+  if(bx.dataset.user){ fsBoxRestore(); }
+  else if(innerWidth<=700){ bx.style.bottom=Math.round(ovR.height-gB+8)+"px"; bx.style.maxHeight=Math.round(Math.max(150,gB*0.55))+"px"; } else { bx.style.bottom=""; bx.style.maxHeight=Math.round(Math.max(200,gB-24))+"px"; }
   fsClampZ(); fsZoomApply(); spDraw();
 }
 /* Zoom im Vollbild: Mausrad, + / − / 0, Schaltflächen; Verschieben durch Ziehen */
@@ -4153,7 +4167,7 @@ async function fsAlign(S2){
 // halbtransparente Box: was ist gerade zu finden, Tastenkürzel
 function fsHint(){ if(!FS.on) return; const st=SA.steps[SA.i], k=$("fsKeys"); if(!k) return;
   const al=FS.secs.map((s,i)=>s.v.offAuto==="audio"?L(`Video ${i+2}: über das Startsignal abgeglichen`,`Video ${i+2}: synced via the start signal`):s.v.offAuto==="time"?L(`Video ${i+2}: über die Aufnahmezeit abgeglichen, bitte prüfen`,`Video ${i+2}: synced via recording time, please check`):L(`Video ${i+2}: Versatz von Hand`,`Video ${i+2}: offset set manually`));
-  k.innerHTML=`${SA.meas&&SA.meas.pts.length>=2?`<span><kbd>←</kbd><kbd>→</kbd> ${L("Senkrechte verschieben","Move the perpendicular")}</span><span><kbd>↑</kbd><kbd>↓</kbd> ${L("Richtung","Direction")}</span>`:`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span>`}<span><kbd>+</kbd><kbd>−</kbd> Zoom</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
+  k.innerHTML=`${SA.meas&&SA.meas.pts.length>=2?`<span><kbd>←</kbd><kbd>→</kbd> ${L("Senkrechte verschieben","Move the perpendicular")}</span><span><kbd>↑</kbd><kbd>↓</kbd> ${L("Richtung","Direction")}</span>`:`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span>`}<span><kbd>+</kbd><kbd>−</kbd> Zoom</span><span><kbd>N</kbd> ${L("Notiz","Note")}</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
 
 $("sFull").onclick=()=>fsEnter(); $("fsClose").onclick=()=>fsExit();
 $("fsLang").onclick=e=>{ e.stopPropagation(); const pp=$("fsLangPop"); pp.hidden=!pp.hidden; $("fsLang").setAttribute("aria-expanded",String(!pp.hidden)); pp.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===LANG))); };
@@ -4355,6 +4369,9 @@ function evReport(){
       <div class="evscroll" style="margin-top:8px"><table class="evtab"><thead><tr><th>Nr.</th><th>${L("Variante","Variant")}</th>${D.stages.length>1?`<th>${L("Stufe","Stage")}</th>`:""}${tl.days>1?`<th>${L("Tag","Day")}</th>`:""}<th class="r">${L("Uhrzeit","Time")}</th><th class="r">${L("Pause davor","Rest before")}</th><th class="r">${lab(sQ)}</th></tr></thead><tbody>
       ${tl.rows.map(r=>`<tr><td>${evPos(p,r.t)}</td><td><i class="evv ${r.t.v}">${r.t.v}</i></td>${D.stages.length>1?`<td>${(r.t.stage??1)||"BL"}</td>`:""}${tl.days>1?`<td>${r.day}</td>`:""}<td class="r">${new Date(r.t0).toLocaleTimeString(L("de-DE","en-GB"),{hour:"2-digit",minute:"2-digit"})}</td><td class="r">${r.pause!=null?evDur(r.pause):"–"}</td><td class="r">${r.t.m&&r.t.m[sQ]!=null?evFmt(r.t.m[sQ],uq):"–"}</td></tr>`).join("")}</tbody></table></div>`;
   }
+  { const all=[]; evOrd(p).forEach(t=>(t.notes||[]).forEach(n=>all.push(Object.assign({no:evPos(p,t), v:t.v},n))));
+    if(all.length){ const g=[]; all.forEach(n=>{ let o=g.find(x=>x.lab===n.lab); if(!o){ o={lab:n.lab,a:[]}; g.push(o); } o.a.push(n); });
+      h+=`<h3 class="evh3">${L("Notizen zur Technik","Technique notes")}</h3><div class="card wnotesum">${g.map(o=>`<p><b>${esc(o.lab)}</b></p><ul>${o.a.map(n=>`<li><i class="evv ${n.v}">${n.v}</i> ${L(`Versuch ${n.no}`,`Attempt ${n.no}`)}: ${esc(n.txt)}</li>`).join("")}</ul>`).join("")}</div>`; } }
   top.innerHTML=h; evMetBar(D);
   $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); $("evPdf").onclick=()=>evPdfAsk(p);
   top.querySelectorAll("[data-chip]").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{ EV.rk=EV.rk||{}; EV.rk[g.dataset.chip]=b.dataset.k; const y=scrollY; evReport(); scrollTo(0,y); }));
@@ -4537,7 +4554,7 @@ function TURNMORE(){
 }
 // Kennwerte eines Wendeversuchs
 function turnMetrics(){
-  const m=SA.marks, v=SA.vals, k=SA.slow||1, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a])/k : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null, p=EV.cur||{}, open=turnOpen(p), w0=open?"touch":"feetOn";
+  const m=smoMarks(), v=SA.vals, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a]) : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null, p=EV.cur||{}, open=turnOpen(p), w0=open?"touch":"feetOn";
   const a=pos(d("in10","in5")); if(a) o.vIn=5/a;
   o.tIn5=pos(d("in5",w0)); o.rotD=v.rotD||null;
   if(open){ o.handT=pos(d("touch","handsOff")); o.turnT=pos(d("touch","feetOn")); o.wallT=pos(d("touch","off")); }
@@ -4549,8 +4566,8 @@ function turnMetrics(){
   const b=pos(d("out5","out10")); if(b) o.vOut=5/b;
   const kt=pos(d("kick1","brk")); if(kt && o.kicks) o.kickF=o.kicks/kt*60; if(o.kicks && o.dive && o.kick1D!=null && o.dive>o.kick1D) o.kl=(o.dive-o.kick1D)/o.kicks;
   o.pullT=pos(d("off","pull")); o.pullK=d("pull","bkick");
-  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ try{ if(m.off!=null){ const x=vmAt(vm,m.off); if(ok(x)) o.vOff=x; } if(m.in5!=null){ const x=vmAt(vm,m.in5); if(ok(x)) o.vIn5vm=x; }
-    const g=vmMean(vm,m.off,m.kick1); if(ok(g)) o.gvVm=g; const u=vmMean(vm,m.off,m.brk); if(ok(u)) o.uwVvm=u; }catch(e){} }
+  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ const M=SA.marks; try{ if(M.off!=null){ const x=vmAt(vm,M.off); if(ok(x)) o.vOff=x; } if(M.in5!=null){ const x=vmAt(vm,M.in5); if(ok(x)) o.vIn5vm=x; }
+    const g=vmMean(vm,M.off,M.kick1); if(ok(g)) o.gvVm=g; const u=vmMean(vm,M.off,M.brk); if(ok(u)) o.uwVvm=u; }catch(e){} }
   return o;
 }
 
@@ -4790,13 +4807,13 @@ function trainAna(blob, cam){
   $("vOld").hidden=true; $("vResSec").hidden=true; a.hidden=false; $("evAnaHead").hidden=true;
   const P=trainP();
   SA.active=true; SA.mode="train"; SA.upload=!cam; SA.trialRef=null; SA.slow=1;
-  SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(P); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
+  SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(P); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null; SA.notes=[]; SA.smo=null; SA.smoChecked=false; SA.fpsKnown=false;
   SA.meta = cam ? CAM.meta : {hornT:0, sig:[]}; SA.events = cam ? CAM.events : []; SA.recT0 = cam ? CAM.recT0 : 0; SA.sigType=null; SA.cands=null; SA.fps = cam ? (CAM.fps||30) : 30;
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   $("sFps").textContent=`${SA.fps} fps`;
-  detectFps(SA.url).then(f=>{ if(f && !cam) upqCheck(f); if(f){ SA.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f*10)/10} ${U("ms")}`; trainSync(); } });
-  SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard();
-  readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
+  detectFps(SA.url).then(f=>{ if(f && !cam) upqCheck(f); if(f){ SA.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f*10)/10} ${U("ms")}`; trainSync(); } SA.fpsKnown=true; smoAuto(); });
+  SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard(); smoCard();
+  readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){} smoAuto();
       V.pcm=SA.pcm; V.raw=SA.raw; V.rawRate=SA.rawRate;
       if(cam) await spFindSig(); else await evFindSig(); spDraw(); wizRender(); })
     .catch(()=>{ SA.marks.sig = cam ? Math.max(0,(SA.meta.hornT||0)-(SA.recT0||0)) : 0; SA.sigAuto="est"; wizRender(); });
@@ -4820,6 +4837,96 @@ function trainSumHTML(){
   return h;
 }
 try{ trainSelUI(); }catch(e){}
+
+/* --- Automatische Zeitlupe (z. B. vom iPhone exportiert): ein Abschnitt des Videos läuft verlangsamt, der Ton ist darin tiefer und langsamer.
+   Erkennung über die Tonspur: Im verlangsamten Abschnitt rutscht das Spektrum um den Zeitlupen-Faktor nach unten (Grenzfrequenz, unter der 85 % der Energie liegen).
+   Danach rechnet Sprintz Zeiten in diesem Abschnitt in Echtzeit um und spielt ihn beim Abspielen entsprechend schneller ab, damit der Ton normal klingt. --- */
+function fftMag(re){ const n=re.length, im=new Float64Array(n); for(let i=1,j=0;i<n;i++){ let b=n>>1; for(;j&b;b>>=1) j^=b; j^=b; if(i<j){ const t=re[i]; re[i]=re[j]; re[j]=t; } }
+  for(let len=2;len<=n;len<<=1){ const a=-2*Math.PI/len, wr=Math.cos(a), wi=Math.sin(a); for(let i=0;i<n;i+=len){ let cr=1, ci=0; for(let k=0;k<len/2;k++){ const ur=re[i+k], ui=im[i+k], xr=re[i+k+len/2], xi=im[i+k+len/2], vr=xr*cr-xi*ci, vi=xr*ci+xi*cr;
+    re[i+k]=ur+vr; im[i+k]=ui+vi; re[i+k+len/2]=ur-vr; im[i+k+len/2]=ui-vi; const t=cr*wr-ci*wi; ci=cr*wi+ci*wr; cr=t; } } }
+  const p=new Float64Array(n/2); for(let i=0;i<n/2;i++) p[i]=re[i]*re[i]+im[i]*im[i]; return p; }
+function smoDetect(x, rate){
+  if(!x || !rate || x.length<rate*2) return null;
+  const N=2048, hop=1024, win=new Float64Array(N); for(let i=0;i<N;i++) win[i]=0.5-0.5*Math.cos(2*Math.PI*i/(N-1));
+  const Lf=[], E=[], SP=[];
+  for(let s=0;s+N<=x.length;s+=hop){ const re=new Float64Array(N); let e=0; for(let i=0;i<N;i++){ re[i]=x[s+i]*win[i]; e+=re[i]*re[i]; } E.push(e);
+    const p=fftMag(re); SP.push(p); let tot=0; for(let i=1;i<p.length;i++) tot+=p[i]; let c=0, k=1; for(;k<p.length;k++){ c+=p[k]; if(c>=0.85*tot) break; } Lf.push(Math.log2(Math.max(20,k*rate/N))); }
+  const es=E.slice().sort((a,b)=>a-b), eMin=es[Math.floor(es.length*0.5)]*0.05; // sehr leise Stellen nicht bewerten
+  const n=Lf.length, med=(a)=>{ const b=a.filter(v=>v!=null).sort((p,q)=>p-q); return b.length?b[Math.floor(b.length/2)]:null; };
+  const L=Lf.map((v,i)=>E[i]<eMin?null:med(Lf.slice(Math.max(0,i-3),i+4).map((w,j)=>E[Math.max(0,i-3)+j]<eMin?null:w)));
+  const valid=L.filter(v=>v!=null).sort((a,b)=>a-b); if(valid.length<20) return null;
+  const ref=valid[Math.floor(valid.length*0.85)], thr=ref-1.3;
+  let best=null, cur=null, gap=0;
+  for(let i=0;i<n;i++){ const slow = L[i]!=null && L[i]<thr;
+    if(slow){ if(!cur) cur={a:i,b:i}; else cur.b=i; gap=0; } else if(cur){ if(++gap>4){ if(!best || cur.b-cur.a>best.b-best.a) best=cur; cur=null; gap=0; } } }
+  if(cur && (!best || cur.b-cur.a>best.b-best.a)) best=cur;
+  if(!best) return null; const dt=hop/rate, s0=best.a*dt, s1=(best.b+1)*dt+N/rate/2, dur=x.length/rate;
+  if(s1-s0<0.6 || (s0<0.3 && s1>dur-0.3)) return null;
+  const inner=L.slice(best.a,best.b+1).filter(v=>v!=null); const est=Math.pow(2, ref-med(inner)); if(!(est>=1.6)) return null;
+  // Faktor genauer: mittleres Spektrum im Abschnitt mit dem gestauchten Spektrum außerhalb vergleichen (Form muss bei richtigem Faktor übereinstimmen)
+  const K=N/2, ps=new Float64Array(K), pn=new Float64Array(K); let ns=0, nn=0;
+  for(let i=0;i<n;i++){ if(E[i]<eMin) continue; const inS=i>=best.a && i<=best.b; const t=inS?ps:pn; for(let k=0;k<K;k++) t[k]+=SP[i][k]; inS?ns++:nn++; }
+  let f=[2,4,8].reduce((a,b)=>Math.abs(Math.log2(b/est))<Math.abs(Math.log2(a/est))?b:a);
+  if(ns && nn){ let bestS=Infinity; for(const F of [2,3,4,6,8]){ const ks=[]; for(let k=3;k*F<K-1;k++) ks.push(Math.log(ps[k]/ns+1e-12)-Math.log(pn[k*F]/nn+1e-12)); if(ks.length<20) continue;
+      const m=ks.reduce((a,b)=>a+b,0)/ks.length, v=ks.reduce((a,b)=>a+(b-m)*(b-m),0)/ks.length; if(v<bestS){ bestS=v; f=F; } } }
+  return {s0:Math.max(0,s0), s1:Math.min(dur,s1), f, auto:true};
+}
+// Videozeit → Echtzeit (Zeitlupen-Abschnitt und globaler Zeitlupen-Faktor)
+function RT(t){ if(t==null) return null; const z=SA.smo; let r=t; if(z && z.f>1){ if(t>z.s1) r=t-(z.s1-z.s0)+(z.s1-z.s0)/z.f; else if(t>z.s0) r=z.s0+(t-z.s0)/z.f; } return r/(SA.slow||1); }
+function smoMarks(){ const o={}; for(const k in SA.marks) o[k]=SA.marks[k]==null?null:RT(SA.marks[k]); return o; }
+const relR=x=>{ if(x==null || SA.marks.sig==null) return null; const off=parseFloat((()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } })())||0;
+  return (x-RT(SA.marks.sig)) - off/1000 + (SA.vals.spk||0)/343; };
+function smoAuto(){ if(SA.smoChecked || !SA.raw) return; SA.smoChecked=true; if(SA.smo || (SA.fpsKnown && SA.fps>65)) { smoCard(); return; }
+  try{ const r=smoDetect(SA.raw, SA.rawRate||24000); if(r){ SA.smo=r; toast(L(`Zeitlupe erkannt (${fmtS(r.s0)} bis ${fmtS(r.s1)}, ${r.f}×). Zeiten darin rechnet Sprintz in Echtzeit um.`,`Slow motion detected (${fmtS(r.s0)} to ${fmtS(r.s1)}, ${r.f}×). Sprintz converts times in it to real time.`),6000); } }catch(e){ console.error(e); }
+  smoCard(); spDraw(); if(SA.steps[SA.i] && SA.steps[SA.i].k==="sum") wizRender(); }
+function smoCard(){ const c=$("sSmoCard"); if(!c) return; const z=SA.smo; if(!SA.active || (!z && !(SA.fps<=65))){ c.hidden=true; return; } c.hidden=false;
+  c.innerHTML = `<div class="row" style="flex-wrap:wrap;gap:8px"><div class="lbl"><b>${L("Zeitlupen-Abschnitt","Slow-motion section")}</b><small>${z ? L(`${z.auto?L("Automatisch erkannt","Detected automatically"):L("Von Hand festgelegt","Set manually")}: ${fmtS(z.s0)} bis ${fmtS(z.s1)} im Video, ${z.f}-fach verlangsamt. Zeiten in diesem Abschnitt rechnet Sprintz in Echtzeit um, beim Abspielen läuft er ${z.f}-mal schneller, damit der Ton normal klingt.`,`${z.auto?L("Automatisch erkannt","Detected automatically"):L("Von Hand festgelegt","Set manually")}: ${fmtS(z.s0)} to ${fmtS(z.s1)} in the video, slowed down ${z.f}×. Sprintz converts times in this section to real time; during playback it runs ${z.f}× faster so the sound is normal.`)
+      : L("Hat das Video einen verlangsamten Abschnitt (z. B. iPhone-Zeitlupe, exportiert)? Dann leg ihn hier fest, damit Zeiten und Ton stimmen.","Does the video have a slowed-down section (e.g. an exported iPhone slow-motion video)? Set it here so times and sound are correct.")}</small></div></div>
+    <div class="testrow smorow"><button type="button" class="testbtn small" data-smo="s0">${L("Beginn hier","Start here")}</button><button type="button" class="testbtn small" data-smo="s1">${L("Ende hier","End here")}</button>
+      <span class="seg smof">${[2,3,4,6,8].map(f=>`<button type="button" data-smof="${f}" aria-pressed="${!!z&&z.f===f}">${f}×</button>`).join("")}</span>${z?`<button type="button" class="testbtn ghost small" data-smo="off">${L("Keine Zeitlupe","No slow motion")}</button>`:""}</div>`;
+  const upd=()=>{ smoCard(); spDraw(); if(SA.steps[SA.i] && SA.steps[SA.i].k==="sum") wizRender(); };
+  c.querySelectorAll("[data-smo]").forEach(b=>b.onclick=()=>{ const a=b.dataset.smo, t=sCurT(), d=sVid.duration||0;
+    if(a==="off"){ SA.smo=null; } else { const z0=SA.smo||{s0:0,s1:d,f:8}; z0[a]=t; if(z0.s1<z0.s0){ const q=z0.s0; z0.s0=z0.s1; z0.s1=q; } z0.auto=false; SA.smo=z0; } upd(); });
+  c.querySelectorAll("[data-smof]").forEach(b=>b.onclick=()=>{ const z0=SA.smo||{s0:0,s1:sVid.duration||0}; z0.f=+b.dataset.smof; z0.auto=false; SA.smo=z0; upd(); });
+}
+// beim Abspielen: verlangsamten Abschnitt entsprechend schneller abspielen, Tonhöhe nicht korrigieren (so stimmt sie wieder)
+function smoRate(){ const z=SA.smo, base=SA.curBase||0.25; const inside = z && z.f>1 && sVid.currentTime>=z.s0 && sVid.currentTime<=z.s1;
+  const r=Math.min(16, inside ? base*z.f : base); if(Math.abs(sVid.playbackRate-r)>1e-3) sVid.playbackRate=r;
+  const pp=!inside; if(sVid.preservesPitch!==pp){ try{ sVid.preservesPitch=pp; sVid.webkitPreservesPitch=pp; sVid.mozPreservesPitch=pp; }catch(e){} } }
+const SPD=[0.25,0.5,1];
+function spdLabel(){ const b=$("sSpd"); if(b) b.textContent=({0.25:"¼×",0.5:"½×",1:"1×"})[SA.playBase||0.25]; }
+
+/* --- Notizen zur Technik während der Auswertung: werden dem Kennwert des aktuellen Schritts zugeordnet und im Ergebnis gesammelt --- */
+const NUMK={jump:"jump",entryD:"entryD",kick1D:"kick1D",diveD:"dive",kicks:"kicks",rotD:"rotD"};
+function noteTarget(st){
+  const p = SA.mode==="train" ? trainP() : SA.mode==="eval" ? EV.cur : null;
+  if(p && (p.tech==="start"||p.tech==="turn")){ const sel=evSel(p), cat=METCAT(p).filter(x=>spApplies(x,p) && (!sel||sel.has(x.k)));
+    const hit = NUMK[st.id] ? cat.find(x=>x.k===NUMK[st.id]) : cat.find(x=>(x.m||[]).includes(st.id) && (x.m||[]).length===1) || cat.find(x=>(x.m||[]).includes(st.id));
+    if(hit) return {k:hit.k, lab:hit.l}; }
+  return {k:st.id, lab:st.t()};
+}
+function noteUI(st){ const tg=noteTarget(st), mine=(SA.notes||[]).map((n,i)=>({n,i})).filter(o=>o.n.step===st.id);
+  return `<div class="wnotes">${mine.map(o=>`<span class="wnote"><b>${esc(o.n.lab)}:</b> ${esc(o.n.txt)} <button type="button" data-ndel="${o.i}" aria-label="${L("Notiz löschen","Delete note")}">×</button></span>`).join("")}
+    <button type="button" class="wnoteb" id="wNoteB">✎ ${L("Notiz zur Technik","Technique note")} <small>(N)</small></button>
+    <div id="wNoteBox" hidden><textarea id="wNoteT" class="note-in" rows="2" maxlength="300" placeholder="${L("Was fällt dir hier an der Technik auf?","What do you notice about the technique here?")}"></textarea>
+    <div class="wnoterow"><small>${L(`Wird zugeordnet: ${esc(tg.lab)}`,`Assigned to: ${esc(tg.lab)}`)}</small><button type="button" class="testbtn small" id="wNoteAdd">${L("Hinzufügen","Add")}</button></div></div></div>`; }
+function noteBind(st){ const b=$("wNoteB"); if(!b) return; const box=$("wNoteBox"), ta=$("wNoteT");
+  b.onclick=()=>{ box.hidden=!box.hidden; if(!box.hidden) setTimeout(()=>ta.focus(),30); };
+  const add=()=>{ const txt=ta.value.trim(); if(!txt) return; const tg=noteTarget(st); (SA.notes=SA.notes||[]).push({k:tg.k, lab:tg.lab, step:st.id, stepLab:st.t(), t:sCurT(), txt}); wizRender(); };
+  $("wNoteAdd").onclick=add; ta.onkeydown=e=>{ if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); add(); } e.stopPropagation(); };
+  document.querySelectorAll("[data-ndel]").forEach(x=>x.onclick=()=>{ SA.notes.splice(+x.dataset.ndel,1); wizRender(); }); }
+function notesSumHTML(notes){ notes=notes||SA.notes||[]; if(!notes.length) return "";
+  const g=[]; notes.forEach(n=>{ let o=g.find(x=>x.lab===n.lab); if(!o){ o={lab:n.lab,a:[]}; g.push(o); } o.a.push(n); });
+  return `<div class="wnotesum"><h4>${L("Notizen zur Technik","Technique notes")}</h4>${g.map(o=>`<p><b>${esc(o.lab)}</b></p><ul>${o.a.map(n=>`<li>${esc(n.txt)} <small>(${fmtS(n.t)})</small></li>`).join("")}</ul>`).join("")}</div>`; }
+// Vollbild: Hinweisbox frei verschiebbar
+{ let d=null; const bx=$("fsBox"), hd=bx.querySelector(".fsboxhd");
+  hd.addEventListener("pointerdown",e=>{ if(e.target.closest("button")) return; e.preventDefault(); const r=bx.getBoundingClientRect(), o=$("fsOv").getBoundingClientRect(); d={x:e.clientX,y:e.clientY,l:r.left-o.left,t:r.top-o.top}; hd.setPointerCapture(e.pointerId); bx.classList.add("drag"); });
+  hd.addEventListener("pointermove",e=>{ if(!d) return; fsBoxPos(d.l+e.clientX-d.x, d.t+e.clientY-d.y); });
+  const up=()=>{ if(!d) return; d=null; bx.classList.remove("drag"); const o=$("fsOv").getBoundingClientRect(); try{ localStorage.setItem("sprintz-fsbox", JSON.stringify([bx.offsetLeft/o.width, bx.offsetTop/o.height])); }catch(e){} };
+  hd.addEventListener("pointerup",up); hd.addEventListener("pointercancel",up); }
+function fsBoxPos(l,t){ const bx=$("fsBox"), o=$("fsOv").getBoundingClientRect(); l=Math.min(Math.max(0,l), o.width-Math.min(bx.offsetWidth,o.width)); t=Math.min(Math.max(0,t), o.height-60);
+  bx.style.left=l+"px"; bx.style.top=t+"px"; bx.style.bottom="auto"; bx.style.right="auto"; bx.dataset.user="1"; }
+function fsBoxRestore(){ try{ const s=JSON.parse(localStorage.getItem("sprintz-fsbox")||"null"); if(s){ const o=$("fsOv").getBoundingClientRect(); fsBoxPos(s[0]*o.width, s[1]*o.height); } }catch(e){} }
 
 function evDefs(p,all){
   p=p||EV.cur||{}; const S={}, sel=all?null:evSel(p); evSteps(Object.assign({},p,{metrics:METCAT(p).map(x=>x.k)})).forEach(s=>S[s.id]=s);
@@ -5102,7 +5209,7 @@ async function evPdfBuild(p, keys){
     if(t.rating) parts.push(L(`Qualität ${t.rating}/5`,`quality ${t.rating}/5`));
     parts.push(t.status==="done"?L("ausgewertet","analysed"):t.vid?L("Video vorhanden, nicht ausgewertet","video available, not analysed"):L("ohne Video","no video"));
     const m=t.m||{}, key=ks.slice(0,4).filter(k=>m[k]!=null).map(k=>`${info(k)[1]} ${evFmt(m[k],info(k)[2])}`);
-    let txt=parts.filter(Boolean).join(" · "); if(key.length) txt+="\n"+key.join(" · "); if(t.note) txt+="\n"+L("Bemerkung: ","Remark: ")+t.note;
+    let txt=parts.filter(Boolean).join(" · "); if(key.length) txt+="\n"+key.join(" · "); if(t.note) txt+="\n"+L("Bemerkung: ","Remark: ")+t.note; (t.notes||[]).forEach(n=>{ txt+="\n"+L("Notiz","Note")+` (${n.lab}): ${n.txt}`; });
     F.need(30); F.para(txt,{size:8.5,after:5}); });
   evPdfDefs(F,p);
   F.footer();
