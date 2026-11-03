@@ -1,0 +1,76 @@
+{
+  "name": "sprintz-desktop",
+  "productName": "Sprintz",
+  "version": "1.0.0",
+  "description": "Sprintz – Start-, Reaktions- und Techniktraining mit Videoauswertung",
+  "author": "Lasse Dietrich",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "prepare-app": "node prepare-app.js",
+    "start": "npm run prepare-app && electron .",
+    "dist": "npm run prepare-app && electron-builder"
+  },
+  "dependencies": {
+    "ffmpeg-static": "5.2.0"
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "app.sprintz.desktop",
+    "productName": "Sprintz",
+    "copyright": "© Lasse Dietrich",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**"
+    ],
+    "mac": {
+      "category": "public.app-category.sports",
+      "target": [
+        {
+          "target": "dmg"
+        },
+        {
+          "target": "zip"
+        }
+      ],
+      "icon": "build/icon.png",
+      "identity": null,
+      "extendInfo": {
+        "NSCameraUsageDescription": "Sprintz filmt deine Starts, damit du sie danach auswerten kannst.",
+        "NSMicrophoneUsageDescription": "Sprintz nimmt den Ton auf, um das Startsignal im Video zu finden."
+      }
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "shortcutName": "Sprintz"
+    },
+    "artifactName": "Sprintz-${version}-${os}-${arch}.${ext}"
+  }
+}

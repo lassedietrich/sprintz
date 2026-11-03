@@ -1,0 +1,32 @@
+[
+[
+"Creating a working copy for frame-accurate analysis …",
+"Kare doğruluğunda analiz için çalışma kopyası oluşturuluyor …",
+"Создаётся рабочая копия для покадрового анализа …",
+"Werkkopie voor beeldnauwkeurige analyse wordt gemaakt …"
+],
+[
+"Creating working copy … {0} %",
+"Çalışma kopyası oluşturuluyor … %{0}",
+"Создаётся рабочая копия … {0} %",
+"Werkkopie wordt gemaakt … {0} %"
+],
+[
+"The working copy couldn't be created. Sprintz uses the original.",
+"Çalışma kopyası oluşturulamadı. Sprintz orijinali kullanıyor.",
+"Не удалось создать рабочую копию. Sprintz использует оригинал.",
+"De werkkopie kon niet worden gemaakt. Sprintz gebruikt het origineel."
+],
+[
+"Download Sprintz as a program for Mac and Windows",
+"Sprintz'i Mac ve Windows programı olarak indir",
+"Скачать Sprintz как программу для Mac и Windows",
+"Sprintz als programma voor Mac en Windows downloaden"
+],
+[
+"With frame-accurate video analysis, all iPhone formats and full slow motion.",
+"Kare doğruluğunda video analizi, tüm iPhone formatları ve tam ağır çekimle.",
+"С покадровым анализом видео, всеми форматами iPhone и полным замедлением.",
+"Met beeldnauwkeurige videoanalyse, alle iPhone-formaten en volledige slowmotion."
+]
+]
