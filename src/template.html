@@ -693,6 +693,9 @@ body.fs-on{overflow:hidden}
 #fsBox .wcard h3,#fsBox .wcard p{color:#fff}
 #fsBox .wnav{margin-top:8px}
 #fsBox.min #fsCardSlot,#fsBox.min #fsKeys{display:none}
+.fshl{display:flex;gap:6px}#fsStep{display:flex;flex-direction:column;gap:1px;margin:2px 2px 2px;line-height:1.25}#fsStep[hidden]{display:none}#fsStep small{font-size:.7rem;color:#B9CDD7}#fsStep b{font-size:.86rem;font-weight:600}
+#fsNotePop{margin:4px 0 8px;padding:8px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2)}#fsNotePop textarea{width:100%;box-sizing:border-box;color:#fff;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:6px 8px;font:inherit;resize:vertical}
+.fsnrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px}.fsnrow small{color:#B9CDD7;font-size:.72rem}#fsNoteList{display:flex;flex-direction:column;gap:4px;margin-top:6px}#fsNoteList:empty{display:none}#fsNoteList .wnote{font-size:.78rem}
 .fsboxhd{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px}
 .fsboxhd button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:12px;padding:4px 12px;cursor:pointer;font:600 .8rem var(--body)}
 #fsKeys{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:.74rem;color:#B9CDD7}
@@ -866,7 +869,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
 <section id="qkPage" hidden></section>
 <section id="evPage" hidden><div id="evTop"></div><div id="evFinishSlot" hidden></div><div id="evBottom"></div></section>
 <div id="fsOv" hidden><div id="fsMain"><div id="fsGrid"></div><div id="fsVm" hidden><canvas id="fsVmC"></canvas></div></div>
-  <div id="fsBox"><div class="fsboxhd"><button type="button" id="fsMin" aria-label="Hinweisbox ein- oder ausklappen">–</button><span class="fslangw"><button type="button" id="fsLang" aria-haspopup="true" aria-expanded="false" aria-label="Sprache / Language">DE</button><span id="fsLangPop" hidden><button type="button" data-v="de" lang="de">DE</button><button type="button" data-v="en" lang="en">EN</button><button type="button" data-v="tr" lang="tr">TR</button><button type="button" data-v="ru" lang="ru">RU</button><button type="button" data-v="nl" lang="nl">NL</button></span></span><button type="button" id="fsClose">Vollbild beenden</button></div><div id="fsCardSlot"></div><div id="fsKeys"></div></div>
+  <div id="fsBox"><div class="fsboxhd"><span class="fshl"><button type="button" id="fsMin" aria-label="Hinweisbox ein- oder ausklappen">–</button><button type="button" id="fsNoteB" aria-haspopup="true" aria-expanded="false"></button></span><span class="fslangw"><button type="button" id="fsLang" aria-haspopup="true" aria-expanded="false" aria-label="Sprache / Language">DE</button><span id="fsLangPop" hidden><button type="button" data-v="de" lang="de">DE</button><button type="button" data-v="en" lang="en">EN</button><button type="button" data-v="tr" lang="tr">TR</button><button type="button" data-v="ru" lang="ru">RU</button><button type="button" data-v="nl" lang="nl">NL</button></span></span><button type="button" id="fsClose">Vollbild beenden</button></div><div id="fsStep" hidden></div><div id="fsNotePop" hidden><textarea id="fsNoteT" class="note-in" rows="2" maxlength="300"></textarea><div class="fsnrow"><small id="fsNoteTg"></small><button type="button" class="testbtn small" id="fsNoteAdd"></button></div><div id="fsNoteList"></div></div><div id="fsCardSlot"></div><div id="fsKeys"></div></div>
   <div id="fsBar"><span class="fszoom" id="fsZoom"><button type="button" id="fsZo" aria-label="Verkleinern">−</button><button type="button" id="fsZl" aria-label="Zoom zurücksetzen">100 %</button><button type="button" id="fsZi" aria-label="Vergrößern">+</button></span></div></div>
 <section id="spAna" hidden>
   <div id="evAnaHead" hidden></div>
@@ -3109,6 +3112,7 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(textlike) return; if(tg && tg.tagName==="INPUT" && tg.type!=="range") tg.blur(); e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
   if(typing) return;
   if(e.key===" " && sa){ e.preventDefault(); $("sPlay").click(); return; }
+  if((e.key==="n"||e.key==="N") && sa && FS.on){ e.preventDefault(); fsNoteOpen(true); return; }
   if((e.key==="n"||e.key==="N") && sa){ const b=$("wNoteB"); if(b){ e.preventDefault(); const bx=$("wNoteBox"); if(FS.on && $("fsBox").classList.contains("min")){ $("fsBox").classList.remove("min"); $("fsMin").textContent="–"; } if(bx.hidden) b.click(); else $("wNoteT").focus(); } return; }
   if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
 });
@@ -3928,13 +3932,18 @@ async function evAnalyze(t){
 }
 // Startsignal ohne Vorgabe erkennen: zuerst das Sprintz-Signal, dann Pfiff, Hupe/Piepton, Knall
 const SIGLBL=()=>({app:L("Sprintz-Signal","Sprintz signal"),whistle:L("Pfiff","Whistle"),tone:L("Hupe / Piepton","Horn / beep"),clap:L("Klatschen / Schuss","Clap / shot")});
+// Startsignal: nur in den ersten 8,5 s des Videos; am wahrscheinlichsten bei 1–2 s, davor und danach stetig abnehmend
+const SIGMAX=8.5;
+function sigPrior(t){ if(t<0||t>SIGMAX) return 0; if(t<1) return 0.55+0.45*t; if(t<=2) return 1; return Math.max(0.2, 1-0.8*(t-2)/(SIGMAX-2)); }
 async function evFindSig(){
   if(!SA.upload && SA.meta.hornT){ await spFindSig(); SA.sigType="app"; return; }
-  const ss=SA.sess, all=[]; let r=null; try{ r=await corrSearch(SA.pcm,0,Infinity); }catch(e){} if(ss!==SA.sess) return;
-  if(r && r.best>0.35) all.push({t:r.t, type:"app", q:Math.min(1,r.best/0.8), prio:0});
-  ["whistle","tone","clap"].forEach((ty,pi)=>{ let c=[]; try{ c=sigDetect(SA.raw, SA.rawRate||24000, ty); }catch(e){} c.slice(0,3).forEach(x=>all.push({t:x.t, type:ty, q:x.q, prio:pi+1})); });
-  // gleiche Stelle nur einmal, bevorzugt die spezifischere Signalart
-  all.sort((a,b)=>a.prio-b.prio || b.q-a.q);
+  const ss=SA.sess, all=[]; let r=null; try{ r=await corrSearch(SA.pcm,0,SIGMAX); }catch(e){} if(ss!==SA.sess) return;
+  if(r && r.best>0.35 && r.t<=SIGMAX) all.push({t:r.t, type:"app", q:Math.min(1,r.best/0.8), prio:0});
+  const rr=SA.rawRate||24000, raw=SA.raw ? SA.raw.subarray(0, Math.min(SA.raw.length, Math.ceil((SIGMAX+0.5)*rr))) : null;
+  ["whistle","tone","clap"].forEach((ty,pi)=>{ let c=[]; try{ c=sigDetect(raw, rr, ty); }catch(e){} c.filter(x=>x.t<=SIGMAX).slice(0,4).forEach(x=>all.push({t:x.t, type:ty, q:x.q, prio:pi+1})); });
+  // Bewertung: Stärke des Treffers × Wahrscheinlichkeit nach der Lage im Video (am höchsten bei 1–2 s); das Sprintz-Signal leicht bevorzugt
+  all.forEach(x=>x.sc=x.q*sigPrior(x.t)*(x.type==="app"?1.15:1));
+  all.sort((a,b)=>b.sc-a.sc || a.prio-b.prio);
   const sel=[]; for(const c of all){ if(sel.every(x=>Math.abs(x.t-c.t)>0.15)) sel.push(c); if(sel.length>=6) break; }
   SA.cands=sel;
   if(sel.length){ SA.marks.sig=sel[0].t; SA.sigType=sel[0].type; SA.sigAuto="found"; } else { SA.marks.sig=0; SA.sigType=null; SA.sigAuto="est"; }
@@ -4123,7 +4132,7 @@ async function fsEnter(){
 }
 // soft: Vollbild der Seite bleibt bestehen (Wechsel zum nächsten Versuch im Vollbild)
 function fsExit(soft){
-  if(!FS.on) return; FS.on=false; const h=FS.home; FS.z={s:1,x:0,y:0}; sVid.style.transform=""; $("fsBox").classList.remove("min"); $("fsMin").textContent="–";
+  if(!FS.on) return; FS.on=false; fsNoteOpen(false); const h=FS.home; FS.z={s:1,x:0,y:0}; sVid.style.transform=""; $("fsBox").classList.remove("min"); $("fsMin").textContent="–";
   h.box[0].insertBefore($("sBox"),h.box[1]); h.card[0].insertBefore($("wCard"),h.card[1]); h.nav[0].insertBefore($("wnavBar"),h.nav[1]); h.bar[0].insertBefore($("sStepBar"),h.bar[1]); h.wave[0].insertBefore($("sWave"),h.wave[1]);
   FS.secs.forEach(s=>{ try{ s.el.pause(); URL.revokeObjectURL(s.el.src); }catch(e){} }); FS.secs=[]; $("fsGrid").innerHTML=""; document.body.classList.remove("fs-on");
   if(soft) return;
@@ -4182,7 +4191,11 @@ async function fsAlign(S2){
   evSave(); fsSync(true); fsHint();
 }
 // halbtransparente Box: was ist gerade zu finden, Tastenkürzel
-function fsHint(){ if(!FS.on) return; const st=SA.steps[SA.i], k=$("fsKeys"); if(!k) return;
+function fsHint(){ if(!FS.on) return; const st=SA.steps[SA.i], k=$("fsKeys");
+  { const nb=$("fsNoteB"); if(nb) nb.textContent="✎ "+L("Notiz","Note"); const fst=$("fsStep"), coll=$("fsBox").classList.contains("min");
+    if(fst){ fst.hidden=!coll || !st; if(st && coll){ const vis=SA.steps.filter(sVisible), vi=vis.indexOf(st), nT=vis.length-1;
+      fst.innerHTML = st.k==="sum" ? `<b>${L("Ergebnis","Result")}</b>` : `<small>${L(`Schritt ${vi+1} von ${nT}`,`Step ${vi+1} of ${nT}`)}${st.k==="time"?" · "+L("Enter markiert","Enter marks"):st.k==="num"?" · "+L("Enter übernimmt","Enter confirms"):""}</small><b>${st.k==="time"?L("Markiere: ","Mark: "):""}${st.t()}</b>`; } }
+    if(!$("fsNotePop").hidden) fsNoteUI(); } if(!k) return;
   const al=FS.secs.map((s,i)=>s.v.offAuto==="audio"?L(`Video ${i+2}: über das Startsignal abgeglichen`,`Video ${i+2}: synced via the start signal`):s.v.offAuto==="time"?L(`Video ${i+2}: über die Aufnahmezeit abgeglichen, bitte prüfen`,`Video ${i+2}: synced via recording time, please check`):L(`Video ${i+2}: Versatz von Hand`,`Video ${i+2}: offset set manually`));
   k.innerHTML=`${SA.meas&&SA.meas.pts.length>=2?`<span><kbd>←</kbd><kbd>→</kbd> ${L("Senkrechte verschieben","Move the perpendicular")}</span><span><kbd>↑</kbd><kbd>↓</kbd> ${L("Richtung","Direction")}</span>`:`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span>`}<span><kbd>+</kbd><kbd>−</kbd> Zoom</span><span><kbd>N</kbd> ${L("Notiz","Note")}</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
 
@@ -4190,7 +4203,20 @@ $("sFull").onclick=()=>fsEnter(); $("fsClose").onclick=()=>fsExit();
 $("fsLang").onclick=e=>{ e.stopPropagation(); const pp=$("fsLangPop"); pp.hidden=!pp.hidden; $("fsLang").setAttribute("aria-expanded",String(!pp.hidden)); pp.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===LANG))); };
 $("fsLangPop").querySelectorAll("button").forEach(b=>b.onclick=e=>{ e.stopPropagation(); $("fsLangPop").hidden=true; setLang(b.dataset.v); });
 document.addEventListener("click",e=>{ const pp=$("fsLangPop"); if(pp && !pp.hidden && !e.target.closest(".fslangw")) pp.hidden=true; });
-$("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin").textContent=b.classList.contains("min")?"+":"–"; };
+$("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin").textContent=b.classList.contains("min")?"+":"–"; $("fsMin").blur(); fsHint(); };
+// Notiz im Vollbild: jederzeit, auch bei eingeklappter Box; zugeordnet wird dem aktuellen Kennwert (im Ergebnis: allgemein)
+function fsNoteTarget(){ const st=SA.steps[SA.i]; if(!st || st.k==="sum") return {k:"general", lab:L("Allgemein","General"), step:"sum", stepLab:L("Ergebnis","Result")}; const tg=noteTarget(st); return {k:tg.k, lab:tg.lab, step:st.id, stepLab:st.t()}; }
+function fsNoteUI(){ const pop=$("fsNotePop"); if(!pop) return; const tg=fsNoteTarget();
+  $("fsNoteT").placeholder=L("Was fällt dir hier an der Technik auf?","What do you notice about the technique here?"); $("fsNoteAdd").textContent=L("Hinzufügen","Add");
+  $("fsNoteTg").textContent=L(`Wird zugeordnet: ${tg.lab}`,`Assigned to: ${tg.lab}`);
+  const mine=(SA.notes||[]).map((n,i)=>({n,i})).filter(o=>o.n.step===tg.step);
+  $("fsNoteList").innerHTML=mine.map(o=>`<span class="wnote"><b>${esc(o.n.lab)}:</b> ${esc(o.n.txt)} <button type="button" data-fsndel="${o.i}" aria-label="${L("Notiz löschen","Delete note")}">×</button></span>`).join("");
+  $("fsNoteList").querySelectorAll("[data-fsndel]").forEach(b=>b.onclick=()=>{ SA.notes.splice(+b.dataset.fsndel,1); fsNoteUI(); wizRender(); }); }
+function fsNoteOpen(on){ const pop=$("fsNotePop"), b=$("fsNoteB"); if(!pop) return; pop.hidden=!on; b.setAttribute("aria-expanded",String(!!on)); if(on){ fsNoteUI(); setTimeout(()=>$("fsNoteT").focus(),30); } else { $("fsNoteT").blur(); } }
+function fsNoteAdd(){ const ta=$("fsNoteT"), txt=ta.value.trim(); if(!txt) return; const tg=fsNoteTarget(); (SA.notes=SA.notes||[]).push({k:tg.k, lab:tg.lab, step:tg.step, stepLab:tg.stepLab, t:sCurT(), txt}); ta.value=""; fsNoteOpen(false); wizRender(); toast(L(`Notiz gespeichert: ${tg.lab}`,`Note saved: ${tg.lab}`),1800); }
+$("fsNoteB").onclick=e=>{ e.stopPropagation(); fsNoteOpen($("fsNotePop").hidden); $("fsNoteB").blur(); };
+$("fsNoteAdd").onclick=fsNoteAdd;
+$("fsNoteT").onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter" && !e.shiftKey){ e.preventDefault(); fsNoteAdd(); } else if(e.key==="Escape"){ e.preventDefault(); fsNoteOpen(false); } };
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && FS.on){ e.preventDefault(); fsExit(); } });
 /* --- Ergebnisblatt der Technikevaluation: Baseline, Vergleich A/B, Verlauf, Boxplot, Pausen und Testtage --- */
 // Kennwerte: Schlüssel, Bezeichnung, Einheit/Format, bessere Richtung (low = kleiner ist besser, high = größer ist besser, null = neutral)
