@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('sprintzDesktop', {
   pathFor: (file) => { try { return webUtils.getPathForFile(file) || null; } catch (e) { return null; } },
   probe: (p) => ipcRenderer.invoke('probe', p),
   proxy: (p) => ipcRenderer.invoke('proxy', p),
+  audio: (p) => ipcRenderer.invoke('audio', p),
   onProgress: (cb) => { const h = (e, d) => cb(d); ipcRenderer.on('proxy-progress', h); return () => ipcRenderer.removeListener('proxy-progress', h); },
   saveFile: (name, data) => ipcRenderer.invoke('save-file', name, data),
   version: () => ipcRenderer.invoke('version'),

@@ -120,7 +120,15 @@ function permissions() {
 }
 
 // Video untersuchen (mit FFmpeg selbst): Bildrate, Auflösung, Codec, Dauer
-ipcMain.handle('probe', async (e, file) => new Promise((resolve) => {
+ipcMain.handle('probe', async (e, file) => probeFile(file));
+// Tonspur direkt mit FFmpeg lesen (Mono, 48 kHz, WAV): schnell und ohne das ganze Video in den Speicher zu laden, auch bei großen 4K-Dateien
+ipcMain.handle('audio', async (e, file) => new Promise((resolve) => {
+  const p = spawn(FFMPEG, ['-hide_banner', '-loglevel', 'error', '-i', file, '-vn', '-ac', '1', '-ar', '48000', '-c:a', 'pcm_s16le', '-f', 'wav', 'pipe:1']);
+  const chunks = []; let n = 0; p.stdout.on('data', d => { chunks.push(d); n += d.length; });
+  p.on('close', code => { if (code !== 0 || n < 100) return resolve(null); const b = Buffer.concat(chunks, n); resolve(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)); });
+  p.on('error', () => resolve(null));
+}));
+function probeFile(file) { return new Promise((resolve) => {
   execFile(FFMPEG, ['-hide_banner', '-i', file], { maxBuffer: 4e6 }, (err, out, errOut) => {
     const t = String(errOut || ''), v = t.match(/Stream #\d+:\d+[^\n]*?: Video: (\w+)[^\n]*?, (\d{2,5})x(\d{2,5})[^\n]*/);
     if (!v) return resolve(null);
@@ -128,7 +136,7 @@ ipcMain.handle('probe', async (e, file) => new Promise((resolve) => {
     const f = +fps || +tbr || null;
     resolve({ codec: v[1], width: +v[2], height: +v[3], fps: f ? Math.round(f * 1000) / 1000 : null, duration: d ? (+d[1]) * 3600 + (+d[2]) * 60 + (+d[3]) : null });
   });
-}));
+}); }
 
 // Arbeitskopie für bildgenaues Arbeiten: jedes Bild ein Schlüsselbild (sofortige, exakte Sprünge), hohe Qualität, Zeitstempel unverändert
 const proxyDir = () => { const d = path.join(app.getPath('userData'), 'arbeitskopien'); fs.mkdirSync(d, { recursive: true }); return d; };
@@ -138,11 +146,14 @@ ipcMain.handle('proxy', async (e, file) => {
   const out = path.join(proxyDir(), key + '.mp4');
   if (fs.existsSync(out) && fs.statSync(out).size > 1000) { fs.utimesSync(out, new Date(), new Date()); return { url: pathToFileURL(out).href, cached: true }; }
   if (running.has(out)) return running.get(out);
-  const job = new Promise((resolve) => {
+  const job = new Promise(async (resolve) => {
     const tmp = out + '.part.mp4', dur = { v: null };
+    // volle Auflösung und Bildrate (auch 4K mit hoher Bildrate); bei sehr vielen Bildpunkten je Sekunde ein schnelleres Profil, die Qualität bleibt über CRF gleich
+    const info = await probeFile(file), px = info ? (info.width || 0) * (info.height || 0) * (info.fps || 30) : 0;
+    const preset = px > 3840 * 2160 * 60 ? 'ultrafast' : px > 1920 * 1080 * 120 ? 'superfast' : 'veryfast';
     const args = ['-y', '-hide_banner', '-i', file, '-map', '0:v:0', '-map', '0:a:0?',
-      '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '14', '-g', '1', '-bf', '0', '-pix_fmt', 'yuv420p',
-      '-vf', "scale='min(1920,iw)':-2", '-fps_mode', 'passthrough',
+      '-c:v', 'libx264', '-preset', preset, '-crf', '14', '-g', '1', '-bf', '0', '-pix_fmt', 'yuv420p', '-threads', '0',
+      '-fps_mode', 'passthrough',
       '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', tmp];
     const p = spawn(FFMPEG, args);
     p.stderr.on('data', d => {
