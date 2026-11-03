@@ -1087,10 +1087,11 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
       <button type="button" data-v="land" aria-pressed="false">Trockensprung an Land</button>
     </div>
     <label class="filebtn" id="fileLbl">Video auswählen<input type="file" id="vfile" accept="video/*"></label>
+    <div id="vMetSlot"></div>
 
   </section>
   <div id="vwork" hidden>
-    <section>
+    <section id="vOld">
       <div class="vhead"><span id="vFpsLbl"></span><button type="button" class="gear" id="vGear" aria-expanded="false" aria-controls="vAdv" aria-label="Einstellungen zur Videoauswertung">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
       <div class="card" id="vAdv" hidden style="margin-bottom:8px">
@@ -1123,7 +1124,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
       <div class="cands" id="vCands" hidden></div>
       <p class="hint" id="vmsg"></p>
     </section>
-    <section>
+    <section id="vResSec">
       <h2>Ergebnis</h2>
       <div class="card">
         <div class="row"><div class="phases">
@@ -2245,7 +2246,7 @@ $("wipeYes").onclick=()=>{ LOG={sessions:[],videos:[]}; saveLog(); $("wipeConfir
 
 /* ---------- Video: Blockzeit ---------- */
 let vEnv="water";
-$("vEnv").querySelectorAll("button").forEach(b=>b.onclick=()=>{ vEnv=b.dataset.v;
+$("vEnv").querySelectorAll("button").forEach(b=>b.onclick=()=>{ vEnv=b.dataset.v; setTimeout(()=>{ if(typeof trainSelUI==="function") trainSelUI(); },0);
   $("vEnv").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", String(x===b))); });
 const V={horn:null, off:null, move:null, hands:null, wave:null, pcm:null, rate:6000, url:null, dist:0};
 const vid=$("vid");
@@ -2473,6 +2474,7 @@ async function loadVideo(f){
     else $("fpsSrc").textContent=L("Nicht erkannt – bitte selbst einstellen.","Not detected – please set it yourself."); }); V.off=null; V.move=null; V.hands=null; linkSel=null; nsRes=null; nsDis=null; renderLinkBox(); V.pcm=null; V.wave=null; V.raw=null; V.cands=null; vCandsRender(); vSigUI();
   $("vwork").hidden=false; $("fileLbl").firstChild.textContent="Anderes Video wählen"; $("vname").value=""; vRate=null; $("vRate").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));
   vmsg("Tonspur wird gelesen …"); updRes();
+  if(typeof trainAna==="function" && appMode!=="eval"){ trainAna(f, typeof CAM!=="undefined" && CAM.reviewing); return; }
   try{
     const buf=await readAudio(f, vmsg);
     V.pcm=ds(buf, V.rate); try{ V.raw=ds(buf, Math.min(24000, buf.sampleRate)); V.rawRate=Math.min(24000, buf.sampleRate); }catch(e){ V.raw=null; } buildWave(); vmsg(L(`Tippe auf „${SIG()} automatisch finden“ oder setze ${SIGa()} von Hand.`,`Tap “Find ${SIG().toLowerCase()} automatically” or mark ${SIGa()} manually.`));
@@ -2673,6 +2675,7 @@ function renderLinkBox(){
 $("vEnv").addEventListener("click",()=>setTimeout(renderLinkBox,0));
 $("vsave").onclick=()=>{ if(CAM.reviewing){ camSave(true); return; } const ms=blockMs(); if(ms==null){ vmsg(L(`Setze zuerst ${SIGa()} und den Take-off.`,`First mark ${SIGa()} and the take-off.`)); return; }
   const vid={id:Date.now(), date:new Date().toISOString(), sport, env:vEnv, ms, rt:since(V.move), hands:since(V.hands), name:$("vname").value.trim(), rate:vRate, fps:fps()};
+  if(SA.mode==="train"){ try{ vid.m=evMetrics(); vid.marks=Object.assign({},SA.marks); vid.vals=Object.assign({},SA.vals); }catch(e){} }
   if(vEnv==="water"){
     if(!linkSel){ vmsg(L("Wähle aus, zu welchem Start das Video gehört.","Choose which start this video belongs to.")); $("linkBox").scrollIntoView({block:"center"}); return; }
     if(linkSel==="new"){
@@ -3024,6 +3027,7 @@ function spStepsTrack(){
   return S1;
 }
 function spReview(blob){
+  if(typeof trainHome==="function") trainHome();
   SA.active=true; SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.meta=CAM.meta; SA.events=CAM.events; SA.recT0=CAM.recT0; SA.steps=spSteps(); SA.frameT=null; SA.fps=CAM.fps||30; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
@@ -3208,7 +3212,7 @@ function wizRender(){
   if(st.k==="time"){
     const v=SA.marks[st.id];
     if(st.sig){ h+=`<p>${SA.sigAuto==="found" ? L(`Gefunden bei ${fmtS(v)}. Prüf die Stelle in der Tonspur.`,`Found at ${fmtS(v)}. Check the spot in the audio track.`) : SA.sigAuto==="est" ? L(`Aus dem Ablauf berechnet: ${fmtS(v)}. Prüf die Stelle und korrigiere sie notfalls.`,`Calculated from the sequence: ${fmtS(v)}. Check it and correct it if needed.`) : SA.sigAuto==="manual" ? L(`Selbst gesetzt bei ${fmtS(v)}.`,`Set manually at ${fmtS(v)}.`) : L("Wird gesucht …","Searching …")}</p>
-      ${SA.mode==="eval" && SA.upload ? (SA.sigType ? `<p class="hint" style="margin:-4px 0 8px">${L("Erkannt:","Detected:")} <b>${SIGLBL()[SA.sigType]}</b></p>` : `<p class="everr">${L("Kein Startsignal gefunden. Setze es von Hand an der richtigen Stelle.","No start signal found. Set it manually at the right spot.")}</p>`)
+      ${(SA.mode==="eval"||SA.mode==="train") && SA.upload ? (SA.sigType ? `<p class="hint" style="margin:-4px 0 8px">${L("Erkannt:","Detected:")} <b>${SIGLBL()[SA.sigType]}</b></p>` : `<p class="everr">${L("Kein Startsignal gefunden. Setze es von Hand an der richtigen Stelle.","No start signal found. Set it manually at the right spot.")}</p>`)
         + (SA.cands && SA.cands.length>1 ? `<div class="cands" id="eCands"><span>${L("Weitere Treffer – tippe den richtigen an:","Other matches – tap the right one:")}</span>${SA.cands.map((x,i)=>`<button type="button" data-i="${i}" aria-pressed="${SA.marks.sig!=null && Math.abs(SA.marks.sig-x.t)<0.002}">${fmtS(x.t)}${x.type?` <small>${SIGLBL()[x.type]}</small>`:""}<i aria-hidden="true"><b style="width:${Math.round(x.q*100)}%"></b></i></button>`).join("")}</div>` : "") : ""}
       <button type="button" class="wbig" id="wOk">${L("Passt so","Looks right")}</button>
       <div class="wrow"><button type="button" class="testbtn" id="wMark">${L("Hier setzen","Set here")}</button><button type="button" class="testbtn" id="wAuto">${L("Automatisch finden","Find automatically")}</button></div>`; }
@@ -3221,12 +3225,12 @@ function wizRender(){
       ${st.seg && ta!=null && tb!=null && tb>ta ? `<button type="button" class="testbtn wmeasb" id="wSeg">▶ ${L("Abschnitt in Zeitlupe abspielen","Play this section in slow motion")}</button>` : ""}
       <div class="wnum"><input id="wNum" type="number" inputmode="decimal" step="${st.step||(st.unit==="×"?1:0.1)}" min="0" value="${SA.vals[st.id]??""}" placeholder="0"><span>${st.unit}</span></div>
       <button type="button" class="wbig" id="wTake">${L("Übernehmen","Confirm")}</button><button type="button" class="wskip" id="wSkip">${L("Weiß ich nicht – überspringen","Don't know – skip")}</button>`;
-  } else h+= SA.mode==="eval" ? evSumHTML() : spSumHTML();
+  } else h+= SA.mode==="eval" ? evSumHTML() : SA.mode==="train" ? trainSumHTML() : spSumHTML();
   c.innerHTML=h; wizProgress();
   const adv=()=>setTimeout(()=>wizGo(SA.i+1,1),380);
   const mk=$("wMark"); if(mk) mk.onclick=()=>{ SA.marks[st.id]=sCurT(); if(st.sig) SA.sigAuto="manual"; spDraw(); wizRender(); adv(); };
   const ok=$("wOk"); if(ok) ok.onclick=()=>adv();
-  const au=$("wAuto"); if(au && SA.mode==="eval") au.onclick=async()=>{ au.textContent=L("Suche …","Searching …"); await evFindSig(); if(SA.marks.sig!=null) sVid.currentTime=SA.marks.sig; spDraw(); wizRender(); };
+  const au=$("wAuto"); if(au && (SA.mode==="eval"||SA.mode==="train") && !(SA.mode==="train" && !SA.upload)) au.onclick=async()=>{ au.textContent=L("Suche …","Searching …"); await evFindSig(); if(SA.marks.sig!=null) sVid.currentTime=SA.marks.sig; spDraw(); wizRender(); };
   else if(au) au.onclick=async()=>{ au.textContent=L("Suche …","Searching …"); const r=SA.pcm ? await corrSearch(SA.pcm,0,Infinity) : null; if(r){ SA.marks.sig=r.t; SA.sigAuto = r.best>0.35?"found":"est"; sVid.currentTime=r.t; } spDraw(); wizRender(); };
   const sk=$("wSkip"); if(sk) sk.onclick=()=>{ measEnd(); if(st.k==="time") delete SA.marks[st.id]; else delete SA.vals[st.id]; wizGo(SA.i+1,1); };
   const tk=$("wTake"); if(tk){ const inp=$("wNum"); const take=()=>{ measEnd(); const x=parseFloat(String(inp.value).replace(",",".")); if(x>=0) SA.vals[st.id]=x; adv(); }; tk.onclick=take; inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); take(); } }; }
@@ -3244,7 +3248,8 @@ function wizRender(){
   // Hochgeladene Videos: Art des Startsignals und Trefferliste
   const ec=$("eCands"); if(ec) ec.querySelectorAll("button").forEach(b=>b.onclick=()=>{ const x=SA.cands[+b.dataset.i]; SA.marks.sig=x.t; SA.sigType=x.type||SA.sigType; SA.sigAuto="manual"; sVid.currentTime=x.t; spDraw(); wizRender(); });
   if(SA.mode==="eval") evAnaHead();
-  $("sFull").hidden = SA.mode!=="eval";
+  $("sFull").hidden = SA.mode!=="eval" && SA.mode!=="train";
+  if(SA.mode==="train"){ trainSync(); const g=$("tGoSave"); if(g) g.onclick=()=>{ if(FS.on) fsExit(); const t=$("vname").closest("section"); t && t.scrollIntoView({behavior:"smooth",block:"start"}); }; }
   if(FS.on) fsHint();
 }
 function wizGo(i,dir){
@@ -3267,7 +3272,7 @@ $("wPrev").onclick=()=>wizGo(SA.i-1,-1); $("wNext").onclick=()=>wizGo(SA.i+1,1);
    Danach steht eine Senkrechte zu dieser Linie im Bild; sie wird mit ← → (Umschalt: 10 Pixel) oder durch Ziehen
    auf das Ereignis geschoben, ↑ ↓ legen fest, ob sie nach oben oder unten zeigt. Die Weite ergibt sich aus der Lage
    ihres Fußpunkts zwischen den beiden Marken (lineare Interpolation, Seitenansicht). */
-const MREF=()=>({0:isTurn(EV.cur)?L("die Wendewand","the turning wall"):L("die Beckenkante (Startwand)","the pool edge (start wall)"),5:L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)"),10:L("die 10-m-Marke","the 10 m mark"),15:L("die 15-m-Marke","the 15 m mark")});
+const MREF=()=>({0:SA.mode!=="train"&&isTurn(EV.cur)?L("die Wendewand","the turning wall"):L("die Beckenkante (Startwand)","the pool edge (start wall)"),5:L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)"),10:L("die 10-m-Marke","the 10 m mark"),15:L("die 15-m-Marke","the 15 m mark")});
 function measRefs(M){ const g=M.st.meas; if(g.pairs){ const pr=g.pairs[M.pair||0], R=MREF(); return [[pr[0],R[pr[0]]],[pr[1],R[pr[1]]]]; } return [[g.a[0],g.a[1]()],[g.b[0],g.b[1]()]]; }
 const measZ=()=> FS.on && FS.z ? FS.z : {s:1,x:0,y:0};
 // Bildschirmpunkt → Lage im (ungezoomten) Video, 0…1
@@ -3857,7 +3862,7 @@ function evSteps(P){
 async function evAnalyze(t){
   const p=EV.cur, blob=await evBlob(t);
   if(!blob){ alertMsg(L("Sprintz speichert keine Videos, nur die Daten daraus. Lade das Video über „Aufnahmen hochladen“ erneut, es wird automatisch wieder diesem Versuch zugeordnet.","Sprintz doesn't store videos, only the data from them. Upload the video again via “Upload recordings”; it is automatically matched to this attempt again.")); return; }
-  EV.trial=t.i; SA.trialRef=t; finishBack(); evMetHide(); $("evPage").hidden=true;
+  if(typeof trainHome==="function") trainHome(); EV.trial=t.i; SA.trialRef=t; finishBack(); evMetHide(); $("evPage").hidden=true;
   SA.active=true; SA.mode="eval"; SA.upload = t.vid.src==="upload"; SA.slow = 1;
   SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
   SA.meta={hornT:t.sigEst||0, sig:[]}; SA.events=[]; SA.recT0=0; SA.sigType=null; SA.cands=null; SA.fps=t.fps||30;
@@ -3888,7 +3893,7 @@ async function evFindSig(){
 // Kennwerte des Starts (Zeiten in Echtzeit, Zeitlupen-Faktor berücksichtigt)
 // Kennwerte eines Versuchs nach den Definitionen in SPMET (Zeiten ab Startsignal, Positionen am Kopf)
 function evMetrics(){
-  if(isTurn(EV.cur)) return turnMetrics();
+  if(SA.mode!=="train" && isTurn(EV.cur)) return turnMetrics();
   const m=SA.marks, v=SA.vals, R=k=>spRel(m[k]), k=SA.slow||1, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a])/k : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null;
   o.rt=R("move"); o.hands=R("hands"); o.block=R("off");
   const tm = m.move!=null ? m.move : m.off; o.result = tm!=null && m.sig!=null ? (tm>=m.sig?"clean":"early") : null;
@@ -4725,17 +4730,76 @@ function spMetSelHTML(p){
     </div></div>`;
 }
 function spMetSelBind(p){
-  const box=document.querySelector(".mscard"); if(!box) return; const re=()=>{ const y=scrollY; box.outerHTML=spMetSelHTML(p); spMetSelBind(p); scrollTo(0,y); };
+  const box=(p._root||$("evTop")||document).querySelector(".mscard"); if(!box) return; const re=()=>{ const y=scrollY; box.outerHTML=spMetSelHTML(p); spMetSelBind(p); scrollTo(0,y); }, save=p._save||evSave;
   const all=()=>METCAT(p).filter(x=>spApplies(x,p)).map(x=>x.k), cur=()=>evSel(p)||new Set(all());
-  $("msToggle").onclick=()=>{ EV.metOpen=!EV.metOpen; re(); };
+  box.querySelector("#msToggle").onclick=()=>{ EV.metOpen=!EV.metOpen; re(); };
   box.querySelectorAll("[data-mst]").forEach(b=>b.onclick=()=>{ EV.metTab=+b.dataset.mst; re(); });
-  box.querySelectorAll("[data-mk]").forEach(c=>c.onchange=()=>{ const s=cur(); if(c.checked) s.add(c.dataset.mk); else s.delete(c.dataset.mk); p.metrics=all().filter(k=>s.has(k)); evSave(); re(); });
+  box.querySelectorAll("[data-mk]").forEach(c=>c.onchange=()=>{ const s=cur(); if(c.checked) s.add(c.dataset.mk); else s.delete(c.dataset.mk); p.metrics=all().filter(k=>s.has(k)); save(); re(); });
   box.querySelectorAll("[data-msall]").forEach(b=>b.onclick=()=>{ const s=cur(), tabKs=METCAT(p).filter(x=>spApplies(x,p) && (EV.metTab===1 ? x.src==="vm" : x.src!=="vm") && (b.dataset.msall!=="1" || !x.uwcam)).map(x=>x.k);
-    tabKs.forEach(k=> b.dataset.msall==="1" ? s.add(k) : s.delete(k)); p.metrics=all().filter(k=>s.has(k)); evSave(); re(); });
+    tabKs.forEach(k=> b.dataset.msall==="1" ? s.add(k) : s.delete(k)); p.metrics=all().filter(k=>s.has(k)); save(); re(); });
   box.querySelectorAll(".msi").forEach(b=>b.onclick=()=>{ const x=b.parentNode.querySelector(".msx"); x.hidden=!x.hidden; b.setAttribute("aria-expanded",String(!x.hidden)); });
 }
 // Mittelwert der Velocitymeter-Geschwindigkeit zwischen zwei Videozeitpunkten
 function vmMean(vm,a,b){ if(a==null||b==null||!(b>a)) return null; const off=vm.off||0; let s=0,n=0; for(let i=0;i<vm.t.length;i++){ const tv=vm.t[i]+off; if(tv>=a && tv<=b && isFinite(vm.v[i])){ s+=vm.v[i]; n++; } } return n ? s/n : null; }
+
+/* --- Videoauswertung im Trainingsmodus: derselbe Assistent wie in der Technikevaluation (Schritte, Tonspur mit Nahansicht, Vollbild, Ausmessen, Kennwerte).
+   Die Markierungen werden in die bisherigen Felder (V.horn, V.move, V.hands, V.off) übertragen, damit Zuordnung, Notiz und Speichern unverändert funktionieren. --- */
+const TRN={on:false, home:null, p:null};
+function TRP(){
+  if(!TRN.p){ let m=null; try{ m=JSON.parse(localStorage.getItem("sprintz-trainmet")||"null"); }catch(e){}
+    TRN.p={tech:"start", start:"block", uw:"fly", metrics:Array.isArray(m)?m:undefined, _save:()=>{ try{ localStorage.setItem("sprintz-trainmet", JSON.stringify(TRN.p.metrics||null)); }catch(e){} }, _root:$("vHead")}; }
+  const p=TRN.p, water=vEnv==="water" && !T();
+  p.start = water && S.startType==="back" ? "back" : "block";
+  // an Land und in der Leichtathletik nur die Blockphase
+  p._land=!water;
+  return p;
+}
+const trainP=()=>{ const p=TRP(); return p._land ? Object.assign({},p,{metrics:["rt","hands","block","mt"]}) : p; };
+function trainSelUI(){
+  const slot=$("vMetSlot"); if(!slot) return; const p=TRP();
+  if(p._land){ slot.innerHTML=""; return; }
+  slot.innerHTML=spMetSelHTML(p); spMetSelBind(p);
+}
+function trainHome(){ // Assistent wieder an seinen Platz
+  if(!TRN.on) return; TRN.on=false; const a=$("spAna"); if(TRN.home) TRN.home[0].insertBefore(a, TRN.home[1]);
+  a.hidden=true; $("vOld").hidden=false; $("vResSec").hidden=false; if(SA.mode==="train"){ if(FS.on) fsExit(); measEnd(); SA.active=false; SA.mode=null; try{ sVid.pause(); }catch(e){} }
+}
+function trainAna(blob, cam){
+  if(SA.mode==="eval") return; const a=$("spAna");
+  if(!TRN.on){ TRN.home=[a.parentNode, a.nextSibling]; $("vwork").prepend(a); TRN.on=true; }
+  $("vOld").hidden=true; $("vResSec").hidden=true; a.hidden=false; $("evAnaHead").hidden=true;
+  const P=trainP();
+  SA.active=true; SA.mode="train"; SA.upload=!cam; SA.trialRef=null; SA.slow=1;
+  SA.marks={}; SA.vals={ spk: camDist() }; SA.i=0; SA.steps=evSteps(P); SA.frameT=null; SA.rate=null; SA.note=""; SA.playTo=null; SA.meas=null;
+  SA.meta = cam ? CAM.meta : {hornT:0, sig:[]}; SA.events = cam ? CAM.events : []; SA.recT0 = cam ? CAM.recT0 : 0; SA.sigType=null; SA.cands=null; SA.fps = cam ? (CAM.fps||30) : 30;
+  if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
+  $("sFps").textContent=`${SA.fps} fps`;
+  detectFps(SA.url).then(f=>{ if(f){ SA.fps=f; $("sFps").textContent=`${f} fps · ±${Math.round(1000/f*10)/10} ${U("ms")}`; trainSync(); } });
+  SA.pcm=null; SA.raw=null; WZ.t=null; WZ.lock=null; spBig(); spDraw(); spSpkCard(); measEnd(); vmCard();
+  readAudio(blob).then(async buf=>{ SA.pcm=ds(buf,V.rate); try{ SA.rawRate=Math.min(24000,buf.sampleRate); SA.raw=ds(buf,SA.rawRate); }catch(e){}
+      V.pcm=SA.pcm; V.raw=SA.raw; V.rawRate=SA.rawRate;
+      if(cam) await spFindSig(); else await evFindSig(); spDraw(); wizRender(); })
+    .catch(()=>{ SA.marks.sig = cam ? Math.max(0,(SA.meta.hornT||0)-(SA.recT0||0)) : 0; SA.sigAuto="est"; wizRender(); });
+  wizRender();
+}
+// Markierungen in die bisherigen Felder übertragen (Ergebnis, Zuordnung zum Start, Speichern)
+function trainSync(){
+  if(SA.mode!=="train") return; const m=SA.marks;
+  V.horn=m.sig??null; V.move=m.move??null; V.hands=m.hands??null; V.off=m.off??null; V.dist=SA.vals.spk||0; $("vDist").value=String(V.dist);
+  try{ setFps(Math.round(SA.fps), L("Automatisch erkannt.","Detected automatically.")); }catch(e){}
+  $("slow").value="1"; updRes();
+}
+function trainSumHTML(){
+  const o=evMetrics(), p=trainP(), row=spRow, hd=spHd, PH=SPPH(), sel=evSel(p);
+  const res={clean:L("Sauber","Clean"),early:L("Zu früh","Too early")}[o.result]||"–";
+  let h=`<p class="evlead" style="margin:0 0 8px">${L("Kennwerte dieses Starts","Parameters of this start")} ${spInfoBtn()}</p>`, cur="block";
+  h+=`<table class="restbl">`+hd(PH.block)+row(L("Ergebnis","Result"),res);
+  METCAT(p).filter(x=>spApplies(x,p,false) && (!sel||sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null) return; if(x.ph!==cur){ cur=x.ph; h+=hd(PH[x.ph]); } h+=row(x.l, x.u==="n" ? String(v) : evFmt(v,x.u)); });
+  h+=`</table><p class="hint" style="margin:10px 2px 4px">${L("Unten ordnest du das Video einem Start zu, schreibst eine Notiz und speicherst die Messung.","Below you assign the video to a start, add a note and save the measurement.")}</p>
+    <div class="wrow"><button type="button" class="wbig" id="tGoSave">${L("Weiter zum Speichern","Continue to saving")}</button></div>`;
+  return h;
+}
+try{ trainSelUI(); }catch(e){}
 
 function evDefs(p,all){
   p=p||EV.cur||{}; const S={}, sel=all?null:evSel(p); evSteps(Object.assign({},p,{metrics:METCAT(p).map(x=>x.k)})).forEach(s=>S[s.id]=s);
@@ -4759,7 +4823,7 @@ function spInfo(p){
   d.querySelectorAll("[data-mt]").forEach(b=>b.onclick=()=>{ d.querySelectorAll("[data-mt]").forEach(x=>x.setAttribute("aria-selected",String(x===b))); d.querySelectorAll("[data-mp]").forEach(x=>x.hidden=x.dataset.mp!==b.dataset.mt); });
 }
 const spInfoBtn=()=>`<button type="button" class="minfo" data-spinfo aria-label="${L("Kennwerte erklärt","Parameters explained")}" title="${L("Kennwerte erklärt","Parameters explained")}">i</button>`;
-document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-spinfo]"); if(b){ e.preventDefault(); spInfo(EV.cur); } });
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-spinfo]"); if(b){ e.preventDefault(); spInfo(SA.mode==="train"||(!EV.cur&&typeof TRP==="function") ? trainP() : EV.cur); } });
 document.addEventListener("keydown",e=>{ const d=$("spInfoDlg"); if(e.key==="Escape" && d && !d.hidden) d.hidden=true; });
 const evExecName=p=> p.tech==="turn" ? turnName(p) : p.tech==="start" ? (p.start==="back" ? L("Rückenstart","Backstroke start") : p.uw==="breast" ? L("Startsprung mit Brust-Tauchzug","Dive start with breaststroke pull-out") : L("Startsprung","Dive start"))
   : p.tech==="turn" ? ({flip:L("Rollwende","Flip turn"), open:L("Kippwende","Open turn")}[p.turn]||"") : "";
@@ -5412,7 +5476,7 @@ function camReview(blob){
   scrollTo(0,0);
   const avk=()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } };
   loadVideo(blob).then(async()=>{
-    $("avoff").value=avk();
+    $("avoff").value=avk(); if(TRN.on) return;
     const est = Math.max(0, m.hornT - CAM.recT0);
     let r=null; try{ r = V.pcm ? await hornSearch(est-0.8, est+0.8) : null; }catch(e){}
     if(r && r.best>0.35){ V.horn=r.t; vmsg(L(`${SIG()} gefunden bei ${fmtS(V.horn)}. Geh jetzt mit −1 / +1 durch die Bilder und setze Reaktion, Hände lösen und Take-off.`,`${SIG()} found at ${fmtS(V.horn)}. Now step through the frames with −1 / +1 and mark reaction, hands off and take-off.`)); }
@@ -5449,6 +5513,7 @@ function revUpd(){
   $("revHow").textContent = d ? L("Ermittelt aus deinen Markierungen im Video.","Determined from your marks in the video.") : L("Setze im Video die Reaktion oder den Take-off. Ob der Start sauber war, zu früh oder auf ein Störsignal, erkennt Sprintz dann selbst.","Mark the reaction or the take-off in the video. Sprintz then works out whether the start was clean, too early or a reaction to a distractor.");
 }
 function camSave(withTimes){
+  if(SA.mode==="train") trainSync();
   const dv=camDerive(); if(dv){ revRes=dv.result; }
   if(!revRes){ $("revRes").hidden=false; $("revAuto").textContent=L("Wie war dein Start?","How was your start?"); $("revHow").textContent=L("Ohne Markierung im Video kann Sprintz das Ergebnis nicht erkennen. Wähle es hier aus.","Without a mark in the video Sprintz can't tell the result. Choose it here."); vmsg(L("Gib zuerst oben an, wie der Start war.","First choose above how the start went.")); $("revBox").scrollIntoView({block:"start"}); const rb=$("revBox"); rb.classList.remove("need"); void rb.offsetWidth; rb.classList.add("need"); return; }
   const ms=blockMs();
@@ -5463,6 +5528,7 @@ function camSave(withTimes){
 $("revSkip").onclick=()=>camSave(false);
 $("revQuit").onclick=()=>{ camClose(true); camOfferClips(); };
 function camExitReview(){
+  if(typeof trainHome==="function") trainHome();
   if(typeof SA!=="undefined" && SA.active){ SA.active=false; $("spAna").hidden=true; try{ $("sVid").removeAttribute("src"); $("sVid").load(); }catch(e){} if(appMode==="sprint") $("spPage").hidden=false; }
   CAM.reviewing=false; document.body.classList.remove("reviewing");
   try{ const a=localStorage.getItem("startsignal-avoff"); $("avoff").value = a===null ? "0" : a; }catch(e){} $("revBox").hidden=true; $("revRow").hidden=true;
@@ -5579,7 +5645,7 @@ function setLang(v){
     if(typeof SA!=="undefined" && SA.active && !$("spAna").hidden){ wizRender(); if(SA.mode==="eval") evAnaHead(); if(SA.meas){ measHint(); measCtl(); } spDraw(); if(typeof vmCard==="function" && SA.mode==="eval") vmCard(); }
     else if(typeof EV!=="undefined" && !$("evPage").hidden && EV.cur && EV.view){ const y=scrollY; ({list:evList, setup:evSetup, plan:evPlanView, report:evReport})[EV.view](); scrollTo(0,y); }
     else if(typeof EV!=="undefined" && !$("evPage").hidden && EV.view==="list") evList();
-    const di=$("spInfoDlg"); if(di && !di.hidden) spInfo(EV.cur);
+    const di=$("spInfoDlg"); if(di && !di.hidden) spInfo(EV.cur); if(typeof trainSelUI==="function") trainSelUI();
     if(typeof FS!=="undefined" && FS.on) fsHint(); }catch(e){ console.error(e); }
   if(v!=="de") trTree(document.body);
 }
