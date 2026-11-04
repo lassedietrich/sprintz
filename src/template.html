@@ -280,7 +280,7 @@ body.menu-open #drawerBg{opacity:1;pointer-events:auto}
 #drawer .mnav{display:flex;flex-direction:column;gap:6px;margin-bottom:22px}
 #drawer .mnav button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid transparent;background:transparent;color:var(--fg);border-radius:16px;padding:12px;cursor:pointer;font:600 1.02rem var(--body)}
 #drawer .mnav button .ic{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--accent);flex:none}
-#drawer .mnav button small{display:block;font-weight:400;font-size:.82rem;color:var(--muted);margin-top:1px}
+#drawer .mnav button small{display:none}
 #drawer .mnav button[aria-current="true"]{background:var(--soft);border-color:var(--line)}
 #drawer .mnav button[aria-current="true"] .ic{background:var(--accent);color:var(--accent-fg)}
 #drawer .mnav button:active{transform:scale(.98)}
@@ -321,7 +321,7 @@ body.mode-other #tabsNav,body.mode-other #tab-train,body.mode-other #tab-stats,b
 .athhd{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;text-align:left;border:0;background:transparent;color:var(--fg);padding:12px 14px;cursor:pointer;font:inherit}.athhd small{grid-column:1;color:var(--muted)}.athhd .athcnt{grid-column:1;font-size:.78rem;color:var(--muted)}.athhd .mschev{grid-row:1/4;grid-column:2;align-self:center;transition:transform .2s}.athhd[aria-expanded="true"] .mschev{transform:rotate(90deg)}
 .athbody{padding:0 14px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}.athf{display:flex;flex-direction:column;gap:3px;font-size:.8rem;color:var(--muted)}.athf input,.athf textarea{font:inherit;font-size:.95rem;color:var(--fg);padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}.athf:has(textarea){grid-column:1/-1}.athact{grid-column:1/-1}
 .sqlbox{white-space:pre-wrap;font:12px/1.4 ui-monospace,monospace;background:rgba(0,0,0,.06);padding:8px;border-radius:8px;overflow:auto}.umorgs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}.umorg{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:2px 4px 2px 10px;font-size:.85rem}.umorg button{border:0;background:transparent;cursor:pointer;color:var(--muted)}
-.umtblw{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.umtbl{width:100%;border-collapse:collapse;font-size:.9rem}.umtbl th{text-align:left;font-size:.75rem;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}.umtbl td{padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}.umtbl td .qkin{max-width:200px}.umexp{border:0;background:transparent;cursor:pointer;font-size:1rem;margin-right:4px;color:var(--accent)}
+.umtblw{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}.umtbl{width:100%;border-collapse:collapse;font-size:.9rem}.umtbl th{text-align:left;font-size:.75rem;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}.umtbl td{padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}.umtbl td .qkin{max-width:200px}.umchips{display:flex;flex-wrap:wrap;gap:4px}.umchips button{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:12px;padding:3px 9px;font:inherit;font-size:.8rem;cursor:pointer}.umchips button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}.umexp{border:0;background:transparent;cursor:pointer;font-size:1rem;margin-right:4px;color:var(--accent)}
 .umdet td{white-space:normal;background:rgba(0,0,0,.025)}.umgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.umgrid span{display:flex;flex-direction:column;font-size:.75rem;color:var(--muted)}.umgrid b{font-size:.95rem;color:var(--fg)}.umath{margin:8px 0 2px;font-size:.88rem}.schk{position:relative;font-size:.78rem}.schk>button{border:1px solid var(--line);background:var(--surface);color:#2a8a4a;border-radius:10px;padding:3px 8px;cursor:pointer;font:600 .78rem var(--body)}.schk.warn>button{color:#b07a00}.schk.bad>button{color:var(--danger);border-color:var(--danger)}.schkp{position:absolute;z-index:6;left:0;top:28px;min-width:280px;max-width:420px;padding:8px 10px 10px 12px;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);background:var(--bg,#fff)}.schk ul{margin:0 0 6px;padding:0;list-style:none}.schk li{margin:3px 0;line-height:1.35}.schk li.bad{color:var(--danger)}.schk li.warn{color:#b07a00}#sDraw{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}#sDraw.on{pointer-events:auto;cursor:crosshair;touch-action:none}#fsTools{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;gap:4px;background:rgba(10,24,32,.72);padding:6px;border-radius:14px;backdrop-filter:blur(6px)}#fsTools button{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;font:600 1.05rem system-ui;cursor:pointer;display:grid;place-items:center;padding:0}#fsTools button[aria-pressed="true"]{background:#2F8FD8;border-color:#2F8FD8}#fsTools button:disabled{opacity:.35;cursor:default}#fsTools #drCol span{width:18px;height:18px;border-radius:50%;border:2px solid #fff}#fsTools .fstsep{height:1px;background:rgba(255,255,255,.2);margin:2px 4px}#sWave{display:block;width:100%;height:120px;border-radius:10px;background:var(--surface);border:1px solid var(--line);margin-top:8px;touch-action:none}
 .wiz{position:relative;overflow:hidden;margin-top:12px;border-radius:16px}
 .wcard{background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:16px;box-shadow:var(--shadow);transition:transform .26s cubic-bezier(.3,.7,.3,1),opacity .26s;touch-action:pan-y}
@@ -414,7 +414,7 @@ body.xh-on #xhair{display:block}
 .seg.big.g4{display:grid;grid-template-columns:repeat(4,1fr)}.seg.big.g4 button{padding:11px 2px;font-size:.95rem}
 #sSpkCard{margin-top:16px}
 #spAna .vbox{position:relative}#sLupe{position:absolute;z-index:5;pointer-events:none;border-radius:50%;border:2px solid #fff;box-shadow:0 3px 14px rgba(0,0,0,.55);background:#000}
-.dcoach{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);margin:0 0 10px;line-height:1.35;cursor:pointer}.dcoach input{margin-top:2px}.qkask{margin:8px 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}.qkask .qt{margin:0 0 4px;font-weight:600}.qkseg{display:flex;flex-wrap:wrap;margin:4px 0}.qkseg button{flex:1 1 auto;padding:7px 10px}.qksw{margin:6px 0}.qkkd{margin:6px 0 8px;font-size:.85rem}.qkkd summary{cursor:pointer;color:var(--accent)}.qkpers{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.qkpsel{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);margin:0 0 8px}.qkcard .qkmain{flex:1;padding:12px 14px;min-width:0}.qkcard small{display:block;color:var(--muted);margin-top:2px}.qkname{font-weight:700}.qkren{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:0 4px}
+.dcoach{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);margin:0 0 10px;line-height:1.35;cursor:pointer}.dcoach input{margin-top:2px}.qkask{transition:transform .32s cubic-bezier(.4,0,.6,1),opacity .32s;}.qkask.swl{transform:translateX(-120%);opacity:0}.qkask.swr{transform:translateX(120%);opacity:0}.qkcard{overflow:hidden}.qkask{margin:8px 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}.qkask .qt{margin:0 0 4px;font-weight:600}.qkseg{display:flex;flex-wrap:wrap;margin:4px 0}.qkseg button{flex:1 1 auto;padding:7px 10px}.qksw{margin:6px 0}.qkkd{margin:6px 0 8px;font-size:.85rem}.qkkd summary{cursor:pointer;color:var(--accent)}.qkpers{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.qkpsel{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);margin:0 0 8px}.qkcard .qkmain{flex:1;padding:12px 14px;min-width:0}.qkcard small{display:block;color:var(--muted);margin-top:2px}.qkname{font-weight:700}.qkren{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:0 4px}
 .qktimes{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0;font-size:.9rem;color:var(--muted)}.qktimes b{color:var(--fg);font-variant-numeric:tabular-nums}
 .qkbtns{display:flex;gap:8px;flex-wrap:wrap}.qkmiss{color:var(--danger)}.qkin{font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:8px;max-width:70%}
 .qkdet{margin-top:22px;padding:12px 14px}.qkdet summary{cursor:pointer}.qkdet .mscard{margin:12px 0 0}
@@ -3418,6 +3418,10 @@ function measDraw(){ const cv=$("sMeas"), r=cv.getBoundingClientRect(), dpr=devi
       g.fillStyle="#3FD07A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(F[0],F[1],5*dpr,0,7); g.fill(); g.stroke();
       const lab=n2(Math.max(0,measDist(M)),spUnitD()); g.font=`700 ${13*dpr}px system-ui`; const tw=g.measureText(lab).width, lx=Math.min(cv.width-tw-8*dpr, Math.max(4*dpr, F[0]+n[0]*40*dpr+6*dpr)), ly=Math.min(cv.height-8*dpr, Math.max(16*dpr, F[1]+n[1]*40*dpr));
       g.fillStyle="rgba(0,0,0,.65)"; g.fillRect(lx-4*dpr,ly-14*dpr,tw+8*dpr,19*dpr); g.fillStyle="#3FD07A"; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(lab,lx,ly); } }
+  // Fadenkreuz über das ganze Bild an der Zeigerspitze, solange Bezugspunkte gesetzt werden: der Punkt landet genau im Schnittpunkt
+  cv.style.cursor = M.pts.length<2 ? "none" : "crosshair";
+  if(M.hover && M.pts.length<2){ const hx=Math.round(M.hover[0]*dpr)+0.5, hy=Math.round(M.hover[1]*dpr)+0.5;
+    [["rgba(0,0,0,.6)",2.2*dpr],["#fff",1*dpr]].forEach(([col,w])=>{ g.strokeStyle=col; g.lineWidth=w; g.beginPath(); g.moveTo(0,hy); g.lineTo(cv.width,hy); g.moveTo(hx,0); g.lineTo(hx,cv.height); g.stroke(); }); }
   pts.forEach((p,i)=>{ g.fillStyle="#FFD24A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(p[0],p[1],6*dpr,0,7); g.fill(); g.stroke();
     g.font=`700 ${12*dpr}px system-ui`; g.fillStyle="#000"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(String(i+1),p[0],p[1]+0.5*dpr); });
 }
@@ -5087,7 +5091,8 @@ function qkList(){
       <div class="seg qkseg" id="qkMetK">${[["start",L("Start","Start")],["turn",L("Wende","Turn")]].map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${QK.metK===v}">${l}</button>`).join("")}</div>
       ${spMetSelHTML(qkP({kind:QK.metK, start:"block", uw:"fly", turn:"flip"}))}</details>`;
   $("qkFiles").onchange=e=>{ const f=[...e.target.files]; e.target.value=""; qkUpload(f); };
-  pg.querySelectorAll("[data-kid]").forEach(box=>qkBindKind(box,"ek",()=>qkE(box.dataset.kid),e=>{ QK.openK=e.id; qkSave(); qkList(); }));
+  pg.querySelectorAll("[data-kid]").forEach(box=>{ const ask=box.closest(".qkask"); if(ask) box.addEventListener("pointerdown",ev=>{ const r=box.getBoundingClientRect(); QK.swDir = ev.clientX < r.left+r.width/2 ? -1 : 1; },true);
+    qkBindKind(box,"ek",()=>qkE(box.dataset.kid),e=>{ QK.openK=e.id; qkSave(); if(ask){ ask.classList.add(QK.swDir<0?"swl":"swr"); setTimeout(qkList,320); } else qkList(); }); });
   pg.querySelectorAll("[data-kall]").forEach(b=>b.onclick=()=>{ const src=qkE(b.dataset.kall); QK.p.trials.filter(x=>!x.kind).forEach(x=>["kind","start","uw","turn","turnDetail","stroke"].forEach(k=>{ if(src[k]!==undefined) x[k]=src[k]; })); qkSave(); qkList(); });
   const all=$("qkAll"); if(all) all.onclick=()=>{ const e=qkOrd().find(x=>x.status==="open" && qkHasVid(x)); if(e) qkAnalyze(e,false); };
   pg.querySelectorAll("[data-qa]").forEach(b=>b.onclick=()=>qkAnalyze(qkE(b.dataset.qa),false));
@@ -5233,11 +5238,12 @@ function qkCloseAna(soft){ SA.sess=(SA.sess||0)+1; if(FS.on) fsExit(soft); measE
 
 /* --- Lupe beim Ausmessen: vergrößerter Ausschnitt um das Fadenkreuz, dünnes Fadenkreuz --- */
 function lupeAt(q, cx, cy, touch){
-  const lp=$("sLupe"), M=SA.meas; if(!lp) return; if(!M || !sVid.videoWidth || q==null){ lp.hidden=true; return; }
+  const lp=$("sLupe"), M=SA.meas; if(!lp) return; if(M) M.hover = q && cx!=null ? [cx,cy] : M.hover; if(!M || !sVid.videoWidth || q==null || M.pts.length>=2){ lp.hidden=true; if(M) measDraw(); return; }
+  measDraw();
   const cv=$("sMeas"), W=cv.clientWidth, H=cv.clientHeight, vw=sVid.videoWidth, vh=sVid.videoHeight, z=measZ();
   const ew=sVid.offsetWidth||W, eh=sVid.offsetHeight||H, s0=Math.min(ew/vw, eh/vh), ox=sVid.offsetLeft+(ew-vw*s0)/2, oy=sVid.offsetTop+(eh-vh*s0)/2;
   const vx=(q[0]*W-ox)/s0, vy=(q[1]*H-oy)/s0;
-  const S=W<500?110:150, mag=4, dpr=devicePixelRatio||1, D=Math.round(S*dpr); if(lp.width!==D){ lp.width=D; lp.height=D; } lp.style.width=lp.style.height=S+"px";
+  const S=W<500?84:112, mag=4, dpr=devicePixelRatio||1, D=Math.round(S*dpr); if(lp.width!==D){ lp.width=D; lp.height=D; } lp.style.width=lp.style.height=S+"px";
   const g=lp.getContext("2d"), sw=S/(mag*s0*z.s), x0=vx-sw/2, y0=vy-sw/2, k=D/sw;
   g.fillStyle="#000"; g.fillRect(0,0,D,D); g.imageSmoothingEnabled=true;
   // nur den Teil innerhalb des Videos zeichnen
@@ -5257,7 +5263,7 @@ function lupeAt(q, cx, cy, touch){
   const lx=px-S/2, ly = touch ? py-S-28 : py-S/2;
   lp.style.left=lx+"px"; lp.style.top=ly+"px"; lp.hidden=false;
 }
-function lupeHide(){ const lp=$("sLupe"); if(lp) lp.hidden=true; }
+function lupeHide(){ const lp=$("sLupe"); if(lp) lp.hidden=true; if(SA.meas && SA.meas.hover){ SA.meas.hover=null; measDraw(); } }
 { const cv=$("sMeas");
   const at=e=>{ const r=cv.getBoundingClientRect(); lupeAt(measN(e), e.clientX-r.left, e.clientY-r.top, e.pointerType!=="mouse"); };
   cv.addEventListener("pointermove",e=>{ if(!SA.meas) return; if(e.pointerType==="mouse" || e.buttons) at(e); });
@@ -5399,6 +5405,7 @@ async function usageReport(force){ if(!USER || !STORE.online() || !navigator.onL
 const usageSoon=()=>{ clearTimeout(usageT); usageT=setTimeout(()=>usageReport(), 5000); };
 // Verwaltung (nur Entwickler): Konto → Person und Organisation, eigene Zeile „accmeta“
 const UM={meta:{accounts:{}, orgs:[]}, rows:[], open:null, err:null};
+const umOrgs=a=> Array.isArray(a&&a.orgs) ? a.orgs : (a&&a.org ? [a.org] : []);
 async function usersLoad(){ UM.err=null;
   try{ await sbReady(); const r=await sbFetch("/rest/v1/userdata?key=eq.accmeta&select=data"); const m=r&&r[0]&&r[0].data; if(m) UM.meta=Object.assign({accounts:{}, orgs:[]}, m); }catch(e){ UM.err=e; }
   try{ await usageReport(true); const r=await sbFetch("/rest/v1/userdata?key=eq.usage&select=user_id,data,updated_at"); UM.rows=(r||[]).map(x=>x.data).filter(Boolean); }catch(e){ UM.err=e; UM.rows=[]; } }
@@ -5415,20 +5422,20 @@ function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") retu
     ${onlyMe?`<div class="card evnote"><p>${L("Es ist nur dein eigenes Konto zu sehen. Damit Sprintz die Nutzungsdaten aller Konten lesen darf, führe diesen Befehl einmal im Supabase-Dashboard unter „SQL Editor“ aus. Er erlaubt das Lesen nur den Entwicklerkonten und nur für die Nutzungsdaten. Andere Konten erscheinen, sobald sie Sprintz wieder öffnen.","Only your own account is visible. To let Sprintz read the usage data of all accounts, run this command once in the Supabase dashboard under “SQL Editor”. It allows reading only for the developer accounts and only for the usage data. Other accounts appear once they open Sprintz again.")}</p><pre class="sqlbox">${esc(usersSQL())}</pre><button type="button" class="testbtn small" id="umCopy">${L("Befehl kopieren","Copy command")}</button></div>`:""}
     <p class="hint">${L("Datenschutz: Die Nutzungsdaten enthalten die Namen der angelegten Athlet*innen. Weise in der Datenschutzerklärung darauf hin.","Privacy: the usage data contains the names of the athletes created. Mention this in the privacy policy.")}</p>
     <div class="umorgs"><b>${L("Organisationen","Organisations")}</b> ${orgs.map((o,i)=>`<span class="umorg">${esc(o)} <button type="button" data-odel="${i}" aria-label="${L("Entfernen","Remove")}">×</button></span>`).join("")}<input type="text" id="umOrgN" class="qkin" maxlength="60" placeholder="${L("Neue Organisation","New organisation")}"><button type="button" class="testbtn small" id="umOrgB">+</button></div>
-    <div class="umtblw"><table class="umtbl"><thead><tr><th>${L("Echte Person","Real person")}</th><th>${L("Konto","Account")}</th><th>${L("Organisation","Organisation")}</th><th>${L("Zuletzt genutzt","Last used")}</th></tr></thead><tbody>
+    <div class="umtblw"><table class="umtbl"><thead><tr><th>${L("Echte Person","Real person")}</th><th>${L("Konto","Account")}</th><th>${L("Organisationen","Organisations")}</th><th>${L("Zuletzt genutzt","Last used")}</th></tr></thead><tbody>
     ${rows.map(r=>{ const a=M.accounts[r.account]||{}, c=r.counts||{}, open=UM.open===r.account;
       return `<tr><td><button type="button" class="umexp" data-ux="${esc(r.account)}" aria-expanded="${open}" aria-label="${L("Daten anzeigen","Show data")}">${open?"▾":"▸"}</button><input type="text" class="qkin" data-up="${esc(r.account)}" maxlength="80" value="${esc(a.person||"")}" placeholder="${L("Echte Person","Real person")}"></td>
-        <td>${esc(r.account)}</td><td><select class="evsel" data-uo="${esc(r.account)}"><option value="">–</option>${orgs.map(o=>`<option${a.org===o?" selected":""}>${esc(o)}</option>`).join("")}</select></td><td>${rel(r.lastUsed)}</td></tr>
+        <td>${esc(r.account)}</td><td><span class="umchips">${orgs.length?orgs.map(o=>`<button type="button" data-uo="${esc(r.account)}" data-org="${esc(o)}" aria-pressed="${umOrgs(a).includes(o)}">${esc(o)}</button>`).join(""):`<small>${L("Oben zuerst Organisationen anlegen","Add organisations above first")}</small>`}</span></td><td>${rel(r.lastUsed)}</td></tr>
         ${open?`<tr class="umdet"><td colspan="4"><div class="umgrid"><span>${L("Zuletzt genutzt","Last used")}<b>${rel(r.lastUsed)}</b></span><span>${L("Programm","App")}<b>${r.app==="desktop"?L("Desktop","Desktop"):L("Web","Web")}</b></span>
           <span>${L("Videos hochgeladen","Videos uploaded")}<b>${c.uploaded??"–"}</b></span><span>${L("Auswertung begonnen","Analysis started")}<b>${c.started??"–"}</b></span><span>${L("Fertig ausgewertet","Analysis finished")}<b>${c.done??"–"}</b></span><span>${L("Projekte","Projects")}<b>${c.projects??"–"}</b></span><span>${L("Trainingsmessungen","Training measurements")}<b>${c.training??"–"}</b></span></div>
           <p class="umath"><b>${L("Angelegte Athlet*innen","Athletes created")}:</b> ${(r.athletes||[]).length?(r.athletes||[]).map(esc).join(", "):"–"}</p></td></tr>`:""}`; }).join("")}</tbody></table></div>`;
   const cp=$("umCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(usersSQL()); toast(L("Kopiert.","Copied.")); }catch(e){} };
   pg.querySelectorAll("[data-ux]").forEach(b=>b.onclick=()=>{ UM.open = UM.open===b.dataset.ux ? null : b.dataset.ux; usersList(); });
   pg.querySelectorAll("[data-up]").forEach(i=>i.onchange=()=>{ (M.accounts[i.dataset.up]=M.accounts[i.dataset.up]||{}).person=i.value.trim(); usersSaveMeta(); });
-  pg.querySelectorAll("[data-uo]").forEach(s=>s.onchange=()=>{ (M.accounts[s.dataset.uo]=M.accounts[s.dataset.uo]||{}).org=s.value||null; usersSaveMeta(); });
+  pg.querySelectorAll("[data-uo]").forEach(b=>b.onclick=()=>{ const a=(M.accounts[b.dataset.uo]=M.accounts[b.dataset.uo]||{}), cur=umOrgs(a), o=b.dataset.org; a.orgs = cur.includes(o) ? cur.filter(x=>x!==o) : cur.concat([o]); delete a.org; b.setAttribute("aria-pressed",String(a.orgs.includes(o))); usersSaveMeta(); });
   const ob=()=>{ const v=$("umOrgN").value.trim(); if(!v) return; M.orgs=[...new Set([...(M.orgs||[]), v])].sort(); usersSaveMeta(); usersList(); };
   $("umOrgB").onclick=ob; $("umOrgN").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); ob(); } };
-  pg.querySelectorAll("[data-odel]").forEach(b=>b.onclick=()=>{ const o=M.orgs[+b.dataset.odel]; M.orgs.splice(+b.dataset.odel,1); Object.values(M.accounts).forEach(a=>{ if(a.org===o) a.org=null; }); usersSaveMeta(); usersList(); });
+  pg.querySelectorAll("[data-odel]").forEach(b=>b.onclick=()=>{ const o=M.orgs[+b.dataset.odel]; M.orgs.splice(+b.dataset.odel,1); Object.values(M.accounts).forEach(a=>{ a.orgs=umOrgs(a).filter(x=>x!==o); delete a.org; }); usersSaveMeta(); usersList(); });
 }
 
 document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-devback]"); if(b) setMode("dev"); });
