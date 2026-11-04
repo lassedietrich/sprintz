@@ -5395,8 +5395,27 @@ const ATH={open:null};
 /* ---------- Entwicklermodus: nutzende Personen ----------
    Jedes Konto meldet seine Nutzungsdaten (zuletzt genutzt, Videos, Auswertungen, Namen der angelegten Athlet*innen) in seine eigene Zeile „usage“.
    Lesen dürfen nur die Entwicklerkonten; dafür braucht es einmalig eine Leserichtlinie in Supabase (siehe usersSQL). */
-const usersSQL=()=>`create policy "Entwickler lesen Nutzungsdaten" on public.userdata for select to authenticated
-using ( key = 'usage' and (auth.jwt() ->> 'email') in (${DEV_USERS.map(u=>`'${sbMail(u)}'`).join(", ")}) );`;
+const usersSQL=()=>`-- 1) Entwicklerkonten dürfen die Nutzungsdaten aller Konten lesen
+drop policy if exists "Entwickler lesen Nutzungsdaten" on public.userdata;
+create policy "Entwickler lesen Nutzungsdaten" on public.userdata for select to authenticated
+using ( key = 'usage' and (auth.jwt() ->> 'email') in (${DEV_USERS.map(u=>`'${sbMail(u)}'`).join(", ")}) );
+
+-- 2) Jedes neu angelegte Konto erscheint sofort in der Tabelle
+create or replace function public.sprintz_new_user() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  insert into public.userdata (user_id, key, data, updated_at)
+  values (new.id, 'usage', jsonb_build_object('account', split_part(new.email, '@', 1), 'created', new.created_at), now())
+  on conflict (user_id, key) do nothing;
+  return new;
+end $$;
+drop trigger if exists sprintz_on_new_user on auth.users;
+create trigger sprintz_on_new_user after insert on auth.users for each row execute function public.sprintz_new_user();
+
+-- 3) Bereits vorhandene Konten einmalig nachtragen
+insert into public.userdata (user_id, key, data, updated_at)
+select id, 'usage', jsonb_build_object('account', split_part(email, '@', 1), 'created', created_at), now() from auth.users
+on conflict (user_id, key) do nothing;`;
 function usageStats(){ const all=STORE._all(); let up=0, st=0, dn=0;
   all.forEach(p=>(p.trials||[]).forEach(t=>{ const v=(t.vid?1:0)+((t.vids2||[]).length); up+=v; const done = p.tech==="quick" ? (t.status==="quick"||t.status==="det") : t.status==="done"; if(done) dn++; else if(t.raw && Object.keys(t.raw.marks||{}).length) st++; }));
   return {uploaded:up, started:st, done:dn, projects:all.filter(p=>p.tech!=="quick").length, training:(LOG.videos||[]).length}; }
@@ -5417,11 +5436,11 @@ async function usersEnter(){ ["spPage","evPage","qkPage","modeSoon","athPage"].f
   if(!STORE.online()){ pg.innerHTML=`<h2 class="big">${L("Nutzende Personen","Users")}</h2><div class="card evnote"><p>${L("Dafür musst du online angemeldet sein.","You need to be signed in online for this.")}</p></div>`; return; }
   await usersLoad(); usersList(); }
 function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") return; const M=UM.meta, orgs=M.orgs||[];
-  const rel=iso=>{ if(!iso) return "–"; const d=(Date.now()-Date.parse(iso))/864e5; return fmtDate(iso)+" ("+(d<1?L("heute","today"):L(`vor ${Math.round(d)} Tagen`,`${Math.round(d)} days ago`))+")"; };
+  const rel=iso=>{ if(!iso) return L("noch nie angemeldet","never signed in"); const d=(Date.now()-Date.parse(iso))/864e5; return fmtDate(iso)+" ("+(d<1?L("heute","today"):L(`vor ${Math.round(d)} Tagen`,`${Math.round(d)} days ago`))+")"; };
   const rows=UM.rows.slice().sort((a,b)=>Date.parse(b.lastUsed||0)-Date.parse(a.lastUsed||0)), onlyMe = rows.length<=1;
   pg.innerHTML=`<button type="button" class="testbtn ghost small" data-devback style="margin:0 0 10px">${L("‹ Entwicklermodus","‹ Developer mode")}</button><h2 class="big">${L("Nutzende Personen","Users")}</h2>
     <p class="evlead">${L("Jedem Konto ordnest du hier eine echte Person und eine Organisation zu. Über den Pfeil siehst du die Nutzungsdaten.","Assign a real person and an organisation to each account here. The arrow shows the usage data.")}</p>
-    ${onlyMe?`<div class="card evnote"><p>${L("Es ist nur dein eigenes Konto zu sehen. Damit Sprintz die Nutzungsdaten aller Konten lesen darf, führe diesen Befehl einmal im Supabase-Dashboard unter „SQL Editor“ aus. Er erlaubt das Lesen nur den Entwicklerkonten und nur für die Nutzungsdaten. Andere Konten erscheinen, sobald sie Sprintz wieder öffnen.","Only your own account is visible. To let Sprintz read the usage data of all accounts, run this command once in the Supabase dashboard under “SQL Editor”. It allows reading only for the developer accounts and only for the usage data. Other accounts appear once they open Sprintz again.")}</p><pre class="sqlbox">${esc(usersSQL())}</pre><button type="button" class="testbtn small" id="umCopy">${L("Befehl kopieren","Copy command")}</button></div>`:""}
+    ${onlyMe||UM.sqlOpen?`<div class="card evnote"><p>${L("Damit hier alle Konten erscheinen, auch neu angelegte noch vor ihrer ersten Anmeldung, führe diesen Befehl einmal im Supabase-Dashboard unter „SQL Editor“ aus (einfügen, „Run“). Er erlaubt das Lesen nur den Entwicklerkonten und nur für die Nutzungsdaten.","For all accounts to appear here, including newly created ones before they first sign in, run this command once in the Supabase dashboard under “SQL Editor” (paste, “Run”). It allows reading only for the developer accounts and only for the usage data.")}}</p><pre class="sqlbox">${esc(usersSQL())}</pre><button type="button" class="testbtn small" id="umCopy">${L("Befehl kopieren","Copy command")}</button></div>`:`<button type="button" class="testbtn ghost small" id="umSql">${L("Einrichtung in Supabase anzeigen","Show Supabase setup")}</button>`}
     <p class="hint">${L("Datenschutz: Die Nutzungsdaten enthalten die Namen der angelegten Athlet*innen. Weise in der Datenschutzerklärung darauf hin.","Privacy: the usage data contains the names of the athletes created. Mention this in the privacy policy.")}</p>
     <div class="umorgs"><b>${L("Organisationen","Organisations")}</b> ${orgs.map((o,i)=>`<span class="umorg">${esc(o)} <button type="button" data-odel="${i}" aria-label="${L("Entfernen","Remove")}">×</button></span>`).join("")}<input type="text" id="umOrgN" class="qkin" maxlength="60" placeholder="${L("Neue Organisation","New organisation")}"><button type="button" class="testbtn small" id="umOrgB">+</button></div>
     <div class="umtblw"><table class="umtbl"><thead><tr><th>${L("Echte Person","Real person")}</th><th>${L("Konto","Account")}</th><th>${L("Organisationen","Organisations")}</th><th>${L("Zuletzt genutzt","Last used")}</th></tr></thead><tbody>
@@ -5431,6 +5450,7 @@ function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") retu
         ${open?`<tr class="umdet"><td colspan="4"><div class="umgrid"><span>${L("Zuletzt genutzt","Last used")}<b>${rel(r.lastUsed)}</b></span><span>${L("Programm","App")}<b>${r.app==="desktop"?L("Desktop","Desktop"):L("Web","Web")}</b></span>
           <span>${L("Videos hochgeladen","Videos uploaded")}<b>${c.uploaded??"–"}</b></span><span>${L("Auswertung begonnen","Analysis started")}<b>${c.started??"–"}</b></span><span>${L("Fertig ausgewertet","Analysis finished")}<b>${c.done??"–"}</b></span><span>${L("Projekte","Projects")}<b>${c.projects??"–"}</b></span><span>${L("Trainingsmessungen","Training measurements")}<b>${c.training??"–"}</b></span></div>
           <p class="umath"><b>${L("Angelegte Athlet*innen","Athletes created")}:</b> ${(r.athletes||[]).length?(r.athletes||[]).map(esc).join(", "):"–"}</p></td></tr>`:""}`; }).join("")}</tbody></table></div>`;
+  const sq=$("umSql"); if(sq) sq.onclick=()=>{ UM.sqlOpen=true; usersList(); };
   const cp=$("umCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(usersSQL()); toast(L("Kopiert.","Copied.")); }catch(e){} };
   pg.querySelectorAll("[data-ux]").forEach(b=>b.onclick=()=>{ UM.open = UM.open===b.dataset.ux ? null : b.dataset.ux; usersList(); });
   pg.querySelectorAll("[data-up]").forEach(i=>i.onchange=()=>{ (M.accounts[i.dataset.up]=M.accounts[i.dataset.up]||{}).person=i.value.trim(); usersSaveMeta(); });
@@ -6431,7 +6451,7 @@ $("coachChk").onchange=()=>{ try{ localStorage.setItem("sprintz-coach-"+(USER||"
 function userUI(){ coachUI(); try{ if(isDev() && window.sprintzDesktop && sprintzDesktop.setDev) sprintzDesktop.setDev(true, USER); }catch(e){} const db=$("devBtn"); if(db){ db.hidden=!isDev(); if((appMode==="dev"||appMode==="kraft") && !isDev() && typeof setMode==="function") setMode("start"); }
   const n=$("userName"); if(!n) return; n.textContent = USER ? (SESS && SESS.offline ? L(`${USER} · offline`,`${USER} · offline`) : L(`Angemeldet als ${USER}`,`Logged in as ${USER}`)) : ""; $("logoutBtn").textContent=L("Abmelden","Log out"); $("logoutBtn").hidden=!USER; if(!$("login").hidden) lgUI(); }
 function showLogin(msg){ const o=$("login"); o.hidden=false; lgUI(); $("lgPrev").hidden=true; $("lgErr").textContent=msg||""; if(USER) $("lgUser").value=USER; setTimeout(()=>$("lgUser").focus(),50); }
-function lgDone(u){ USER=u; try{ localStorage.setItem("sprintz-user",u); }catch(err){} $("login").hidden=true; $("lgPass").value=""; $("lgErr").textContent=""; lgMigrate(u); userUI(); syncSoon(300); if(appMode==="eval") evEnter(); appStart(); }
+function lgDone(u){ USER=u; try{ localStorage.setItem("sprintz-user",u); }catch(err){} $("login").hidden=true; $("lgPass").value=""; $("lgErr").textContent=""; lgMigrate(u); userUI(); syncSoon(300); setTimeout(()=>{ if(typeof usageReport==="function") usageReport(true); },1500); if(appMode==="eval") evEnter(); appStart(); }
 $("lgLang").querySelectorAll("button").forEach(b=>b.onclick=()=>{ setLang(b.dataset.v); lgUI(); });
 // Einmalige Übernahme: Benutzername lasse289 → host289 (Projekte auf diesem Gerät mitnehmen)
 function lgMigrate(u){ const MIG={host289:"lasse289"}; const o=MIG[u]; if(!o) return; try{ const k="sprintz-projects-", a=localStorage.getItem(k+o);
