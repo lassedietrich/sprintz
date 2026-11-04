@@ -316,7 +316,7 @@ body.mode-other #tabsNav,body.mode-other #tab-train,body.mode-other #tab-stats,b
 #spAdvDis{margin-bottom:10px}
 /* Sprint-Auswertung (Assistent) */
 #spAna h2{margin-top:6px}
-#sWave.slim{height:34px!important}#tabsNav{display:none!important}#athPage h2.big,#usersPage h2.big{font:600 1.5rem var(--display);letter-spacing:-.01em;margin:6px 2px 10px}#athPage>.evlead,#usersPage>.evlead,#athPage>p.hint,#usersPage>p.hint{text-shadow:0 0 12px var(--water),0 0 3px var(--water)}
+#sWave.slim{height:34px!important}#tabsNav{display:none!important}.dlbox{max-height:calc(100vh - 32px);overflow:auto;max-width:560px}.dlbox h3{margin:10px 0 2px;font-size:1rem}.dlbox p{margin:0;line-height:1.5}.dlbtns{display:flex;flex-direction:column;gap:8px;margin:8px 0}.dlbtn{display:block;text-decoration:none;text-align:center;border-radius:12px;padding:12px;border:1px solid var(--line);color:var(--accent);background:var(--bg);font-weight:600}.dlbtn.main{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-size:1.05rem}.dlbtn small{display:block;font-weight:400;font-size:.8rem;opacity:.9;margin-top:2px;color:inherit}.dlsteps{margin:6px 0;padding-left:20px;line-height:1.5}.dlsteps li{margin:6px 0}.dlsteps small{display:block;color:var(--muted)}.dlcmd{display:flex;gap:8px;align-items:center;margin:6px 0 2px}.dlcmd code{flex:1;font:13px ui-monospace,monospace;background:rgba(0,0,0,.07);padding:6px 8px;border-radius:6px;user-select:all}.dlact{display:flex;justify-content:flex-end}#athPage h2.big,#usersPage h2.big{font:600 1.5rem var(--display);letter-spacing:-.01em;margin:6px 2px 10px}#athPage>.evlead,#usersPage>.evlead,#athPage>p.hint,#usersPage>p.hint{text-shadow:0 0 12px var(--water),0 0 3px var(--water)}
 .athadd{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}.athadd .qkin{flex:1;min-width:180px;max-width:none}.athlist{display:flex;flex-direction:column;gap:10px;margin-top:10px}.athcard{padding:0;overflow:hidden}
 .athhd{display:grid;grid-template-columns:1fr auto;gap:2px 10px;width:100%;text-align:left;border:0;background:transparent;color:var(--fg);padding:12px 14px;cursor:pointer;font:inherit}.athhd small{grid-column:1;color:var(--muted)}.athhd .athcnt{grid-column:1;font-size:.78rem;color:var(--muted)}.athhd .mschev{grid-row:1/4;grid-column:2;align-self:center;transition:transform .2s}.athhd[aria-expanded="true"] .mschev{transform:rotate(90deg)}
 .athbody{padding:0 14px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}.athf{display:flex;flex-direction:column;gap:3px;font-size:.8rem;color:var(--muted)}.athf input,.athf textarea{font:inherit;font-size:.95rem;color:var(--fg);padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}.athf:has(textarea){grid-column:1/-1}.athact{grid-column:1/-1}
@@ -1207,6 +1207,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
   <button type="button" id="tourBtn" aria-label="Tour durch die App starten"><span>?</span>Tour</button>
 </div>
 
+<div id="dlDlg" class="dlg" hidden role="dialog" aria-modal="true" aria-labelledby="dlTitle"><div class="dlgbox dlbox"><h2 id="dlTitle"></h2><div id="dlBody"></div><div class="dlact"><button type="button" class="testbtn ghost" id="dlClose"></button></div></div></div>
 <div id="aboutDlg" class="dlg" hidden role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
   <div class="dlgbox about">
     <h2 id="aboutTitle">Über Sprintz</h2>
@@ -3140,6 +3141,7 @@ document.addEventListener("keydown",e=>{
   if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
 });
 $("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.muted=false; SA.curBase=SA.playBase||0.25; smoRate(); sVid.play(); } else sVid.pause(); };
+const SPD=[1,0.75,0.5,0.25];
 $("sSpd").onclick=()=>{ const i=SPD.indexOf(SA.playBase||0.25); SA.playBase=SPD[(i+1)%SPD.length]; try{ localStorage.setItem("sprintz-spd",String(SA.playBase)); }catch(e){} spdLabel(); if(!sVid.paused){ SA.curBase=SA.playBase; smoRate(); } };
 try{ const v=parseFloat(localStorage.getItem("sprintz-spd")); if(SPD.includes(v)) SA.playBase=v; }catch(e){} spdLabel();
 sVid.addEventListener("play",()=>{ $("sPlay").textContent="❚❚"; const loop=()=>{ if(!sVid.paused){ smoRate(); if(SA.playTo!=null && sVid.currentTime>=SA.playTo){ sVid.pause(); SA.playTo=null; } spTick(); requestAnimationFrame(loop);} }; loop(); });
@@ -3300,7 +3302,7 @@ function wizRender(){
   } else h+= SA.mode==="eval" ? evSumHTML() : SA.mode==="train" ? trainSumHTML() : SA.mode==="quick" ? qkSumHTML() : spSumHTML();
   if(st.k!=="sum") h+=noteUI(st); else h+=notesSumHTML();
   // Hinweis bei unrealistischen Zeiten schon während der Auswertung (Start)
-  if(st.k!=="sum" && (SA.mode==="eval"||SA.mode==="train"||(SA.mode==="quick"&&(qkE(QK.cur)||{}).kind==="start")) && !(SA.mode==="eval"&&isTurn(EV.cur))){ try{ const w=slowWarnHTML(evMetrics()); if(w) h=w+h; }catch(e){} }
+  if((SA.mode==="eval"||SA.mode==="train"||(SA.mode==="quick"&&(qkE(QK.cur)||{}).kind==="start")) && !(SA.mode==="eval"&&isTurn(EV.cur))){ try{ slowAutoFix(); }catch(e){} }
   c.innerHTML=h; wizProgress(); if(st.k!=="sum") noteBind(st);
   const adv=()=>setTimeout(()=>wizGo(SA.i+1,1),380);
   const mk=$("wMark"); if(mk) mk.onclick=()=>{ SA.navT=performance.now(); if(st.sig) SA.sigOk=true; SA.marks[st.id]=sCurT(); if(st.sig) SA.sigAuto="manual"; spDraw(); wizRender(); adv(); };
@@ -4012,7 +4014,7 @@ function evSumHTML(){
   const o=evMetrics(), p=EV.cur, t=p.trials[EV.trial], row=spRow, hd=spHd, PH=SPPH();
   const res={clean:L("Sauber","Clean"),early:L("Zu früh","Too early")}[o.result]||"–";
   let h=`<p class="evlead" style="margin:0 0 8px"><i class="evv ${t.v}">${t.v}</i> <b>${esc(evVN(p,t.v))}</b> · ${L(`Versuch ${evPos(p,t)} von ${p.trials.length}`,`Attempt ${evPos(p,t)} of ${p.trials.length}`)} ${spInfoBtn()}</p>`;
-  if((o.block!=null && o.block>1.6) || (o.rt!=null && o.rt>1.2)) h+=`<p class="everr evwarn">${L("Die Zeiten sind unrealistisch lang. Wahrscheinlich ist das Video eine umgewandelte Zeitlupe statt der Originaldatei. Sende das Video mit „Alle Fotodaten“ und lade es erneut hoch.","The times are unrealistically long. The video is probably a converted slow-motion copy instead of the original file. Send the video with “All Photos Data” and upload it again.")}</p>`;
+  if(false) h+=`<p class="everr evwarn">${L("Die Zeiten sind unrealistisch lang. Wahrscheinlich ist das Video eine umgewandelte Zeitlupe statt der Originaldatei. Sende das Video mit „Alle Fotodaten“ und lade es erneut hoch.","The times are unrealistically long. The video is probably a converted slow-motion copy instead of the original file. Send the video with “All Photos Data” and upload it again.")}</p>`;
   h+=slowWarnHTML(o);
   // Kernwerte immer, weitere nur, wenn sie berechnet werden konnten
   const turn=isTurn(p), core=new Set(turn?["tIn5","t55","tOut5","footT"]:["rt","block","flight","jump","t5","t15"]); let cur=turn?null:"block";
@@ -4983,33 +4985,25 @@ function smoAuto(){ if(SA.raw) setTimeout(anaCheck,0); if(SA.smoChecked || !SA.r
   try{ const r=smoDetect(SA.rawHi?SA.rawHi.x:SA.raw, SA.rawHi?SA.rawHi.r:(SA.rawRate||24000)); if(r){ SA.smo=r; const g=r.segs; toast(g.length===1 ? L(`Zeitlupe erkannt (${fmtS(g[0].s0)} bis ${fmtS(g[0].s1)}, ${g[0].f}×). Zeiten darin rechnet Sprintz in Echtzeit um. Prüf Beginn, Ende und Faktor.`,`Slow motion detected (${fmtS(g[0].s0)} to ${fmtS(g[0].s1)}, ${g[0].f}×). Sprintz converts times in it to real time. Check start, end and factor.`) : L(`${g.length} Zeitlupen-Abschnitte erkannt. Zeiten darin rechnet Sprintz in Echtzeit um. Prüf Beginn, Ende und Faktor.`,`${g.length} slow-motion sections detected. Sprintz converts times in them to real time. Check start, end and factor.`),7000); } }catch(e){ console.error(e); }
   smoCard(); spDraw(); if(SA.steps[SA.i] && SA.steps[SA.i].k==="sum") wizRender(); }
 // Bedienung (Karte unter dem Video und im Vollbild): jeder Abschnitt mit Beginn, Ende und Faktor; jederzeit änderbar
-function smoCardHTML(){ const segs=smoSegs(), z=SA.smo;
-  return `<div class="lbl"><b>${L("Zeitlupen-Abschnitte","Slow-motion sections")}</b><small>${segs.length ? (z&&z.auto?L("Automatisch erkannt, bitte prüfen. ","Detected automatically, please check. "):"")+L("Zeiten in den Abschnitten rechnet Sprintz in Echtzeit um; beim Abspielen laufen sie entsprechend schneller, damit der Ton normal klingt. Stell das Video auf den Beginn bzw. das Ende und tippe auf den Knopf.","Sprintz converts times in the sections to real time; during playback they run faster accordingly so the sound is normal. Put the video on the start or end and tap the button.")
-      : L("Ist das Video stellenweise verlangsamt (z. B. iPhone-Zeitlupe, exportiert)? Dann leg die Abschnitte hier fest, damit Zeiten und Ton stimmen.","Is the video slowed down in places (e.g. an exported iPhone slow-motion video)? Set the sections here so times and sound are correct.")}</small></div>
-    ${segs.map((g,i)=>`<div class="smoseg${smoAt(sCurT())===g?" cur":""}"><span class="smolab">${L(`Abschnitt ${i+1}`,`Section ${i+1}`)}: <b>${fmtS(g.s0)} – ${fmtS(g.s1)}</b></span>
-      <span class="smob"><button type="button" class="testbtn small" data-sg="${i}" data-smo="s0">${L("Beginn hier","Start here")}</button><button type="button" class="testbtn small" data-sg="${i}" data-smo="s1">${L("Ende hier","End here")}</button>
-      <span class="seg smof">${SMOF.map(f=>`<button type="button" data-sg="${i}" data-smof="${f}" aria-pressed="${g.f===f}">${f}×</button>`).join("")}</span><button type="button" class="testbtn ghost small" data-sg="${i}" data-smo="del" aria-label="${L("Abschnitt entfernen","Remove section")}">×</button></span></div>`).join("")}
-    <div class="testrow smorow"><button type="button" class="testbtn small" data-smo="add">${L("+ Abschnitt ab hier","+ Section from here")}</button><button type="button" class="testbtn small" data-smo="all">${L("Ganzes Video","Whole video")}</button>${segs.length?`<button type="button" class="testbtn ghost small" data-smo="off">${L("Keine Zeitlupe","No slow motion")}</button>`:""}</div>`; }
-function smoBind(c){ const upd=()=>{ smoCard(); spDraw(); fsSmoBar(); if(SA.steps[SA.i] && SA.steps[SA.i].k==="sum") wizRender(); };
-  const set=segs=>{ SA.smo = segs.length ? {segs, auto:false} : null; };
-  c.querySelectorAll("[data-smo]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const a=b.dataset.smo, i=+b.dataset.sg, t=sCurT(), d=sVid.duration||0, segs=smoSegs().map(g=>Object.assign({},g));
-    if(a==="off") set([]); else if(a==="all") set([{s0:0, s1:d, f:(segs[0]&&segs[0].f)||8}]);
-    else if(a==="add") set(segs.concat([{s0:t, s1:Math.min(d, t+1.5), f:(segs[segs.length-1]&&segs[segs.length-1].f)||8}]));
-    else if(a==="del"){ segs.splice(i,1); set(segs); }
-    else if(segs[i]){ segs[i][a]=t; if(segs[i].s1<segs[i].s0){ const q=segs[i].s0; segs[i].s0=segs[i].s1; segs[i].s1=q; } set(segs); }
-    upd(); });
-  c.querySelectorAll("[data-smof]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const segs=smoSegs().map(g=>Object.assign({},g)), i=+b.dataset.sg; if(segs[i]){ segs[i].f=+b.dataset.smof; set(segs); } upd(); }); }
-function smoCard(){ const c=$("sSmoCard"); if(c){ const segs=smoSegs(); if(!SA.active || (!segs.length && !(SA.fps<=65))) c.hidden=true; else { c.hidden=false; c.innerHTML=smoCardHTML(); smoBind(c); } }
+function smoCardHTML(){ const segs=smoSegs(), f=SA.fps||30;
+  return `<div class="lbl"><b>${L("Zeitlupe","Slow motion")}</b><small>${segs.length ? L(`Sprintz hat erkannt, dass das Video stellenweise verlangsamt ist (${segs.map(g=>`${fmtS(g.s0)} – ${fmtS(g.s1)}`).join(", ")}), und rechnet alle Zeiten automatisch in Echtzeit um. Dort entspricht ein Videobild ${Math.round(1000/(f*segs[0].f)*10)/10} ms.`,`Sprintz detected that the video is slowed down in places (${segs.map(g=>`${fmtS(g.s0)} – ${fmtS(g.s1)}`).join(", ")}) and converts all times to real time automatically. There, one video frame is ${Math.round(1000/(f*segs[0].f)*10)/10} ms.`)
+      : L("Keine Zeitlupe erkannt: Die Zeiten im Video sind Echtzeit.","No slow motion detected: the times in the video are real time.")}</small></div>
+    <div class="testrow smorow">${segs.length?`<button type="button" class="testbtn ghost small" data-smo="off">${L("Das Video ist keine Zeitlupe","The video is not slow motion")}</button>`:`<button type="button" class="testbtn ghost small" data-smo="again">${L("Erneut prüfen","Check again")}</button>`}</div>`; }
+function smoBind(c){ const upd=()=>{ smoCard(); spDraw(); fsSmoBar(); sFpsUpd(); if(SA.steps[SA.i] && SA.steps[SA.i].k==="sum") wizRender(); };
+  c.querySelectorAll("[data-smo]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const a=b.dataset.smo;
+    if(a==="off"){ SA.smo=null; SA.smoUserOff=true; } else if(a==="again"){ SA.smoUserOff=false; SA.smo=null; SA.smoChecked=false; smoAuto(); slowAutoFix(); }
+    upd(); }); }
+function smoCard(){ const c=$("sSmoCard"); if(c){ const segs=smoSegs(); if(!SA.active || !segs.length) c.hidden=true; else { c.hidden=false; c.innerHTML=smoCardHTML(); smoBind(c); } }
   const p=$("fsSmoPop"); if(p && !p.hidden){ p.innerHTML=smoCardHTML(); smoBind(p); } fsSmoBar(); sFpsUpd(); }
 // Vollbild: Zeitlupe und Abspielgeschwindigkeit unten in der Leiste
-function fsSmoBar(){ const b=$("fsSmoB"); if(!b) return; const segs=smoSegs(); b.textContent = segs.length ? L(`Zeitlupe: ${segs.map(g=>g.f+"×").join(", ")}`,`Slow motion: ${segs.map(g=>g.f+"×").join(", ")}`) : L("Zeitlupe: keine","Slow motion: none"); b.classList.toggle("on",!!segs.length);
-  const s=$("fsSpd"); if(s) s.textContent=({0.25:"¼×",0.5:"½×",1:"1×"})[SA.playBase||0.25]; }
+function fsSmoBar(){ const b=$("fsSmoB"); if(!b) return; const segs=smoSegs(); b.textContent = segs.length ? L("Zeitlupe: automatisch in Echtzeit","Slow motion: converted to real time") : L("Echtzeit","Real time"); b.classList.toggle("on",!!segs.length);
+  const s=$("fsSpd"); if(s) s.textContent=SPDL(SA.playBase); }
 // beim Abspielen: verlangsamten Abschnitt entsprechend schneller abspielen, Tonhöhe nicht korrigieren (so stimmt sie wieder)
 function smoRate(){ const g=smoAt(sVid.currentTime), base=SA.curBase||0.25; const inside=!!g;
   const r=Math.min(16, inside ? base*g.f : base); if(Math.abs(sVid.playbackRate-r)>1e-3) sVid.playbackRate=r;
   const pp=!inside; if(sVid.preservesPitch!==pp){ try{ sVid.preservesPitch=pp; sVid.webkitPreservesPitch=pp; sVid.mozPreservesPitch=pp; }catch(e){} } }
-const SPD=[0.25,0.5,1];
-function spdLabel(){ const b=$("sSpd"); if(b) b.textContent=({0.25:"¼×",0.5:"½×",1:"1×"})[SA.playBase||0.25]; if(typeof fsSmoBar==="function") fsSmoBar(); }
+function SPDL(v){ return ({1:"4/4",0.75:"3/4",0.5:"2/4",0.25:"1/4"})[v||0.25]||"1/4"; }
+function spdLabel(){ const b=$("sSpd"); if(b) b.textContent=SPDL(SA.playBase); if(typeof fsSmoBar==="function") fsSmoBar(); }
 
 /* ---------- Auswertungsmodus: Videos ohne Projekt sichten (Zeitlupe), schnell bewerten und später detailliert auswerten ----------
    Je Video wird festgelegt, was ausgewertet wird: Start, Wende, Anschlag oder Technik allgemein (mit den bekannten Unterscheidungen).
@@ -5178,7 +5172,18 @@ function qkAnaHead(){ const h=$("evAnaHead"), e=qkE(QK.cur); if(!e){ h.hidden=tr
   h.innerHTML=`<span><b>${esc(qkName(e))}</b> · ${qkKindName(e.kind)}${qkSub(e)?" ("+qkSub(e)+")":""} · ${QK.det?L("Detaillierte Auswertung","Detailed analysis"):e.kind==="tech"?L("Sichten","Viewing"):L("Schnelle Bewertung","Quick rating")} · ${L(`Video ${k} von ${ord.length}`,`Video ${k} of ${ord.length}`)} ${QK.det?spInfoBtn():""}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="qkAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
   $("qkAnaBack").onclick=()=>{ qkCloseAna(); qkList(); }; }
 // Hinweis bei unrealistischen Zeiten: wahrscheinlich ein Video mit fester Zeitlupe
-function slowWarnHTML(o){ if(!o) return ""; const t15=o.t15, t5=o.t5, t10=o.t10, rt=o.rt, bl=o.block;
+/* Automatische Korrektur, wenn die Zeiten physiologisch nicht passen (Start): Blockzeit 0,45–1,25 s, Reaktion bis 0,5 s, 15 m unter 12 s.
+   Der Faktor wird aus dem Verhältnis zum typischen Wert bestimmt und auf die üblichen Zeitlupen (2, 4, 5, 8, 10) gerundet. */
+function slowAutoFix(){ if(!SA.active || SA.smoUserOff || !SA.marks || SA.marks.sig==null) return false; let o; try{ o=evMetrics(); }catch(e){ return false; }
+  const M=SA.marks, bl=o.block, rt=o.rt, t15=o.t15; let ratio=null;
+  if(bl!=null){ if(bl>1.25 || bl<0.45) ratio=bl/0.72; } else if(rt!=null){ if(rt>0.5) ratio=rt/0.17; } else if(t15!=null){ if(t15>12) ratio=t15/6.5; }
+  if(!ratio) return false; const at=M.off??M.move??M.p15, g0=smoAt(at), cf=g0?g0.f:1, want=cf*ratio;
+  const f=[1,2,4,5,8,10].reduce((a,b)=>Math.abs(Math.log2(b/want))<Math.abs(Math.log2(a/want))?b:a); if(f===cf) return false;
+  const segs=smoSegs(); if(f===1) SA.smo=null; else if(segs.length && g0) SA.smo={segs:segs.map(g=>Object.assign({},g,{f})), auto:true}; else SA.smo={segs:[{s0:0, s1:sVid.duration||0, f}], auto:true};
+  toast(L("Zeitlupe automatisch erkannt: Sprintz rechnet die Zeiten in Echtzeit um.","Slow motion detected automatically: Sprintz converts the times to real time."),4000);
+  smoCard(); spDraw(); sFpsUpd(); return true; }
+function slowWarnHTML(o){ return ""; }
+function slowWarnHTMLOld(o){ if(!o) return ""; const t15=o.t15, t5=o.t5, t10=o.t10, rt=o.rt, bl=o.block;
   const bad=(t15!=null&&t15>12) || (t10!=null&&t10>8) || (t5!=null&&t5>4.5) || (rt!=null&&rt>0.45) || (bl!=null&&bl>1.3);
   if(!bad) return ""; const M=SA.marks||{}, cf=((typeof smoAt==="function" && smoAt(M.off??M.move??M.sig??0))||{f:1}).f; // bereits gewählte Verlangsamung einrechnen
   const ref = cf*(t15!=null&&t15>12 ? t15/6.5 : t10!=null&&t10>8 ? t10/4.2 : t5!=null&&t5>4.5 ? t5/1.9 : bl!=null&&bl>1.3 ? bl/0.72 : rt/0.18);
@@ -5190,7 +5195,7 @@ function slowWarnHTML(o){ if(!o) return ""; const t15=o.t15, t5=o.t5, t10=o.t10,
 document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-smoall]"); if(!b || !SA.active) return; const f=+b.dataset.smoall, d=sVid.duration||0;
   const sg=smoSegs(); SA.smo = sg.length ? {segs:sg.map(g=>Object.assign({},g,{f})), auto:false} : {segs:[{s0:0, s1:d, f}], auto:false}; smoCard(); spDraw(); wizRender(); });
 function qkSumHTML(){
-  const e=qkE(QK.cur)||{}, o=qkMetrics(), row=spRow, hd=spHd, PH=SPPH(); let h="";
+  if((qkE(QK.cur)||{}).kind==="start") slowAutoFix(); const e=qkE(QK.cur)||{}, o=qkMetrics(), row=spRow, hd=spHd, PH=SPPH(); let h="";
   if(e.kind==="start") h+=slowWarnHTML(o);
   if(e.kind==="tech"){ h+=`<p class="hint" style="margin:0 2px 8px">${L("Notizen schreibst du mit N oder über „✎ Notiz“, zeichnen kannst du im Vollbild über die Leiste am rechten Rand. Beides wird mit dem Eintrag gespeichert.","Write notes with N or via “✎ Note”; in full screen you can draw with the bar on the right edge. Both are saved with the entry.")}</p>`; }
   else if(e.kind==="finish"){ h+=`<table class="restbl">`+hd(L("Anschlag","Finish"))+row(L("Zeit letzte 5 m","Time last 5 m"),evFmt(o.tF5,"s"))+row(L("Zeit letzte 10 m","Time last 10 m"),evFmt(o.tF10,"s"))+row(L("Geschwindigkeit letzte 5 m","Velocity last 5 m"),evFmt(o.vF5,"m/s"))+row(L("Geschwindigkeit 10–5 m","Velocity 10–5 m"),evFmt(o.vF105,"m/s"))+(QK.det?row(L("Letzter Armzug bis Anschlag","Last arm pull to touch"),evFmt(o.lastT,"s")):"")+`</table>`; }
@@ -5427,6 +5432,52 @@ function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") retu
 }
 
 document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-devback]"); if(b) setMode("dev"); });
+/* ---------- Hinweis in der Online-Version: Sprintz als Programm herunterladen, Anleitung passend zum Betriebssystem ---------- */
+const DLREL="https://github.com/lassedietrich/sprintz/releases/latest";
+function dlOS(){ const ua=navigator.userAgent||"", pl=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||"";
+  if(/iPhone|iPad|iPod|Android/i.test(ua) || (/Mac/i.test(pl) && navigator.maxTouchPoints>1)) return "mobile";
+  if(/Win/i.test(pl) || /Windows/i.test(ua)) return "win";
+  if(/Mac/i.test(pl) || /Mac OS X/i.test(ua)) return "mac";
+  return "other"; }
+// Apple-Chip oder Intel: über die Grafikkarte (nur ein Hinweis, beide Downloads bleiben wählbar)
+function dlMacArch(){ try{ const c=document.createElement("canvas").getContext("webgl"); const e=c&&c.getExtension("WEBGL_debug_renderer_info"); const r=e?c.getParameter(e.UNMASKED_RENDERER_WEBGL):""; if(/Apple M\d|Apple GPU/i.test(r)) return "arm64"; if(/Intel|AMD|Radeon/i.test(r)) return "x64"; }catch(e){} return null; }
+async function dlAssets(){ try{ const r=await fetch("https://api.github.com/repos/lassedietrich/sprintz/releases/latest"); if(!r.ok) return null; const j=await r.json(); return {v:String(j.tag_name||"").replace(/^v/,""), a:(j.assets||[]).map(x=>({n:x.name, u:x.browser_download_url, mb:Math.round(x.size/1048576)}))}; }catch(e){ return null; } }
+async function dlShow(){
+  const dlg=$("dlDlg"); if(!dlg || window.sprintzDesktop) return; const os=dlOS(), arch=os==="mac"?dlMacArch():null, box=$("dlBody");
+  const btn=(href,lab,sub,main)=>`<a class="dlbtn${main?" main":""}" href="${href}" target="_blank" rel="noopener">${lab}${sub?`<small>${sub}</small>`:""}</a>`;
+  const render=R=>{ const f=re=>R&&R.a.find(x=>re.test(x.n)), ver=R&&R.v?` ${R.v}`:"";
+    const arm=f(/mac-arm64\.dmg$/), x64=f(/mac-x64\.dmg$/), win=f(/win-x64\.exe$/), mb=x=>x?L(`${x.mb} MB`,`${x.mb} MB`):"";
+    let h=`<p>${L("Sprintz gibt es auch als Programm für deinen Computer. Es kann alles, was die Online-Version kann, und wertet Videos bildgenau in voller Qualität aus, auch 4K mit hoher Bildrate. Die Online-Version bleibt für das Handy, z. B. für die Startsignale am Becken.","Sprintz is also available as a program for your computer. It does everything the online version does and analyses videos frame-accurately in full quality, including 4K at high frame rates. The online version stays for your phone, e.g. for the start signals at the pool.")}</p>`;
+    if(os==="mac"){ const first = arch==="x64" ? [x64,L("Für Mac mit Intel-Prozessor","For Mac with Intel processor")] : [arm,L("Für Mac mit Apple-Chip (M1 bis M4)","For Mac with Apple chip (M1 to M4)")], second = arch==="x64" ? [arm,L("Mac mit Apple-Chip","Mac with Apple chip")] : [x64,L("Mac mit Intel-Prozessor","Mac with Intel processor")];
+      h+=`<h3>${L("So installierst du Sprintz auf deinem Mac","How to install Sprintz on your Mac")}</h3>
+        <div class="dlbtns">${btn(first[0]?first[0].u:DLREL, L(`Sprintz${ver} herunterladen`,`Download Sprintz${ver}`), first[1]+(first[0]?" · "+mb(first[0]):""), true)}${btn(second[0]?second[0].u:DLREL, second[1], second[0]?mb(second[0]):"")}</div>
+        <p class="hint">${L("Welchen Chip dein Mac hat, siehst du im Apple-Menü oben links unter „Über diesen Mac“ (Chip: Apple M… oder Prozessor: Intel).","You can see which chip your Mac has in the Apple menu at the top left under “About This Mac” (Chip: Apple M… or Processor: Intel).")}</p>
+        <ol class="dlsteps"><li>${L("Lade die Datei herunter (sie öffnet sich in einem neuen Tab) und öffne sie im Ordner „Downloads“.","Download the file (it opens in a new tab) and open it in the “Downloads” folder.")}</li>
+        <li>${L("Zieh das Sprintz-Symbol im Fenster auf den Ordner „Programme“.","Drag the Sprintz icon in the window onto the “Applications” folder.")}</li>
+        <li>${L("Öffne das Terminal: Cmd + Leertaste drücken, „Terminal“ eingeben, Enter. Füge diesen Befehl ein und drück Enter:","Open Terminal: press Cmd + Space, type “Terminal”, Enter. Paste this command and press Enter:")}<div class="dlcmd"><code id="dlCmd">xattr -cr /Applications/Sprintz.app</code><button type="button" class="testbtn small" id="dlCopy">${L("Kopieren","Copy")}</button></div><small>${L("Nötig, weil Sprintz noch nicht bei Apple signiert ist. Sonst meldet macOS, die App sei beschädigt.","Needed because Sprintz isn't signed with Apple yet. Otherwise macOS says the app is damaged.")}</small></li>
+        <li>${L("Starte Sprintz aus dem Ordner „Programme“ und melde dich mit deinem Konto an. Deine Daten sind sofort da.","Start Sprintz from the “Applications” folder and sign in with your account. Your data is there right away.")}</li></ol>`; }
+    else if(os==="win"){ h+=`<h3>${L("So installierst du Sprintz unter Windows","How to install Sprintz on Windows")}</h3>
+        <div class="dlbtns">${btn(win?win.u:DLREL, L(`Sprintz${ver} herunterladen`,`Download Sprintz${ver}`), L("Für Windows (64 Bit)","For Windows (64-bit)")+(win?" · "+mb(win):""), true)}</div>
+        <ol class="dlsteps"><li>${L("Lade die Datei herunter (sie öffnet sich in einem neuen Tab) und öffne sie.","Download the file (it opens in a new tab) and open it.")}</li>
+        <li>${L("Zeigt Windows „Der Computer wurde durch Windows geschützt“: Klick auf „Weitere Informationen“ und dann auf „Trotzdem ausführen“. Nötig, weil Sprintz noch nicht signiert ist.","If Windows shows “Windows protected your PC”: click “More info” and then “Run anyway”. Needed because Sprintz isn't signed yet.")}</li>
+        <li>${L("Folge der Installation. Danach startet Sprintz und ist im Startmenü zu finden.","Follow the installation. Sprintz then starts and is in the Start menu.")}</li>
+        <li>${L("Melde dich mit deinem Konto an. Deine Daten sind sofort da.","Sign in with your account. Your data is there right away.")}</li></ol>`; }
+    else { h+=`<h3>${L("Am Computer installieren","Install on a computer")}</h3><p>${L("Das Programm gibt es für Mac und Windows. Öffne diese Seite an deinem Computer, dann zeigt Sprintz dir dort die passende Anleitung.","The program is available for Mac and Windows. Open this page on your computer and Sprintz shows you the matching instructions there.")}</p>
+        <div class="dlbtns">${btn(DLREL, L("Alle Downloads ansehen","See all downloads"), "", false)}</div>`; }
+    h+=`<p class="hint">${L("Neue Versionen meldet das Programm beim Start selbst.","The program announces new versions itself when it starts.")}</p>`;
+    box.innerHTML=h; const cp=$("dlCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText("xattr -cr /Applications/Sprintz.app"); cp.textContent=L("Kopiert","Copied"); }catch(e){} }; };
+  render(null); dlg.hidden=false; $("dlTitle").textContent=L("Sprintz als Programm","Sprintz as a program"); $("dlClose").textContent=L("Später","Later");
+  const R=await dlAssets(); if(!dlg.hidden) render(R);
+}
+function dlHide(){ $("dlDlg").hidden=true; try{ localStorage.setItem("sprintz-dlhint","1"); }catch(e){} }
+$("dlClose").onclick=dlHide; $("dlDlg").addEventListener("click",e=>{ if(e.target.id==="dlDlg") dlHide(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("dlDlg").hidden) dlHide(); });
+// beim ersten Öffnen (nicht im Programm, nicht während Sportwahl oder Tour)
+(function dlFirst(){ if(window.sprintzDesktop) return; let seen=null; try{ seen=localStorage.getItem("sprintz-dlhint"); }catch(e){} if(seen) return;
+  let n=0; const tick=()=>{ const onb=$("onb"), tour=document.querySelector(".tourbox:not([hidden]),#tour:not([hidden])"); if((onb&&!onb.hidden&&onb.offsetParent!==null) || tour){ if(++n<240) setTimeout(tick,1500); return; } dlShow(); };
+  setTimeout(tick,2500); })();
+{ const a=document.querySelector("#deskDl a"); if(a) a.addEventListener("click",e=>{ e.preventDefault(); $("aboutDlg").hidden=true; dlShow(); }); }
+
 /* --- Notizen zur Technik während der Auswertung: werden dem Kennwert des aktuellen Schritts zugeordnet und im Ergebnis gesammelt --- */
 const NUMK={jump:"jump",entryD:"entryD",kick1D:"kick1D",diveD:"dive",kicks:"kicks",rotD:"rotD"};
 function noteTarget(st){
