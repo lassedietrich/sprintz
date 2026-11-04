@@ -4,6 +4,7 @@ const path = require('path'), fs = require('fs'), crypto = require('crypto'), { 
 const unpack = p => p.replace('app.asar', 'app.asar.unpacked');
 const FFMPEG = unpack(require('ffmpeg-static'));
 const REPO = 'lassedietrich/sprintz';
+const DEVS = ['host289', 'freaky200']; // Konten mit eigenem Test-Zweig
 const os = require('os');
 let win;
 
@@ -36,11 +37,13 @@ async function resolvePage(ch) {
     dialog.showMessageBox(win, { type: 'info', message: 'Im Ordner Sprintz-Test liegt noch keine Testversion', detail: TEST_DIR() + '\n\nSobald dort eine index.html liegt, lädt Sprintz sie automatisch. Bis dahin läuft die normale Fassung.' });
     return resolvePage('stable');
   }
-  if (ch === 'test') {
-    const t = await fetchText(`https://api.github.com/repos/${REPO}/contents/index.html?ref=test&t=${Date.now()}`, { Accept: 'application/vnd.github.raw' }, 15000);
-    if (validHtml(t)) { const f = path.join(webDir(), 'test.html'); fs.writeFileSync(f, t); return { file: f, channel: 'test', note: 'GitHub-Zweig test, geladen ' + new Date().toLocaleString('de-DE') }; }
-    const old = path.join(webDir(), 'test.html');
-    if (fs.existsSync(old)) return { file: old, channel: 'test', note: 'GitHub nicht erreichbar, zuletzt geladene Testversion' };
+  if (ch === 'test' || ch.startsWith('test:')) {
+    // jede entwickelnde Person hat ihren eigenen Test-Zweig: test-<Konto> (z. B. test-host289, test-freaky200)
+    const who = ch === 'test' ? (SET.user || 'host289') : ch.slice(5), ref = 'test-' + who, fn = 'test-' + who.replace(/[^a-z0-9_-]/gi, '') + '.html';
+    const t = await fetchText(`https://api.github.com/repos/${REPO}/contents/index.html?ref=${encodeURIComponent(ref)}&t=${Date.now()}`, { Accept: 'application/vnd.github.raw' }, 15000);
+    if (validHtml(t)) { const f = path.join(webDir(), fn); fs.writeFileSync(f, t); return { file: f, channel: 'test', note: `Zweig ${ref}, geladen ` + new Date().toLocaleString('de-DE') }; }
+    const old = path.join(webDir(), fn);
+    if (fs.existsSync(old)) return { file: old, channel: 'test', note: `${ref}: GitHub nicht erreichbar, zuletzt geladene Fassung` };
     dialog.showMessageBox(win, { type: 'warning', message: 'Testversion nicht erreichbar', detail: 'Der Test-Zweig auf GitHub konnte nicht geladen werden. Es läuft die normale Fassung.' });
     return resolvePage('stable');
   }
@@ -73,6 +76,7 @@ function badge() {
     b.style.cssText='position:fixed;left:50%;top:0;transform:translateX(-50%);z-index:2147483647;background:#E8590C;color:#fff;font:600 11px/1.2 system-ui,sans-serif;padding:4px 12px;border-radius:0 0 8px 8px;pointer-events:none;letter-spacing:.04em;box-shadow:0 2px 6px rgba(0,0,0,.25)'; })()`).catch(() => {});
 }
 function setChannel(ch) { SET.channel = ch; saveSet(); loadApp(); }
+// ältere Einstellung „test“ = eigener Test-Zweig
 function menu() {
   const isMac = process.platform === 'darwin';
   const view = { label: 'Darstellung', submenu: [
@@ -84,9 +88,9 @@ function menu() {
   else t.push({ label: 'Datei', submenu: [{ role: 'quit', label: 'Beenden' }] });
   t.push({ role: 'editMenu', label: 'Bearbeiten' }, view);
   if (SET.dev) {
-    const r = (id, label) => ({ label, type: 'radio', checked: SET.channel === id, click: () => setChannel(id) });
+    const r = (id, label) => ({ label, type: 'radio', checked: SET.channel === id || (SET.channel === 'test' && id === 'test:' + (SET.user || 'host289')), click: () => setChannel(id) });
     t.push({ label: 'Entwicklung', submenu: [
-      r('stable', 'Normale Fassung (GitHub Pages)'), r('test', 'Testversion: GitHub-Zweig test'), r('local', 'Testversion: Ordner Sprintz-Test'), r('bundled', 'Fassung aus dem Installer'),
+      r('stable', 'Normale Fassung (GitHub Pages)'), ...DEVS.map(u => r('test:' + u, `Testversion von ${u}${u === SET.user ? ' (meine)' : ''}: Zweig test-${u}`)), r('local', 'Testversion: Ordner Sprintz-Test'), r('bundled', 'Fassung aus dem Installer'),
       { type: 'separator' },
       { label: 'Ordner Sprintz-Test öffnen', click: () => { fs.mkdirSync(TEST_DIR(), { recursive: true }); shell.openPath(TEST_DIR()); } },
       { label: 'Entwicklerwerkzeuge', accelerator: isMac ? 'Alt+Cmd+I' : 'Ctrl+Shift+I', click: () => win && win.webContents.toggleDevTools() },
@@ -96,7 +100,7 @@ function menu() {
   t.push({ role: 'windowMenu', label: 'Fenster' });
   Menu.setApplicationMenu(Menu.buildFromTemplate(t));
 }
-ipcMain.handle('set-dev', (e, on) => { if (on && !SET.dev) { SET.dev = true; saveSet(); menu(); } return SET.dev; });
+ipcMain.handle('set-dev', (e, on, user) => { let ch = false; if (on && !SET.dev) { SET.dev = true; ch = true; } if (user && SET.user !== user) { SET.user = String(user); ch = true; } if (ch) { saveSet(); menu(); } return SET.dev; });
 ipcMain.handle('channel', () => ({ channel: loaded.channel, note: loaded.note }));
 
 function createWindow() {

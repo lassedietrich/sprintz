@@ -33,7 +33,11 @@ Das Programm übernimmt beim Bauen die aktuelle `index.html` aus dem Repo.
 - `src/` – Quelltext, Töne, Übersetzungen (`src/i18n`), PDF-Schrift
 - `desktop/` – Electron-Hülle (`main.js`, `preload.js`), Videoverarbeitung mit FFmpeg
 
-## Testen im Desktop-Programm (Entwicklermodus, Konten host289 und freaky200)
+## Zusammenarbeit und Testen (Konten host289 und freaky200)
+
+Jede Person arbeitet in ihrem eigenen Zweig (`test-host289`, `test-freaky200`) und testet ihn im Desktop-Programm über das Menü **Entwicklung**. Nur Lasse übernimmt Änderungen nach `main` (Pull Request). Die Arbeitsregeln für Claude stehen in `CLAUDE.md`.
+
+### Testen im Desktop-Programm
 
 Das Desktop-Programm lädt die Web-App bei jedem Start von GitHub Pages; ein neuer Installer ist nur bei Änderungen im Ordner `desktop/` nötig.
 Im Menü **Entwicklung** lässt sich die Fassung umschalten:
