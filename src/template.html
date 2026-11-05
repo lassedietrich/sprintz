@@ -5088,7 +5088,7 @@ function qkList(){
           : `<div class="qkask"><p class="qt">${L("Was wird in diesem Video ausgewertet?","What is analysed in this video?")}</p><div data-kid="${e.id}">${qkKindHTML(e,"ek")}</div></div>`}
         ${e.kind && noKind && QK.openK===e.id ? `<button type="button" class="testbtn ghost small" data-kall="${e.id}">${L(`Auch für die ${noKind} Videos ohne Angabe übernehmen`,`Also apply to the ${noKind} videos without a choice`)}</button>`:""}
         ${cp?`<label class="qkpsel">${L("Athlet*in","Athlete")} <select class="evsel" data-pers="${e.id}"><option value="">${L("– keine Zuordnung –","– not assigned –")}</option>${pl.map(x=>`<option value="${x.id}"${e.person===x.id?" selected":""}>${esc(x.name)}</option>`).join("")}</select></label>`:""}
-        <div class="qkbtns"><button type="button" class="testbtn small" data-qa="${e.id}"${has&&e.kind?"":" disabled"}>${e.kind==="tech"?L("Ansehen","View"):e.status==="open"?L("Schnell bewerten","Quick rating"):L("Zeiten ansehen","View times")}</button>${e.kind==="tech"?"":`<button type="button" class="testbtn small ghost" data-qd="${e.id}"${has&&e.kind?"":" disabled"}>${L("Detailliert auswerten","Analyse in detail")}</button>`}</div></div>
+        <div class="qkbtns"><button type="button" class="testbtn small" data-qa="${e.id}"${has&&e.kind?"":" disabled"}>${e.kind==="tech"?L("Ansehen","View"):e.status==="open"?L("Schnell bewerten","Quick rating"):L("Zeiten ansehen","View times")}</button>${e.kind==="tech"?"":`<button type="button" class="testbtn small ghost" data-qd="${e.id}"${has&&e.kind?"":" disabled"}>${L("Detailliert auswerten","Analyse in detail")}</button>`}${e.kind && e.status!=="open" && has?`<button type="button" class="testbtn small ghost" data-qpdf="${e.id}">📄 ${L("Ergebnis-PDF","Result PDF")}</button>`:""}</div></div>
         <button type="button" class="evdel" data-del="${e.id}" aria-label="${L("Eintrag löschen","Delete entry")}">×</button></div>`; }).join("") : `<p class="hint">${L("Noch keine Videos.","No videos yet.")}</p>`}</div>
     ${ord.some(e=>e.m)?`<button type="button" class="testbtn ghost" id="qkCsv" style="margin-top:14px">${L("Zeiten herunterladen (CSV)","Download times (CSV)")}</button>`:""}
     <details class="card qkdet"${QK.detOpen?" open":""}><summary><b>${L("Kennwerte für die detaillierte Auswertung","Parameters for the detailed analysis")}</b></summary>
@@ -5101,6 +5101,7 @@ function qkList(){
   const all=$("qkAll"); if(all) all.onclick=()=>{ const e=qkOrd().find(x=>x.status==="open" && qkHasVid(x)); if(e) qkAnalyze(e,false); };
   pg.querySelectorAll("[data-qa]").forEach(b=>b.onclick=()=>qkAnalyze(qkE(b.dataset.qa),false));
   pg.querySelectorAll("[data-qd]").forEach(b=>b.onclick=()=>qkAnalyze(qkE(b.dataset.qd),true));
+  pg.querySelectorAll("[data-qpdf]").forEach(b=>b.onclick=()=>qkPdf(qkE(b.dataset.qpdf)));
   pg.querySelectorAll("[data-pers]").forEach(s=>s.onchange=()=>{ const e=qkE(s.dataset.pers); e.person=s.value||null; qkSave(); });
   const pf=$("qkPF"); if(pf) pf.onchange=()=>{ QK.pf=pf.value; qkList(); };
   const pa=$("qkPAdd"); if(pa) pa.onclick=()=>{ const ed=$("qkPEd"); ed.innerHTML=`<input type="text" class="qkin" id="qkPN" maxlength="40" placeholder="${L("Name oder Kürzel","Name or initials")}"><button type="button" class="testbtn small" id="qkPOk">${L("Hinzufügen","Add")}</button>`; const i=$("qkPN"); i.focus();
@@ -5177,6 +5178,11 @@ async function qkAnalyze(e, det){
     .catch(()=>{ if(ss!==SA.sess) return; if(SA.marks.sig==null && e.kind==="start"){ SA.marks.sig=0; SA.sigAuto="est"; } wizRender(); });
   wizRender();
 }
+/* Ergebnis-PDF direkt aus der Videoliste: Auswertung öffnen, zur Zusammenfassung springen, PDF erstellen */
+async function qkPdf(e){ if(!e) return; await qkAnalyze(e, e.kind!=="tech"); if(QK.cur!==e.id || !SA.active) return; const ss=SA.sess;
+  SA.i=SA.steps.length-1; wizRender();
+  await new Promise(r=>{ if(sVid.readyState>=2) return r(); const f=()=>{ sVid.removeEventListener("loadeddata",f); r(); }; sVid.addEventListener("loadeddata",f); setTimeout(r,8000); });
+  if(ss!==SA.sess) return; await resPdf(); }
 function qkAnaHead(){ const h=$("evAnaHead"), e=qkE(QK.cur); if(!e){ h.hidden=true; return; } h.hidden=false; const ord=qkOrd(), k=ord.indexOf(e)+1;
   h.innerHTML=`<span><b>${esc(qkName(e))}</b> · ${qkKindName(e.kind)}${qkSub(e)?" ("+qkSub(e)+")":""} · ${QK.det?L("Detaillierte Auswertung","Detailed analysis"):e.kind==="tech"?L("Sichten","Viewing"):L("Schnelle Bewertung","Quick rating")} · ${L(`Video ${k} von ${ord.length}`,`Video ${k} of ${ord.length}`)} ${QK.det?spInfoBtn():""}</span><span class="evhr"><button type="button" class="testbtn ghost small" id="qkAnaBack">${L("‹ Übersicht","‹ Overview")}</button></span>`;
   $("qkAnaBack").onclick=()=>{ qkCloseAna(); qkList(); }; }
@@ -6562,7 +6568,7 @@ function blogWrap(name, info){ try{ const f=eval(name); if(typeof f!=="function"
   eval(name+"=w"); }catch(e){} }
 const blogVid=t=>t&&t.vid?{name:t.vid.name, size:t.vid.size, dur:t.vid.dur, kind:t.kind, person:t.person?1:0, status:t.status}:undefined;
 [["setMode",m=>({m})],["qkAnalyze",(e,d)=>Object.assign({det:!!d},blogVid(e))],["evAnalyze",t=>blogVid(t)],["trainAna",null],["qkUpload",f=>({n:f&&f.length})],["evUpload",f=>({n:f&&f.length})],
- ["qkSaveCur",null],["evSaveTrial",null],["qkCloseAna",null],["evCloseAna",null],["fsEnter",null],["fsExit",null],["measStart",st=>({st:st&&st.id})],["measEnd",null],["evFindSig",null],["smoAuto",null],["slowAutoFix",null],["qkList",null],["kinoExport",null],["resPdf",null]].forEach(([n,i])=>blogWrap(n,i));
+ ["qkSaveCur",null],["evSaveTrial",null],["qkCloseAna",null],["evCloseAna",null],["fsEnter",null],["fsExit",null],["measStart",st=>({st:st&&st.id})],["measEnd",null],["evFindSig",null],["smoAuto",null],["slowAutoFix",null],["qkList",null],["kinoExport",null],["resPdf",null],["qkPdf",e=>blogVid(e)]].forEach(([n,i])=>blogWrap(n,i));
 sVid.addEventListener("error",()=>blog("error","Video-Fehler",{code:sVid.error&&sVid.error.code, msg:sVid.error&&sVid.error.message}));
 sVid.addEventListener("loadedmetadata",()=>blog("video","geladen",{dur:sVid.duration, w:sVid.videoWidth, h:sVid.videoHeight}));
 function blogState(){ const st=SA.steps&&SA.steps[SA.i]; return { zeit:new Date().toString(), version:(document.querySelector("meta[name=sprintz-build]")||{}).content||"", user:USER, mode:appMode, lang:LANG, desktop:!!window.sprintzDesktop, ua:navigator.userAgent, screen:innerWidth+"×"+innerHeight,
