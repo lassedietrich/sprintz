@@ -5579,6 +5579,26 @@ async function resStripPdf(F, doc, strip){ const fr=[]; for(const x of strip){ c
   fr.forEach((x,i)=>{ const c=i%cols, r=Math.floor(i/cols), X=x0+c*(w+gap), Y=F.y+r*(h+cap+gap); doc.image(x.id,X,Y,w,h);
     doc.text(X,Y+h+9,(F.wrap(x.lab,7,"b",w)[0]||""),{size:7,f:"b",color:"#0D2230"}); if(x.time) doc.text(X,Y+h+18,L(`${x.time} nach dem Startsignal`,`${x.time} after the start signal`),{size:7,color:"#557080"}); });
   F.y+=tot+8; }
+/* Abschnittsgeschwindigkeiten aus den Zeitmarken (5 m, 10 m, 15 m und weitere Messpunkte) */
+function segSpeeds(){ const M=SA.marks||{}; if(M.sig==null) return []; const tt=m=>relR(RT(m));
+  const pts=[[5,M.p5],[10,M.p10],[15,M.p15]].concat(xdList().map(d=>[d,M[xdId(d)]])).filter(x=>x[1]!=null).map(x=>[x[0],tt(x[1])]).filter(x=>x[1]!=null&&x[1]>0).sort((a,b)=>a[0]-b[0]);
+  const out=[]; let prev=[0,0]; pts.forEach(p=>{ const dt=p[1]-prev[1]; if(dt>0 && p[0]>prev[0]) out.push({a:prev[0], b:p[0], t:dt, v:(p[0]-prev[0])/dt, cum:p[1]}); prev=p; }); return out; }
+function segChartJpeg(S){ const c=document.createElement("canvas"); c.width=1600; c.height=620; const g=c.getContext("2d"), s=2, W=c.width, H=c.height, P=velPal(true);
+  g.fillStyle="#fff"; g.fillRect(0,0,W,H); const ml=70*s, mr=20*s, mt=34*s, mb=66*s, pw=W-ml-mr, ph=H-mt-mb, vmax=Math.max(...S.map(x=>x.v)), st=vmax>6?2:vmax>3?1:0.5, y1=Math.ceil((vmax*1.18)/st)*st, py=v=>mt+(1-v/y1)*ph;
+  g.font=`${11*s}px system-ui,sans-serif`; g.textBaseline="middle"; g.strokeStyle=P.ln; g.lineWidth=s; g.fillStyle=P.mu; g.textAlign="right";
+  for(let v=0;v<=y1+1e-9;v+=st){ const y=py(v); g.beginPath(); g.moveTo(ml,y); g.lineTo(ml+pw,y); g.stroke(); g.fillText(velMs(v),ml-8*s,y); }
+  g.save(); g.translate(16*s,mt+ph/2); g.rotate(-Math.PI/2); g.textAlign="center"; g.fillText("m/s",0,0); g.restore();
+  const tot=S[S.length-1].b, gap=6*s, px=d=>ml+d/tot*pw;
+  S.forEach((x,i)=>{ const x0=px(x.a)+gap/2, x1=px(x.b)-gap/2, y=py(x.v), r=Math.min(8*s,(x1-x0)/2);
+    const gr=g.createLinearGradient(0,y,0,mt+ph); gr.addColorStop(0,"#2F7BEF"); gr.addColorStop(1,"#9CC3FA"); g.fillStyle=gr;
+    g.beginPath(); g.moveTo(x0,mt+ph); g.lineTo(x0,y+r); g.quadraticCurveTo(x0,y,x0+r,y); g.lineTo(x1-r,y); g.quadraticCurveTo(x1,y,x1,y+r); g.lineTo(x1,mt+ph); g.closePath(); g.fill();
+    const cx=(x0+x1)/2; g.textAlign="center"; g.fillStyle="#0D2230"; g.font=`700 ${13*s}px system-ui,sans-serif`; g.fillText(`${velMs(x.v)} m/s`,cx,y-30*s); g.fillStyle=P.mu; g.font=`${10*s}px system-ui,sans-serif`; g.fillText(`${velPace(x.v)} min/100 m`,cx,y-15*s);
+    g.fillStyle="#0D2230"; g.font=`600 ${11*s}px system-ui,sans-serif`; g.fillText(`${xdFmt(x.a)}–${xdFmt(x.b)} m`,cx,mt+ph+16*s); g.fillStyle=P.mu; g.font=`${10*s}px system-ui,sans-serif`; g.fillText(`${evFmt(x.t,"s")} · ${L("ges.","tot.")} ${evFmt(x.cum,"s")}`,cx,mt+ph+32*s); });
+  // Verbindungslinie über die Balkenmitten
+  
+  S.forEach(x=>{ const cx=(px(x.a)+px(x.b))/2; g.fillStyle="#fff"; g.strokeStyle="#0A7A9F"; g.lineWidth=2*s; g.beginPath(); g.arc(cx,py(x.v),4.5*s,0,7); g.fill(); g.stroke(); });
+  g.fillStyle=P.mu; g.textAlign="center"; g.font=`${11*s}px system-ui,sans-serif`; g.fillText(L("Abschnitt (Zeit im Abschnitt · Gesamtzeit ab Startsignal)","Section (time in section · total time from the start signal)"),ml+pw/2,H-10*s);
+  const b64=c.toDataURL("image/jpeg",0.92).split(",")[1]; return {bytes:Uint8Array.from(atob(b64),ch=>ch.charCodeAt(0)), w:c.width, h:c.height}; }
 async function resPdf(pre){
   const ask = pre && pre.name ? pre : await fileAsk(resName(L("Ergebnisblatt","Result sheet"))+".pdf","application/pdf","pdf",L("Ergebnisblatt","Result sheet")); if(!ask) return;
   const C=resCtx(), M=SA.marks||{}, dt=new Date();
@@ -5602,6 +5622,10 @@ async function resPdf(pre){
     const rows=resRows(C).concat(xdRows());
     if(rows.length){ F.h2(L("Kennwerte","Parameters")); F.table([{h:L("Phase","Phase"),w:2},{h:L("Kennwert","Parameter"),w:4.2},{h:L("Wert","Value"),w:1.6,a:"r"}], rows.map(r=>[r.ph,{t:r.l,f:"b"},{t:r.v,f:"b"}])); }
     const sg=smoSegs(); F.para(L(`Bildrate: ${Math.round((SA.fps||30)*100)/100} Bilder pro Sekunde`,`Frame rate: ${Math.round((SA.fps||30)*100)/100} frames per second`)+(sg.length?" · "+L(`Zeitlupe erkannt (${sg[0].f}×), Zeiten in Echtzeit umgerechnet`,`Slow motion detected (${sg[0].f}×), times converted to real time`):""),{size:8,color:"#557080"});
+    // Geschwindigkeit je Abschnitt (aus den Zeitmarken)
+    const SG=segSpeeds();
+    if(SG.length){ F.h2(L("Geschwindigkeit je Abschnitt","Velocity per section")); const im=segChartJpeg(SG), id=doc.addJpeg(im.bytes,im.w,im.h), w=F.cw, h=w*im.h/im.w; F.need(h+10); F.img(id,w,h,F.M); F.y+=h+4;
+      F.para(L("Mittlere Geschwindigkeit zwischen den gesetzten Zeitmarken, gemessen am Kopf; der erste Abschnitt zählt ab dem Startsignal und enthält Reaktion, Blockphase und Flug.","Mean velocity between the set time marks, measured at the head; the first section counts from the start signal and includes reaction, block phase and flight."),{size:8,color:"#557080"}); }
     // Geschwindigkeitsverlauf
     const VR=SA.vel?velRes():null;
     if(VR){ F.h2(L("Geschwindigkeitsverlauf","Velocity profile")); const im=velChartJpeg(VR), id=doc.addJpeg(im.bytes,im.w,im.h), w=F.cw, h=w*im.h/im.w; F.need(h+10); F.img(id,w,h,F.M); F.y+=h+6;
@@ -5671,12 +5695,16 @@ async function kinoExport(){
   const rec=new MediaRecorder(stream,{mimeType:mime, videoBitsPerSecond:vbr, audioBitsPerSecond:256000}), chunks=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
   const done=new Promise(r=>rec.onstop=r); const wasMuted=sVid.muted, back=sVid.currentTime; sVid.muted=!dst;
   let raf=0; const loop=()=>{ draw(); raf=requestAnimationFrame(loop); };
+  // Start: Ton ab 2 s nach dem Startsignal über 0,5 s ausblenden; ab der 15-m-Marke normale Geschwindigkeit und Ton wieder einblenden
+  const MK=SA.marks, isStart=C.kind==="start" || (!C.kind && C.p && C.p.tech==="start"), gn=dst&&dst._g, fast=()=>isStart && MK.p15!=null && sVid.currentTime>=MK.p15-0.5/f;
+  const baseAt=()=>fast()?1:base;
+  const audio=()=>{ if(!gn) return; let v=1; if(MK.sig!=null && isStart){ if(fast()) v=Math.min(1,Math.max(0,(RT(sVid.currentTime)-RT(MK.p15))/0.5)); else { const r=relR(RT(sVid.currentTime)); if(r!=null && r>2) v=Math.max(0,1-(r-2)/0.5); } } try{ gn.gain.setTargetAtTime(v,KAUD.ac.currentTime,0.03); }catch(e){} };
   try{
     msg(L("Ergebnisvideo wird erstellt … Das Video läuft dabei in halber Geschwindigkeit durch.","Creating the result video … The video plays through at half speed."));
     await resSeek(t0); rec.start(250); loop();
     for(let i=0;i<=ev.length && !KINO.stop;i++){ const target = i<ev.length ? ev[i].t : t1; cur=null;
-      if(target>sVid.currentTime+0.5/f){ SA.curBase=base; smoRate(); await sVid.play().catch(()=>{});
-        await new Promise(res=>{ const chk=()=>{ if(KINO.stop || sVid.currentTime>=target-0.5/f || sVid.ended){ res(); return; } smoRate(); requestAnimationFrame(chk); }; chk(); }); sVid.pause(); }
+      if(target>sVid.currentTime+0.5/f){ SA.curBase=baseAt(); smoRate(); audio(); await sVid.play().catch(()=>{});
+        await new Promise(res=>{ const chk=()=>{ if(KINO.stop || sVid.currentTime>=target-0.5/f || sVid.ended){ res(); return; } SA.curBase=baseAt(); smoRate(); audio(); requestAnimationFrame(chk); }; chk(); }); sVid.pause(); }
       if(i<ev.length && !KINO.stop){ const e=ev[i]; await resSeek(e.t+0.5/f); e.ovl=e.dr?resOverlay(W,H):null; cur=e; msg(L(`Ergebnisvideo: ${i+1} von ${ev.length} Stellen`,`Result video: ${i+1} of ${ev.length} points`));
         const chars=e.notes.join(" ").length+e.sub.join(" ").length; await new Promise(r=>setTimeout(r,Math.min(8000,2600+chars*45+(e.geo.length?1200:0)))); } }
     cur=null; await new Promise(r=>setTimeout(r,500));
@@ -5767,8 +5795,8 @@ function kinoGeo(g, G, W, H, lab){ const s=Math.min(W,H)/520, A=[G.pts[0][0]*W,G
 /* ---------- Ton im Ergebnisvideo: Tonspur des Videos über Web Audio mitschneiden ---------- */
 const KAUD={ac:null, src:null};
 function kinoAudio(){ try{ if(!KAUD.ac){ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null; KAUD.ac=new AC(); KAUD.src=KAUD.ac.createMediaElementSource(sVid); KAUD.src.connect(KAUD.ac.destination); }
-  KAUD.ac.resume&&KAUD.ac.resume(); const dst=KAUD.ac.createMediaStreamDestination(); KAUD.src.connect(dst); try{ KAUD.src.disconnect(KAUD.ac.destination); }catch(e){} return dst; }catch(e){ blog("warn","kinoAudio: "+(e&&e.message||e)); return null; } }
-function kinoAudioEnd(dst){ try{ if(dst) KAUD.src.disconnect(dst); KAUD.src.connect(KAUD.ac.destination); }catch(e){} }
+  KAUD.ac.resume&&KAUD.ac.resume(); const dst=KAUD.ac.createMediaStreamDestination(), gn=KAUD.ac.createGain(); KAUD.src.connect(gn); gn.connect(dst); dst._g=gn; try{ KAUD.src.disconnect(KAUD.ac.destination); }catch(e){} return dst; }catch(e){ blog("warn","kinoAudio: "+(e&&e.message||e)); return null; } }
+function kinoAudioEnd(dst){ try{ if(dst) KAUD.src.disconnect(dst._g); KAUD.src.connect(KAUD.ac.destination); }catch(e){} }
 function resActHTML(){ return `<div class="resact"><button type="button" class="testbtn" id="resPdfB">📄 ${L("Ergebnis-PDF","Result PDF")}</button><button type="button" class="testbtn" id="kinoB">🎬 ${L("Ergebnisvideo exportieren","Export result video")}</button>${velSwim()?`<button type="button" class="testbtn" id="velB">📈 ${SA.vel&&SA.vel.f&&SA.vel.f.length?L("Geschwindigkeitsverlauf bearbeiten","Edit velocity profile"):L("Geschwindigkeitsverlauf messen","Measure velocity profile")}</button>`:""}</div>${velSwim()?velSumHTML():""}`; }
 function resActBind(){ const a=$("resPdfB"); if(a) a.onclick=()=>resPdf(); const b=$("kinoB"); if(b) b.onclick=()=>kinoExport(); const v=$("velB"); if(v) v.onclick=()=>velOpen(); velSumDraw(); }
 
@@ -6093,10 +6121,10 @@ function evPdfDefs(F,p,noStat){
     evDefs(p).map(x=>[{t:x.l+(un(x)?` (${un(x)})`:""),f:"b"}, x.def, x.r||"–", x.dir==="low"?L("kleiner","lower"):x.dir==="high"?L("größer","higher"):"–"]),{size:7.2});
   F.h2(L("Markierungen im Video","Video marks"));
   F.table([{h:L("Markierung","Mark"),w:2.2},{h:L("Was markiert wird","What is marked"),w:7.3}], evSteps(p).filter(s=>s.k!=="sum").map(s=>[{t:s.t(),f:"b"}, s.x()]),{size:7.4});
-  F.h2(L("Weitere Kennwerte, die man kennen sollte","Further parameters worth knowing"));
+  if(!noStat){ F.h2(L("Weitere Kennwerte, die man kennen sollte","Further parameters worth knowing"));
   F.para(L("Diese Kennwerte erfasst Sprintz nicht; sie brauchen meist zusätzliche Messtechnik.","Sprintz doesn't capture these parameters; they usually need additional measuring equipment."),{size:8,color:"#355262"});
   F.table([{h:L("Kennwert","Parameter"),w:2.3},{h:L("Beschreibung","Description"),w:3.6},{h:relLab(p,true),w:2.8},{h:L("Erfassung","Capture"),w:1.9}],
-    MORECAT(p).map(x=>[{t:`${x.l} (${x.kz})`,f:"b"}, `${PH[x.ph]}: ${x.d}`, x.r, x.e]),{size:7});
+    MORECAT(p).map(x=>[{t:`${x.l} (${x.kz})`,f:"b"}, `${PH[x.ph]}: ${x.d}`, x.r, x.e]),{size:7}); }
   if(!noStat){ F.h2(L("Statistische Werte","Statistical values"));
   F.table([{h:L("Begriff","Term"),w:2.2},{h:L("Erklärung","Explanation"),w:7.3}], EVSTAT().map(x=>[{t:x.t,f:"b"}, x.d]),{size:7.4}); }
   F.h2(L("Quellen","Sources")); EVSRC().forEach(x=>F.para(x,{size:7.6,color:"#355262",after:3}));
