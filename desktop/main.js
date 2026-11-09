@@ -138,7 +138,7 @@ function probeFile(file) { return new Promise((resolve) => {
     if (!v) return resolve(null);
     const line = v[0], fps = (line.match(/([\d.]+) fps/) || [])[1], tbr = (line.match(/([\d.]+) tbr/) || [])[1], d = t.match(/Duration: (\d+):(\d+):([\d.]+)/);
     const f = +fps || +tbr || null;
-    resolve({ codec: v[1], width: +v[2], height: +v[3], fps: f ? Math.round(f * 1000) / 1000 : null, duration: d ? (+d[1]) * 3600 + (+d[2]) * 60 + (+d[3]) : null });
+    resolve({ codec: v[1], width: +v[2], height: +v[3], fps: f ? Math.round(f * 1000) / 1000 : null, duration: d ? (+d[1]) * 3600 + (+d[2]) * 60 + (+d[3]) : null, hdr: /bt2020|arib-std-b67|smpte2084/.test(line), line: line.slice(0, 220) });
   });
 }); }
 
@@ -146,7 +146,7 @@ function probeFile(file) { return new Promise((resolve) => {
 const proxyDir = () => { const d = path.join(app.getPath('userData'), 'arbeitskopien'); fs.mkdirSync(d, { recursive: true }); return d; };
 const running = new Map();
 ipcMain.handle('proxy', async (e, file) => {
-  const st = fs.statSync(file), key = crypto.createHash('sha1').update(file + '|' + st.size + '|' + st.mtimeMs).digest('hex').slice(0, 20);
+  const st = fs.statSync(file), key = crypto.createHash('sha1').update('sdr709tm|' + file + '|' + st.size + '|' + st.mtimeMs).digest('hex').slice(0, 20);
   const out = path.join(proxyDir(), key + '.mp4');
   if (fs.existsSync(out) && fs.statSync(out).size > 1000) { fs.utimesSync(out, new Date(), new Date()); return { url: pathToFileURL(out).href, cached: true }; }
   if (running.has(out)) return running.get(out);
@@ -155,18 +155,28 @@ ipcMain.handle('proxy', async (e, file) => {
     // volle Auflösung und Bildrate (auch 4K mit hoher Bildrate); bei sehr vielen Bildpunkten je Sekunde ein schnelleres Profil, die Qualität bleibt über CRF gleich
     const info = await probeFile(file), px = info ? (info.width || 0) * (info.height || 0) * (info.fps || 30) : 0;
     const preset = px > 3840 * 2160 * 60 ? 'ultrafast' : px > 1920 * 1080 * 120 ? 'superfast' : 'veryfast';
-    const args = ['-y', '-hide_banner', '-i', file, '-map', '0:v:0', '-map', '0:a:0?',
-      '-c:v', 'libx264', '-preset', preset, '-crf', '14', '-g', '1', '-bf', '0', '-pix_fmt', 'yuv420p', '-threads', '0',
-      '-fps_mode', 'passthrough',
-      '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', tmp];
-    const p = spawn(FFMPEG, args);
-    p.stderr.on('data', d => {
-      const s = d.toString(), m = s.match(/Duration: (\d+):(\d+):([\d.]+)/); if (m) dur.v = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]);
-      const t = [...s.matchAll(/time=(\d+):(\d+):([\d.]+)/g)].pop();
-      if (t && dur.v) { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]); e.sender.send('proxy-progress', { file, p: Math.min(1, sec / dur.v) }); }
+    // immer SDR nach BT.709: iPhone-Videos sind oft HDR (HLG/PQ, BT.2020). Als 8-Bit-Kopie mit HDR-Kennzeichnung zeigt macOS teils ein schwarzes
+    // oder ein stark überbelichtetes Bild. HDR wird deshalb per Tone-Mapping (Hable) auf SDR gebracht; klappt das nicht, einfache Umrechnung.
+    const TM = 'zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p';
+    const PLAIN = 'scale=out_color_matrix=bt709:out_range=tv,format=yuv420p';
+    const run = vf => new Promise(res => {
+      const args = ['-y', '-hide_banner', '-i', file, '-map', '0:v:0', '-map', '0:a:0?',
+        '-vf', vf, '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv',
+        '-c:v', 'libx264', '-preset', preset, '-crf', '14', '-g', '1', '-bf', '0', '-profile:v', 'high', '-level:v', '5.1', '-threads', '0',
+        '-fps_mode', 'passthrough',
+        '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', tmp];
+      const p = spawn(FFMPEG, args);
+      p.stderr.on('data', d => {
+        const s = d.toString(), m = s.match(/Duration: (\d+):(\d+):([\d.]+)/); if (m) dur.v = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]);
+        const t = [...s.matchAll(/time=(\d+):(\d+):([\d.]+)/g)].pop();
+        if (t && dur.v) { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]); e.sender.send('proxy-progress', { file, p: Math.min(1, sec / dur.v) }); }
+      });
+      p.on('close', code => res(code === 0)); p.on('error', () => res(false));
     });
-    p.on('close', code => { running.delete(out); if (code === 0) { fs.renameSync(tmp, out); resolve({ url: pathToFileURL(out).href }); } else { try { fs.unlinkSync(tmp); } catch (x) {} resolve(null); } });
-    p.on('error', () => { running.delete(out); resolve(null); });
+    let ok = await run(info && info.hdr ? TM : PLAIN);
+    if (!ok && info && info.hdr) { try { fs.unlinkSync(tmp); } catch (x) {} ok = await run(PLAIN); }
+    running.delete(out);
+    if (ok) { fs.renameSync(tmp, out); resolve({ url: pathToFileURL(out).href }); } else { try { fs.unlinkSync(tmp); } catch (x) {} resolve(null); }
   });
   running.set(out, job); return job;
 });

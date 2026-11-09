@@ -1,0 +1,23 @@
+[
+["Result: {0}","Sonuç: {0}","Результат: {0}","Resultaat: {0}"],
+["Video: {0}","Video: {0}","Видео: {0}","Video: {0}"],
+["Frame: {0}","Kare: {0}","Кадр: {0}","Beeld: {0}"],
+["Frame: current position in the video","Kare: videodaki mevcut konum","Кадр: текущая позиция в видео","Beeld: huidige positie in de video"],
+["Phase","Faz","Фаза","Fase"],
+["Value","Değer","Значение","Waarde"],
+["Frame rate: {0} frames per second","Kare hızı: saniyede {0} kare","Частота кадров: {0} кадров в секунду","Beeldsnelheid: {0} beelden per seconde"],
+["Slow motion detected ({0}×), times converted to real time","Ağır çekim algılandı ({0}×), süreler gerçek zamana çevrildi","Обнаружена замедленная съёмка ({0}×), время пересчитано в реальное","Slow motion herkend ({0}×), tijden omgerekend naar echte tijd"],
+["Assigned to","Atandığı yer","Относится к","Toegewezen aan"],
+["No notes.","Not yok.","Заметок нет.","Geen notities."],
+["The PDF couldn't be created.","PDF oluşturulamadı.","Не удалось создать PDF.","De pdf kon niet worden gemaakt."],
+["{0} after the start signal","Start sinyalinden {0} sonra","{0} после стартового сигнала","{0} na het startsignaal"],
+["Set marks first, then there are points to pause at.","Önce işaretleri koy, sonra durulacak noktalar olur.","Сначала поставь отметки, тогда появятся точки для остановки.","Zet eerst markeringen, dan zijn er punten om te pauzeren."],
+["This browser can't create videos. Use the desktop program or Chrome.","Bu tarayıcı video oluşturamıyor. Masaüstü programını veya Chrome'u kullan.","Этот браузер не умеет создавать видео. Используй программу для компьютера или Chrome.","Deze browser kan geen video's maken. Gebruik het desktopprogramma of Chrome."],
+["Creating the cinema video … The video plays through at half speed.","Sinema videosu oluşturuluyor … Video yarı hızda oynatılıyor.","Создаётся кино-видео … Видео воспроизводится на половинной скорости.","Bioscoopvideo wordt gemaakt … De video speelt af op halve snelheid."],
+["Cinema video: {0} of {1} points","Sinema videosu: {1} noktadan {0}","Кино-видео: {0} из {1} точек","Bioscoopvideo: {0} van {1} punten"],
+["Cancelled.","İptal edildi.","Отменено.","Geannuleerd."],
+["Cinema video","Sinema videosu","Кино-видео","Bioscoopvideo"],
+["Result PDF","Sonuç PDF'i","PDF с результатом","Resultaat-pdf"],
+["Export cinema video","Sinema videosunu dışa aktar","Экспортировать кино-видео","Bioscoopvideo exporteren"],
+["Explanation of the parameters","Parametrelerin açıklaması","Пояснение показателей","Uitleg van de kenmerken"]
+]
