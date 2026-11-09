@@ -6015,7 +6015,21 @@ async function deskAttach(blob, onFps){
   if(tok!==SA.deskTok) return; ov.hidden=true;
   if(!r){ toast(L("Die Arbeitskopie ließ sich nicht erstellen. Sprintz nutzt das Original.","The working copy couldn't be created. Sprintz uses the original.")); return; }
   const t=VG.exp!=null?VG.exp:sVid.currentTime; SA.vidUrl=r.url; sVid.src=r.url; sVid.addEventListener("loadedmetadata",()=>{ vgCmd(t); try{ sVid.currentTime=t; }catch(e){} spDraw(); },{once:true});
+  blog("video","Arbeitskopie",{cached:!!r.cached, info:SA.deskInfo}); vidBlackGuard(r.url, tok);
 }
+/* Schwarzes Bild (z. B. HDR-Aufnahmen vom iPhone): Helligkeit der Arbeitskopie prüfen; ist sie schwarz, das Original aber nicht, das Original nutzen */
+async function vidLuma(src, ts){ const v=document.createElement("video"); v.muted=true; v.preload="auto"; v.src=src;
+  await new Promise(r=>{ v.addEventListener("loadeddata",r,{once:true}); v.addEventListener("error",r,{once:true}); setTimeout(r,8000); });
+  if(!v.videoWidth){ v.removeAttribute("src"); v.load(); return null; }
+  const c=document.createElement("canvas"); c.width=64; c.height=36; const g=c.getContext("2d",{willReadFrequently:true}); let mx=0;
+  for(const f of ts){ await new Promise(r=>{ v.addEventListener("seeked",r,{once:true}); setTimeout(r,3000); v.currentTime=Math.max(0.05,(v.duration||1)*f); });
+    g.drawImage(v,0,0,64,36); const d=g.getImageData(0,0,64,36).data; for(let i=0;i<d.length;i+=4) mx=Math.max(mx,d[i],d[i+1],d[i+2]); }
+  v.removeAttribute("src"); v.load(); return mx; }
+async function vidBlackGuard(url, tok){ try{ const a=await vidLuma(url,[0.3,0.6]); blog("video","Helligkeit Arbeitskopie",{max:a}); if(a==null || a>12 || tok!==SA.deskTok) return;
+    const b=SA.url ? await vidLuma(SA.url,[0.3,0.6]) : null; blog("video","Helligkeit Original",{max:b}); if(tok!==SA.deskTok || b==null || b<=12) return;
+    const t=sVid.currentTime; SA.vidUrl=null; sVid.src=SA.url; sVid.addEventListener("loadedmetadata",()=>{ try{ sVid.currentTime=t; }catch(e){} spDraw(); },{once:true});
+    toast(L("Die Arbeitskopie zeigt kein Bild. Sprintz nutzt jetzt das Originalvideo.","The working copy shows no picture. Sprintz now uses the original video."),5000); }
+  catch(e){ blog("warn","Helligkeitsprüfung: "+(e&&e.message||e)); } }
 async function deskSave(name, data){ if(!DSK) return false; try{ const buf = typeof data==="string" ? new TextEncoder().encode(data) : new Uint8Array(await data.arrayBuffer()); await DSK.saveFile(name, buf); return true; }catch(e){ return false; } }
 function evDefs(p,all){
   p=p||EV.cur||{}; const S={}, sel=all?null:evSel(p); evSteps(Object.assign({},p,{metrics:METCAT(p).map(x=>x.k)})).forEach(s=>S[s.id]=s);
@@ -6898,7 +6912,7 @@ const blogVid=t=>t&&t.vid?{name:t.vid.name, size:t.vid.size, dur:t.vid.dur, kind
 sVid.addEventListener("error",()=>blog("error","Video-Fehler",{code:sVid.error&&sVid.error.code, msg:sVid.error&&sVid.error.message}));
 sVid.addEventListener("loadedmetadata",()=>blog("video","geladen",{dur:sVid.duration, w:sVid.videoWidth, h:sVid.videoHeight}));
 function blogState(){ const st=SA.steps&&SA.steps[SA.i]; return { zeit:new Date().toString(), version:(document.querySelector("meta[name=sprintz-build]")||{}).content||"", user:USER, mode:appMode, lang:LANG, desktop:!!window.sprintzDesktop, ua:navigator.userAgent, screen:innerWidth+"×"+innerHeight,
-  analyse:{active:SA.active, mode:SA.mode, step:st&&st.id, i:SA.i, steps:(SA.steps||[]).length, marks:SA.marks, smo:SA.smo, fps:SA.fps, sigOk:SA.sigOk, fs:typeof FS!=="undefined"&&FS.on, video:{t:sVid.currentTime, dur:sVid.duration, ready:sVid.readyState, paused:sVid.paused, err:sVid.error&&sVid.error.code, src:(sVid.currentSrc||"").slice(0,30)}},
+  analyse:{active:SA.active, mode:SA.mode, step:st&&st.id, i:SA.i, steps:(SA.steps||[]).length, marks:SA.marks, smo:SA.smo, fps:SA.fps, desk:SA.deskInfo||null, arbeitskopie:!!SA.vidUrl, sigOk:SA.sigOk, fs:typeof FS!=="undefined"&&FS.on, video:{t:sVid.currentTime, dur:sVid.duration, ready:sVid.readyState, paused:sVid.paused, err:sVid.error&&sVid.error.code, src:(sVid.currentSrc||"").slice(0,30)}},
   technikauswertung: typeof QK!=="undefined"&&QK.p ? {videos:QK.p.trials.length, cur:QK.cur, filter:QK.pf, ohneArt:QK.p.trials.filter(e=>!e.kind).length} : null,
   projekt: typeof EV!=="undefined"&&EV.cur ? {tech:EV.cur.tech, versuche:(EV.cur.trials||[]).length, trial:EV.trial} : null }; }
 function bugOpen(){ const d=$("bugDlg"); if(!d) return; blog("bericht","geöffnet"); $("bugTitle").textContent=L("Fehler melden","Report a problem"); $("bugLead").textContent=L("Beschreib kurz, was gestört hat oder aufgefallen ist. Der Bericht enthält dazu das Protokoll der letzten Aktionen und den Zustand der App, aber keine Videos und keine Passwörter. Lade die Datei danach bei Claude hoch.","Briefly describe what went wrong or what you noticed. The report also contains the log of the last actions and the state of the app, but no videos and no passwords. Then upload the file to Claude.");
