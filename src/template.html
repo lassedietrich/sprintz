@@ -5562,10 +5562,23 @@ function resOverlay(cw,ch){ const z0=FS.z; if(FS.on) FS.z={s:1,x:0,y:0}; const s
   const o=document.createElement("canvas"); o.width=cw; o.height=ch; if((SA.draw||[]).length) o.getContext("2d").drawImage(cv, r.x*dpr, r.y*dpr, r.w*dpr, r.h*dpr, 0, 0, cw, ch);
   DR.show=show; if(FS.on){ FS.z=z0; } drRender(); return o; }
 async function resSeek(t){ await new Promise(res=>{ let done=false; const fin=()=>{ if(done) return; done=true; res(); }; sVid.addEventListener("seeked",fin,{once:true}); setTimeout(fin,1500); sSeekTo(t); }); await new Promise(r=>setTimeout(r,60)); }
-async function resFrame(t){ const back=sVid.currentTime; if(t!=null) await resSeek(t); const vw=sVid.videoWidth, vh=sVid.videoHeight, k=Math.min(1,1400/vw), c=document.createElement("canvas"); c.width=Math.round(vw*k); c.height=Math.round(vh*k);
+async function resFrame(t,mw){ const back=sVid.currentTime; if(t!=null) await resSeek(t); const vw=sVid.videoWidth, vh=sVid.videoHeight, k=Math.min(1,(mw||1400)/vw), c=document.createElement("canvas"); c.width=Math.round(vw*k); c.height=Math.round(vh*k);
   const g=c.getContext("2d"); g.drawImage(sVid,0,0,c.width,c.height); g.drawImage(resOverlay(c.width,c.height),0,0); const b64=c.toDataURL("image/jpeg",0.9).split(",")[1];
   if(t!=null) await resSeek(back); return {bytes:Uint8Array.from(atob(b64),ch=>ch.charCodeAt(0)), w:c.width, h:c.height}; }
 /* Ergebnis-PDF: oben das Bild „Vorderer Fuß löst sich“, alle Kennwerte, alle Notizen, auf einer eigenen Seite die Erklärung der Kennwerte */
+/* Bilderreihe des Starts für das Ergebnisblatt: Startsignal, Hände lösen, hinterer Fuß, vorderer Fuß, Mitte der Flugphase, erster Wasserkontakt */
+function resStrip(C){ const isStart = C.kind==="start" || (!C.kind && C.p && C.p.tech==="start"); if(!isStart) return []; const M=SA.marks||{}, fps=sFps(), st=id=>(SA.steps||[]).find(s=>s.id===id);
+  const out=[]; [["sig"],["hands"],["rear"],["off"],["mid"],["entry"]].forEach(([id])=>{ let t, lab;
+    if(id==="mid"){ if(M.off==null||M.entry==null||M.entry<=M.off) return; t=Math.round((M.off+M.entry)/2*fps)/fps; lab=L("Mitte der Flugphase","Middle of the flight phase"); }
+    else { if(M[id]==null) return; t=M[id]; const s=st(id); lab=s?s.t():id; }
+    const r=M.sig!=null?relR(RT(t)):null; out.push({t, lab, time:r!=null?evFmt(r,"s"):""}); }); return out; }
+async function resStripPdf(F, doc, strip){ const fr=[]; for(const x of strip){ const im=await resFrame(x.t+0.5/sFps(), 720); fr.push(Object.assign({id:doc.addJpeg(im.bytes,im.w,im.h), ar:im.h/im.w}, x)); }
+  const n=fr.length, cols=n<=3?n:3, rows=Math.ceil(n/cols), gap=6, cap=22, ar=fr[0].ar, H0=Math.min(330, F.cw*ar);
+  let w=(F.cw-gap*(cols-1))/cols, h=w*ar; if(rows*(h+cap)+(rows-1)*gap>H0){ h=(H0-(rows-1)*gap)/rows-cap; w=h/ar; }
+  const tot=rows*(h+cap)+(rows-1)*gap, x0=F.M+(F.cw-(cols*w+gap*(cols-1)))/2; F.need(tot+8);
+  fr.forEach((x,i)=>{ const c=i%cols, r=Math.floor(i/cols), X=x0+c*(w+gap), Y=F.y+r*(h+cap+gap); doc.image(x.id,X,Y,w,h);
+    doc.text(X,Y+h+9,(F.wrap(x.lab,7,"b",w)[0]||""),{size:7,f:"b",color:"#0D2230"}); if(x.time) doc.text(X,Y+h+18,L(`${x.time} nach dem Startsignal`,`${x.time} after the start signal`),{size:7,color:"#557080"}); });
+  F.y+=tot+8; }
 async function resPdf(pre){
   const ask = pre && pre.name ? pre : await fileAsk(resName(L("Ergebnisblatt","Result sheet"))+".pdf","application/pdf","pdf",L("Ergebnisblatt","Result sheet")); if(!ask) return;
   const C=resCtx(), M=SA.marks||{}, dt=new Date();
@@ -5574,12 +5587,17 @@ async function resPdf(pre){
     F.h1(L(`Ergebnis: ${C.name}`,`Result: ${C.name}`));
     const sub=[C.ath?L(`Athlet*in: ${C.ath}`,`Athlete: ${C.ath}`):"", C.kind?qkKindName(C.kind)+(C.e&&qkSub(C.e)?" · "+qkSub(C.e):""):"", C.vname?L(`Video: ${C.vname}`,`Video: ${C.vname}`):"", L(`Erstellt am ${dt.toLocaleDateString(L("de-DE","en-GB"))}`,`Created on ${dt.toLocaleDateString(L("de-DE","en-GB"))}`)].filter(Boolean).join(" · ");
     F.para(sub,{color:"#557080",after:8});
+    // Start: Bilderreihe (Startsignal bis erster Wasserkontakt), sonst ein Bild
+    const strip=resStrip(C);
+    if(sVid.videoWidth && strip.length>=2) await resStripPdf(F, doc, strip);
+    else {
     // Bild: Vorderer Fuß löst sich (Start), sonst Abstoß bzw. Anschlag
     const tImg = M.off ?? M.ftouch ?? M.feetOn ?? null;
     if(sVid.videoWidth){ const fr=await resFrame(tImg!=null ? tImg+0.5/sFps() : null), id=doc.addJpeg(fr.bytes,fr.w,fr.h), w=F.cw, h=Math.min(330, w*fr.h/fr.w), ww=h*fr.w/fr.h;
       F.need(h+20); F.img(id, ww, h, F.M+(F.cw-ww)/2); F.y+=h+4;
       const st=(SA.steps||[]).find(s=>s.id===(M.off!=null?"off":M.ftouch!=null?"ftouch":"feetOn"));
       F.para(st?L(`Bild: ${st.t()}`,`Frame: ${st.t()}`):L("Bild: aktuelle Stelle im Video","Frame: current position in the video"),{size:8,color:"#557080",after:6}); }
+    }
     // Kennwerte
     const rows=resRows(C).concat(xdRows());
     if(rows.length){ F.h2(L("Kennwerte","Parameters")); F.table([{h:L("Phase","Phase"),w:2},{h:L("Kennwert","Parameter"),w:4.2},{h:L("Wert","Value"),w:1.6,a:"r"}], rows.map(r=>[r.ph,{t:r.l,f:"b"},{t:r.v,f:"b"}])); }
@@ -5621,13 +5639,14 @@ function kinoWrap(g,txt,maxW){ const words=String(txt).split(/\s+/), lines=[]; l
 async function kinoExport(){
   if(KINO.on || !SA.active || !sVid.videoWidth) return; const C=resCtx(), ev=kinoEvents(C);
   if(!ev.length){ toast(L("Setz zuerst Markierungen, dann gibt es Stellen zum Anhalten.","Set marks first, then there are points to pause at.")); return; }
-  const canRec=window.MediaRecorder&&MediaRecorder.isTypeSupported, AU=["video/mp4;codecs=avc1.640028,mp4a.40.2","video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus"], VO=["video/mp4;codecs=avc1.640028","video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"];
+  const canRec=window.MediaRecorder&&MediaRecorder.isTypeSupported, AU=["video/mp4;codecs=avc1.640033,mp4a.40.2","video/mp4;codecs=avc1.640028,mp4a.40.2","video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus"], VO=["video/mp4;codecs=avc1.640033","video/mp4;codecs=avc1.640028","video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"];
   const amime=canRec?AU.find(m=>MediaRecorder.isTypeSupported(m)):null, vmime=canRec?VO.find(m=>MediaRecorder.isTypeSupported(m)):null, mime0=amime||vmime;
   if(!mime0){ toast(L("Dieser Browser kann keine Videos erstellen. Nutze das Desktop-Programm oder Chrome.","This browser can't create videos. Use the desktop program or Chrome.")); return; }
   const ext=mime0.includes("mp4")?"mp4":"webm", ask=await fileAsk(resName(L("Ergebnisvideo","Result video"))+"."+ext, mime0.split(";")[0], ext, L("Ergebnisvideo","Result video")); if(!ask) return;
   const dst=amime?kinoAudio():null, mime=dst?amime:(vmime||amime);
-  const vw=sVid.videoWidth, vh=sVid.videoHeight, k=Math.min(1,1920/vw), W=Math.round(vw*k/2)*2, H=Math.round(vh*k/2)*2;
-  const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d"), f=sFps();
+  const vw=sVid.videoWidth, vh=sVid.videoHeight, k=Math.min(1,3840/Math.max(vw,vh)), W=Math.round(vw*k/2)*2, H=Math.round(vh*k/2)*2;
+  const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d",{alpha:false}), f=sFps(); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
+  const ofps=Math.min(60,Math.max(30,Math.round(f))), vbr=Math.round(Math.min(150e6,Math.max(30e6,W*H*ofps*0.5)));
   const t0=Math.max(0, SA.marks.sig!=null ? Math.min(SA.marks.sig, ev[0].t)-2 : ev[0].t-2), t1=Math.min(sVid.duration, ev[ev.length-1].t+1.5), base=0.5;
   const ov=$("kinoOv"); ov.hidden=false; $("kinoStop").textContent=L("Abbrechen","Cancel"); KINO.on=true; KINO.stop=false;
   const msg=t=>{ $("kinoMsg").textContent=t; };
@@ -5645,8 +5664,8 @@ async function kinoExport(){
       g.font=F3; g.fillStyle="#3FD07A"; sl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; });
       g.font=`italic ${F2}`; g.fillStyle="#E8D49A"; nl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; }); }
     g.font=`600 ${Math.round(fs*0.55)}px system-ui,sans-serif`; g.fillStyle="rgba(255,255,255,.75)"; g.fillText("Sprintz",pad,H-pad*0.6); };
-  const vs=c.captureStream(30), stream=new MediaStream([...vs.getVideoTracks(), ...(dst?dst.stream.getAudioTracks():[])]);
-  const rec=new MediaRecorder(stream,{mimeType:mime, videoBitsPerSecond:10e6, audioBitsPerSecond:128000}), chunks=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+  const vs=c.captureStream(ofps), stream=new MediaStream([...vs.getVideoTracks(), ...(dst?dst.stream.getAudioTracks():[])]);
+  const rec=new MediaRecorder(stream,{mimeType:mime, videoBitsPerSecond:vbr, audioBitsPerSecond:256000}), chunks=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
   const done=new Promise(r=>rec.onstop=r); const wasMuted=sVid.muted, back=sVid.currentTime; sVid.muted=!dst;
   let raf=0; const loop=()=>{ draw(); raf=requestAnimationFrame(loop); };
   try{
