@@ -5670,7 +5670,7 @@ async function kinoExport(){
   const dst=amime?kinoAudio():null, mime=dst?amime:(vmime||amime);
   const vw=sVid.videoWidth, vh=sVid.videoHeight, k=Math.min(1,3840/Math.max(vw,vh)), W=Math.round(vw*k/2)*2, H=Math.round(vh*k/2)*2;
   const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d",{alpha:false}), f=sFps(); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
-  const ofps=Math.min(60,Math.max(30,Math.round(f))), vbr=Math.round(Math.min(150e6,Math.max(30e6,W*H*ofps*0.5)));
+  const ofps=Math.min(60,Math.max(30,Math.round(f))), vbr=Math.round(Math.min(100e6,Math.max(30e6,W*H*ofps*0.5)));
   const t0=Math.max(0, SA.marks.sig!=null ? Math.min(SA.marks.sig, ev[0].t)-2 : ev[0].t-2), t1=Math.min(sVid.duration, ev[ev.length-1].t+1.5), base=0.5;
   const ov=$("kinoOv"); ov.hidden=false; $("kinoStop").textContent=L("Abbrechen","Cancel"); KINO.on=true; KINO.stop=false;
   const msg=t=>{ $("kinoMsg").textContent=t; };
@@ -5710,7 +5710,8 @@ async function kinoExport(){
     cur=null; await new Promise(r=>setTimeout(r,500));
   }finally{ cancelAnimationFrame(raf); sVid.pause(); try{ rec.stop(); }catch(e){} await done; kinoAudioEnd(dst); sVid.muted=wasMuted; ov.hidden=true; KINO.on=false; await resSeek(back); }
   if(KINO.stop){ toast(L("Abgebrochen.","Cancelled.")); return; }
-  const blob=new Blob(chunks,{type:mime.split(";")[0]});
+  let blob=new Blob(chunks,{type:mime.split(";")[0]});
+  if(ext==="mp4"){ try{ toast(L("Ergebnisvideo wird gespeichert …","Saving the result video …"),4000); const o=await mp4Defrag(blob); if(o) blob=o; blog("video","Ergebnisvideo",{mb:Math.round(blob.size/1e6), umgebaut:!!o, mime}); }catch(e){ blog("warn","mp4Defrag: "+(e&&e.message||e)); } }
   await fileWrite(ask, blob, L("Ergebnisvideo","Result video"));
 }
 /* ---------- Dateinamen und Speichern mit Rückfrage (Speicherort wählen, nichts öffnet sich) ---------- */
@@ -5797,6 +5798,63 @@ const KAUD={ac:null, src:null};
 function kinoAudio(){ try{ if(!KAUD.ac){ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null; KAUD.ac=new AC(); KAUD.src=KAUD.ac.createMediaElementSource(sVid); KAUD.src.connect(KAUD.ac.destination); }
   KAUD.ac.resume&&KAUD.ac.resume(); const dst=KAUD.ac.createMediaStreamDestination(), gn=KAUD.ac.createGain(); KAUD.src.connect(gn); gn.connect(dst); dst._g=gn; try{ KAUD.src.disconnect(KAUD.ac.destination); }catch(e){} return dst; }catch(e){ blog("warn","kinoAudio: "+(e&&e.message||e)); return null; } }
 function kinoAudioEnd(dst){ try{ if(dst) KAUD.src.disconnect(dst._g); KAUD.src.connect(KAUD.ac.destination); }catch(e){} }
+/* ---------- Ergebnisvideo als normale MP4-Datei: Der Browser zeichnet „fragmentiertes“ MP4 auf (ohne Gesamtdauer, ohne Inhaltsverzeichnis),
+   das manche Programme (z. B. QuickTime) nicht öffnen. Hier wird es ohne Neukodierung in eine klassische MP4 mit vollständigem Inhaltsverzeichnis umgebaut.
+   Die Videodaten werden dabei nicht kopiert, sondern als Ausschnitte der Aufnahme weiterverwendet (wichtig bei großen 4K-Dateien). ---------- */
+async function mp4Defrag(blob){
+  const rd=async(a,n)=>new DataView(await blob.slice(a,a+n).arrayBuffer()), N=blob.size, top=[];
+  for(let p=0;p+8<=N;){ const h=await rd(p,16); let sz=h.getUint32(0), hs=8; const ty=String.fromCharCode(h.getUint8(4),h.getUint8(5),h.getUint8(6),h.getUint8(7));
+    if(sz===1){ sz=Number(h.getBigUint64(8)); hs=16; } else if(sz===0) sz=N-p; if(sz<hs) break; top.push({ty,p,sz,hs}); p+=sz; }
+  const moovB=top.find(b=>b.ty==="moov"); if(!moovB || !top.some(b=>b.ty==="moof")) return null;
+  const kids=(dv,a,b)=>{ const o=[]; for(let p=a;p+8<=b;){ let sz=dv.getUint32(p); const ty=String.fromCharCode(dv.getUint8(p+4),dv.getUint8(p+5),dv.getUint8(p+6),dv.getUint8(p+7)); if(sz<8||p+sz>b) break; o.push({ty,p,sz}); p+=sz; } return o; };
+  const one=(dv,a,b,ty)=>kids(dv,a,b).find(x=>x.ty===ty);
+  const MV=await rd(moovB.p,moovB.sz), mv=kids(MV,moovB.hs,moovB.sz), tracks={}, order=[];
+  const trex={}; const mvex=mv.find(x=>x.ty==="mvex"); if(mvex) kids(MV,mvex.p+8,mvex.p+mvex.sz).filter(x=>x.ty==="trex").forEach(x=>{ const o=x.p+12; trex[MV.getUint32(o)]={dur:MV.getUint32(o+8), size:MV.getUint32(o+12), flags:MV.getUint32(o+16)}; });
+  mv.filter(x=>x.ty==="trak").forEach(t=>{ const tk=one(MV,t.p+8,t.p+t.sz,"tkhd"), v=MV.getUint8(tk.p+8), id=MV.getUint32(tk.p+(v?28:20)); const md=one(MV,t.p+8,t.p+t.sz,"mdia"), mh=one(MV,md.p+8,md.p+md.sz,"mdhd"), mv1=MV.getUint8(mh.p+8);
+    const ts=MV.getUint32(mh.p+(mv1?28:20)), hd=one(MV,md.p+8,md.p+md.sz,"hdlr"), kind=String.fromCharCode(...[0,1,2,3].map(i=>MV.getUint8(hd.p+16+i)));
+    tracks[id]={id, t, md, ts, kind, s:[]}; order.push(id); });
+  // Abschnitte (moof) lesen: Lage, Größe, Dauer und Art jedes Bildes bzw. Tonblocks
+  const mdats=top.filter(b=>b.ty==="mdat");
+  for(const mf of top.filter(b=>b.ty==="moof")){ const D=await rd(mf.p,mf.sz);
+    kids(D,mf.hs,mf.sz).filter(x=>x.ty==="traf").forEach(tr=>{ const ks=kids(D,tr.p+8,tr.p+tr.sz), th=ks.find(x=>x.ty==="tfhd"); if(!th) return; let o=th.p+8; const fl=D.getUint32(o)&0xffffff; o+=4; const id=D.getUint32(o); o+=4;
+      const T=tracks[id], X=trex[id]||{dur:0,size:0,flags:0}; if(!T) return; let base=mf.p, dd=X.dur, ds=X.size, df=X.flags;
+      if(fl&1){ base=Number(D.getBigUint64(o)); o+=8; } if(fl&2) o+=4; if(fl&8){ dd=D.getUint32(o); o+=4; } if(fl&0x10){ ds=D.getUint32(o); o+=4; } if(fl&0x20){ df=D.getUint32(o); o+=4; }
+      const tf=ks.find(x=>x.ty==="tfdt"); let dts=T.s.length?T.s[T.s.length-1].dts+T.s[T.s.length-1].dur:0; if(tf){ dts=D.getUint8(tf.p+8)?Number(D.getBigUint64(tf.p+12)):D.getUint32(tf.p+12); }
+      let next=base; ks.filter(x=>x.ty==="trun").forEach(ru=>{ let q=ru.p+8; const v=D.getUint8(q), f=D.getUint32(q)&0xffffff; q+=4; const n=D.getUint32(q); q+=4; let off=next; if(f&1){ off=base+D.getInt32(q); q+=4; } let ff=null; if(f&4){ ff=D.getUint32(q); q+=4; }
+        for(let i=0;i<n;i++){ let du=dd, sz=ds, sf=(i===0&&ff!=null)?ff:df, ct=0; if(f&0x100){ du=D.getUint32(q); q+=4; } if(f&0x200){ sz=D.getUint32(q); q+=4; } if(f&0x400){ const x=D.getUint32(q); q+=4; if(!(i===0&&ff!=null)) sf=x; } if(f&0x800){ ct=v?D.getInt32(q):D.getUint32(q); q+=4; }
+          T.s.push({off, sz, dur:du, sync:!(sf&0x10000), ct, dts}); off+=sz; dts+=du; } next=off; }); }); }
+  if(!order.some(id=>tracks[id].s.length)) return null;
+  // Lage im neuen mdat: alle alten mdat-Inhalte hintereinander
+  let acc=0; const mm=mdats.map(b=>{ const r={a:b.p+b.hs, b:b.p+b.sz, o:acc}; acc+=b.sz-b.hs; return r; }), dataLen=acc;
+  const newPos=x=>{ const m=mm.find(r=>x>=r.a && x<r.b); return m ? m.o+(x-m.a) : -1; };
+  // Hilfen zum Schreiben von Boxen
+  const U8=a=>new Uint8Array(a), cat=arr=>{ const n=arr.reduce((s,a)=>s+a.length,0), o=new Uint8Array(n); let p=0; arr.forEach(a=>{ o.set(a,p); p+=a.length; }); return o; };
+  const box=(ty,...parts)=>{ const body=cat(parts), o=new Uint8Array(8+body.length), dv=new DataView(o.buffer); dv.setUint32(0,o.length); for(let i=0;i<4;i++) o[4+i]=ty.charCodeAt(i); o.set(body,8); return o; };
+  const u32=(...v)=>{ const o=new Uint8Array(4*v.length), dv=new DataView(o.buffer); v.forEach((x,i)=>dv.setUint32(4*i,x>>>0)); return o; };
+  const raw=(a,n)=>new Uint8Array(MV.buffer.slice(MV.byteOffset+a, MV.byteOffset+a+n));
+  const mvh=one(MV,moovB.hs,moovB.sz,"mvhd"), mvv=MV.getUint8(mvh.p+8), mts=MV.getUint32(mvh.p+(mvv?28:20));
+  const tdur=id=>{ const s=tracks[id].s; return s.length ? s[s.length-1].dts+s[s.length-1].dur-s[0].dts : 0; };
+  const movDur=Math.max(...order.map(id=>Math.round(tdur(id)*mts/tracks[id].ts)));
+  const setDur=(b,v,o0,o1,val)=>{ const dv=new DataView(b.buffer,b.byteOffset,b.length); if(v) dv.setBigUint64(o1,BigInt(val)); else dv.setUint32(o0,val>>>0); return b; };
+  const build=base=>{
+    const traks=order.filter(id=>tracks[id].s.length).map(id=>{ const T=tracks[id], S=T.s, t=T.t, mdia=T.md;
+      const tk=one(MV,t.p+8,t.p+t.sz,"tkhd"), tkv=MV.getUint8(tk.p+8), tkb=setDur(raw(tk.p,tk.sz),tkv,28,36,Math.round(tdur(id)*mts/T.ts));
+      const mh=one(MV,mdia.p+8,mdia.p+mdia.sz,"mdhd"), mhv=MV.getUint8(mh.p+8), mhb=setDur(raw(mh.p,mh.sz),mhv,24,32,tdur(id));
+      const hd=one(MV,mdia.p+8,mdia.p+mdia.sz,"hdlr"), mi=one(MV,mdia.p+8,mdia.p+mdia.sz,"minf"), mik=kids(MV,mi.p+8,mi.p+mi.sz), st=mik.find(x=>x.ty==="stbl"), sd=one(MV,st.p+8,st.p+st.sz,"stsd");
+      // stts (gleiche Dauern zusammenfassen), ctts, stss, stsz, stsc, co64
+      const tt=[]; S.forEach(x=>{ const l=tt[tt.length-1]; if(l&&l[1]===x.dur) l[0]++; else tt.push([1,x.dur]); });
+      const hasCt=S.some(x=>x.ct!==0), ct=[]; if(hasCt) S.forEach(x=>{ const l=ct[ct.length-1]; if(l&&l[1]===x.ct) l[0]++; else ct.push([1,x.ct]); });
+      const sy=[]; S.forEach((x,i)=>{ if(x.sync) sy.push(i+1); }); const allSync=sy.length===S.length;
+      const co=new Uint8Array(8+8*S.length), cdv=new DataView(co.buffer); cdv.setUint32(4,S.length); S.forEach((x,i)=>cdv.setBigUint64(8+8*i,BigInt(base+newPos(x.off))));
+      const stbl=box("stbl", raw(sd.p,sd.sz), box("stts",u32(0,tt.length),...tt.map(e=>u32(e[0],e[1]))), hasCt?box("ctts",u32(S.some(x=>x.ct<0)?0x01000000:0,ct.length),...ct.map(e=>u32(e[0],e[1]))):U8(0),
+        (T.kind==="vide"&&!allSync)?box("stss",u32(0,sy.length),u32(...sy)):U8(0), box("stsc",u32(0,1,1,1,1)), box("stsz",u32(0,0,S.length),u32(...S.map(x=>x.sz))), box("co64",co));
+      const minf=box("minf",...mik.filter(x=>x.ty!=="stbl").map(x=>raw(x.p,x.sz)),stbl);
+      return box("trak", tkb, box("mdia", mhb, raw(hd.p,hd.sz), minf)); });
+    return box("moov", setDur(raw(mvh.p,mvh.sz),mvv,24,32,movDur), ...traks); };
+  const ftyp=box("ftyp",U8([105,115,111,109]),u32(512),U8([105,115,111,109,105,115,111,50,97,118,99,49,109,112,52,49]));
+  let moov=build(0); const mdHead=16; moov=build(ftyp.length+moov.length+mdHead); // Größe bleibt gleich, nur die Lage ändert sich
+  const mh=new Uint8Array(16), hv=new DataView(mh.buffer); hv.setUint32(0,1); mh.set([109,100,97,116],4); hv.setBigUint64(8,BigInt(16+dataLen));
+  return new Blob([ftyp, moov, mh, ...mdats.map(b=>blob.slice(b.p+b.hs,b.p+b.sz))], {type:"video/mp4"}); }
 function resActHTML(){ return `<div class="resact"><button type="button" class="testbtn" id="resPdfB">📄 ${L("Ergebnis-PDF","Result PDF")}</button><button type="button" class="testbtn" id="kinoB">🎬 ${L("Ergebnisvideo exportieren","Export result video")}</button>${velSwim()?`<button type="button" class="testbtn" id="velB">📈 ${SA.vel&&SA.vel.f&&SA.vel.f.length?L("Geschwindigkeitsverlauf bearbeiten","Edit velocity profile"):L("Geschwindigkeitsverlauf messen","Measure velocity profile")}</button>`:""}</div>${velSwim()?velSumHTML():""}`; }
 function resActBind(){ const a=$("resPdfB"); if(a) a.onclick=()=>resPdf(); const b=$("kinoB"); if(b) b.onclick=()=>kinoExport(); const v=$("velB"); if(v) v.onclick=()=>velOpen(); velSumDraw(); }
 
