@@ -1,0 +1,21 @@
+[
+["Result sheet","Sonuç sayfası","Лист результатов","Resultatenblad"],
+["Drawing","Çizim","Рисунок","Tekening"],
+["Result video","Sonuç videosu","Видео с результатами","Resultatenvideo"],
+["Creating the result video … The video plays through at half speed.","Sonuç videosu oluşturuluyor … Video yarı hızda oynatılıyor.","Создаётся видео с результатами … Видео воспроизводится на половинной скорости.","Resultatenvideo wordt gemaakt … De video speelt af op halve snelheid."],
+["Result video: {0} of {1} points","Sonuç videosu: {1} noktadan {0}","Видео с результатами: {0} из {1} точек","Resultatenvideo: {0} van {1} punten"],
+["Saved: {0}","Kaydedildi: {0}","Сохранено: {0}","Opgeslagen: {0}"],
+["The first frame in which the top of your head reaches the {0} m mark.","Başının üst kısmının {0} m işaretine ulaştığı ilk kare.","Первый кадр, в котором макушка достигает отметки {0} м.","Het eerste beeld waarin de bovenkant van je hoofd de {0}-m-markering bereikt."],
+["Continue the analysis?","Analize devam edilsin mi?","Продолжить анализ?","Verder analyseren?"],
+["The 15 m mark is set. Would you like to analyse further distances, for example the 25 m or 50 m time?","15 m işareti kondu. Başka mesafeleri de analiz etmek ister misin, örneğin 25 m veya 50 m süresini?","Отметка 15 м поставлена. Хочешь проанализировать и другие дистанции, например время на 25 м или 50 м?","De 15-m-markering is gezet. Wil je nog meer afstanden analyseren, bijvoorbeeld de 25-m- of 50-m-tijd?"],
+["own distance","kendi mesafen","своя дистанция","eigen afstand"],
+["No, show the result","Hayır, sonucu göster","Нет, показать результат","Nee, toon het resultaat"],
+["Add measuring point","Ölçüm noktası ekle","Добавить точку измерения","Meetpunt toevoegen"],
+["Additional points","Ek ölçüm noktaları","Дополнительные точки","Extra meetpunten"],
+["{0} m time","{0} m süresi","Время на {0} м","{0}-m-tijd"],
+["Velocity {0}–{1} m","Hız {0}–{1} m","Скорость {0}–{1} м","Snelheid {0}–{1} m"],
+["Note on the drawing","Çizime not","Заметка к рисунку","Notitie bij de tekening"],
+["What does the drawing show? (optional)","Çizim neyi gösteriyor? (isteğe bağlı)","Что показывает рисунок? (необязательно)","Wat laat de tekening zien? (optioneel)"],
+["Without note","Notsuz","Без заметки","Zonder notitie"],
+["Export result video","Sonuç videosunu dışa aktar","Экспортировать видео с результатами","Resultatenvideo exporteren"]
+]
