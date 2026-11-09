@@ -451,7 +451,7 @@ h2 .minfo{width:26px;height:26px;font-size:.95rem}
 .msi{flex:none;width:20px;height:20px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted);font:700 .7rem/1 Georgia,serif;font-style:italic;padding:0;cursor:pointer;opacity:.7}.msi[aria-expanded="true"]{opacity:1;color:var(--accent);border-color:var(--accent)}
 .msx{flex-basis:100%;margin:2px 0 4px 24px;font-size:.84rem;line-height:1.45}.msx span{color:var(--muted)}
 .evdl{margin:6px 0 0}
-#sProx{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:5;background:rgba(8,20,28,.8);color:#fff;border-radius:10px;padding:7px 12px;font-size:.85rem;pointer-events:none}
+#sProx{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:5;background:rgba(8,20,28,.8);color:#fff;border-radius:10px;padding:7px 12px;font-size:.85rem;pointer-events:none}#sProx.big{top:50%;transform:translate(-50%,-50%);font-size:1.05rem;padding:14px 18px;max-width:80%;text-align:center;line-height:1.4}
 .deskdl{display:flex;flex-direction:column;gap:2px;margin:10px 0}.deskdl small{color:var(--muted)}
 .fsboxhd{cursor:grab;touch-action:none}#fsBox.drag{opacity:.85}#fsBox.drag .fsboxhd{cursor:grabbing}
 .wnotes{margin-top:10px;display:flex;flex-direction:column;gap:6px}.wnoteb{align-self:flex-start;border:0;background:transparent;color:var(--accent);font:inherit;font-size:.88rem;padding:2px 0;cursor:pointer}.wnoteb small{color:var(--muted)}
@@ -5128,7 +5128,7 @@ async function qkUpload(files){
     if(hit){ for(const v of [hit.vid,...(hit.vids2||[])]) if(v && v.key!==key && v.name===f.name && v.size===f.size) EV.files[v.key]=EV.files[key]; again++; continue; }
     const e={id:evId(), vid:{key, src:"upload", name:f.name, t, dur:dur||null, size:f.size, dev:DEVID}, status:"open", label:"", added:Date.now(), person:(QK.pf!=="all"&&QK.pf!=="none")?QK.pf:null, kind:null};
     p.trials.push(e); neu++; }
-  await qkSave(); qkList();
+  await qkSave(); qkList(); deskPrep(files);
   const m=$("qkMsg"); if(m) m.textContent=[neu?L(`${neu} neue Videos.`,`${neu} new videos.`):"", again?L(`${again} schon bekannte Videos wieder geöffnet.`,`${again} known videos reopened.`):""].filter(Boolean).join(" ");
 }
 function qkCsv(){
@@ -6124,14 +6124,25 @@ async function deskAttach(blob, onFps){
   if(!DSK || !blob) return; let fp=null; try{ fp=DSK.pathFor(blob); }catch(e){} if(!fp) return;
   const tok=(SA.deskTok=(SA.deskTok||0)+1); SA.deskInfo=null;
   DSK.probe(fp).then(info=>{ if(tok!==SA.deskTok || !info) return; SA.deskInfo=info; if(info.fps>0) onFps(info.fps); }).catch(()=>{});
-  const ov=$("sProx"); ov.hidden=false; ov.textContent=L("Arbeitskopie für bildgenaues Arbeiten wird erstellt …","Creating a working copy for frame-accurate analysis …");
-  const off=DSK.onProgress(d=>{ if(d.file===fp && tok===SA.deskTok) ov.textContent=L(`Arbeitskopie wird erstellt … ${Math.round(d.p*100)} %`,`Creating working copy … ${Math.round(d.p*100)} %`); });
-  let r=null; try{ r=await DSK.proxy(fp); }catch(e){} off();
-  if(tok!==SA.deskTok) return; ov.hidden=true;
+  const ov=$("sProx"); ov.hidden=false; ov.classList.remove("big"); SA.origBad=false; SA.proxPending=true; SA.proxP=null; ov.textContent=L("Arbeitskopie für bildgenaues Arbeiten wird erstellt …","Creating a working copy for frame-accurate analysis …");
+  const off=DSK.onProgress(d=>{ if(d.file===fp && tok===SA.deskTok){ SA.proxP=d.p; proxText(); } });
+  let r=null; try{ r=await DSK.proxy(fp); }catch(e){} off(); if(tok===SA.deskTok) SA.proxPending=false;
+  if(tok!==SA.deskTok) return; ov.hidden=true; ov.classList.remove("big"); SA.origBad=false;
   if(!r){ toast(L("Die Arbeitskopie ließ sich nicht erstellen. Sprintz nutzt das Original.","The working copy couldn't be created. Sprintz uses the original.")); return; }
   const t=VG.exp!=null?VG.exp:sVid.currentTime; SA.vidUrl=r.url; sVid.src=r.url; sVid.addEventListener("loadedmetadata",()=>{ vgCmd(t); try{ sVid.currentTime=t; }catch(e){} spDraw(); },{once:true});
   blog("video","Arbeitskopie",{cached:!!r.cached, info:SA.deskInfo}); vidBlackGuard(r.url, tok);
 }
+/* Hinweis während der Arbeitskopie; kann das Programm das Original nicht abspielen (z. B. 4K-HEVC vom iPhone: „negative timestamp“), groß und mittig */
+function proxText(){ const ov=$("sProx"); if(!ov||ov.hidden) return; const pc=SA.proxP!=null?` ${Math.round(SA.proxP*100)} %`:"";
+  ov.textContent = SA.origBad ? L(`Dieses Video lässt sich erst mit der Arbeitskopie anzeigen. Bitte kurz warten …${pc}`,`This video can only be shown with the working copy. Please wait a moment …${pc}`) : L(`Arbeitskopie wird erstellt …${pc}`,`Creating working copy …${pc}`); }
+sVid.addEventListener("error",()=>{ if(DSK && SA.proxPending){ SA.origBad=true; const ov=$("sProx"); ov.hidden=false; ov.classList.add("big"); proxText(); } });
+// Arbeitskopien schon beim Hochladen vorbereiten (nacheinander), damit die Auswertung sofort startklar ist
+const PREP={q:[], run:false};
+async function deskPrep(files){ if(!DSK) return; files.forEach(f=>{ try{ const fp=DSK.pathFor(f); if(fp) PREP.q.push({fp, name:f.name}); }catch(e){} }); if(PREP.run) return; PREP.run=true;
+  const msg=t=>{ const m=$("qkMsg"); if(m && !$("qkPage").hidden) m.textContent=t; };
+  while(PREP.q.length){ const it=PREP.q.shift(), left=PREP.q.length; const off=DSK.onProgress(d=>{ if(d.file===it.fp) msg(L(`Arbeitskopie für „${it.name}“ wird vorbereitet … ${Math.round(d.p*100)} %`,`Preparing working copy for “${it.name}” … ${Math.round(d.p*100)} %`)+(left?" "+L(`(danach noch ${left})`,`(${left} more after that)`):"")); });
+    try{ await DSK.proxy(it.fp); }catch(e){} off(); blog("video","Arbeitskopie vorbereitet",{name:it.name}); }
+  PREP.run=false; msg(L("Alle Arbeitskopien sind fertig.","All working copies are ready.")); }
 /* Schwarzes Bild (z. B. HDR-Aufnahmen vom iPhone): Helligkeit der Arbeitskopie prüfen; ist sie schwarz, das Original aber nicht, das Original nutzen */
 async function vidLuma(src, ts){ const v=document.createElement("video"); v.muted=true; v.preload="auto"; v.src=src;
   await new Promise(r=>{ v.addEventListener("loadeddata",r,{once:true}); v.addEventListener("error",r,{once:true}); setTimeout(r,8000); });
