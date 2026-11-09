@@ -1,0 +1,7 @@
+[
+["Take-off","Ayrılış","Отталкивание","Afzet"],
+["Source: velocity meter ({0}), aligned in time with the video.","Kaynak: hız ölçer ({0}), videoyla zamanlama olarak hizalanmış.","Источник: велосиметр ({0}), синхронизирован по времени с видео.","Bron: snelheidsmeter ({0}), in de tijd afgestemd op de video."],
+["Source: head tracked frame by frame in the video and smoothed.","Kaynak: baş videoda kare kare takip edildi ve düzeltildi.","Источник: голова отслежена в видео кадр за кадром и сглажена.","Bron: hoofd beeld voor beeld in de video gevolgd en afgevlakt."],
+["Source: mean velocity between the time marks, plotted at the middle of each section; the first section counts from the start signal and includes reaction, block phase and flight.","Kaynak: zaman işaretleri arasındaki ortalama hız, her bölümün ortasına işlenmiştir; ilk bölüm start sinyalinden itibaren sayılır ve tepki, blok evresi ve uçuşu içerir.","Источник: средняя скорость между отметками времени, нанесена в середине каждого участка; первый участок отсчитывается от стартового сигнала и включает реакцию, фазу на тумбочке и полёт.","Bron: gemiddelde snelheid tussen de tijdmarkeringen, telkens in het midden van het onderdeel weergegeven; het eerste onderdeel telt vanaf het startsignaal en omvat reactie, blokfase en vlucht."],
+["Velocity from head tracking","Baş takibinden hız","Скорость по отслеживанию головы","Snelheid uit het volgen van het hoofd"]
+]
