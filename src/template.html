@@ -5077,7 +5077,7 @@ function qkList(){
   const st=e=>e.status==="det"?L("Detailliert ausgewertet","Analysed in detail"):e.status==="quick"?L("Schnell bewertet","Quick rating done"):L("Offen","Open");
   pg.innerHTML=`<h2 class="big">${L("Technikauswertung","Technique analysis")}</h2>
     <p class="evlead">${L("Videos ohne Projekt hochladen, in Zeitlupe sichten und schnell bewerten. Die Markierungen bleiben gespeichert, die detaillierte Auswertung machst du später. Videos speichert Sprintz nicht.","Upload videos without a project, view them in slow motion and rate them quickly. The marks are saved; you do the detailed analysis later. Sprintz doesn't store videos.")}</p>
-    <label class="filebtn evup">${L("Videos hochladen","Upload videos")}<input type="file" id="qkFiles" accept="video/*,.mov,.mp4,.m4v,.webm" multiple></label><label class="testbtn ghost small mp4fix">🎞 ${L("Ergebnisvideo in normale MP4 umwandeln","Convert result video to a normal MP4")}<input type="file" id="mp4Fix" accept=".mp4,video/mp4" hidden></label><p class="hint upq" data-upq></p><p class="hint" id="qkMsg"></p>
+    <label class="filebtn evup">${L("Videos hochladen","Upload videos")}<input type="file" id="qkFiles" accept="video/*,.mov,.mp4,.m4v,.webm" multiple></label><label class="testbtn ghost small mp4fix">🎞 ${L("Ergebnisvideo in normale MP4 umwandeln","Convert result video to a normal MP4")}<input type="file" id="mp4Fix" hidden></label><p class="hint upq" data-upq></p><p class="hint" id="qkMsg"></p>
     ${open?`<button type="button" class="evbig" id="qkAll" style="margin:6px 0 4px">${L(`Nacheinander bewerten (${open} offen)`,`Rate one after another (${open} open)`)}</button>`:""}
     <h2 class="big" style="margin-top:22px">${L("Deine Videos","Your videos")}</h2>
     ${cp?`<div class="qkpers"><label>${L("Athlet*in","Athlete")} <select id="qkPF" class="evsel"><option value="all">${L("Alle","All")}</option>${pl.map(x=>`<option value="${x.id}"${QK.pf===x.id?" selected":""}>${esc(x.name)}</option>`).join("")}<option value="none"${QK.pf==="none"?" selected":""}>${L("Ohne Zuordnung","Not assigned")}</option></select></label><button type="button" class="testbtn ghost small" id="qkPAdd">+ ${L("Athlet*in","Athlete")}</button><span id="qkPEd"></span></div>`:""}
@@ -5097,8 +5097,8 @@ function qkList(){
       ${spMetSelHTML(qkP({kind:QK.metK, start:"block", uw:"fly", turn:"flip"}))}</details>`;
   $("qkFiles").onchange=e=>{ const f=[...e.target.files]; e.target.value=""; qkUpload(f); };
   $("mp4Fix").onchange=async e=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return; toast(L("Wird umgewandelt …","Converting …"),3000);
-    try{ const o=await mp4Defrag(f); if(!o){ toast(L("Diese Datei ist schon eine normale MP4 und muss nicht umgewandelt werden.","This file already is a normal MP4 and doesn't need converting."),5000); return; }
-      const nm=f.name.replace(/\.mp4$/i,"")+" (MP4).mp4", ask=await fileAsk(nm,"video/mp4","mp4",L("Ergebnisvideo","Result video")); if(!ask) return; await fileWrite(ask,o,L("Ergebnisvideo","Result video")); blog("video","MP4 umgewandelt",{mb:Math.round(f.size/1e6)}); }
+    try{ const o=await mp4Defrag(f); if(!o){ toast(L("Diese Datei ist kein fragmentiertes MP4-Video und muss nicht umgewandelt werden.","This file isn't a fragmented MP4 video and doesn't need converting."),5000); return; }
+      const nm=f.name.replace(/\.[a-z0-9]{2,4}$/i,"")+" (MP4).mp4", ask=await fileAsk(nm,"video/mp4","mp4",L("Ergebnisvideo","Result video")); if(!ask) return; await fileWrite(ask,o,L("Ergebnisvideo","Result video")); blog("video","MP4 umgewandelt",{mb:Math.round(f.size/1e6)}); }
     catch(err){ blog("error","mp4Fix: "+(err&&err.message||err)); toast(L("Die Datei ließ sich nicht umwandeln.","The file couldn't be converted."),5000); } };
   pg.querySelectorAll("[data-kid]").forEach(box=>{ const ask=box.closest(".qkask"); if(ask) box.addEventListener("pointerdown",ev=>{ const r=box.getBoundingClientRect(); QK.swDir = ev.clientX < r.left+r.width/2 ? -1 : 1; },true);
     qkBindKind(box,"ek",()=>qkE(box.dataset.kid),e=>{ QK.openK=e.id; qkSave(); if(ask){ ask.classList.add(QK.swDir<0?"swl":"swr"); setTimeout(qkList,320); } else qkList(); }); });
@@ -5577,11 +5577,11 @@ function resStrip(C){ const isStart = C.kind==="start" || (!C.kind && C.p && C.p
     else { if(M[id]==null) return; t=M[id]; const s=st(id); lab=s?s.t():id; }
     const r=M.sig!=null?relR(RT(t)):null; out.push({t, lab, time:r!=null?evFmt(r,"s"):""}); }); return out; }
 async function resStripPdf(F, doc, strip){ const fr=[]; for(const x of strip){ const im=await resFrame(x.t+0.5/sFps(), 720); fr.push(Object.assign({id:doc.addJpeg(im.bytes,im.w,im.h), ar:im.h/im.w}, x)); }
-  const n=fr.length, cols=n<=3?n:3, rows=Math.ceil(n/cols), gap=6, cap=22, ar=fr[0].ar, H0=Math.min(330, F.cw*ar);
+  const n=fr.length, cols=n<=3?n:3, rows=Math.ceil(n/cols), gap=6, cap=0, ar=fr[0].ar, H0=Math.min(330, F.cw*ar);
   let w=(F.cw-gap*(cols-1))/cols, h=w*ar; if(rows*(h+cap)+(rows-1)*gap>H0){ h=(H0-(rows-1)*gap)/rows-cap; w=h/ar; }
   const tot=rows*(h+cap)+(rows-1)*gap, x0=F.M+(F.cw-(cols*w+gap*(cols-1)))/2; F.need(tot+8);
   fr.forEach((x,i)=>{ const c=i%cols, r=Math.floor(i/cols), X=x0+c*(w+gap), Y=F.y+r*(h+cap+gap); doc.image(x.id,X,Y,w,h);
-    doc.text(X,Y+h+9,(F.wrap(x.lab,7,"b",w)[0]||""),{size:7,f:"b",color:"#0D2230"}); if(x.time) doc.text(X,Y+h+18,L(`${x.time} nach dem Startsignal`,`${x.time} after the start signal`),{size:7,color:"#557080"}); });
+  });
   F.y+=tot+8; }
 /* Abschnittsgeschwindigkeiten aus den Zeitmarken (5 m, 10 m, 15 m und weitere Messpunkte) */
 function segSpeeds(){ const M=SA.marks||{}; if(M.sig==null) return []; const tt=m=>relR(RT(m));
@@ -5660,7 +5660,7 @@ function kinoEvents(C){ const M=SA.marks||{}, o=C.o||{}, cat=C.p?METCAT(C.p):[],
   // Zeichnungen: Halt in jedem Bild, in dem gezeichnet wurde
   const seen=new Set(); drShapes().filter(s=>s.tv!=null).forEach(s=>{ const fk=drFk(s.tv); if(seen.has(fk)) return; seen.add(fk);
     const nt=(SA.notes||[]).filter(n=>n.k==="draw" && Math.abs(n.fk-fk)<=1).map(n=>n.txt); let e=out.find(x=>near(x.t,s.tv));
-    if(!e){ e={t:s.tv, step:L("Zeichnung","Drawing"), lab:L("Zeichnung","Drawing"), val:after(s.tv), notes:[], geo:[], sub:[]}; out.push(e); }
+    if(!e){ e={t:s.tv, step:"", lab:"", val:"", notes:[], geo:[], sub:[]}; out.push(e); }
     e.dr=true; nt.forEach(x=>{ if(!e.notes.includes(x)) e.notes.push(x); }); });
   return out.sort((a,b)=>a.t-b.t); }
 function kinoWrap(g,txt,maxW){ const words=String(txt).split(/\s+/), lines=[]; let l=""; words.forEach(w=>{ const t=l?l+" "+w:w; if(g.measureText(t).width>maxW && l){ lines.push(l); l=w; } else l=t; }); if(l) lines.push(l); return lines; }
@@ -5686,14 +5686,14 @@ async function kinoExport(){
     { g.font=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; const head=[C.ath,C.name].filter(Boolean).join(" · "), hl=kinoWrap(g,head,Math.max(fs*4,W-tw-pad*2.6)).slice(0,3), hw=Math.max(...hl.map(l=>g.measureText(l).width)), lh=fs*0.85;
       g.fillStyle="rgba(0,0,0,.45)"; g.fillRect(pad*0.6,pad*0.6,hw+pad,lh*hl.length+fs*0.3); g.fillStyle="#fff"; hl.forEach((l,i)=>g.fillText(l,pad*1.1,pad*0.6+fs*0.15+lh*(i+0.5))); }
     if(cur){ const F1=`700 ${Math.round(fs*1.25)}px system-ui,sans-serif`, F2=`400 ${Math.round(fs*0.8)}px system-ui,sans-serif`, F3=`600 ${Math.round(fs*0.85)}px system-ui,sans-serif`;
-      const big=cur.val?`${cur.lab}: ${cur.val}`:cur.lab; g.font=F1; const bl=kinoWrap(g,big,MW); g.font=F2; const nl=cur.notes.flatMap(n=>kinoWrap(g,"„"+n+"“",MW)); g.font=F3; const sl=cur.sub.flatMap(x=>kinoWrap(g,x,MW));
-      const F0=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; g.font=F0; const tl=cur.step!==cur.lab?kinoWrap(g,cur.step,MW):[];
+      const big=cur.val?`${cur.lab}: ${cur.val}`:cur.lab; g.font=F1; const bl=big?kinoWrap(g,big,MW):[]; g.font=F2; const nl=cur.notes.flatMap(n=>kinoWrap(g,n,MW)); g.font=F3; const sl=cur.sub.flatMap(x=>kinoWrap(g,x,MW));
+      const F0=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; g.font=F0; const tl=cur.step&&cur.step!==cur.lab?kinoWrap(g,cur.step,MW):[];
       const wd=(font,t)=>{ g.font=font; return g.measureText(t).width; }; const bw=Math.min(W-pad*2, Math.max(...bl.map(l=>wd(F1,l)), ...nl.map(l=>wd(F2,l)), ...sl.map(l=>wd(F3,l)), ...tl.map(l=>wd(F0,l)))+pad*1.6);
-      const bh=tl.length*fs*0.9+bl.length*fs*1.45+fs*0.25+sl.length*fs*1.05+nl.length*fs*1.05+pad*0.6, by=H-bh-pad*1.2; g.fillStyle="rgba(8,20,28,.78)"; g.fillRect(pad,by,bw,bh);
+      if(tl.length+bl.length+sl.length+nl.length) { const bh=tl.length*fs*0.9+bl.length*fs*1.45+(bl.length?fs*0.25:0)+sl.length*fs*1.05+nl.length*fs*1.05+pad*0.6, by=H-bh-pad*1.2; g.fillStyle="rgba(8,20,28,.78)"; g.fillRect(pad,by,bw,bh);
       let y=by+pad*0.5; g.font=F0; g.fillStyle="#8fd3ff"; tl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*0.9; });
       g.font=F1; g.fillStyle="#fff"; bl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.7); y+=fs*1.45; }); y+=fs*0.05;
       g.font=F3; g.fillStyle="#3FD07A"; sl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; });
-      g.font=`italic ${F2}`; g.fillStyle="#E8D49A"; nl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; }); }
+      g.font=`italic ${F2}`; g.fillStyle="#E8D49A"; nl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; }); } }
     g.font=`600 ${Math.round(fs*0.55)}px system-ui,sans-serif`; g.fillStyle="rgba(255,255,255,.75)"; g.fillText("Sprintz",pad,H-pad*0.6); };
   const vs=c.captureStream(ofps), stream=new MediaStream([...vs.getVideoTracks(), ...(dst?dst.stream.getAudioTracks():[])]);
   const rec=new MediaRecorder(stream,{mimeType:mime, videoBitsPerSecond:vbr, audioBitsPerSecond:256000}), chunks=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
@@ -5701,7 +5701,7 @@ async function kinoExport(){
   let raf=0; const loop=()=>{ draw(); raf=requestAnimationFrame(loop); };
   // Start: Ton ab 2 s nach dem Startsignal über 0,5 s ausblenden; ab der 15-m-Marke normale Geschwindigkeit und Ton wieder einblenden
   const MK=SA.marks, isStart=C.kind==="start" || (!C.kind && C.p && C.p.tech==="start"), gn=dst&&dst._g, fast=()=>isStart && MK.p15!=null && sVid.currentTime>=MK.p15-0.5/f;
-  const baseAt=()=>fast()?1:base;
+  const baseAt=()=>fast() || (MK.sig!=null && sVid.currentTime<MK.sig-0.5/f) ? 1 : base;
   const audio=()=>{ if(!gn) return; let v=1; if(MK.sig!=null && isStart){ if(fast()) v=Math.min(1,Math.max(0,(RT(sVid.currentTime)-RT(MK.p15))/0.5)); else { const r=relR(RT(sVid.currentTime)); if(r!=null && r>2) v=Math.max(0,1-(r-2)/0.5); } } try{ gn.gain.setTargetAtTime(v,KAUD.ac.currentTime,0.03); }catch(e){} };
   try{
     msg(L("Ergebnisvideo wird erstellt … Das Video läuft dabei in halber Geschwindigkeit durch.","Creating the result video … The video plays through at half speed."));
