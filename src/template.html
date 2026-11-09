@@ -5650,17 +5650,20 @@ async function kinoExport(){
   const t0=Math.max(0, SA.marks.sig!=null ? Math.min(SA.marks.sig, ev[0].t)-2 : ev[0].t-2), t1=Math.min(sVid.duration, ev[ev.length-1].t+1.5), base=0.5;
   const ov=$("kinoOv"); ov.hidden=false; $("kinoStop").textContent=L("Abbrechen","Cancel"); KINO.on=true; KINO.stop=false;
   const msg=t=>{ $("kinoMsg").textContent=t; };
-  const fs=Math.round(H/26), pad=Math.round(H/40);
+  const U=Math.min(W,H), fs=Math.round(U/26), pad=Math.round(U/40), MW=W>H?W*0.6:W-pad*3.6;
   let cur=null; // aktuell angezeigtes Ereignis
   const draw=()=>{ g.drawImage(sVid,0,0,W,H); if(cur){ if(cur.ovl) g.drawImage(cur.ovl,0,0); cur.geo.forEach(x=>kinoGeo(g,x.G,W,H,x.lab)); }
-    g.font=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; g.fillStyle="rgba(0,0,0,.45)"; const head=[C.ath,C.name].filter(Boolean).join(" · "); const hw=g.measureText(head).width; g.fillRect(pad*0.6,pad*0.6,hw+pad,fs*1.1); g.fillStyle="#fff"; g.textBaseline="middle"; g.fillText(head,pad*1.1,pad*0.6+fs*0.55);
-    if(SA.marks.sig!=null){ const r=relR(RT(sVid.currentTime)); if(r!=null){ const tt=(r<0?"−":"")+evFmt(Math.abs(r),"s"); g.font=`700 ${fs}px system-ui,sans-serif`; const w=g.measureText(tt).width; g.fillStyle="rgba(0,0,0,.45)"; g.fillRect(W-w-pad*1.6,pad*0.6,w+pad,fs*1.3); g.fillStyle="#FFD24A"; g.fillText(tt,W-w-pad*1.1,pad*0.6+fs*0.65); } }
+    let tw=0; g.textBaseline="middle";
+    if(SA.marks.sig!=null){ const r=relR(RT(sVid.currentTime)); if(r!=null){ const tt=(r<0?"−":"")+evFmt(Math.abs(r),"s"); g.font=`700 ${fs}px system-ui,sans-serif`; const w=g.measureText(tt).width; tw=w+pad*2; g.fillStyle="rgba(0,0,0,.45)"; g.fillRect(W-w-pad*1.6,pad*0.6,w+pad,fs*1.3); g.fillStyle="#FFD24A"; g.fillText(tt,W-w-pad*1.1,pad*0.6+fs*0.65); } }
+    { g.font=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; const head=[C.ath,C.name].filter(Boolean).join(" · "), hl=kinoWrap(g,head,Math.max(fs*4,W-tw-pad*2.6)).slice(0,3), hw=Math.max(...hl.map(l=>g.measureText(l).width)), lh=fs*0.85;
+      g.fillStyle="rgba(0,0,0,.45)"; g.fillRect(pad*0.6,pad*0.6,hw+pad,lh*hl.length+fs*0.3); g.fillStyle="#fff"; hl.forEach((l,i)=>g.fillText(l,pad*1.1,pad*0.6+fs*0.15+lh*(i+0.5))); }
     if(cur){ const F1=`700 ${Math.round(fs*1.25)}px system-ui,sans-serif`, F2=`400 ${Math.round(fs*0.8)}px system-ui,sans-serif`, F3=`600 ${Math.round(fs*0.85)}px system-ui,sans-serif`;
-      const big=cur.val?`${cur.lab}: ${cur.val}`:cur.lab; g.font=F2; const nl=cur.notes.flatMap(n=>kinoWrap(g,"„"+n+"“",W*0.6)); g.font=F3; const sl=cur.sub.flatMap(x=>kinoWrap(g,x,W*0.6));
-      const wd=(font,t)=>{ g.font=font; return g.measureText(t).width; }; const bw=Math.max(wd(F1,big), ...nl.map(l=>wd(F2,l)), ...sl.map(l=>wd(F3,l)));
-      const bh=fs*1.7+(cur.step!==cur.lab?fs*0.9:0)+sl.length*fs*1.05+nl.length*fs*1.05+pad*0.6, by=H-bh-pad*1.2; g.fillStyle="rgba(8,20,28,.78)"; g.fillRect(pad,by,bw+pad*1.6,bh);
-      let y=by+pad*0.5; if(cur.step!==cur.lab){ g.font=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; g.fillStyle="#8fd3ff"; g.fillText(cur.step,pad*1.8,y+fs*0.4); y+=fs*0.9; }
-      g.font=F1; g.fillStyle="#fff"; g.fillText(big,pad*1.8,y+fs*0.7); y+=fs*1.5;
+      const big=cur.val?`${cur.lab}: ${cur.val}`:cur.lab; g.font=F1; const bl=kinoWrap(g,big,MW); g.font=F2; const nl=cur.notes.flatMap(n=>kinoWrap(g,"„"+n+"“",MW)); g.font=F3; const sl=cur.sub.flatMap(x=>kinoWrap(g,x,MW));
+      const F0=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; g.font=F0; const tl=cur.step!==cur.lab?kinoWrap(g,cur.step,MW):[];
+      const wd=(font,t)=>{ g.font=font; return g.measureText(t).width; }; const bw=Math.min(W-pad*2, Math.max(...bl.map(l=>wd(F1,l)), ...nl.map(l=>wd(F2,l)), ...sl.map(l=>wd(F3,l)), ...tl.map(l=>wd(F0,l)))+pad*1.6);
+      const bh=tl.length*fs*0.9+bl.length*fs*1.45+fs*0.25+sl.length*fs*1.05+nl.length*fs*1.05+pad*0.6, by=H-bh-pad*1.2; g.fillStyle="rgba(8,20,28,.78)"; g.fillRect(pad,by,bw,bh);
+      let y=by+pad*0.5; g.font=F0; g.fillStyle="#8fd3ff"; tl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*0.9; });
+      g.font=F1; g.fillStyle="#fff"; bl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.7); y+=fs*1.45; }); y+=fs*0.05;
       g.font=F3; g.fillStyle="#3FD07A"; sl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; });
       g.font=`italic ${F2}`; g.fillStyle="#E8D49A"; nl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; }); }
     g.font=`600 ${Math.round(fs*0.55)}px system-ui,sans-serif`; g.fillStyle="rgba(255,255,255,.75)"; g.fillText("Sprintz",pad,H-pad*0.6); };
@@ -5751,7 +5754,7 @@ if(typeof sVid.requestVideoFrameCallback==="function"){ const f=()=>{ if(SA.acti
 function measKeep(st){ const M=SA.meas; if(!M || M.foot==null || M.pts.length<2) return; const cv=$("sMeas"), bw=cv.clientWidth, bh=cv.clientHeight, r=resCrop(), [ra,rb]=measRefs(M);
   const cn=p=>[Math.round(((p[0]*bw)-r.x)/r.w*1e5)/1e5, Math.round(((p[1]*bh)-r.y)/r.h*1e5)/1e5];
   (SA.mgeo=SA.mgeo||{})[st.id]={tv:Math.round(sCurT()*1e5)/1e5, pts:M.pts.map(cn), foot:M.foot, dir:M.dir, ra:ra[0], rb:rb[0]}; }
-function kinoGeo(g, G, W, H, lab){ const s=H/520, A=[G.pts[0][0]*W,G.pts[0][1]*H], B=[G.pts[1][0]*W,G.pts[1][1]*H], ab=[B[0]-A[0],B[1]-A[1]], len=Math.hypot(ab[0],ab[1])||1, u=[ab[0]/len,ab[1]/len], diag=Math.hypot(W,H)*2;
+function kinoGeo(g, G, W, H, lab){ const s=Math.min(W,H)/520, A=[G.pts[0][0]*W,G.pts[0][1]*H], B=[G.pts[1][0]*W,G.pts[1][1]*H], ab=[B[0]-A[0],B[1]-A[1]], len=Math.hypot(ab[0],ab[1])||1, u=[ab[0]/len,ab[1]/len], diag=Math.hypot(W,H)*2;
   g.save(); g.lineCap="round"; g.strokeStyle="rgba(255,210,74,.45)"; g.lineWidth=2*s; g.setLineDash([6*s,6*s]); g.beginPath(); g.moveTo(A[0]-u[0]*diag,A[1]-u[1]*diag); g.lineTo(B[0]+u[0]*diag,B[1]+u[1]*diag); g.stroke();
   g.strokeStyle="#FFD24A"; g.lineWidth=3*s; g.setLineDash([10*s,6*s]); g.beginPath(); g.moveTo(A[0],A[1]); g.lineTo(B[0],B[1]); g.stroke(); g.setLineDash([]);
   const tag=(x,y,t,col)=>{ g.font=`700 ${Math.round(16*s)}px system-ui,sans-serif`; const tw=g.measureText(t).width; g.fillStyle="rgba(0,0,0,.7)"; g.fillRect(x-5*s,y-18*s,tw+10*s,24*s); g.fillStyle=col; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(t,x,y); };
@@ -5759,7 +5762,7 @@ function kinoGeo(g, G, W, H, lab){ const s=H/520, A=[G.pts[0][0]*W,G.pts[0][1]*H
   const F=[A[0]+G.foot*ab[0], A[1]+G.foot*ab[1]]; let n=[-u[1],u[0]]; if(n[1]>0 || (n[1]===0 && n[0]>0)) n=[-n[0],-n[1]]; if(G.dir>0) n=[-n[0],-n[1]];
   g.strokeStyle="#000"; g.lineWidth=6*s; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke(); g.strokeStyle="#3FD07A"; g.lineWidth=3*s; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
   g.fillStyle="#3FD07A"; g.strokeStyle="#000"; g.lineWidth=2*s; g.beginPath(); g.arc(F[0],F[1],7*s,0,7); g.fill(); g.stroke();
-  if(lab){ const lx=Math.min(W-260*s, Math.max(8*s, F[0]+n[0]*60*s+10*s)), ly=Math.min(H-20*s, Math.max(30*s, F[1]+n[1]*60*s)); tag(lx,ly,lab,"#3FD07A"); } g.restore(); }
+  if(lab){ g.font=`700 ${Math.round(16*s)}px system-ui,sans-serif`; const lw=g.measureText(lab).width; if(lw>W-30*s){ const p2=lab.split(" · "); lab=p2[0]; } const lx=Math.min(W-g.measureText(lab).width-20*s, Math.max(8*s, F[0]+n[0]*60*s+10*s)), ly=Math.min(H-20*s, Math.max(30*s, F[1]+n[1]*60*s)); tag(lx,ly,lab,"#3FD07A"); } g.restore(); }
 
 /* ---------- Ton im Ergebnisvideo: Tonspur des Videos über Web Audio mitschneiden ---------- */
 const KAUD={ac:null, src:null};
