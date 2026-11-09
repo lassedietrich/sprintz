@@ -17,10 +17,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14
+          - os: macos-15
             arch: arm64
             args: --mac --arm64
-          - os: macos-14
+          - os: macos-15
             arch: x64
             args: --mac --x64
           - os: windows-latest
