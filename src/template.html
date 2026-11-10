@@ -3136,7 +3136,8 @@ document.addEventListener("keydown",e=>{
   if(sa && SA.meas && ($("sMeas").hidden || !(SA.steps[SA.i] && SA.steps[SA.i].meas))) measEnd(); // verwaiste Messung beenden
   if(sa && !textlike && SA.meas && SA.meas.pts.length>=2){
     if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ e.preventDefault(); measMove((e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1)); return; }
-    if(e.key==="ArrowUp"||e.key==="ArrowDown"){ e.preventDefault(); SA.meas.dir = e.key==="ArrowUp"?-1:1; measDraw(); measCtl(); return; } }
+    if(e.key==="ArrowUp"||e.key==="ArrowDown"){ e.preventDefault(); SA.meas.dir = e.key==="ArrowUp"?-1:1; measDraw(); measCtl(); return; }
+    if(e.key==="q"||e.key==="Q"||e.key==="e"||e.key==="E"){ e.preventDefault(); measRot(((e.key==="e"||e.key==="E")?1:-1)*(e.shiftKey?5:1)); return; } }
   if(sa && FS.on && !typing && (e.key==="+"||e.key==="="||e.key==="-"||e.key==="0")){ e.preventDefault(); if(e.key==="0") fsZoomReset(); else fsZoomAt(e.key==="-"?1/1.25:1.25); return; }
   if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(textlike) return; if(tg && tg.tagName==="INPUT" && tg.type!=="range") tg.blur(); e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
   if(typing) return;
@@ -3305,7 +3306,7 @@ function wizRender(){
       <div class="wnum"><input id="wNum" type="number" inputmode="decimal" step="${st.step||(st.unit==="×"?1:0.1)}" min="0" value="${SA.vals[st.id]??""}" placeholder="0"><span>${st.unit}</span></div>
       <button type="button" class="wbig" id="wTake">${L("Übernehmen","Confirm")}</button><button type="button" class="wskip" id="wSkip">${L("Weiß ich nicht – überspringen","Don't know – skip")}</button>`;
   } else if(st.k==="more"){ h+=xdMoreHTML(); } else h+= SA.mode==="eval" ? evSumHTML() : SA.mode==="train" ? trainSumHTML() : SA.mode==="quick" ? qkSumHTML() : spSumHTML();
-  if(st.k==="more"){} else if(st.k!=="sum") h+=noteUI(st)+(st.k==="time"&&!st.sig?xdPlusHTML():""); else h+=resActHTML()+xdSumHTML()+xdPlusHTML()+notesSumHTML();
+  if(st.k==="more"){} else if(st.k!=="sum") h+=noteUI(st)+(st.k==="time"&&!st.sig?xdPlusHTML():""); else h+=resActHTML()+xdSumHTML()+wtSumHTML()+xdPlusHTML()+notesSumHTML();
   // Hinweis bei unrealistischen Zeiten schon während der Auswertung (Start)
   if((SA.mode==="eval"||SA.mode==="train"||(SA.mode==="quick"&&(qkE(QK.cur)||{}).kind==="start")) && !(SA.mode==="eval"&&isTurn(EV.cur))){ try{ slowAutoFix(); }catch(e){} }
   c.innerHTML=h; wizProgress(); try{ nlRender(); }catch(e){} if(st.k!=="sum") noteBind(st); else resActBind(); if(st.k==="more") xdMoreBind(); xdPlusBind();
@@ -3364,7 +3365,7 @@ function measGeo(M){ const r=$("sMeas").getBoundingClientRect(), W=r.width, H=r.
 function measDist(M){ const [ra,rb]=measRefs(M); return ra[0]+M.foot*(rb[0]-ra[0]); }
 function measStart(st){
   if(typeof DR!=="undefined" && DR.tool) drSetTool(null); sVid.pause(); SA.measPair=SA.measPair||{};
-  SA.meas={st, pts:[], pair:SA.measPair[st.id]||0, foot:null, dir:1};
+  SA.meas={st, pts:[], pair:SA.measPair[st.id]||0, foot:null, dir:1, ang:0};
   $("sMeas").hidden=false;
   // Beschreibung einklappen, im Vollbild die Hinweisbox
   $("wCard").classList.add("meascol");
@@ -3381,7 +3382,7 @@ function measVal(){ const M=SA.meas; if(!M || M.foot==null) return null; const d
 function measHint(){ const M=SA.meas, h=$("wMeasH"); if(!M) return; const g=M.st.meas, k=M.pts.length, [ra,rb]=measRefs(M), d=measVal();
   if(h){ h.hidden=false; h.innerHTML = k===0 ? L(`Stell das Video auf ein Bild, in dem beide Marken zu sehen sind. Tippe dann im Video auf ${ra[1]}.`,`Pause on a frame in which both marks are visible. Then tap ${ra[1]} in the video.`)
     : k===1 ? L(`Tippe jetzt auf ${rb[1]}.`,`Now tap ${rb[1]}.`)
-    : L(`Schieb die Senkrechte auf ${g.tg()}: mit ← → (Umschalt: schneller), durch Ziehen oder Antippen.`,`Move the perpendicular onto ${g.tg()}: with ← → (Shift: faster), by dragging or by tapping.`)+(d!=null?" "+L(`Gemessen: <b>${n2(Math.max(0,d),spUnitD())}</b>. Übernehmen mit Enter.`,`Measured: <b>${n2(Math.max(0,d),spUnitD())}</b>. Confirm with Enter.`):""); }
+    : L(`Schieb die Senkrechte auf ${g.tg()}: mit ← → (Umschalt: schneller), durch Ziehen oder Antippen. Drehen kannst du sie am runden Griff oder mit Q und E.`,`Move the perpendicular onto ${g.tg()}: with ← → (Shift: faster), by dragging or by tapping. Rotate it with the round handle or with Q and E.`)+(d!=null?" "+L(`Gemessen: <b>${n2(Math.max(0,d),spUnitD())}</b>. Übernehmen mit Enter.`,`Measured: <b>${n2(Math.max(0,d),spUnitD())}</b>. Confirm with Enter.`):""); }
   // Anleitung direkt auf dem Video (verschiebbar): Bezugsmarken wählen, drei Schritte, der aktuelle hervorgehoben
   const tp=$("sMeasTip"); if(!tp) return; tp.hidden=false;
   const lst=[ra[1], rb[1], L(`Senkrechte auf ${g.tg()} schieben`,`Move the perpendicular onto ${g.tg()}`)];
@@ -3396,12 +3397,18 @@ function measHint(){ const M=SA.meas, h=$("wMeasH"); if(!M) return; const g=M.st
 // Schaltflächen unten rechts: Punkt entfernen, alle entfernen, Richtung, übernehmen
 function measCtl(){ const M=SA.meas, c=$("sMeasCtl"); if(!c) return; if(!M){ c.hidden=true; return; } c.hidden=false; const k=M.pts.length;
   c.innerHTML=`${k>=2?`<button type="button" data-mc="dir" title="${L("Richtung der Senkrechten","Direction of the perpendicular")}">${M.dir<0?`↑<span> ${L("Senkrechte nach oben","Perpendicular up")}</span>`:`↓<span> ${L("Senkrechte nach unten","Perpendicular down")}</span>`}</button>`:""}
+    ${k>=2?`<button type="button" data-mc="rl" title="${L("Linie gegen den Uhrzeigersinn drehen (Q, Umschalt: 5°)","Rotate line anticlockwise (Q, Shift: 5°)")}">⟲</button><button type="button" data-mc="rr" title="${L("Linie im Uhrzeigersinn drehen (E, Umschalt: 5°)","Rotate line clockwise (E, Shift: 5°)")}">⟳</button>${Math.abs(M.ang||0)>=0.004?`<button type="button" data-mc="r0" title="${L("Wieder senkrecht","Perpendicular again")}">⊥</button>`:""}`:""}
     <button type="button" data-mc="undo" title="${L("Letzten Punkt entfernen","Remove last point")}"${k?"":" disabled"}>↶<span> ${L("Letzten Punkt entfernen","Remove last point")}</span></button>
     <button type="button" data-mc="clear" title="${L("Alle Punkte entfernen","Remove all points")}"${k?"":" disabled"}>×<span> ${L("Alle Punkte entfernen","Remove all points")}</span></button>
     ${M.foot!=null?`<button type="button" class="ok" data-mc="ok">✓ ${L("Übernehmen","Confirm")}</button>`:""}`;
   c.querySelectorAll("[data-mc]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); const a=b.dataset.mc;
-    if(a==="dir"){ M.dir=-M.dir; } else if(a==="undo"){ M.pts.pop(); M.foot=null; } else if(a==="clear"){ M.pts=[]; M.foot=null; } else if(a==="ok"){ const tk=$("wTake"); if(tk) tk.click(); return; }
+    if(a==="rl"){ M.ang=Math.max(-1.4,(M.ang||0)-(e.shiftKey?5:1)*Math.PI/180); } else if(a==="rr"){ M.ang=Math.min(1.4,(M.ang||0)+(e.shiftKey?5:1)*Math.PI/180); } else if(a==="r0"){ M.ang=0; }
+    else if(a==="dir"){ M.dir=-M.dir; } else if(a==="undo"){ M.pts.pop(); M.foot=null; } else if(a==="clear"){ M.pts=[]; M.foot=null; } else if(a==="ok"){ const tk=$("wTake"); if(tk) tk.click(); return; }
     measDraw(); measHint(); measCtl(); }); }
+function measNorm(u,M){ let n=[-u[1],u[0]]; if(n[1]>0 || (n[1]===0 && n[0]>0)) n=[-n[0],-n[1]]; if(M.dir>0) n=[-n[0],-n[1]]; const a=M.ang||0, c=Math.cos(a), s=Math.sin(a); return [n[0]*c-n[1]*s, n[0]*s+n[1]*c]; }
+function measHandle(M){ const G=measGeo(M); if(G.len<1||M.foot==null) return null; const u=[G.ab[0]/G.len,G.ab[1]/G.len], n=measNorm(u,M), F=[G.A[0]+M.foot*G.ab[0], G.A[1]+M.foot*G.ab[1]], L=95/measZ().s;
+  return {F, n, u, H:[F[0]+n[0]*L, F[1]+n[1]*L]}; }
+function measRot(deg){ const M=SA.meas; if(!M||M.pts.length<2) return; M.ang=Math.max(-1.4,Math.min(1.4,(M.ang||0)+deg*Math.PI/180)); measDraw(); measHint(); measCtl(); }
 function measMove(px){ const M=SA.meas; if(!M || M.pts.length<2) return; const G=measGeo(M); if(G.len<1) return;
   const z=measZ(), sx = Math.abs(G.ab[0])>=Math.abs(G.ab[1]) ? Math.sign(G.ab[0])||1 : Math.sign(G.ab[1])||1;
   if(M.foot==null) M.foot=0.5; M.foot+=sx*px/z.s/G.len; measDraw(); measHint(); measCtl();
@@ -3414,13 +3421,17 @@ function measDraw(){ const cv=$("sMeas"), r=cv.getBoundingClientRect(), dpr=devi
     // Bezugslinie, verlängert
     g.strokeStyle="rgba(255,210,74,.35)"; g.lineWidth=1.5*dpr; g.setLineDash([4*dpr,5*dpr]); g.beginPath(); g.moveTo(A[0]-u[0]*diag,A[1]-u[1]*diag); g.lineTo(B[0]+u[0]*diag,B[1]+u[1]*diag); g.stroke();
     g.strokeStyle="rgba(255,210,74,.95)"; g.lineWidth=2*dpr; g.setLineDash([6*dpr,4*dpr]); g.beginPath(); g.moveTo(A[0],A[1]); g.lineTo(B[0],B[1]); g.stroke(); g.setLineDash([]);
-    if(M.foot!=null){ const F=[A[0]+M.foot*ab[0], A[1]+M.foot*ab[1]]; let n=[-u[1],u[0]]; if(n[1]>0 || (n[1]===0 && n[0]>0)) n=[-n[0],-n[1]]; if(M.dir>0) n=[-n[0],-n[1]];
+    if(M.foot!=null){ const F=[A[0]+M.foot*ab[0], A[1]+M.foot*ab[1]], n=measNorm(u,M);
       g.strokeStyle="#000"; g.lineWidth=4*dpr; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
       g.strokeStyle="#3FD07A"; g.lineWidth=2*dpr; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
       // Winkelzeichen: die Senkrechte steht rechtwinklig auf der Geraden durch Punkt 1 und 2 (nicht auf dem Bildrand)
-      { const q=11*dpr, sg=M.foot<0.5?1:-1, a1=[F[0]+u[0]*q*sg, F[1]+u[1]*q*sg], a2=[a1[0]+n[0]*q, a1[1]+n[1]*q], a3=[F[0]+n[0]*q, F[1]+n[1]*q];
+      if(Math.abs(M.ang||0)<0.004){ const q=11*dpr, sg=M.foot<0.5?1:-1, a1=[F[0]+u[0]*q*sg, F[1]+u[1]*q*sg], a2=[a1[0]+n[0]*q, a1[1]+n[1]*q], a3=[F[0]+n[0]*q, F[1]+n[1]*q];
         g.strokeStyle="#3FD07A"; g.lineWidth=1.5*dpr; g.beginPath(); g.moveTo(a1[0],a1[1]); g.lineTo(a2[0],a2[1]); g.lineTo(a3[0],a3[1]); g.stroke(); }
       g.fillStyle="#3FD07A"; g.strokeStyle="#000"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(F[0],F[1],5*dpr,0,7); g.fill(); g.stroke();
+      // Griff zum Drehen der Linie
+      { const Hh=[F[0]+n[0]*95*dpr, F[1]+n[1]*95*dpr]; g.fillStyle="#fff"; g.strokeStyle="#3FD07A"; g.lineWidth=2.5*dpr; g.beginPath(); g.arc(Hh[0],Hh[1],8*dpr,0,7); g.fill(); g.stroke();
+        g.strokeStyle="#1d6b40"; g.lineWidth=1.5*dpr; g.beginPath(); g.arc(Hh[0],Hh[1],4*dpr,0.4,5.4); g.stroke();
+        if(Math.abs(M.ang||0)>=0.004){ const t=`${(M.ang>0?"+":"−")}${Math.abs(M.ang*180/Math.PI).toFixed(1).replace(".",LANG==="en"?".":",")}°`; g.font=`700 ${12*dpr}px system-ui`; const tw=g.measureText(t).width; g.fillStyle="rgba(0,0,0,.65)"; g.fillRect(Hh[0]+12*dpr,Hh[1]-10*dpr,tw+8*dpr,18*dpr); g.fillStyle="#3FD07A"; g.textBaseline="middle"; g.textAlign="left"; g.fillText(t,Hh[0]+16*dpr,Hh[1]-1*dpr); } }
       const lab=n2(Math.max(0,measDist(M)),spUnitD()); g.font=`700 ${13*dpr}px system-ui`; const tw=g.measureText(lab).width, lx=Math.min(cv.width-tw-8*dpr, Math.max(4*dpr, F[0]+n[0]*40*dpr+6*dpr)), ly=Math.min(cv.height-8*dpr, Math.max(16*dpr, F[1]+n[1]*40*dpr));
       g.fillStyle="rgba(0,0,0,.65)"; g.fillRect(lx-4*dpr,ly-14*dpr,tw+8*dpr,19*dpr); g.fillStyle="#3FD07A"; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(lab,lx,ly); } }
   // Fadenkreuz über das ganze Bild an der Zeigerspitze, solange Bezugspunkte gesetzt werden: der Punkt landet genau im Schnittpunkt
@@ -3433,11 +3444,13 @@ function measDraw(){ const cv=$("sMeas"), r=cv.getBoundingClientRect(), dpr=devi
 // Tippen setzt Punkte bzw. den Fußpunkt; Ziehen verschiebt nach zwei Punkten die Senkrechte, davor (gezoomt) das Bild
 { const cv=$("sMeas"); let down=null;
   const footAt=e=>{ const M=SA.meas, G=measGeo(M), r=cv.getBoundingClientRect(), q=measN(e), C=[q[0]*G.W,q[1]*G.H]; if(G.len<1) return; M.foot=((C[0]-G.A[0])*G.ab[0]+(C[1]-G.A[1])*G.ab[1])/(G.len*G.len); };
-  cv.addEventListener("pointerdown",e=>{ const M=SA.meas; if(!M) return; e.preventDefault(); down={x:e.clientX,y:e.clientY,moved:false,pan:false}; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointerdown",e=>{ const M=SA.meas; if(!M) return; e.preventDefault(); down={x:e.clientX,y:e.clientY,moved:false,pan:false,rot:false}; cv.setPointerCapture(e.pointerId);
+    if(M.pts.length>=2 && M.foot!=null){ const h=measHandle(M), G=measGeo(M), q=measN(e); if(h && Math.hypot(q[0]*G.W-h.H[0], q[1]*G.H-h.H[1])<18/measZ().s) down.rot=true; } });
   cv.addEventListener("pointermove",e=>{ const M=SA.meas; if(!M||!down) return; const dx=e.clientX-down.x, dy=e.clientY-down.y; if(!down.moved && Math.hypot(dx,dy)<6) return; down.moved=true;
-    if(M.pts.length>=2){ footAt(e); measDraw(); measHint(); measCtl(); }
+    if(down.rot){ const h=measHandle(M), G=measGeo(M), q=measN(e); if(h){ const M0=Object.assign({},M,{ang:0}), n0=measNorm(h.u,M0), v=[q[0]*G.W-h.F[0], q[1]*G.H-h.F[1]]; M.ang=Math.max(-1.4,Math.min(1.4,Math.atan2(n0[0]*v[1]-n0[1]*v[0], n0[0]*v[0]+n0[1]*v[1]))); measDraw(); measHint(); measCtl(); } }
+    else if(M.pts.length>=2){ footAt(e); measDraw(); measHint(); measCtl(); }
     else if(fsPan(dx,dy)){ down.x=e.clientX; down.y=e.clientY; } });
-  const up=e=>{ const M=SA.meas, d=down; down=null; if(!M||!d||d.moved) return;
+  const up=e=>{ const M=SA.meas, d=down; down=null; if(!M||!d||d.moved||d.rot) return;
     if(M.pts.length<2){ M.pts.push(measN(e)); if(M.pts.length===2){ const G=measGeo(M); if(G.len<10){ M.pts=[]; } else M.foot=0.5; } }
     else footAt(e);
     measDraw(); measHint(); measCtl(); };
@@ -4660,8 +4673,8 @@ function TURNMORE(){
     {ph:"uw",l:L("Beinschlagamplitude und Strouhal-Zahl","Kick amplitude and Strouhal number"),kz:"A, m; St",d:L("Senkrechte Ausdehnung des Kicks und Effizienzkennzahl A × f / v.","Vertical range of the kick and the efficiency index A × f / v."),r:L("Kennzahlen für die Effizienz des Delfinkicks.","Indices of dolphin kick efficiency."),e:UW}];
 }
 // Kennwerte eines Wendeversuchs
-function turnMetrics(){
-  const m=smoMarks(), v=SA.vals, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a]) : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null, p=(SA.mode==="quick"?qkP():EV.cur)||{}, open=turnOpen(p), w0=open?"touch":"feetOn";
+function turnMetrics(cx){ cx=cx||{};
+  const raw=cx.raw||SA.marks, m=cx.raw?Object.fromEntries(Object.entries(cx.raw).map(([k,t])=>[k,t==null?null:RT(t)])):smoMarks(), v=cx.v||SA.vals, d=(a,b)=> m[a]!=null&&m[b]!=null ? (m[b]-m[a]) : null, o={}, ok=x=>x!=null&&isFinite(x), pos=x=>ok(x)&&x>0?x:null, p=cx.p||((SA.mode==="quick"?qkP():EV.cur)||{}), open=turnOpen(p), w0=open?"touch":"feetOn";
   const a=pos(d("in10","in5")); if(a) o.vIn=5/a;
   o.tIn5=pos(d("in5",w0)); o.rotD=v.rotD||null; o.lastRot=pos(d("lastArm",open?"touch":"rot")); o.hipD=v.hipD||null; o.t7575=pos(d("in7","out7"));
   if(open){ o.handT=pos(d("touch","handsOff")); o.turnT=pos(d("touch","feetOn")); o.wallT=pos(d("touch","off")); }
@@ -4673,7 +4686,7 @@ function turnMetrics(){
   const b=pos(d("out5","out10")); if(b) o.vOut=5/b;
   const kt=pos(d("kick1","brk")); if(kt && o.kicks) o.kickF=o.kicks/kt*60; if(o.kicks && o.dive && o.kick1D!=null && o.dive>o.kick1D) o.kl=(o.dive-o.kick1D)/o.kicks;
   o.pullT=pos(d("off","pull")); o.pullK=d("pull","bkick");
-  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ const M=SA.marks; try{ if(M.off!=null){ const x=vmAt(vm,M.off); if(ok(x)) o.vOff=x; } if(M.in5!=null){ const x=vmAt(vm,M.in5); if(ok(x)) o.vIn5vm=x; }
+  const vm=SA.trialRef&&SA.trialRef.vm; if(vm){ const M=raw; try{ if(M.off!=null){ const x=vmAt(vm,M.off); if(ok(x)) o.vOff=x; } if(M.in5!=null){ const x=vmAt(vm,M.in5); if(ok(x)) o.vIn5vm=x; }
     const g=vmMean(vm,M.off,M.kick1); if(ok(g)) o.gvVm=g; const u=vmMean(vm,M.off,M.brk); if(ok(u)) o.uwVvm=u; }catch(e){} }
   return o;
 }
@@ -5681,7 +5694,7 @@ async function resPdf(pre){
       F.para(st?L(`Bild: ${st.t()}`,`Frame: ${st.t()}`):L("Bild: aktuelle Stelle im Video","Frame: current position in the video"),{size:8,color:"#557080",after:6}); }
     }
     // Kennwerte
-    const rows=resRows(C).concat(xdRows());
+    const rows=resRows(C).concat(xdRows(), wtRows());
     if(rows.length){ F.h2(L("Kennwerte","Parameters")); F.table([{h:L("Phase","Phase"),w:2},{h:L("Kennwert","Parameter"),w:4.2},{h:L("Wert","Value"),w:1.6,a:"r"}], rows.map(r=>[r.ph,{t:r.l,f:"b"},{t:r.v,f:"b"}])); }
     const sg=smoSegs(); F.para(L(`Bildrate: ${Math.round((SA.fps||30)*100)/100} Bilder pro Sekunde`,`Frame rate: ${Math.round((SA.fps||30)*100)/100} frames per second`)+(sg.length?" · "+L(`Zeitlupe erkannt (${sg[0].f}×), Zeiten in Echtzeit umgerechnet`,`Slow motion detected (${sg[0].f}×), times converted to real time`):""),{size:8,color:"#557080"});
     // Geschwindigkeitsverlauf als Liniendiagramm: Velocitymeter, sonst Kopfverfolgung, sonst Abschnittsmittel aus den Zeitmarken
@@ -5790,6 +5803,31 @@ async function fileWrite(ask, blob, title){ const name=ask.name;
   if(ask.h){ try{ const w=await ask.h.createWritable(); await w.write(blob); await w.close(); toast(L(`Gespeichert: ${ask.h.name||name}`,`Saved: ${ask.h.name||name}`),3000); return; }catch(e){ blog("warn","fileWrite: "+(e&&e.message||e)); } }
   await evSaveFile(blob, name, title); }
 
+/* ---------- Wende im Anschluss an den Start (gleiche Auswertung): Distanzmarken werden geteilt (z. B. 15 m = 10 m vor der Wand im 25-m-Becken),
+   die Ereignisse der Wende bekommen eigene Marken mit „w_“ davor. ---------- */
+function wtP(){ const wt=SA.vals&&SA.vals.wt; return wt ? {tech:"turn", sport:"swim", turn:wt.turn, uw:"fly"} : null; }
+function wtDistMark(d){ const M=SA.marks||{}; return d===5?M.p5:d===10?M.p10:d===15?M.p15:M[xdId(d)]; }
+function wtMarksRaw(){ const wt=SA.vals.wt, M=SA.marks||{}, o={}; [["in10",-10],["in7",-7.5],["in5",-5],["out5",5],["out7",7.5],["out10",10]].forEach(([k,dd])=>{ const v=wtDistMark(wt.D+dd); if(v!=null) o[k]=v; });
+  Object.keys(M).forEach(k=>{ if(k.startsWith("w_") && M[k]!=null) o[k.slice(2)]=M[k]; }); return o; }
+function wtVals(){ const V=SA.vals||{}, o={}; ["rotD","hipD","kick1D","diveD","kicks"].forEach(k=>{ if(V["w_"+k]!=null) o[k]=V["w_"+k]; }); return o; }
+function wtMetrics(){ const p=wtP(); if(!p) return {}; try{ return turnMetrics({raw:wtMarksRaw(), v:wtVals(), p}); }catch(e){ return {}; } }
+function wtSteps(){ const p=wtP(); if(!p) return {pre:[],post:[]}; const all=turnSteps(p), open=turnOpen(p), by=id=>all.find(x=>x.id===id);
+  const cl=st=>{ const c=Object.assign({}, st, {id:"w_"+st.id, wt:true, t:()=>L("Wende: ","Turn: ")+st.t()}); if(st.meas && st.meas.at) c.meas=Object.assign({}, st.meas, {at:"w_"+st.meas.at}); return c; };
+  const pre=(open?["lastArm","touch","handsOff","feetOn","hipD","off","kick1","kick1D","pull","bkick"]:["lastArm","rot","rotD","feetOn","hipD","off","kick1","kick1D","pull","bkick"]).map(by).filter(Boolean).map(cl);
+  const post=["brk","diveD","kicks"].map(by).filter(Boolean).map(cl); return {pre, post}; }
+function wtSet(turn, D){ SA.vals=SA.vals||{}; const old=SA.vals.wt; if(old && old.auto){ SA.vals.xd=xdList().filter(d=>!(old.auto.includes(d) && SA.marks[xdId(d)]==null)); }
+  if(!turn){ delete SA.vals.wt; xdSync(); return; } const D0=D||25, auto=[]; SA.vals.wt={turn, D:D0, auto};
+  [D0-10, D0-5, D0+5, D0+10].filter(d=>d>0 && ![5,10,15].includes(d)).forEach(d=>{ const a=xdList(); if(!a.includes(d)){ SA.vals.xd=a.concat([d]).sort((x,y)=>x-y); auto.push(d); } }); xdSync(); }
+function wtRows(){ const p=wtP(); if(!p) return []; const o=wtMetrics(), PH=SPPH(), wt=SA.vals.wt, tn=(TURNTYPES(false).find(x=>x[0]===wt.turn)||[0,""])[1];
+  return TURNMET(p).filter(x=>spApplies(x,p,!!(SA.trialRef&&SA.trialRef.vm)) && o[x.k]!=null && (typeof o[x.k]!=="number" || isFinite(o[x.k]))).map(x=>({ph:`${tn} · ${PH[x.ph]||""}`, k:"w_"+x.k, l:x.l, v:x.u==="n"?String(o[x.k]):evFmt(o[x.k],x.u)})); }
+function wtSumHTML(){ const rows=wtRows(); if(!rows.length) return ""; const wt=SA.vals.wt, tn=(TURNTYPES(false).find(x=>x[0]===wt.turn)||[0,""])[1];
+  return `<div class="velsum"><h4>${esc(tn)} (${L(`${wt.D}-m-Becken`,`${wt.D} m pool`)})</h4><table class="veltab"><tbody>${rows.map(r=>`<tr><td>${esc(r.l)}</td><td class="n"><b>${esc(r.v)}</b></td></tr>`).join("")}</tbody></table></div>`; }
+function wtMoreHTML(){ const wt=SA.vals&&SA.vals.wt, D=wt?wt.D:(SA.wtD||25);
+  return `<div class="wtadd"><p style="margin:12px 0 6px"><b>${L("Wende mit auswerten","Also analyse the turn")}</b></p><p class="hint" style="margin:0 0 6px">${L("Die Wende kommt als weitere Schritte in dieser Auswertung. Distanzmarken wie 15 m (= 10 m vor der Wand im 25-m-Becken) werden übernommen.","The turn is added as further steps in this analysis. Distance marks such as 15 m (= 10 m before the wall in a 25 m pool) are reused.")}</p>
+    <div class="xdrow">${[25,50].map(d=>`<button type="button" class="testbtn small" data-wtd="${d}" aria-pressed="${D===d}">${L(`${d}-m-Becken`,`${d} m pool`)}</button>`).join("")}</div>
+    <div class="xdrow">${TURNTYPES(false).map(([v,l])=>`<button type="button" class="testbtn" data-wtt="${v}" aria-pressed="${!!wt&&wt.turn===v}">↪ ${esc(l)}</button>`).join("")}</div></div>`; }
+function wtMoreBind(){ document.querySelectorAll("#wCard [data-wtd]").forEach(b=>b.onclick=()=>{ SA.wtD=+b.dataset.wtd; const wt=SA.vals.wt; if(wt) wtSet(wt.turn, SA.wtD); wizRender(); });
+  document.querySelectorAll("#wCard [data-wtt]").forEach(b=>b.onclick=()=>{ const wt=SA.vals.wt, v=b.dataset.wtt; if(wt && wt.turn===v) wtSet(null); else wtSet(v, wt?wt.D:(SA.wtD||25)); wizRender(); }); }
 /* ---------- Weitere Messpunkte: nach der 15-m-Marke weiter auswerten (z. B. 25 m, 50 m) und jederzeit eigene Messpunkte ---------- */
 const xdId=d=>"px"+String(d).replace(".","_");
 const xdFmt=d=>LANG==="en"?String(d):String(d).replace(".",",");
@@ -5801,6 +5839,9 @@ function xdSync(){ const S=SA.steps; if(!S||!S.length) return; const cid=S[SA.i]
   const i15=S.findIndex(s=>s.id==="p15"); if(i15>=0 && !S.some(s=>s.k==="more")) S.splice(i15+1,0,{id:"more",k:"more",t:()=>L("Weiter auswerten?","Continue the analysis?"),x:()=>""});
   L0.slice().sort((a,b)=>a-b).forEach(d=>{ if(S.some(s=>s.xd===d)) return; let at=S.findIndex(s=>s.k==="sum"); if(at<0) at=S.length;
     for(let i=0;i<S.length;i++) if(S[i].xd!=null && S[i].xd>d){ at=Math.min(at,i); break; } S.splice(at,0,xdStep(d)); });
+  for(let i=S.length-1;i>=0;i--) if(S[i].wt) S.splice(i,1);
+  const wt=SA.vals&&SA.vals.wt; if(wt){ const {pre,post}=wtSteps(), o5=wt.D+5, id5=o5===5?"p5":o5===10?"p10":o5===15?"p15":xdId(o5); let at=S.findIndex(s=>s.id===id5);
+    if(at<0){ at=S.findIndex(s=>s.k==="sum"); if(at<0) at=S.length; S.splice(at,0,...pre,...post); } else { S.splice(at,0,...pre); at+=pre.length+1; S.splice(at,0,...post); } }
   const ni=S.findIndex(s=>s.id===cid); if(ni>=0) SA.i=ni; }
 function xdAdd(d){ d=Math.round(d*100)/100; if(!(d>0) || d>2000) return false; SA.vals=SA.vals||{}; const a=xdList(); if(!a.includes(d)) a.push(d); SA.vals.xd=a.sort((x,y)=>x-y); xdSync(); return true; }
 function xdToggle(d){ const a=xdList(); if(a.includes(d)){ SA.vals.xd=a.filter(x=>x!==d); delete SA.marks[xdId(d)]; } else SA.vals.xd=a.concat([d]).sort((x,y)=>x-y); xdSync(); }
@@ -5808,13 +5849,14 @@ function xdMoreHTML(){ const a=xdList();
   return `<p>${L("Die 15-m-Marke ist gesetzt. Möchtest du noch weitere Distanzen auswerten, zum Beispiel die 25-m- oder 50-m-Zeit?","The 15 m mark is set. Would you like to analyse further distances, for example the 25 m or 50 m time?")}</p>
     <div class="xdrow">${[25,50].map(d=>`<button type="button" class="testbtn" data-xd="${d}" aria-pressed="${a.includes(d)}">${d} m</button>`).join("")}${a.filter(d=>d!==25&&d!==50).map(d=>`<button type="button" class="testbtn" data-xd="${d}" aria-pressed="true">${xdFmt(d)} m</button>`).join("")}</div>
     <div class="wnum xdin"><input id="xdIn" type="number" inputmode="decimal" step="0.5" min="0" placeholder="${L("eigene Distanz","own distance")}"><span>m</span><button type="button" class="testbtn small" id="xdAdd">${L("Hinzufügen","Add")}</button></div>
+    ${wtMoreHTML()}
     <button type="button" class="wbig" id="xdGo">${a.length?L("Weiter","Next"):L("Nein, zum Ergebnis","No, show the result")}</button>`; }
 function xdMoreBind(){ document.querySelectorAll("#wCard [data-xd]").forEach(b=>b.onclick=()=>{ xdToggle(+b.dataset.xd); wizRender(); });
   const add=()=>{ const v=parseFloat(String($("xdIn").value).replace(",",".")); if(xdAdd(v)) wizRender(); }; $("xdAdd").onclick=add; $("xdIn").onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"){ e.preventDefault(); add(); } };
-  $("xdGo").onclick=()=>wizGo(SA.i+1,1); }
+  $("xdGo").onclick=()=>wizGo(SA.i+1,1); wtMoreBind(); }
 // jederzeit: Messpunkt hinzufügen
-function xdPlusHTML(){ return `<div class="xdplus"><button type="button" class="wskip" id="xdPlus">+ ${L("Messpunkt hinzufügen","Add measuring point")}</button><div id="xdBox" class="wnum xdin" hidden><input id="xdIn2" type="number" inputmode="decimal" step="0.5" min="0" placeholder="${L("Distanz","Distance")}"><span>m</span><button type="button" class="testbtn small" id="xdOk">${L("Hinzufügen","Add")}</button></div></div>`; }
-function xdPlusBind(){ const b=$("xdPlus"); if(!b) return; b.onclick=()=>{ $("xdBox").hidden=false; setTimeout(()=>$("xdIn2").focus(),30); };
+function xdPlusHTML(){ const mi=(SA.steps||[]).findIndex(s=>s.k==="more"), cur=SA.steps&&SA.steps[SA.i]; return `<div class="xdplus">${mi>=0 && cur && cur.k==="sum" && !(SA.vals&&SA.vals.wt)?`<button type="button" class="wskip" id="wtGo">↪ ${L("Wende hinzufügen","Add turn")}</button>`:""}<button type="button" class="wskip" id="xdPlus">+ ${L("Messpunkt hinzufügen","Add measuring point")}</button><div id="xdBox" class="wnum xdin" hidden><input id="xdIn2" type="number" inputmode="decimal" step="0.5" min="0" placeholder="${L("Distanz","Distance")}"><span>m</span><button type="button" class="testbtn small" id="xdOk">${L("Hinzufügen","Add")}</button></div></div>`; }
+function xdPlusBind(){ const wg=$("wtGo"); if(wg) wg.onclick=()=>{ const i=SA.steps.findIndex(s=>s.k==="more"); if(i>=0) wizGo(i,-1); }; const b=$("xdPlus"); if(!b) return; b.onclick=()=>{ $("xdBox").hidden=false; setTimeout(()=>$("xdIn2").focus(),30); };
   const ok=()=>{ const d=Math.round(parseFloat(String($("xdIn2").value).replace(",","."))*100)/100; if(!xdAdd(d)) return; const i=SA.steps.findIndex(s=>s.xd===d); if(i>=0) wizGo(i, i>=SA.i?1:-1); else wizRender(); };
   $("xdOk").onclick=ok; $("xdIn2").onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"){ e.preventDefault(); ok(); } }; }
 // Ergebnis: Zeit nach dem Startsignal und Geschwindigkeit seit dem vorherigen Messpunkt
@@ -5847,13 +5889,13 @@ if(typeof sVid.requestVideoFrameCallback==="function"){ const f=()=>{ if(SA.acti
 /* ---------- Ausmessen: Bezugslinie und Senkrechte merken (für das Ergebnisvideo) ---------- */
 function measKeep(st){ const M=SA.meas; if(!M || M.foot==null || M.pts.length<2) return; const cv=$("sMeas"), bw=cv.clientWidth, bh=cv.clientHeight, r=resCrop(), [ra,rb]=measRefs(M);
   const cn=p=>[Math.round(((p[0]*bw)-r.x)/r.w*1e5)/1e5, Math.round(((p[1]*bh)-r.y)/r.h*1e5)/1e5];
-  (SA.mgeo=SA.mgeo||{})[st.id]={tv:Math.round(sCurT()*1e5)/1e5, pts:M.pts.map(cn), foot:M.foot, dir:M.dir, ra:ra[0], rb:rb[0]}; }
+  (SA.mgeo=SA.mgeo||{})[st.id]={tv:Math.round(sCurT()*1e5)/1e5, pts:M.pts.map(cn), foot:M.foot, dir:M.dir, ang:M.ang||0, ra:ra[0], rb:rb[0]}; }
 function kinoGeo(g, G, W, H, lab){ const s=Math.min(W,H)/520, A=[G.pts[0][0]*W,G.pts[0][1]*H], B=[G.pts[1][0]*W,G.pts[1][1]*H], ab=[B[0]-A[0],B[1]-A[1]], len=Math.hypot(ab[0],ab[1])||1, u=[ab[0]/len,ab[1]/len], diag=Math.hypot(W,H)*2;
   g.save(); g.lineCap="round"; g.strokeStyle="rgba(255,210,74,.45)"; g.lineWidth=2*s; g.setLineDash([6*s,6*s]); g.beginPath(); g.moveTo(A[0]-u[0]*diag,A[1]-u[1]*diag); g.lineTo(B[0]+u[0]*diag,B[1]+u[1]*diag); g.stroke();
   g.strokeStyle="#FFD24A"; g.lineWidth=3*s; g.setLineDash([10*s,6*s]); g.beginPath(); g.moveTo(A[0],A[1]); g.lineTo(B[0],B[1]); g.stroke(); g.setLineDash([]);
   const tag=(x,y,t,col)=>{ g.font=`700 ${Math.round(16*s)}px system-ui,sans-serif`; const tw=g.measureText(t).width; g.fillStyle="rgba(0,0,0,.7)"; g.fillRect(x-5*s,y-18*s,tw+10*s,24*s); g.fillStyle=col; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(t,x,y); };
   [[A,G.ra],[B,G.rb]].forEach(([p,d])=>{ g.fillStyle="#FFD24A"; g.strokeStyle="#000"; g.lineWidth=2*s; g.beginPath(); g.arc(p[0],p[1],7*s,0,7); g.fill(); g.stroke(); tag(p[0]+10*s,p[1]-10*s,`${xdFmt(d)} m`,"#FFD24A"); });
-  const F=[A[0]+G.foot*ab[0], A[1]+G.foot*ab[1]]; let n=[-u[1],u[0]]; if(n[1]>0 || (n[1]===0 && n[0]>0)) n=[-n[0],-n[1]]; if(G.dir>0) n=[-n[0],-n[1]];
+  const F=[A[0]+G.foot*ab[0], A[1]+G.foot*ab[1]], n=measNorm(u,{dir:G.dir, ang:G.ang||0});
   g.strokeStyle="#000"; g.lineWidth=6*s; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke(); g.strokeStyle="#3FD07A"; g.lineWidth=3*s; g.beginPath(); g.moveTo(F[0],F[1]); g.lineTo(F[0]+n[0]*diag,F[1]+n[1]*diag); g.stroke();
   g.fillStyle="#3FD07A"; g.strokeStyle="#000"; g.lineWidth=2*s; g.beginPath(); g.arc(F[0],F[1],7*s,0,7); g.fill(); g.stroke();
   if(lab){ g.font=`700 ${Math.round(16*s)}px system-ui,sans-serif`; const lw=g.measureText(lab).width; if(lw>W-30*s){ const p2=lab.split(" · "); lab=p2[0]; } const lx=Math.min(W-g.measureText(lab).width-20*s, Math.max(8*s, F[0]+n[0]*60*s+10*s)), ly=Math.min(H-20*s, Math.max(30*s, F[1]+n[1]*60*s)); tag(lx,ly,lab,"#3FD07A"); } g.restore(); }
@@ -5947,7 +5989,7 @@ function nlRender(){ if(NL.drag) return; const box=$("sBox"); if(!box) return; l
 function kinoNote(g, n, W, H){ const p=n.pos, fpx=Math.max(10,p.fs*H), pad=fpx*0.45, w=p.w*W; g.save(); g.font=`italic 500 ${Math.round(fpx)}px system-ui,sans-serif`;
   const lines=kinoWrap(g, n.txt, w-pad*2), h=lines.length*fpx*1.25+pad*1.4, x=Math.min(W-w, p.x*W), y=Math.min(H-h, p.y*H);
   g.fillStyle="rgba(8,20,28,.78)"; g.fillRect(x,y,w,h); g.fillStyle="#E8D49A"; g.textBaseline="middle"; g.textAlign="left"; lines.forEach((l,i)=>g.fillText(l, x+pad, y+pad*0.7+fpx*0.62+i*fpx*1.25)); g.restore(); }
-function resActHTML(){ return `<div class="resact"><button type="button" class="testbtn" id="resPdfB">📄 ${L("Ergebnis-PDF","Result PDF")}</button><button type="button" class="testbtn" id="kinoB">🎬 ${L("Ergebnisvideo exportieren","Export result video")}</button>${velSwim()?`<button type="button" class="testbtn" id="velB">📈 ${SA.vel&&SA.vel.f&&SA.vel.f.length?L("Geschwindigkeitsverlauf bearbeiten","Edit velocity profile"):L("Geschwindigkeitsverlauf messen","Measure velocity profile")}</button>`:""}</div>${velSwim()?velSumHTML():""}${qkTurnBtnHTML()}`; }
+function resActHTML(){ return `<div class="resact"><button type="button" class="testbtn" id="resPdfB">📄 ${L("Ergebnis-PDF","Result PDF")}</button><button type="button" class="testbtn" id="kinoB">🎬 ${L("Ergebnisvideo exportieren","Export result video")}</button>${velSwim()?`<button type="button" class="testbtn" id="velB">📈 ${SA.vel&&SA.vel.f&&SA.vel.f.length?L("Geschwindigkeitsverlauf bearbeiten","Edit velocity profile"):L("Geschwindigkeitsverlauf messen","Measure velocity profile")}</button>`:""}</div>${velSwim()?velSumHTML():""}`; }
 /* Technikauswertung: aus einem Startvideo heraus die Wende im selben Video auswerten (neuer Eintrag mit demselben Video) */
 function qkTurnBtnHTML(){ if(SA.mode!=="quick") return ""; const e=qkE(QK.cur); if(!e || e.kind!=="start") return "";
   return `<div class="qkaddturn"><p class="hint" style="margin:0 0 6px">${L("Ist im Video auch eine Wende zu sehen? Dann werte sie direkt mit aus:","Is there also a turn in the video? Then analyse it right away:")}</p><div class="xdrow">${TURNTYPES(false).map(([v,l])=>`<button type="button" class="testbtn" data-addturn="${v}">↪ ${esc(l)}</button>`).join("")}</div></div>`; }

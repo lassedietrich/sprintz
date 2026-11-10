@@ -1,0 +1,11 @@
+[
+["Move the perpendicular onto {0}: with ← → (Shift: faster), by dragging or by tapping. Rotate it with the round handle or with Q and E.","Dik çizgiyi {0} üzerine kaydır: ← → ile (Shift: daha hızlı), sürükleyerek veya dokunarak. Yuvarlak tutamakla ya da Q ve E ile döndürebilirsin.","Передвинь перпендикуляр на {0}: клавишами ← → (Shift: быстрее), перетаскиванием или касанием. Повернуть его можно круглой ручкой или клавишами Q и E.","Schuif de loodlijn naar {0}: met ← → (Shift: sneller), door te slepen of te tikken. Draaien kan met de ronde greep of met Q en E."],
+["Rotate line anticlockwise (Q, Shift: 5°)","Çizgiyi saat yönünün tersine döndür (Q, Shift: 5°)","Повернуть линию против часовой стрелки (Q, Shift: 5°)","Lijn tegen de klok in draaien (Q, Shift: 5°)"],
+["Rotate line clockwise (E, Shift: 5°)","Çizgiyi saat yönünde döndür (E, Shift: 5°)","Повернуть линию по часовой стрелке (E, Shift: 5°)","Lijn met de klok mee draaien (E, Shift: 5°)"],
+["Perpendicular again","Yeniden dik","Снова перпендикулярно","Weer loodrecht"],
+["Turn: ","Dönüş: ","Поворот: ","Keerpunt: "],
+["{0} m pool","{0} m havuz","Бассейн {0} м","{0}-m-bad"],
+["Also analyse the turn","Dönüşü de analiz et","Проанализировать и поворот","Ook het keerpunt analyseren"],
+["The turn is added as further steps in this analysis. Distance marks such as 15 m (= 10 m before the wall in a 25 m pool) are reused.","Dönüş bu analize ek adımlar olarak eklenir. 15 m gibi mesafe işaretleri (25 m havuzda duvardan 10 m önce) yeniden kullanılır.","Поворот добавляется в этот анализ как дополнительные шаги. Отметки дистанции, например 15 м (= 10 м до стенки в 25-метровом бассейне), используются повторно.","Het keerpunt wordt als extra stappen aan deze analyse toegevoegd. Afstandsmarkeringen zoals 15 m (= 10 m voor de wand in een 25-m-bad) worden overgenomen."],
+["Add turn","Dönüş ekle","Добавить поворот","Keerpunt toevoegen"]
+]
