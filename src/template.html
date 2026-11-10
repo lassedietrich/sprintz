@@ -5808,16 +5808,20 @@ async function fileWrite(ask, blob, title){ const name=ask.name;
 function wtP(){ const wt=SA.vals&&SA.vals.wt; return wt ? {tech:"turn", sport:"swim", turn:wt.turn, uw:"fly"} : null; }
 function wtDistMark(d){ const M=SA.marks||{}; return d===5?M.p5:d===10?M.p10:d===15?M.p15:M[xdId(d)]; }
 function wtMarksRaw(){ const wt=SA.vals.wt, M=SA.marks||{}, o={}; [["in10",-10],["in7",-7.5],["in5",-5],["out5",5],["out7",7.5],["out10",10]].forEach(([k,dd])=>{ const v=wtDistMark(wt.D+dd); if(v!=null) o[k]=v; });
-  Object.keys(M).forEach(k=>{ if(k.startsWith("w_") && M[k]!=null) o[k.slice(2)]=M[k]; }); return o; }
+  Object.keys(M).forEach(k=>{ if(k.startsWith("w_") && M[k]!=null) o[k.slice(2)]=M[k]; });
+  // Wandkontakt = Distanzmarke der Beckenlänge (25 m bzw. 50 m): bei Kippwenden der Anschlag, bei Roll- und Rückenwenden der erste Fußkontakt
+  const wall=wtDistMark(wt.D), open=turnOpen(wtP()); if(wall!=null){ if(open) o.touch=wall; else o.feetOn=wall; } return o; }
 function wtVals(){ const V=SA.vals||{}, o={}; ["rotD","hipD","kick1D","diveD","kicks"].forEach(k=>{ if(V["w_"+k]!=null) o[k]=V["w_"+k]; }); return o; }
 function wtMetrics(){ const p=wtP(); if(!p) return {}; try{ return turnMetrics({raw:wtMarksRaw(), v:wtVals(), p}); }catch(e){ return {}; } }
 function wtSteps(){ const p=wtP(); if(!p) return {pre:[],post:[]}; const all=turnSteps(p), open=turnOpen(p), by=id=>all.find(x=>x.id===id);
   const cl=st=>{ const c=Object.assign({}, st, {id:"w_"+st.id, wt:true, t:()=>L("Wende: ","Turn: ")+st.t()}); if(st.meas && st.meas.at) c.meas=Object.assign({}, st.meas, {at:"w_"+st.meas.at}); return c; };
-  const pre=(open?["lastArm","touch","handsOff","feetOn","hipD","off","kick1","kick1D","pull","bkick"]:["lastArm","rot","rotD","feetOn","hipD","off","kick1","kick1D","pull","bkick"]).map(by).filter(Boolean).map(cl);
-  const post=["brk","diveD","kicks"].map(by).filter(Boolean).map(cl); return {pre, post}; }
+  // vor dem Wandkontakt, nach dem Wandkontakt (der Wandkontakt selbst ist die Distanzmarke der Beckenlänge) und nach 5 m
+  const preA=(open?["lastArm"]:["lastArm","rot","rotD"]).map(by).filter(Boolean).map(cl);
+  const preB=(open?["handsOff","feetOn","hipD","off","kick1","kick1D","pull","bkick"]:["hipD","off","kick1","kick1D","pull","bkick"]).map(by).filter(Boolean).map(cl);
+  const post=["brk","diveD","kicks"].map(by).filter(Boolean).map(cl); return {preA, preB, post}; }
 function wtSet(turn, D){ SA.vals=SA.vals||{}; const old=SA.vals.wt; if(old && old.auto){ SA.vals.xd=xdList().filter(d=>!(old.auto.includes(d) && SA.marks[xdId(d)]==null)); }
   if(!turn){ delete SA.vals.wt; xdSync(); return; } const D0=D||25, auto=[]; SA.vals.wt={turn, D:D0, auto};
-  [D0-10, D0-5, D0+5, D0+10].filter(d=>d>0 && ![5,10,15].includes(d)).forEach(d=>{ const a=xdList(); if(!a.includes(d)){ SA.vals.xd=a.concat([d]).sort((x,y)=>x-y); auto.push(d); } }); xdSync(); }
+  [D0-10, D0-5, D0, D0+5, D0+10].filter(d=>d>0 && ![5,10,15].includes(d)).forEach(d=>{ const a=xdList(); if(!a.includes(d)){ SA.vals.xd=a.concat([d]).sort((x,y)=>x-y); auto.push(d); } }); xdSync(); }
 function wtRows(){ const p=wtP(); if(!p) return []; const o=wtMetrics(), PH=SPPH(), wt=SA.vals.wt, tn=(TURNTYPES(false).find(x=>x[0]===wt.turn)||[0,""])[1];
   return TURNMET(p).filter(x=>spApplies(x,p,!!(SA.trialRef&&SA.trialRef.vm)) && o[x.k]!=null && (typeof o[x.k]!=="number" || isFinite(o[x.k]))).map(x=>({ph:`${tn} · ${PH[x.ph]||""}`, k:"w_"+x.k, l:x.l, v:x.u==="n"?String(o[x.k]):evFmt(o[x.k],x.u)})); }
 function wtSumHTML(){ const rows=wtRows(); if(!rows.length) return ""; const wt=SA.vals.wt, tn=(TURNTYPES(false).find(x=>x[0]===wt.turn)||[0,""])[1];
@@ -5839,9 +5843,14 @@ function xdSync(){ const S=SA.steps; if(!S||!S.length) return; const cid=S[SA.i]
   const i15=S.findIndex(s=>s.id==="p15"); if(i15>=0 && !S.some(s=>s.k==="more")) S.splice(i15+1,0,{id:"more",k:"more",t:()=>L("Weiter auswerten?","Continue the analysis?"),x:()=>""});
   L0.slice().sort((a,b)=>a-b).forEach(d=>{ if(S.some(s=>s.xd===d)) return; let at=S.findIndex(s=>s.k==="sum"); if(at<0) at=S.length;
     for(let i=0;i<S.length;i++) if(S[i].xd!=null && S[i].xd>d){ at=Math.min(at,i); break; } S.splice(at,0,xdStep(d)); });
-  for(let i=S.length-1;i>=0;i--) if(S[i].wt) S.splice(i,1);
-  const wt=SA.vals&&SA.vals.wt; if(wt){ const {pre,post}=wtSteps(), o5=wt.D+5, id5=o5===5?"p5":o5===10?"p10":o5===15?"p15":xdId(o5); let at=S.findIndex(s=>s.id===id5);
-    if(at<0){ at=S.findIndex(s=>s.k==="sum"); if(at<0) at=S.length; S.splice(at,0,...pre,...post); } else { S.splice(at,0,...pre); at+=pre.length+1; S.splice(at,0,...post); } }
+  for(let i=S.length-1;i>=0;i--){ if(S[i].wt) S.splice(i,1); else if(S[i].wl) S[i]=xdStep(S[i].xd); }
+  const wt=SA.vals&&SA.vals.wt; if(wt){ const {preA,preB,post}=wtSteps(), idOf=d=>d===5?"p5":d===10?"p10":d===15?"p15":xdId(d), open=turnOpen(wtP());
+    const iw=S.findIndex(s=>s.id===idOf(wt.D)); if(iw>=0){ const sw=S[iw], D=wt.D, ds=xdFmt(D);
+      // die Beckenlängen-Marke ist zugleich der Wandkontakt der Wende
+      S[iw]=Object.assign({}, sw, {wl:true, t:()=>open?L(`${ds} m – Anschlag (Wende)`,`${ds} m – touch (turn)`):L(`${ds} m – Füße an der Wand (Wende)`,`${ds} m – feet on the wall (turn)`),
+        x:()=>open?L(`Das erste Bild, in dem deine Hände die Wand berühren. Das ist zugleich die ${ds}-m-Zeit.`,`The first frame in which your hands touch the wall. This is also the ${ds} m time.`):L(`Das erste Bild, in dem deine Füße die Wand berühren. Das ist zugleich die ${ds}-m-Zeit.`,`The first frame in which your feet touch the wall. This is also the ${ds} m time.`)}); }
+    const put=(id,arr,after)=>{ let i=S.findIndex(s=>s.id===id); if(i<0){ i=S.findIndex(s=>s.k==="sum"); if(i<0) i=S.length; S.splice(i,0,...arr); return; } S.splice(after?i+1:i,0,...arr); };
+    put(idOf(wt.D),preA,false); put(idOf(wt.D),preB,true); put(idOf(wt.D+5),post,true); }
   const ni=S.findIndex(s=>s.id===cid); if(ni>=0) SA.i=ni; }
 function xdAdd(d){ d=Math.round(d*100)/100; if(!(d>0) || d>2000) return false; SA.vals=SA.vals||{}; const a=xdList(); if(!a.includes(d)) a.push(d); SA.vals.xd=a.sort((x,y)=>x-y); xdSync(); return true; }
 function xdToggle(d){ const a=xdList(); if(a.includes(d)){ SA.vals.xd=a.filter(x=>x!==d); delete SA.marks[xdId(d)]; } else SA.vals.xd=a.concat([d]).sort((x,y)=>x-y); xdSync(); }

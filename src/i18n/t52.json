@@ -1,0 +1,6 @@
+[
+["{0} m – touch (turn)","{0} m – dokunuş (dönüş)","{0} м – касание (поворот)","{0} m – aantikken (keerpunt)"],
+["{0} m – feet on the wall (turn)","{0} m – ayaklar duvarda (dönüş)","{0} м – ноги на стенке (поворот)","{0} m – voeten tegen de wand (keerpunt)"],
+["The first frame in which your hands touch the wall. This is also the {0} m time.","Ellerinin duvara değdiği ilk kare. Bu aynı zamanda {0} m süresidir.","Первый кадр, в котором кисти касаются стенки. Это одновременно и время на {0} м.","Het eerste beeld waarin je handen de wand raken. Dit is tegelijk de {0}-m-tijd."],
+["The first frame in which your feet touch the wall. This is also the {0} m time.","Ayaklarının duvara değdiği ilk kare. Bu aynı zamanda {0} m süresidir.","Первый кадр, в котором ноги касаются стенки. Это одновременно и время на {0} м.","Het eerste beeld waarin je voeten de wand raken. Dit is tegelijk de {0}-m-tijd."]
+]
