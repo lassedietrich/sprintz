@@ -41,6 +41,7 @@ Danach `index.html` und `src/` committen und in den eigenen Test-Zweig pushen.
 
 - **Sprache:** Deutsch mit „du“, korrekte Fachbegriffe aus Schwimmen und Leichtathletik.
 - **Alle Texte in fünf Sprachen:** DE, EN, TR, RU, NL. Im Code immer `L("Deutsch","English")`. Neue englische Texte bekommen in einer neuen Datei `src/i18n/tNN.json` (nächste freie Nummer) je eine Zeile `["English","Türkçe","Русский","Nederlands"]`. `node src/tools/i18n.js` meldet fehlende Texte. Keine Teilsätze in Platzhaltern zusammensetzen; im Russischen kein Betonungszeichen (U+0301), die PDF-Schrift kennt es nicht.
+- **Weitere Sprachen** (fr, es, it, pl, cs, da, nb, sv, ro, hr, sr, sq, uk, ku, ar): erst übersetzen, wenn Lasse veröffentlichen lässt („übernehmen“). `node src/tools/i18n.js --neu` schreibt die fehlenden Texte nach `src/i18n/todo/<code>.json`; Übersetzungen kommen nach `src/i18n/lang/<code>.json` als `{"English": "Übersetzung"}`.
 - **Fachliches:** nur mit wissenschaftlichen oder institutionellen Quellen begründen.
 - **Datenschutz:** Sprintz speichert **keine Videos**, nur die Daten daraus. Nie Videos hochladen oder in den Online-Speicher legen.
 - **Sicherheit:** Nur der öffentliche Supabase-Schlüssel (`sb_publishable_…`) darf im Code stehen. Nie nach `service_role`- oder geheimen Schlüsseln fragen oder sie annehmen. Keine Passwörter im Code.
