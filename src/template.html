@@ -416,6 +416,11 @@ body.xh-on #xhair{display:block}
 #spAna .vbox{position:relative}#sLupe{position:absolute;z-index:5;pointer-events:none;border-radius:50%;border:2px solid #fff;box-shadow:0 3px 14px rgba(0,0,0,.55);background:#000}
 .dcoach{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);margin:0 0 10px;line-height:1.35;cursor:pointer}.dcoach input{margin-top:2px}.qkask{transition:transform .32s cubic-bezier(.4,0,.6,1),opacity .32s;}.qkask.swl{transform:translateX(-120%);opacity:0}.qkask.swr{transform:translateX(120%);opacity:0}.qkcard{overflow:hidden}.qkask{margin:8px 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}.qkask .qt{margin:0 0 4px;font-weight:600}.qkseg{display:flex;flex-wrap:wrap;margin:4px 0}.qkseg button{flex:1 1 auto;padding:7px 10px}.qksw{margin:6px 0}.qkkd{margin:6px 0 8px;font-size:.85rem}.qkkd summary{cursor:pointer;color:var(--accent)}.qkpers{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.qkpsel{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);margin:0 0 8px}
 .pklab{font-size:.82rem;color:var(--muted)}
+.mso{display:flex;gap:8px;align-items:center;padding:7px 10px;border-radius:8px;cursor:pointer}.mso:hover{background:rgba(47,111,224,.08)}
+.dclcode{font:600 .95rem ui-monospace,Menlo,monospace;letter-spacing:.06em;background:rgba(47,111,224,.1);padding:2px 6px;border-radius:6px}
+.dclact{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;margin:4px 0 8px}.dcldel{color:var(--danger)}
+.dcltbl td{vertical-align:middle}.dcltbl .n{text-align:right}
+#sBox.lupeon{cursor:crosshair}
 .pkbtn{text-align:left;min-width:180px;max-width:100%;cursor:pointer;padding-right:30px;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pkbtn::after{content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);opacity:.6}
 .pkpop{position:fixed;z-index:9000;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.22);padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
@@ -3158,6 +3163,7 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ if(textlike) return; if(tg && tg.tagName==="INPUT" && tg.type!=="range") tg.blur(); e.preventDefault(); const k=(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1); if(sa) sStep(k); else vStep(k); return; }
   if(typing) return;
   if(e.key===" " && sa){ e.preventDefault(); $("sPlay").click(); return; }
+  if((e.key==="l"||e.key==="L") && sa){ e.preventDefault(); lupeToggle(); return; }
   if((e.key==="n"||e.key==="N") && sa && FS.on){ e.preventDefault(); fsNoteOpen(true); return; }
   if((e.key==="n"||e.key==="N") && sa){ const b=$("wNoteB"); if(b){ e.preventDefault(); const bx=$("wNoteBox"); if(FS.on && $("fsBox").classList.contains("min")){ $("fsBox").classList.remove("min"); $("fsMin").textContent="–"; } if(bx.hidden) b.click(); else $("wNoteT").focus(); } return; }
   if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
@@ -4205,7 +4211,7 @@ async function fsEnter(){
 }
 // soft: Vollbild der Seite bleibt bestehen (Wechsel zum nächsten Versuch im Vollbild)
 function fsExit(soft){
-  if(!FS.on) return; FS.on=false; fsNoteOpen(false); $("fsSmoPop").hidden=true; drSetTool(null); const h=FS.home; FS.z={s:1,x:0,y:0}; sVid.style.transform=""; $("fsBox").classList.remove("min"); $("fsMin").textContent="–";
+  if(!FS.on) return; FS.on=false; if(LUPE.on) lupeToggle(false); fsNoteOpen(false); $("fsSmoPop").hidden=true; drSetTool(null); const h=FS.home; FS.z={s:1,x:0,y:0}; sVid.style.transform=""; $("fsBox").classList.remove("min"); $("fsMin").textContent="–";
   h.box[0].insertBefore($("sBox"),h.box[1]); h.card[0].insertBefore($("wCard"),h.card[1]); h.nav[0].insertBefore($("wnavBar"),h.nav[1]); h.bar[0].insertBefore($("sStepBar"),h.bar[1]); h.wave[0].insertBefore($("sWave"),h.wave[1]);
   FS.secs.forEach(s=>{ try{ s.el.pause(); URL.revokeObjectURL(s.el.src); }catch(e){} }); FS.secs=[]; $("fsGrid").innerHTML=""; document.body.classList.remove("fs-on");
   if(soft) return;
@@ -4271,7 +4277,7 @@ function fsHint(){ if(!FS.on) return; const st=SA.steps[SA.i], k=$("fsKeys");
     if(!$("fsNotePop").hidden) fsNoteUI(); } if(!k) return;
   const al=FS.secs.map((s,i)=>s.v.offAuto==="audio"?L(`Video ${i+2}: über das Startsignal abgeglichen`,`Video ${i+2}: synced via the start signal`):s.v.offAuto==="time"?L(`Video ${i+2}: über die Aufnahmezeit abgeglichen, bitte prüfen`,`Video ${i+2}: synced via recording time, please check`):L(`Video ${i+2}: Versatz von Hand`,`Video ${i+2}: offset set manually`));
   const chk=SA.check&&SA.check.sess===SA.sess ? SA.check.it.find(x=>!x.ok) : null;
-  k.innerHTML=(chk?`<span class="fsal">⚠ ${chk.txt}</span>`:"")+`${SA.meas&&SA.meas.pts.length>=2?`<span><kbd>←</kbd><kbd>→</kbd> ${L("Senkrechte verschieben","Move the perpendicular")}</span><span><kbd>↑</kbd><kbd>↓</kbd> ${L("Richtung","Direction")}</span>`:`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span>`}<span><kbd>+</kbd><kbd>−</kbd> Zoom</span><span><kbd>N</kbd> ${L("Notiz","Note")}</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
+  k.innerHTML=(chk?`<span class="fsal">⚠ ${chk.txt}</span>`:"")+`${SA.meas&&SA.meas.pts.length>=2?`<span><kbd>←</kbd><kbd>→</kbd> ${L("Senkrechte verschieben","Move the perpendicular")}</span><span><kbd>↑</kbd><kbd>↓</kbd> ${L("Richtung","Direction")}</span>`:`<span><kbd>←</kbd><kbd>→</kbd> ${L("1 Bild","1 frame")}</span>`}<span><kbd>+</kbd><kbd>−</kbd> Zoom</span><span><kbd>N</kbd> ${L("Notiz","Note")}</span><span><kbd>L</kbd> ${L("Lupe","Magnifier")}</span><span><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd> ${L("10 Bilder","10 frames")}</span><span><kbd>${L("Leertaste","Space")}</kbd> ${L("Abspielen","Play")}</span><span><kbd>Enter</kbd> ${st&&st.k==="time"?L("Markieren","Mark"):L("Übernehmen","Confirm")}</span><span><kbd>Esc</kbd> ${L("Vollbild beenden","Exit full screen")}</span>${al.length?`<span class="fsal">${al.join(" · ")}</span>`:""}`; }
 
 $("sFull").onclick=()=>fsEnter(); $("fsClose").onclick=()=>fsExit();
 $("fsSpd").onclick=e=>{ e.stopPropagation(); $("sSpd").click(); $("fsSpd").blur(); };
@@ -5322,7 +5328,30 @@ function lupeAt(q, cx, cy, touch){
   const lx=px-S/2, ly = touch ? py-S-28 : py-S/2;
   lp.style.left=lx+"px"; lp.style.top=ly+"px"; lp.hidden=false;
 }
-function lupeHide(){ const lp=$("sLupe"); if(lp) lp.hidden=true; if(SA.meas && SA.meas.hover){ SA.meas.hover=null; measDraw(); } }
+/* --- freie Lupe (Werkzeugleiste rechts oder Taste L): vergrößerter Ausschnitt um den Mauszeiger samt Zeichnungen;
+   Klicks gehen weiter an Markieren, Messen und Zeichnen. Mausrad über dem Video ändert die Vergrößerung (2× bis 10×). --- */
+const LUPE={on:false, mag:3, last:null};
+function lupeToggle(on){ LUPE.on = on==null ? !LUPE.on : !!on; const b=$("lupeB"); if(b) b.setAttribute("aria-pressed",String(LUPE.on)); $("sBox").classList.toggle("lupeon",LUPE.on);
+  if(!LUPE.on){ if(!SA.meas){ const lp=$("sLupe"); if(lp) lp.hidden=true; } } else if(LUPE.last) lupeFree(LUPE.last); else toast(L("Lupe an: Fahr mit der Maus über das Video, Mausrad ändert die Vergrößerung. L schaltet sie aus.","Magnifier on: move the mouse over the video, the mouse wheel changes the magnification. L turns it off."),3500); }
+function lupeFree(pt){ const lp=$("sLupe"); if(!lp) return; LUPE.last=pt; if(!LUPE.on || SA.meas) return; if(!sVid.videoWidth || !SA.active){ lp.hidden=true; return; }
+  const box=$("sBox"), r=box.getBoundingClientRect(), cx=pt.x-r.left, cy=pt.y-r.top; if(cx<0||cy<0||cx>r.width||cy>r.height){ lp.hidden=true; return; }
+  const z=measZ(), vw=sVid.videoWidth, vh=sVid.videoHeight, ew=sVid.offsetWidth||r.width, eh=sVid.offsetHeight||r.height, s0=Math.min(ew/vw, eh/vh), ox=sVid.offsetLeft+(ew-vw*s0)/2, oy=sVid.offsetTop+(eh-vh*s0)/2;
+  const vx=((cx-z.x)/z.s-ox)/s0, vy=((cy-z.y)/z.s-oy)/s0;
+  const S=Math.round(Math.max(140, Math.min(260, Math.min(r.width,r.height)*0.42))), dpr=devicePixelRatio||1, D=Math.round(S*dpr); if(lp.width!==D){ lp.width=D; lp.height=D; } lp.style.width=lp.style.height=S+"px";
+  const g=lp.getContext("2d"), sw=S/(LUPE.mag*s0*z.s), x0=vx-sw/2, y0=vy-sw/2, k=D/sw; g.fillStyle="#000"; g.fillRect(0,0,D,D); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
+  const sx=Math.max(0,x0), sy=Math.max(0,y0), ex=Math.min(vw,x0+sw), ey=Math.min(vh,y0+sw);
+  if(ex>sx && ey>sy){ try{ g.drawImage(sVid, sx, sy, ex-sx, ey-sy, (sx-x0)*k, (sy-y0)*k, (ex-sx)*k, (ey-sy)*k); }catch(e){} }
+  // Zeichnungen und Linien (liegen als Leinwand über dem Video, in Bildschirmkoordinaten)
+  const a=S/LUPE.mag; ["sDraw","sMeas"].forEach(id=>{ const c=$(id); if(!c || c.hidden || !c.width || !c.clientWidth) return; const f=c.width/c.clientWidth, cr=c.getBoundingClientRect(), qx=pt.x-cr.left-a/2, qy=pt.y-cr.top-a/2; try{ g.drawImage(c, qx*f, qy*f, a*f, a*f, 0, 0, D, D); }catch(e){} });
+  const c=Math.round(D/2)+0.5, gap=4*dpr, arm=12*dpr; [["rgba(0,0,0,.6)",2.2*dpr],["rgba(255,255,255,.9)",1*dpr]].forEach(([col,w])=>{ g.strokeStyle=col; g.lineWidth=w; g.beginPath(); g.moveTo(c-gap-arm,c); g.lineTo(c-gap,c); g.moveTo(c+gap,c); g.lineTo(c+gap+arm,c); g.moveTo(c,c-gap-arm); g.lineTo(c,c-gap); g.moveTo(c,c+gap); g.lineTo(c,c+gap+arm); g.stroke(); });
+  g.font=`600 ${Math.round(12*dpr)}px system-ui,sans-serif`; g.fillStyle="rgba(0,0,0,.55)"; const t=LUPE.mag+"×", tw=g.measureText(t).width; g.fillRect(D/2-tw/2-5*dpr, D-22*dpr, tw+10*dpr, 16*dpr); g.fillStyle="#fff"; g.textAlign="center"; g.textBaseline="middle"; g.fillText(t, D/2, D-14*dpr);
+  lp.style.left=(cx-S/2)+"px"; lp.style.top=(cy-S/2)+"px"; lp.hidden=false; }
+{ const bx=$("sBox");
+  bx.addEventListener("pointermove",e=>{ if(LUPE.on && e.pointerType!=="touch") lupeFree({x:e.clientX, y:e.clientY}); });
+  bx.addEventListener("pointerleave",()=>{ if(LUPE.on && !SA.meas){ const lp=$("sLupe"); if(lp) lp.hidden=true; } LUPE.last=null; });
+  bx.addEventListener("wheel",e=>{ if(!LUPE.on || e.ctrlKey || SA.meas) return; e.preventDefault(); e.stopImmediatePropagation(); LUPE.mag=Math.max(2,Math.min(10,LUPE.mag+(e.deltaY<0?1:-1))); lupeFree({x:e.clientX, y:e.clientY}); },{passive:false, capture:true});
+  const re=()=>{ if(LUPE.on && LUPE.last) lupeFree(LUPE.last); }; sVid.addEventListener("seeked",re); sVid.addEventListener("timeupdate",re); }
+function lupeHide(){ const lp=$("sLupe"); if(lp) lp.hidden=true; if(LUPE.on && LUPE.last) setTimeout(()=>lupeFree(LUPE.last),0); if(SA.meas && SA.meas.hover){ SA.meas.hover=null; measDraw(); } }
 { const cv=$("sMeas");
   const at=e=>{ const r=cv.getBoundingClientRect(); lupeAt(measN(e), e.clientX-r.left, e.clientY-r.top, e.pointerType!=="mouse"); };
   cv.addEventListener("pointermove",e=>{ if(!SA.meas) return; if(e.pointerType==="mouse" || e.buttons) at(e); });
@@ -5359,13 +5388,14 @@ function drRender(){ try{ nlRender(); }catch(e){}
         g.lineWidth=1.5*dpr; g.beginPath(); g.arc(b[0],b[1],r,a1,a1+d,d<0); g.stroke(); const m=a1+d/2; label(b[0]+Math.cos(m)*(r+10*dpr)-12*dpr, b[1]+Math.sin(m)*(r+10*dpr)+5*dpr, drDeg(drAng(s.pts[0],s.pts[1],s.pts[2])), col); } } }
 }
 function drToolbar(){ const tb=$("fsTools"); if(!tb) return; const n=drShapes().length;
-  tb.innerHTML=`<button type="button" data-dt="" aria-pressed="${!DR.tool}" title="${L("Kein Werkzeug (Video bedienen)","No tool (control the video)")}">✋</button>`
+  tb.innerHTML=`<button type="button" id="lupeB" aria-pressed="${LUPE.on}" title="${L("Lupe (Taste L): vergrößert die Stelle unter dem Mauszeiger, Mausrad ändert die Vergrößerung","Magnifier (key L): enlarges the spot under the pointer, the mouse wheel changes the magnification")}" aria-label="${L("Lupe","Magnifier")}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6"/></svg></button><i class="fstsep"></i><button type="button" data-dt="" aria-pressed="${!DR.tool}" title="${L("Kein Werkzeug (Video bedienen)","No tool (control the video)")}">✋</button>`
     +DRTOOLS().map(([k,ic,lab])=>`<button type="button" data-dt="${k}" aria-pressed="${DR.tool===k}" title="${lab}" aria-label="${lab}">${ic}</button>`).join("")
     +`<i class="fstsep"></i><button type="button" id="drCol" title="${L("Farbe","Colour")}" aria-label="${L("Farbe","Colour")}"><span style="background:${DRCOL[DR.col]}"></span></button>`
     +`<button type="button" id="drUndo" title="${L("Rückgängig","Undo")}" aria-label="${L("Rückgängig","Undo")}"${n?"":" disabled"}>↶</button>`
     +`<button type="button" id="drClr" title="${L("Alle Zeichnungen löschen","Delete all drawings")}" aria-label="${L("Alle Zeichnungen löschen","Delete all drawings")}"${n?"":" disabled"}>🗑</button>`
     +`<button type="button" id="drEye" aria-pressed="${DR.show}" title="${L("Zeichnungen ein- oder ausblenden","Show or hide drawings")}" aria-label="${L("Zeichnungen ein- oder ausblenden","Show or hide drawings")}">👁</button>`;
   tb.querySelectorAll("[data-dt]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); drSetTool(b.dataset.dt||null); b.blur(); });
+  $("lupeB").onclick=e=>{ e.stopPropagation(); lupeToggle(); $("lupeB").blur(); };
   $("drCol").onclick=e=>{ e.stopPropagation(); DR.col=(DR.col+1)%DRCOL.length; drToolbar(); };
   $("drUndo").onclick=e=>{ e.stopPropagation(); drShapes().pop(); drNotesClean(); drRender(); drToolbar(); };
   $("drClr").onclick=e=>{ e.stopPropagation(); SA.draw=[]; drNotesClean(); drRender(); drToolbar(); };
@@ -5487,18 +5517,18 @@ async function clubLoad(force){ if(!clubOn()) return []; if(CLUB.list && !force 
 const clubName=id=>{ const c=(CLUB.list||[]).find(x=>x.id===id); return c?c.name:""; };
 const clubsCur=()=>(CLUB.list||[]).filter(c=>(c.sport||"swim")===sport);
 async function clubCreate(name){ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_create_club",{method:"POST", body:{p_name:name, p_account:USER, p_sport:sport}}); await clubLoad(true); return r; }
-async function clubJoin(code){ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_join_club",{method:"POST", body:{p_code:code, p_account:USER}}); await clubLoad(true); await clubAthPull(); return r; }
+async function clubJoin(code){ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_join_club",{method:"POST", body:{p_code:code, p_account:USER}}); await clubLoad(true); const p=await clubAthPull(); (r||{}).got=(p&&p.nw)||0; return r; }
 async function clubMembers(cid){ await sbReady(); return await sbFetch(`/rest/v1/club_members?select=user_id,account,role,joined_at&club_id=eq.${cid}&order=joined_at`); }
 async function clubKick(cid,uid){ await sbReady(); await sbFetch(`/rest/v1/club_members?club_id=eq.${cid}&user_id=eq.${uid}`,{method:"DELETE"}); }
 // Athlet*innen: online ↔ lokal
 async function clubAthPull(){ if(!clubOn()) return; const cl=await clubLoad(); if(!cl.length) return;
   try{ const ids=cl.map(c=>c.id).join(","); const rows=await sbFetch(`/rest/v1/club_athletes?select=id,club_id,first_name,last_name,nickname,birth_year,spec,consent&club_id=in.(${ids})`);
     const o=PERS.get(); let ch=false; const key=(c,f,l,b)=>[c,(f||"").trim().toLowerCase(),(l||"").trim().toLowerCase(),+b].join("|");
-    (rows||[]).forEach(r=>{ let x=o.list.find(q=>q.cid===r.id) || o.list.find(q=>q.clubId===r.club_id && key(q.clubId,q.first,q.last,q.birth)===key(r.club_id,r.first_name,r.last_name,r.birth_year));
+    let nw=0; (rows||[]).forEach(r=>{ let x=o.list.find(q=>q.cid===r.id) || o.list.find(q=>q.clubId===r.club_id && key(q.clubId,q.first,q.last,q.birth)===key(r.club_id,r.first_name,r.last_name,r.birth_year));
       const f={cid:r.id, clubId:r.club_id, first:r.first_name, last:r.last_name, nick:r.nickname||"", birth:r.birth_year, spec:r.spec||"", consent:!!r.consent}; f.name=persName(f);
-      if(!x){ if((o.del||[]).includes("c:"+r.id)) return; x=Object.assign({id:evId(), created:Date.now(), club:clubName(r.club_id), sport:(cl.find(c=>c.id===r.club_id)||{}).sport||"swim"}, f); o.list.push(x); ch=true; }
+      if(!x){ if((o.del||[]).includes("c:"+r.id)) return; x=Object.assign({id:evId(), created:Date.now(), club:clubName(r.club_id), sport:(cl.find(c=>c.id===r.club_id)||{}).sport||"swim"}, f); o.list.push(x); ch=true; nw++; }
       else if(["cid","clubId","first","last","nick","birth","spec","consent"].some(k=>String(x[k]??"")!==String(f[k]??""))){ Object.assign(x,f,{club:clubName(r.club_id)}); ch=true; } });
-    if(ch){ o._u=Date.now(); try{ localStorage.setItem(PERS.key(), JSON.stringify(o)); }catch(e){} } CLUB.err=null; }
+    if(ch){ o._u=Date.now(); try{ localStorage.setItem(PERS.key(), JSON.stringify(o)); }catch(e){} } CLUB.err=null; return {nw, ch}; }
   catch(e){ if(clubMissing(e)) CLUB.err="setup"; blog("warn","clubAthPull: "+(e.message||e)); } }
 async function clubAthPush(id){ if(!clubOn()) return null; const x=PERS.get().list.find(q=>q.id===id); if(!x || !x.clubId || !x.consent || !x.first || !x.last || !x.birth) return null;
   await sbReady(); const body={club_id:x.clubId, first_name:x.first.trim(), last_name:x.last.trim(), nickname:(x.nick||"").trim()||null, birth_year:+x.birth, spec:(x.spec||"").trim()||null, consent:true, updated_at:new Date().toISOString()};
@@ -5680,13 +5710,20 @@ function clubHTML(){ if(!canPersons()) return ""; if(!STORE.online()) return `<d
     <p class="hint" id="clubMsg">${L("Wer einen Verein anlegt, verwaltet ihn und gibt den Vereinscode an andere Trainer*innen weiter. Alle Mitglieder sehen die Athlet*innen und Ergebnisse des Vereins; Videos werden nie hochgeladen.","Whoever creates a club manages it and shares the club code with other coaches. All members see the club's athletes and results; videos are never uploaded.")}</p></div>`; }
 function clubBind(){ const msg=t=>{ const m=$("clubMsg"); if(m) m.textContent=t; };
   const cp=$("clubSqlCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(clubSQL()); cp.textContent=L("Kopiert","Copied"); }catch(e){} };
-  const jb=$("clubJoinB"); if(jb) jb.onclick=async()=>{ const c=$("clubCode").value.trim(); if(!c) return; jb.disabled=true; try{ const r=await clubJoin(c); athList(); toast(L(`Beigetreten: ${r.name}`,`Joined: ${r.name}`),3000); }catch(e){ msg(clubMissing(e)?L("Die Vereinsdatenbank ist noch nicht eingerichtet.","The club database isn't set up yet."):L("Der Vereinscode ist unbekannt.","Unknown club code.")); } jb.disabled=false; };
+  const jb=$("clubJoinB"); if(jb) jb.onclick=async()=>{ const c=$("clubCode").value.trim(); if(!c) return; jb.disabled=true; try{ const r=await clubJoin(c); athList(); toast(L(`Beigetreten: ${r.name} · ${r.got||0} Athlet*innen übernommen`,`Joined: ${r.name} · ${r.got||0} athletes received`),4000); $("clubCode").value=""; }catch(e){ msg(clubMissing(e)?L("Die Vereinsdatenbank ist noch nicht eingerichtet.","The club database isn't set up yet."):L("Der Vereinscode ist unbekannt.","Unknown club code.")); } jb.disabled=false; };
   const nb=$("clubNewB"); if(nb) nb.onclick=async()=>{ const n=$("clubNew").value.trim(); if(n.length<2) return; nb.disabled=true; try{ const r=await clubCreate(n); athList(); toast(L(`Verein angelegt. Vereinscode: ${r.code}`,`Club created. Club code: ${r.code}`),6000); }catch(e){ msg(clubMissing(e)?L("Die Vereinsdatenbank ist noch nicht eingerichtet.","The club database isn't set up yet."):L("Der Verein ließ sich nicht anlegen.","The club couldn't be created.")); } nb.disabled=false; };
   document.querySelectorAll("[data-cmem]").forEach(b=>b.onclick=async()=>{ const id=b.dataset.cmem, box=$("cm-"+id); if(box.innerHTML){ box.innerHTML=""; return; } try{ const m=await clubMembers(id);
     box.innerHTML=(m||[]).map(r=>`<span class="clubm">${esc(r.account||"?")}${r.role==="admin"?" ("+L("Verwalter","admin")+")":`<button type="button" data-ckick="${id}|${r.user_id}" aria-label="${L("Entfernen","Remove")}">✕</button>`}</span>`).join("");
     box.querySelectorAll("[data-ckick]").forEach(k=>k.onclick=async()=>{ const [c,u]=k.dataset.ckick.split("|"); try{ await clubKick(c,u); k.parentNode.remove(); }catch(e){} }); }catch(e){ box.textContent=L("Mitglieder ließen sich nicht laden.","Members couldn't be loaded."); } });
   document.querySelectorAll("[data-cleave]").forEach(b=>b.onclick=async()=>{ if(!b.dataset.sure){ b.dataset.sure="1"; b.textContent=L("Wirklich austreten?","Really leave?"); return; } try{ await clubKick(b.dataset.cleave, SESS.uid); await clubLoad(true); athList(); }catch(e){} }); }
 const ATH={open:null, dd:false};
+// regelmäßiger Abgleich mit der Vereinsdatenbank (alle 3 Minuten und beim Zurückkehren in die App)
+const CSYNC={t:0, run:false};
+async function clubSyncTick(force){ if(CSYNC.run || !clubOn() || !navigator.onLine || (!force && Date.now()-CSYNC.t<60000)) return; CSYNC.run=true; CSYNC.t=Date.now();
+  try{ await clubLoad(true); const r=await clubAthPull(); const ae=document.activeElement, editing=ae && $("athPage") && $("athPage").contains(ae) && /INPUT|TEXTAREA|SELECT/.test(ae.tagName);
+    if(r && r.ch && appMode==="ath" && !editing) athList(); }catch(e){} CSYNC.run=false; }
+setInterval(()=>{ if(document.visibilityState==="visible") clubSyncTick(true); }, 180000);
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") clubSyncTick(); });
 /* ---------- Auswahl von Athlet*innen als Ausklappmenü: erst Verein/Organisation, dann alle Personen, sortiert nach Vorname oder Geburtsjahr ---------- */
 const PK={r:{}, pop:null, st:(()=>{ try{ return JSON.parse(localStorage.getItem("sprintz-pk")||"{}")||{}; }catch(e){ return {}; } })()};
 const pkSave=()=>{ try{ localStorage.setItem("sprintz-pk",JSON.stringify(PK.st)); }catch(e){} };
@@ -5714,11 +5751,80 @@ function pkOpen(btn){ const key=btn.dataset.pk, R=PK.r[key]; if(!R) return; cons
     d.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{ pkClose(); const v=b.dataset.v; R.cur=v; if(R.o.pick) R.o.pick(v); });
     place(); };
   draw(); }
-document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-pk]"); if(b){ e.preventDefault(); pkOpen(b); } });
-document.addEventListener("pointerdown",e=>{ if(PK.pop && !e.target.closest("#pkPop") && !e.target.closest("[data-pk]")) pkClose(); },true);
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-pk]"); if(b){ e.preventDefault(); pkOpen(b); return; } const m=e.target.closest&&e.target.closest("[data-ms]"); if(m){ e.preventDefault(); msOpen(m); } });
+document.addEventListener("pointerdown",e=>{ if(PK.pop && !e.target.closest("#pkPop") && !e.target.closest("[data-pk],[data-ms]")) pkClose(); },true);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && PK.pop){ pkClose(); e.stopPropagation(); } },true);
 window.addEventListener("resize",()=>pkClose());
 
+/* ---------- Entwicklermodus: alle Vereine (über zwei Funktionen in Supabase, die nur Entwicklerkonten ausführen dürfen) ---------- */
+const clubDevSQL=()=>`-- Entwicklerkonten: alle Vereine mit Vereinscode sehen und verwalten
+create or replace function public.sprintz_is_dev() returns boolean language sql stable security definer set search_path = public as $$
+  select coalesce((auth.jwt() ->> 'email') in (${DEV_USERS.map(u=>`'${sbMail(u)}'`).join(", ")}), false) $$;
+create or replace function public.sprintz_dev_clubs() returns json language plpgsql stable security definer set search_path = public as $$
+begin
+  if not public.sprintz_is_dev() then raise exception 'not allowed'; end if;
+  return (select coalesce(json_agg(x order by x.name), '[]'::json) from (
+    select c.id, c.name, c.code, c.sport, c.created_at,
+      (select coalesce(json_agg(json_build_object('user_id', m.user_id, 'account', m.account, 'role', m.role) order by m.joined_at), '[]'::json) from club_members m where m.club_id = c.id) as members,
+      (select count(*) from club_athletes a where a.club_id = c.id) as athletes,
+      (select count(*) from club_results r where r.club_id = c.id) as results
+    from clubs c) x);
+end $$;
+create or replace function public.sprintz_dev_club(p_club uuid, p_action text, p_value text default null) returns json language plpgsql security definer set search_path = public as $$
+declare k text;
+begin
+  if not public.sprintz_is_dev() then raise exception 'not allowed'; end if;
+  if p_action = 'rename' then update clubs set name = trim(p_value) where id = p_club;
+  elsif p_action = 'sport' then update clubs set sport = case when p_value = 'track' then 'track' else 'swim' end where id = p_club;
+  elsif p_action = 'newcode' then
+    loop
+      k := upper(substr(md5(random()::text || clock_timestamp()::text), 1, 8));
+      exit when not exists(select 1 from clubs where code = k);
+    end loop;
+    update clubs set code = k where id = p_club;
+  elsif p_action = 'kick' then delete from club_members where club_id = p_club and user_id = p_value::uuid;
+  elsif p_action = 'join' then
+    insert into club_members(club_id, user_id, account, role) values (p_club, auth.uid(), split_part(auth.jwt() ->> 'email', '@', 1), 'admin')
+      on conflict (club_id, user_id) do update set role = 'admin';
+  elsif p_action = 'delete' then delete from clubs where id = p_club;
+  else raise exception 'unknown action'; end if;
+  return json_build_object('ok', true, 'code', k);
+end $$;
+revoke all on function public.sprintz_dev_clubs(), public.sprintz_dev_club(uuid, text, text) from public, anon;
+grant execute on function public.sprintz_dev_clubs(), public.sprintz_dev_club(uuid, text, text) to authenticated;`;
+const DCL={list:null, err:null, open:null, sql:false};
+async function devClubsLoad(){ DCL.err=null; try{ await sbReady(); DCL.list=await sbFetch("/rest/v1/rpc/sprintz_dev_clubs",{method:"POST", body:{}})||[]; }
+  catch(e){ DCL.list=null; DCL.err = (e.code==="PGRST202"||e.status===404||/sprintz_dev_clubs|does not exist|schema cache/i.test(e.message||"")) ? "setup" : (e.message||"err"); } }
+async function devClubAct(id, action, value){ try{ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_dev_club",{method:"POST", body:{p_club:id, p_action:action, p_value:value??null}}); await devClubsLoad(); if(action==="join"||action==="delete") await clubLoad(true); usersList(); return r; }
+  catch(e){ toast(L("Das hat nicht geklappt.","That didn't work.")+" "+(e.message||""),4000); return null; } }
+function devClubsHTML(){ const sp=v=>v==="track"?L("Leichtathletik","Athletics"):L("Schwimmen","Swimming");
+  if(DCL.err==="setup" || DCL.sql) return `<div class="card evnote"><h3 style="margin:8px 0">${L("Vereine","Clubs")}</h3><p>${L("Damit du hier alle Vereine mit ihren Vereinscodes siehst und verwalten kannst, führe diesen Befehl einmal im Supabase-Dashboard unter „SQL Editor“ aus (einfügen, „Run“). Nur die Entwicklerkonten dürfen die beiden Funktionen ausführen.","To see and manage all clubs with their club codes here, run this command once in the Supabase dashboard under “SQL Editor” (paste, “Run”). Only the developer accounts may run the two functions.")}</p><pre class="sqlbox">${esc(clubDevSQL())}</pre><button type="button" class="testbtn small" id="dclCopy">${L("Befehl kopieren","Copy command")}</button>${DCL.sql?` <button type="button" class="testbtn ghost small" id="dclSqlX">${L("Ausblenden","Hide")}</button>`:""}</div>`;
+  if(DCL.err) return `<div class="card evnote"><h3 style="margin:8px 0">${L("Vereine","Clubs")}</h3><p class="everr">${esc(DCL.err)}</p></div>`;
+  const cl=DCL.list||[];
+  return `<h3 class="big" style="margin:22px 0 6px">${L("Vereine","Clubs")} (${cl.length})</h3>
+    <div class="umtblw"><table class="umtbl dcltbl"><thead><tr><th>${L("Verein","Club")}</th><th>${L("Sportart","Sport")}</th><th>${L("Vereinscode","Club code")}</th><th class="n">${L("Mitglieder","Members")}</th><th class="n">${L("Athlet*innen","Athletes")}</th><th class="n">${L("Auswertungen","Analyses")}</th><th></th></tr></thead><tbody>
+    ${cl.length?cl.map(c=>{ const open=DCL.open===c.id, mem=c.members||[], me=mem.some(m=>m.user_id===SESS.uid);
+      return `<tr><td><button type="button" class="umexp" data-dco="${c.id}" aria-expanded="${open}">${open?"▾":"▸"}</button><b>${esc(c.name)}</b></td><td>${sp(c.sport)}</td><td><code class="dclcode">${esc(c.code)}</code> <button type="button" class="testbtn ghost small" data-dcc="${esc(c.code)}">${L("Kopieren","Copy")}</button></td><td class="n">${mem.length}</td><td class="n">${c.athletes??0}</td><td class="n">${c.results??0}</td>
+        <td>${me?`<small>${L("Du bist Mitglied","You're a member")}</small>`:`<button type="button" class="testbtn ghost small" data-dca="join|${c.id}">${L("Beitreten","Join")}</button>`}</td></tr>
+        ${open?`<tr class="umdet"><td colspan="7"><div class="dclact">
+          <label class="pkrow"><span>${L("Name","Name")}</span><input type="text" class="qkin" id="dcn-${c.id}" maxlength="80" value="${esc(c.name)}"></label><button type="button" class="testbtn small" data-dca="rename|${c.id}">${L("Speichern","Save")}</button>
+          <label class="pkrow"><span>${L("Sportart","Sport")}</span><select class="evsel" data-dcs="${c.id}"><option value="swim"${c.sport!=="track"?" selected":""}>${L("Schwimmen","Swimming")}</option><option value="track"${c.sport==="track"?" selected":""}>${L("Leichtathletik","Athletics")}</option></select></label>
+          <button type="button" class="testbtn ghost small" data-dca="newcode|${c.id}">${L("Neuen Vereinscode erzeugen","Generate new club code")}</button>
+          <button type="button" class="testbtn ghost small dcldel" data-dca="delete|${c.id}">${L("Verein löschen","Delete club")}</button></div>
+          <p class="umath"><b>${L("Mitglieder","Members")}:</b> ${mem.length?mem.map(m=>`<span class="clubm">${esc(m.account||"?")}${m.role==="admin"?" ("+L("Verwalter","admin")+")":""}<button type="button" data-dck="${c.id}|${m.user_id}" aria-label="${L("Entfernen","Remove")}">✕</button></span>`).join(""):"–"}</p></td></tr>`:""}`; }).join(""):`<tr><td colspan="7"><small>${L("Noch keine Vereine.","No clubs yet.")}</small></td></tr>`}</tbody></table></div>
+    <button type="button" class="testbtn ghost small" id="dclSql" style="margin-top:8px">${L("Einrichtung in Supabase anzeigen","Show Supabase setup")}</button>`; }
+function devClubsBind(pg){ const cp=$("dclCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(clubDevSQL()); toast(L("Kopiert.","Copied.")); }catch(e){} };
+  const sq=$("dclSql"); if(sq) sq.onclick=()=>{ DCL.sql=true; usersList(); }; const sx=$("dclSqlX"); if(sx) sx.onclick=async()=>{ DCL.sql=false; await devClubsLoad(); usersList(); };
+  pg.querySelectorAll("[data-dco]").forEach(b=>b.onclick=()=>{ DCL.open=DCL.open===b.dataset.dco?null:b.dataset.dco; usersList(); });
+  pg.querySelectorAll("[data-dcc]").forEach(b=>b.onclick=()=>{ try{ navigator.clipboard.writeText(b.dataset.dcc); toast(L("Vereinscode kopiert.","Club code copied.")); }catch(e){} });
+  pg.querySelectorAll("[data-dcs]").forEach(s=>s.onchange=()=>devClubAct(s.dataset.dcs,"sport",s.value));
+  pg.querySelectorAll("[data-dck]").forEach(b=>b.onclick=()=>{ const [c,u]=b.dataset.dck.split("|"); devClubAct(c,"kick",u); });
+  pg.querySelectorAll("[data-dca]").forEach(b=>b.onclick=async()=>{ const [a,id]=b.dataset.dca.split("|");
+    if(a==="delete" && !b.dataset.sure){ b.dataset.sure="1"; b.textContent=L("Wirklich löschen? Alle Athlet*innen und Ergebnisse des Vereins werden gelöscht.","Really delete? All athletes and results of the club are deleted."); return; }
+    if(a==="newcode" && !b.dataset.sure){ b.dataset.sure="1"; b.textContent=L("Wirklich? Der alte Code gilt dann nicht mehr.","Really? The old code stops working."); return; }
+    const v = a==="rename" ? ($("dcn-"+id).value||"").trim() : null; if(a==="rename" && v.length<2) return; b.disabled=true;
+    const r=await devClubAct(id,a,v); if(r && a==="join") toast(L("Beigetreten.","Joined."),2500); });
+}
 /* ---------- Entwicklermodus: nutzende Personen ----------
    Jedes Konto meldet seine Nutzungsdaten (zuletzt genutzt, Videos, Auswertungen, Namen der angelegten Athlet*innen) in seine eigene Zeile „usage“.
    Lesen dürfen nur die Entwicklerkonten; dafür braucht es einmalig eine Leserichtlinie in Supabase (siehe usersSQL). */
@@ -5754,6 +5860,16 @@ const usageSoon=()=>{ clearTimeout(usageT); usageT=setTimeout(()=>usageReport(),
 // Verwaltung (nur Entwickler): Konto → Person und Organisation, eigene Zeile „accmeta“
 const UM={meta:{accounts:{}, orgs:[]}, rows:[], open:null, err:null};
 const umOrgs=a=> Array.isArray(a&&a.orgs) ? a.orgs : (a&&a.org ? [a.org] : []);
+const umAll=()=>[...new Set([...(UM.meta.orgs||[]), ...((typeof DCL!=="undefined" && DCL.list)||[]).map(c=>c.name)])].sort((a,b)=>a.localeCompare(b));
+// Mehrfachauswahl als Ausklappmenü (Häkchen); nutzt dasselbe Aufklappfenster wie die Athletenauswahl
+const MS={r:{}};
+function msHTML(key, sel, opts, none, onChange){ MS.r[key]={sel:sel.slice(), opts, none, onChange}; return `<button type="button" class="evsel pkbtn" data-ms="${esc(key)}" aria-haspopup="listbox">${esc(sel.length?sel.join(", "):none)}</button>`; }
+function msOpen(btn){ const key=btn.dataset.ms, R=MS.r[key]; if(!R) return; const same=PK.pop && PK.pop.dataset.k==="ms:"+key; pkClose(); if(same) return;
+  const d=document.createElement("div"); d.id="pkPop"; d.className="pkpop"; d.dataset.k="ms:"+key; document.body.appendChild(d); PK.pop=d;
+  d.innerHTML=`<div class="pklist" role="listbox" aria-multiselectable="true">${R.opts.map(o=>`<label class="mso"><input type="checkbox" value="${esc(o)}"${R.sel.includes(o)?" checked":""}> <span>${esc(o)}</span></label>`).join("")}</div>`;
+  d.querySelectorAll("input").forEach(i=>i.onchange=()=>{ R.sel=[...d.querySelectorAll("input:checked")].map(x=>x.value); btn.textContent=R.sel.length?R.sel.join(", "):R.none; R.onChange(R.sel.slice()); });
+  const r=btn.getBoundingClientRect(), w=Math.min(window.innerWidth-16, Math.max(240, r.width)); d.style.width=w+"px"; d.style.left=Math.max(8, Math.min(r.left, window.innerWidth-w-8))+"px";
+  const below=window.innerHeight-r.bottom-12; if(below>=200){ d.style.top=(r.bottom+4)+"px"; d.style.maxHeight=below+"px"; } else { d.style.bottom=(window.innerHeight-r.top+4)+"px"; d.style.maxHeight=(r.top-12)+"px"; } }
 async function usersLoad(){ UM.err=null;
   try{ await sbReady(); const r=await sbFetch("/rest/v1/userdata?key=eq.accmeta&select=data"); const m=r&&r[0]&&r[0].data; if(m) UM.meta=Object.assign({accounts:{}, orgs:[]}, m); }catch(e){ UM.err=e; }
   try{ await usageReport(true); const r=await sbFetch("/rest/v1/userdata?key=eq.usage&select=user_id,data,updated_at"); UM.rows=(r||[]).map(x=>x.data).filter(Boolean); }catch(e){ UM.err=e; UM.rows=[]; } }
@@ -5761,7 +5877,7 @@ async function usersSaveMeta(){ try{ await sbReady(); await sbFetch("/rest/v1/us
 async function usersEnter(){ ["spPage","evPage","qkPage","modeSoon","athPage"].forEach(k=>{ const e=$(k); if(e) e.hidden=true; }); const pg=$("usersPage"); pg.hidden=false;
   pg.innerHTML=`<h2 class="big">${L("Nutzende Personen","Users")}</h2><p class="hint">${L("Wird geladen …","Loading …")}</p>`;
   if(!STORE.online()){ pg.innerHTML=`<h2 class="big">${L("Nutzende Personen","Users")}</h2><div class="card evnote"><p>${L("Dafür musst du online angemeldet sein.","You need to be signed in online for this.")}</p></div>`; return; }
-  await usersLoad(); usersList(); }
+  await Promise.all([usersLoad(), devClubsLoad()]); usersList(); }
 function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") return; const M=UM.meta, orgs=M.orgs||[];
   const rel=iso=>{ if(!iso) return L("noch nie angemeldet","never signed in"); const d=(Date.now()-Date.parse(iso))/864e5; return fmtDate(iso)+" ("+(d<1?L("heute","today"):L(`vor ${Math.round(d)} Tagen`,`${Math.round(d)} days ago`))+")"; };
   const rows=UM.rows.slice().sort((a,b)=>Date.parse(b.lastUsed||0)-Date.parse(a.lastUsed||0)), onlyMe = rows.length<=1;
@@ -5773,10 +5889,12 @@ function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") retu
     <div class="umtblw"><table class="umtbl"><thead><tr><th>${L("Echte Person","Real person")}</th><th>${L("Konto","Account")}</th><th>${L("Organisationen","Organisations")}</th><th>${L("Zuletzt genutzt","Last used")}</th></tr></thead><tbody>
     ${rows.map(r=>{ const a=M.accounts[r.account]||{}, c=r.counts||{}, open=UM.open===r.account;
       return `<tr><td><button type="button" class="umexp" data-ux="${esc(r.account)}" aria-expanded="${open}" aria-label="${L("Daten anzeigen","Show data")}">${open?"▾":"▸"}</button><input type="text" class="qkin" data-up="${esc(r.account)}" maxlength="80" value="${esc(a.person||"")}" placeholder="${L("Echte Person","Real person")}"></td>
-        <td>${esc(r.account)}</td><td><span class="umchips">${orgs.length?orgs.map(o=>`<button type="button" data-uo="${esc(r.account)}" data-org="${esc(o)}" aria-pressed="${umOrgs(a).includes(o)}">${esc(o)}</button>`).join(""):`<small>${L("Oben zuerst Organisationen anlegen","Add organisations above first")}</small>`}</span></td><td>${rel(r.lastUsed)}</td></tr>
+        <td>${esc(r.account)}</td><td>${umAll().length?msHTML("uo:"+r.account, umOrgs(a), umAll(), L("– keine –","– none –"), v=>{ const A=(M.accounts[r.account]=M.accounts[r.account]||{}); A.orgs=v; delete A.org; usersSaveMeta(); }):`<small>${L("Oben zuerst Organisationen anlegen","Add organisations above first")}</small>`}</td><td>${rel(r.lastUsed)}</td></tr>
         ${open?`<tr class="umdet"><td colspan="4"><div class="umgrid"><span>${L("Zuletzt genutzt","Last used")}<b>${rel(r.lastUsed)}</b></span><span>${L("Programm","App")}<b>${r.app==="desktop"?L("Desktop","Desktop"):L("Web","Web")}</b></span>
           <span>${L("Videos hochgeladen","Videos uploaded")}<b>${c.uploaded??"–"}</b></span><span>${L("Auswertung begonnen","Analysis started")}<b>${c.started??"–"}</b></span><span>${L("Fertig ausgewertet","Analysis finished")}<b>${c.done??"–"}</b></span><span>${L("Projekte","Projects")}<b>${c.projects??"–"}</b></span><span>${L("Trainingsmessungen","Training measurements")}<b>${c.training??"–"}</b></span></div>
-          <p class="umath"><b>${L("Angelegte Athlet*innen","Athletes created")}:</b> ${(r.athletes||[]).length?(r.athletes||[]).map(esc).join(", "):"–"}</p></td></tr>`:""}`; }).join("")}</tbody></table></div>`;
+          <p class="umath"><b>${L("Angelegte Athlet*innen","Athletes created")}:</b> ${(r.athletes||[]).length?(r.athletes||[]).map(esc).join(", "):"–"}</p></td></tr>`:""}`; }).join("")}</tbody></table></div>
+    ${devClubsHTML()}`;
+  devClubsBind(pg);
   const sq=$("umSql"); if(sq) sq.onclick=()=>{ UM.sqlOpen=true; usersList(); };
   const cp=$("umCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(usersSQL()); toast(L("Kopiert.","Copied.")); }catch(e){} };
   pg.querySelectorAll("[data-ux]").forEach(b=>b.onclick=()=>{ UM.open = UM.open===b.dataset.ux ? null : b.dataset.ux; usersList(); });
