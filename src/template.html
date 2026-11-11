@@ -430,6 +430,11 @@ body.xh-on #xhair{display:block}
 .drsel .drsx{margin-left:auto;min-width:28px;height:28px;padding:0}.drsel .drsdel{color:#ff9a9a}.drsel [aria-pressed="true"]{background:#c0392b;border-color:#c0392b}
 .drsanim{cursor:pointer}.drshint{margin:0;font-size:.78rem;opacity:.85;line-height:1.35}
 .umrole{display:flex;flex-direction:column;gap:4px;min-width:200px}
+.langwrap{display:flex;justify-content:center;margin-top:12px}.langbtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:12px;padding:9px 14px;font:600 .95rem var(--body);cursor:pointer}
+.langbtn .langcur{font-weight:500;color:var(--muted)}.langbtn i{font-style:normal;opacity:.6}
+#langPop{position:fixed;z-index:9500;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.25);padding:6px;overflow:auto;display:flex;flex-direction:column;gap:1px}
+#langPop[hidden]{display:none}#langPop button{display:flex;justify-content:space-between;align-items:center;gap:10px;border:0;background:none;color:inherit;font:500 .95rem var(--body);padding:8px 10px;border-radius:8px;cursor:pointer;text-align:start}
+#langPop button:hover{background:rgba(47,111,224,.08)}#langPop button[aria-selected="true"]{background:rgba(47,111,224,.15);font-weight:700}#langPop small{color:var(--muted);font-weight:400}
 .bugsbox{max-width:760px;max-height:calc(100vh - 32px);overflow:auto}.bglist{display:flex;flex-direction:column;gap:8px}.bgrow{display:flex;gap:10px;align-items:flex-start;border-top:1px solid var(--line);padding-top:8px}.bgrow.done{opacity:.55}
 .bgmain{flex:1;min-width:0}.bgmain p{margin:4px 0}.bgmain pre{max-height:320px;overflow:auto;font-size:11px}.bgall{display:flex;gap:6px;align-items:center;font-size:.85rem}
 .smlist{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow:auto}.smrow{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}.smrow select{min-width:170px}
@@ -914,9 +919,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
     <button type="button" class="lgreg" id="lgReg">Neu bei Sprintz? Konto anlegen</button>
   </form>
   <div id="regBox" hidden></div>
-  <div class="seg big g3" id="lgLang" role="group" aria-label="Sprache / Language">
-    <button type="button" data-v="de" lang="de">Deutsch</button><button type="button" data-v="en" lang="en">English</button><button type="button" data-v="tr" lang="tr">Türkçe</button><button type="button" data-v="ru" lang="ru">Русский</button><button type="button" data-v="nl" lang="nl">Nederlands</button>
-  </div>
+  <div class="langwrap" id="lgLang"><button type="button" class="langbtn" id="lgLangB" aria-haspopup="listbox" aria-label="Sprache / Language"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span>Language</span><b class="langcur"></b><i aria-hidden="true">▾</i></button></div>
 </div></div>
 <div class="stage" id="stage">
 <div id="track" aria-hidden="true" hidden><div class="finish"></div><div class="lanes"></div><div class="startline"></div><div class="blocks"></div><div class="nums"></div></div>
@@ -1292,13 +1295,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
     </form>
     <p class="deskdl" id="deskDl"><a href="https://github.com/lassedietrich/sprintz/releases/latest" target="_blank" rel="noopener">Sprintz als Programm für Mac und Windows herunterladen</a><small>Mit bildgenauer Videoauswertung, allen iPhone-Formaten und vollen Zeitlupen.</small></p>
     <h3>Language</h3>
-    <div class="seg big g3" id="langSeg" role="group" aria-label="Sprache / Language">
-      <button type="button" data-v="de" lang="de">Deutsch</button>
-      <button type="button" data-v="en" lang="en">English</button>
-      <button type="button" data-v="tr" lang="tr">Türkçe</button>
-      <button type="button" data-v="ru" lang="ru">Русский</button>
-      <button type="button" data-v="nl" lang="nl">Nederlands</button>
-    </div>
+    <div class="langwrap" id="langSeg"><button type="button" class="langbtn" id="aboutLangB" aria-haspopup="listbox" aria-label="Sprache / Language"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span>Language</span><b class="langcur"></b><i aria-hidden="true">▾</i></button></div>
     <button type="button" class="testbtn" id="aboutClose" style="flex:none">Schließen</button>
   </div>
 </div>
@@ -1447,15 +1444,22 @@ async function sbReady(){ if(!SESS || SESS.offline) throw new Error("offline"); 
     catch(e){ if(!e.net){ SESS=null; sbSave(); setTimeout(()=>{ USER=null; userUI(); showLogin(L("Bitte melde dich erneut an.","Please log in again.")); },0); } throw e; } finally{ sbRef=null; } })();
   return sbRef; }
 async function sbLogout(){ try{ if(SESS && !SESS.offline) await sbFetch("/auth/v1/logout",{method:"POST"}); }catch(e){} SESS=null; sbSave(); }
-let LANG="de"; try{ LANG=localStorage.getItem("startz-lang")||"de"; }catch(e){} if(!["de","en","tr","ru","nl"].includes(LANG)) LANG="de";
+// Sprachen (Eigenbezeichnung). Fehlt eine Übersetzung, erscheint der englische Text.
+const LANGS=[["de","Deutsch"],["en","English"],["fr","Français"],["es","Español"],["it","Italiano"],["nl","Nederlands"],["pl","Polski"],["cs","Čeština"],["da","Dansk"],["nb","Norsk"],["sv","Svenska"],["ro","Română"],["hr","Hrvatski"],["sr","Српски"],["sq","Shqip"],["uk","Українська"],["ru","Русский"],["tr","Türkçe"],["ku","Kurdî (Kurmancî)"],["ar","العربية"]];
+const RTL=["ar"];
+let LANG="de"; try{ LANG=localStorage.getItem("startz-lang")||"de"; }catch(e){} if(!LANGS.some(l=>l[0]===LANG)) LANG="de";
 // Weitere Sprachen: Schlüssel ist der englische Text, Werte [Türkisch, Russisch, Niederländisch]
 const I18N = __I18N__;
-const XL={tr:{},ru:{},nl:{}}, XP={tr:[],ru:[],nl:[]}, XC={tr:new Map(),ru:new Map(),nl:new Map()};
+// weitere Sprachen: {Sprache: {englischer Text: Übersetzung}} aus src/i18n/lang/*.json
+const I18NX = __I18NX__;
+const XL={}, XP={}, XC={}; LANGS.forEach(([l])=>{ if(l!=="de"&&l!=="en"){ XL[l]={}; XP[l]=[]; XC[l]=new Map(); } });
 (()=>{ const ix={tr:0,ru:1,nl:2}, esc=x=>x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-  for(const [en,a] of Object.entries(I18N)) for(const l in ix){ const v=a[ix[l]]; if(!v) continue; XL[l][en]=v;
+  const add=(l,en,v)=>{ if(!v || !XL[l]) return; XL[l][en]=v;
     if(/\{\d+\}/.test(en)){ const parts=en.split(/\{(\d+)\}/), lit=parts.filter((_,i)=>i%2===0).join("").length;
       const re=new RegExp("^"+parts.map((p,i)=> i%2 ? "([\\s\\S]*?)" : esc(p)).join("")+"$"), order=parts.filter((_,i)=>i%2===1).map(Number);
-      XP[l].push({re, v, order, lit}); } }
+      XP[l].push({re, v, order, lit}); } };
+  for(const [l,T] of Object.entries(I18NX||{})) for(const [en,v] of Object.entries(T||{})) add(l,en,v);
+  for(const [en,a] of Object.entries(I18N)) for(const l in ix) add(l,en,a[ix[l]]);
   for(const l in XP) XP[l].sort((a,b)=>b.lit-a.lit); })();
 function xl(en){
   const T=XL[LANG]; if(!T || typeof en!=="string") return en;
@@ -4334,9 +4338,7 @@ function fsHint(){ if(!FS.on) return; const st=SA.steps[SA.i], k=$("fsKeys");
 $("sFull").onclick=()=>fsEnter(); $("fsClose").onclick=()=>fsExit();
 $("fsSpd").onclick=e=>{ e.stopPropagation(); $("sSpd").click(); $("fsSpd").blur(); };
 $("fsSmoB").onclick=e=>{ e.stopPropagation(); const p=$("fsSmoPop"); p.hidden=!p.hidden; $("fsSmoB").blur(); if(!p.hidden){ p.innerHTML=smoCardHTML(); smoBind(p); } };
-$("fsLang").onclick=e=>{ e.stopPropagation(); const pp=$("fsLangPop"); pp.hidden=!pp.hidden; $("fsLang").setAttribute("aria-expanded",String(!pp.hidden)); pp.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===LANG))); };
-$("fsLangPop").querySelectorAll("button").forEach(b=>b.onclick=e=>{ e.stopPropagation(); $("fsLangPop").hidden=true; setLang(b.dataset.v); });
-document.addEventListener("click",e=>{ const pp=$("fsLangPop"); if(pp && !pp.hidden && !e.target.closest(".fslangw")) pp.hidden=true; });
+$("fsLang").onclick=e=>{ e.stopPropagation(); langOpen($("fsLang")); };
 $("fsMin").onclick=()=>{ const b=$("fsBox"); b.classList.toggle("min"); $("fsMin").textContent=b.classList.contains("min")?"+":"–"; $("fsMin").blur(); fsHint(); };
 // Notiz im Vollbild: jederzeit, auch bei eingeklappter Box; zugeordnet wird dem aktuellen Kennwert (im Ergebnis: allgemein)
 function fsNoteTarget(){ const st=SA.steps[SA.i]; if(!st || st.k==="sum") return {k:"general", lab:L("Allgemein","General"), step:"sum", stepLab:L("Ergebnis","Result")}; const tg=noteTarget(st); return {k:tg.k, lab:tg.lab, step:st.id, stepLab:st.t()}; }
@@ -5813,7 +5815,9 @@ create policy "Mitglieder: Ergebnisse" on public.club_results for all to authent
   using (public.sprintz_is_member(club_id))
   with check (public.sprintz_is_member(club_id) and exists(select 1 from public.club_athletes a where a.id = athlete_id and a.club_id = club_results.club_id));`;
 // Bereich „Vereine“ auf der Seite Athlet*innen
-function clubHTML(){ if(!canPersons()) return ""; if(!STORE.online()) return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3><p class="hint">${L("Die Vereinsdatenbank braucht eine Anmeldung mit Internetverbindung.","The club database needs a sign-in with an internet connection.")}</p></div>`;
+function offlineNote(){ return SESS && SESS.offline ? `<p class="hint">${L("Du bist gerade nur auf diesem Gerät angemeldet (ohne Server), z. B. weil bei der Anmeldung keine Verbindung bestand. Melde dich einmal neu an, dann sind Vereine und Online-Daten wieder da.","You're currently signed in on this device only (without the server), e.g. because there was no connection when you signed in. Sign in again once and clubs and online data are back.")}</p><button type="button" class="testbtn small" data-relogin>${L("Neu anmelden","Sign in again")}</button>` : `<p class="hint">${L("Die Vereinsdatenbank braucht eine Anmeldung mit Internetverbindung.","The club database needs a sign-in with an internet connection.")}</p>`; }
+document.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("[data-relogin]")) showLogin(""); });
+function clubHTML(){ if(!canPersons()) return ""; if(!STORE.online()) return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3>${offlineNote()}</div>`;
   const cl=clubsCur(), dev=DEV_USERS.includes(USER);
   if(CLUB.err==="setup") return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3><p class="hint">${L("Die Vereinsdatenbank ist in Supabase noch nicht eingerichtet.","The club database hasn't been set up in Supabase yet.")}</p>${dev?`<p class="hint">${L("Einmalig im Supabase-Dashboard unter „SQL Editor“ einfügen und „Run“ drücken:","Paste once in the Supabase dashboard under “SQL Editor” and press “Run”:")}</p><pre class="sqlbox">${esc(clubSQL())}</pre><button type="button" class="testbtn small" id="clubSqlCopy">${L("Befehl kopieren","Copy command")}</button>`:""}</div>`;
   return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3>
@@ -6319,7 +6323,7 @@ function reqPickBind(roles){ const q=$("rqQ"), res=$("rqRes"), sel=$("rqSel"); c
   const search=async()=>{ const v=q.value.trim(); if(v.length<2){ res.innerHTML=""; return; } try{ const r=await sbFetch("/rest/v1/rpc/sprintz_club_search",{method:"POST", noAuth:!SESS||!SESS.access_token, body:{q:v}})||[];
       res.innerHTML=r.length?r.filter(c=>!REG.clubs.some(x=>x.id===c.id)).map(c=>`<button type="button" data-rqa="${c.id}" data-n="${esc(c.name)}" data-s="${c.sport||"swim"}">+ ${esc(c.name)} <small>${c.sport==="track"?L("Leichtathletik","Athletics"):L("Schwimmen","Swimming")}</small></button>`).join(""):`<p class="hint">${L("Kein Verein gefunden.","No club found.")}</p>`;
       res.querySelectorAll("[data-rqa]").forEach(b=>b.onclick=()=>{ const r0=rl(); REG.clubs.push({id:b.dataset.rqa, name:b.dataset.n, sport:b.dataset.s, role:r0[0][0]}); q.value=""; res.innerHTML=""; drawSel(); }); }
-    catch(e){ res.innerHTML=`<p class="hint">${L("Die Vereinssuche ist gerade nicht erreichbar.","Club search isn't available right now.")}</p>`; } };
+    catch(e){ blog("warn","club_search: "+(e.status||"")+" "+(e.code||"")+" "+(e.message||e)); res.innerHTML=`<p class="hint">${e.net?L("Keine Verbindung zum Server.","No connection to the server."):(e.status===404||e.code==="PGRST202")?L("Die Vereinssuche ist in Supabase noch nicht eingerichtet (Befehl im Entwicklermodus ausführen).","Club search hasn't been set up in Supabase yet (run the command in developer mode)."):L("Die Vereinssuche ist gerade nicht erreichbar.","Club search isn't available right now.")+` (${esc(String(e.message||""))})`}</p>`; } };
   q.oninput=()=>{ clearTimeout(REG.timer); REG.timer=setTimeout(search,300); }; q.onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"){ e.preventDefault(); search(); } }; drawSel(); }
 async function reqSend(info){ let n=0; for(const c of REG.clubs){ try{ await sbFetch("/rest/v1/rpc/sprintz_request_join",{method:"POST", body:{p_club:c.id, p_account:USER||info.account, p_role:c.role, p_first:info.first, p_last:info.last, p_birth:info.birth||null, p_spec:info.spec||null, p_consent:!!info.consent}}); n++; }catch(e){ blog("warn","request_join: "+(e.message||e)); } } return n; }
 function regOpen(){ REG.clubs=[]; const b=$("regBox"); $("lgForm").hidden=true; b.hidden=false; const yr=new Date().getFullYear();
@@ -6397,7 +6401,7 @@ function meList(){ const pg=$("mePage"); if(!pg || appMode!=="me") return; const
     ${ath?`<div class="card mecard"><h3>${L("Ich als Athlet*in","Me as an athlete")}</h3>${me.length?me.map(x=>`<div class="merow"><b>${esc(persName(x))}</b><span class="hint">${[x.birth?akName(akOf(x.birth)):"", persClubNames(x), x.spec].filter(Boolean).map(esc).join(" · ")}</span><button type="button" class="testbtn small" data-mestat="${x.id}">📊 ${L("Statistik","Statistics")}</button></div>`).join(""):`<p class="hint">${L("Dein Konto ist noch mit keiner Athlet*in im Verein verbunden. Das macht der Entwicklermodus.","Your account isn't linked to an athlete in a club yet. That's done in developer mode.")}</p>`}</div>`:""}
     <div class="card mecard"><h3>${L("Vereine","Clubs")}</h3>${cl.length?`<table class="veltab"><thead><tr><th>${L("Verein","Club")}</th><th>${L("Sportart","Sport")}</th><th>${L("Rolle im Verein","Role in club")}</th><th>${L("Vereinscode","Club code")}</th></tr></thead><tbody>
       ${cl.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${spN(c.sport)}</td><td>${rN(c.role)}${c.del?` · <small>${L("darf löschen","may delete")}</small>`:""}</td><td>${c.admin&&c.code?`<code class="dclcode">${esc(c.code)}</code> <button type="button" class="testbtn ghost small" data-mecode="${esc(c.code)}">${L("Kopieren","Copy")}</button>`:`<small class="hint">${L("nur für den Vereins-Chef","club head only")}</small>`}</td></tr>`).join("")}</tbody></table>`
-      :`<p class="hint">${STORE.online()?L("Du bist noch in keinem Verein.","You're not in a club yet."):L("Die Vereinsdatenbank braucht eine Anmeldung mit Internetverbindung.","The club database needs a sign-in with an internet connection.")}</p>`}
+      :STORE.online()?`<p class="hint">${L("Du bist noch in keinem Verein.","You're not in a club yet.")}</p>`:offlineNote()}
       ${STORE.online()?`<div class="clubbtns"><button type="button" class="testbtn" id="meJoin">${L("Verein beitreten (Code)","Join a club (code)")}</button><button type="button" class="testbtn ghost" id="meReq">${L("Beitrittsanfrage stellen","Send a join request")}</button></div>`:""}
       ${RQ.mine.length?`<p class="qt" style="margin:10px 0 4px">${L("Meine Anfragen","My requests")}</p>${RQ.mine.slice(0,8).map(q=>`<div class="merow"><span>${esc(q.club)}</span><small class="hint">${q.status==="open"?L("offen","open"):q.status==="accepted"?L("angenommen","accepted"):L("abgelehnt","declined")}</small></div>`).join("")}`:""}</div>
     <div class="card mecard"><h3>${L("Meine Nutzung","My usage")}</h3><div class="umgrid"><span>${L("Videos hochgeladen","Videos uploaded")}<b>${st.uploaded}</b></span><span>${L("Fertig ausgewertet","Analysis finished")}<b>${st.done}</b></span><span>${L("Auswertung begonnen","Analysis started")}<b>${st.started}</b></span><span>${L("Projekte","Projects")}<b>${st.projects}</b></span><span>${L("Trainingsmessungen","Training measurements")}<b>${st.training}</b></span></div></div>`;
@@ -6532,10 +6536,7 @@ const DLS={os:null, R:null};
 function dlHide(){ $("dlDlg").hidden=true; try{ localStorage.setItem("sprintz-dlhint","1"); }catch(e){} }
 $("dlClose").onclick=dlHide;
 // Sprachwahl im Download-Fenster (wie über das i)
-{ const pop=$("dlLangPop"); pop.innerHTML=[["de","Deutsch"],["en","English"],["tr","Türkçe"],["ru","Русский"],["nl","Nederlands"]].map(([v,l])=>`<button type="button" data-v="${v}" lang="${v}">${l}</button>`).join("");
-  $("dlLang").onclick=e=>{ e.stopPropagation(); pop.hidden=!pop.hidden; $("dlLang").setAttribute("aria-expanded",String(!pop.hidden)); pop.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===LANG))); };
-  pop.querySelectorAll("button").forEach(b=>b.onclick=e=>{ e.stopPropagation(); pop.hidden=true; setLang(b.dataset.v); dlShow(DLS.os); });
-  document.addEventListener("click",e=>{ if(!pop.hidden && !e.target.closest(".dllang")) pop.hidden=true; }); } $("dlDlg").addEventListener("click",e=>{ if(e.target.id==="dlDlg") dlHide(); });
+$("dlLang").onclick=e=>{ e.stopPropagation(); langOpen($("dlLang"), ()=>dlShow(DLS.os)); }; $("dlDlg").addEventListener("click",e=>{ if(e.target.id==="dlDlg") dlHide(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("dlDlg").hidden) dlHide(); });
 // beim ersten Öffnen (nicht im Programm, nicht während Sportwahl oder Tour)
 (function dlFirst(){ if(window.sprintzDesktop) return; let seen=null; try{ seen=localStorage.getItem("sprintz-dlhint"); }catch(e){} if(seen) return;
@@ -8216,7 +8217,7 @@ new MutationObserver(ms=>{ if(LANG==="de") return; ms.forEach(m=>{
 function setLang(v){
   LANG=v; try{ localStorage.setItem("startz-lang",v); }catch(e){}
   document.documentElement.lang=v;
-  $("langSeg").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.v===v)));
+  document.documentElement.dir = RTL.includes(v) ? "rtl" : "ltr"; langBtns();
   untrTree();
   if(typeof userUI==="function") userUI();
   sportLabels(); summary(); renderTiming(); renderPresets(); envNote(); if(typeof setMode==="function" && appMode!=="start") setMode(appMode); if(typeof renderLinkBox==="function") renderLinkBox();
@@ -8230,7 +8231,20 @@ function setLang(v){
     if(typeof FS!=="undefined" && FS.on) fsHint(); }catch(e){ console.error(e); }
   if(v!=="de") trTree(document.body);
 }
-$("langSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>setLang(b.dataset.v));
+// Sprachmenü: ein gemeinsames Aufklappfenster für alle „Language“-Knöpfe
+function langBtns(){ const n=(LANGS.find(l=>l[0]===LANG)||[])[1]||LANG; document.querySelectorAll(".langbtn .langcur").forEach(b=>b.textContent=n); const fl=$("fsLang"); if(fl) fl.textContent=LANG.toUpperCase(); const dc=$("dlLangCur"); if(dc) dc.textContent=LANG.toUpperCase(); }
+function langCover(l){ if(l==="de"||l==="en") return 100; const T=XL[l]||{}, n=Object.keys(I18N).length||1; return Math.min(100, Math.round(Object.keys(T).length/n*100)); }
+function langOpen(btn, after){ let p=$("langPop"); if(p && !p.hidden && p.dataset.for===btn.id){ p.hidden=true; return; }
+  if(!p){ p=document.createElement("div"); p.id="langPop"; p.setAttribute("role","listbox"); document.body.appendChild(p);
+    document.addEventListener("pointerdown",e=>{ if(!p.hidden && !e.target.closest("#langPop") && !e.target.closest(".langbtn,#fsLang,#dlLang")) p.hidden=true; },true);
+    document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !p.hidden){ p.hidden=true; e.stopPropagation(); } },true); }
+  const dev=typeof isDev==="function" && isDev();
+  p.dataset.for=btn.id||""; p.innerHTML=LANGS.map(([v,n])=>{ const c=langCover(v); return `<button type="button" role="option" data-v="${v}" lang="${v}" aria-selected="${v===LANG}"${RTL.includes(v)?' dir="rtl"':""}><span>${n}</span>${dev&&c<100?`<small>${c} %</small>`:""}</button>`; }).join("");
+  p.querySelectorAll("button").forEach(b=>b.onclick=e=>{ e.stopPropagation(); p.hidden=true; setLang(b.dataset.v); if(after) after(); });
+  p.hidden=false; const r=btn.getBoundingClientRect(), w=230; p.style.width=w+"px"; p.style.left=Math.max(8,Math.min(r.left, innerWidth-w-8))+"px";
+  const below=innerHeight-r.bottom-12; if(below>=260){ p.style.top=(r.bottom+4)+"px"; p.style.bottom=""; p.style.maxHeight=below+"px"; } else { p.style.top=""; p.style.bottom=(innerHeight-r.top+4)+"px"; p.style.maxHeight=(r.top-12)+"px"; } }
+$("aboutLangB").onclick=e=>{ e.stopPropagation(); langOpen($("aboutLangB")); };
+document.documentElement.dir = RTL.includes(LANG) ? "rtl" : "ltr"; setTimeout(langBtns,0);
 if(window.sprintzDesktop){ const d=$("deskDl"); if(d) d.hidden=true; document.body.classList.add("is-desktop-app"); }
 /* ---------- Protokoll und Fehlerbericht: zeichnet auf, was in der App passiert (Aktionen, Fehler, Warnungen).
    Cmd/Strg + Umschalt + B öffnet den Bericht: eigene Beschreibung + Protokoll + Zustand, als Datei zum Hochladen an Claude. ---------- */
@@ -8282,7 +8296,7 @@ setLang(LANG);
    Vorläufig: Prüfung im Browser über einen Hash. Das schützt nicht wirklich (siehe Hinweis an Lasse),
    bis ein Online-Dienst mit echter Anmeldung angebunden ist. */
 function lgUI(){ $("lgReg").textContent=L("Neu bei Sprintz? Konto anlegen","New to Sprintz? Create an account"); $("lgUserL").textContent=L("Benutzername","Username"); $("lgPassL").textContent=L("Passwort","Password"); $("lgGo").textContent=L("Anmelden","Log in");
-  $("lgLang").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===LANG))); }
+  langBtns(); }
 // Training: Video einer Person zuordnen
 function vPersUI(){ const r=$("vPersRow"); if(!r) return; r.hidden=!canPersons(); if(r.hidden) return; const cur=$("vPerson").value; $("vPersLbl").textContent=L("Athlet*in","Athlete");
   $("vPerson").innerHTML=`<option value="">${L("– keine Zuordnung –","– not assigned –")}</option>`+PERS.list().map(x=>`<option value="${x.id}"${cur===x.id?" selected":""}>${esc(x.name)}</option>`).join(""); }
@@ -8294,7 +8308,7 @@ function userUI(){ coachUI(); try{ if(isDev() && window.sprintzDesktop && sprint
   const n=$("userName"); if(!n) return; n.textContent = USER ? (SESS && SESS.offline ? L(`${USER} · offline`,`${USER} · offline`) : L(`Angemeldet als ${USER}`,`Logged in as ${USER}`)) : ""; $("logoutBtn").textContent=L("Abmelden","Log out"); $("logoutBtn").hidden=!USER; if(!$("login").hidden) lgUI(); }
 function showLogin(msg){ const o=$("login"); o.hidden=false; lgUI(); $("lgPrev").hidden=true; $("lgErr").textContent=msg||""; if(USER) $("lgUser").value=USER; setTimeout(()=>$("lgUser").focus(),50); }
 function lgDone(u){ setTimeout(()=>regPendingFinish(u),800); USER=u; try{ localStorage.setItem("sprintz-user",u); }catch(err){} $("login").hidden=true; $("lgPass").value=""; $("lgErr").textContent=""; lgMigrate(u); userUI(); syncSoon(300); setTimeout(()=>{ if(typeof usageReport==="function") usageReport(true); },1500); if(appMode==="eval") evEnter(); appStart(); }
-$("lgLang").querySelectorAll("button").forEach(b=>b.onclick=()=>{ setLang(b.dataset.v); lgUI(); });
+$("lgLangB").onclick=e=>{ e.stopPropagation(); langOpen($("lgLangB"), ()=>{ lgUI(); if(!$("regBox").hidden) regOpen(); }); };
 // Einmalige Übernahme: Benutzername lasse289 → host289 (Projekte auf diesem Gerät mitnehmen)
 function lgMigrate(u){ const MIG={host289:"lasse289"}; const o=MIG[u]; if(!o) return; try{ const k="sprintz-projects-", a=localStorage.getItem(k+o);
   if(a && (!localStorage.getItem(k+u) || localStorage.getItem(k+u)==="[]")){ const ps=JSON.parse(a); ps.forEach(x=>x._pending=true); localStorage.setItem(k+u, JSON.stringify(ps)); localStorage.removeItem(k+o); } }catch(e){} }

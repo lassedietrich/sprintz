@@ -1,0 +1,6 @@
+[
+["You're currently signed in on this device only (without the server), e.g. because there was no connection when you signed in. Sign in again once and clubs and online data are back.","Şu anda yalnızca bu cihazda (sunucu olmadan) giriş yapmış durumdasın, örneğin giriş yaparken bağlantı olmadığı için. Bir kez yeniden giriş yap, kulüpler ve çevrimiçi veriler geri gelir.","Сейчас ты вошёл только на этом устройстве (без сервера), например потому что при входе не было подключения. Войди ещё раз, и клубы и онлайн-данные снова появятся.","Je bent nu alleen op dit apparaat aangemeld (zonder server), bijv. omdat er bij het aanmelden geen verbinding was. Meld je één keer opnieuw aan, dan zijn clubs en onlinegegevens terug."],
+["Sign in again","Yeniden giriş yap","Войти снова","Opnieuw aanmelden"],
+["No connection to the server.","Sunucuya bağlantı yok.","Нет подключения к серверу.","Geen verbinding met de server."],
+["Club search hasn't been set up in Supabase yet (run the command in developer mode).","Kulüp araması Supabase'de henüz kurulmadı (komutu geliştirici modunda çalıştır).","Поиск клубов в Supabase ещё не настроен (выполни команду в режиме разработчика).","Clubs zoeken is in Supabase nog niet ingericht (voer de opdracht uit in de ontwikkelaarsmodus)."]
+]

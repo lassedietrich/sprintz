@@ -19,3 +19,13 @@ const miss=[...keys.keys()].filter(en=>!T[en]);
 fs.writeFileSync(path.join(SRC,'i18n/table.json'),JSON.stringify(T));
 if(miss.length){ console.log(`Fehlende Übersetzungen (${miss.length}) – in eine neue Datei src/i18n/tNN.json eintragen als ["English","Türkçe","Русский","Nederlands"]:`); miss.forEach(m=>console.log(' '+JSON.stringify(m))); process.exitCode=1; }
 else console.log(`Alle ${keys.size} Texte übersetzt.`);
+// Weitere Sprachen: src/i18n/lang/<code>.json = {"English": "Übersetzung"}. Sie werden erst beim Veröffentlichen erzeugt.
+// node tools/i18n.js --neu  → zeigt je Sprache, was fehlt, und schreibt src/i18n/todo/<code>.json (englischer und deutscher Text)
+const NEU=["fr","es","it","pl","cs","da","nb","sv","ro","hr","sr","sq","uk","ku","ar"], LD=path.join(SRC,'i18n/lang'), X={};
+if(!fs.existsSync(LD)) fs.mkdirSync(LD);
+NEU.forEach(l=>{ const f=path.join(LD,l+'.json'); const t=fs.existsSync(f)?JSON.parse(fs.readFileSync(f,'utf8')):{}; const used={}; for(const en of keys.keys()) if(t[en]) used[en]=t[en]; X[l]=used; });
+fs.writeFileSync(path.join(SRC,'i18n/langs.json'),JSON.stringify(X));
+const cov=NEU.map(l=>`${l} ${Math.round(Object.keys(X[l]).length/keys.size*100)} %`).join(', ');
+console.log(`Weitere Sprachen (werden beim Veröffentlichen übersetzt): ${cov}`);
+if(process.argv.includes('--neu')){ const TD=path.join(SRC,'i18n/todo'); if(!fs.existsSync(TD)) fs.mkdirSync(TD);
+  NEU.forEach(l=>{ const m={}; for(const [en,de] of keys) if(!X[l][en]) m[en]=de; fs.writeFileSync(path.join(TD,l+'.json'),JSON.stringify(m,null,1)); console.log(`${l}: ${Object.keys(m).length} fehlen → src/i18n/todo/${l}.json`); }); }
