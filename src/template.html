@@ -428,7 +428,15 @@ body.xh-on #xhair{display:block}
 .drsanim{cursor:pointer}.drshint{margin:0;font-size:.78rem;opacity:.85;line-height:1.35}
 .umrole{display:flex;flex-direction:column;gap:4px;min-width:200px}
 .clubbtns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 6px}
-.mecard{padding:12px 16px;margin-bottom:14px}.mecard h3{margin:4px 0 10px}.merow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0}
+.mecard{padding:12px 16px;margin-bottom:14px}
+.lgreg{display:block;margin:14px auto 0;background:none;border:0;color:var(--accent);font:600 .95rem var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#regBox .regform{display:flex;flex-direction:column;gap:6px}#regBox fieldset{border:1px solid var(--line);border-radius:12px;padding:8px 12px 12px;margin:6px 0;display:flex;flex-direction:column;gap:4px}
+#regBox legend{font-weight:700;padding:0 4px}.rgroles{display:flex;gap:18px;margin:2px 0 8px}.rgroles label{display:flex;gap:6px;align-items:center;margin:0}
+.rgcons{display:flex!important;gap:8px;align-items:flex-start;font-weight:400!important;font-size:.85rem!important;margin-top:8px}.rgcons input{margin-top:3px}
+#rgGo{margin-top:8px}#rgAthW:not([hidden]){display:flex;flex-direction:column;gap:4px}#regBox #rqQ{width:100%;max-width:none}.lgbox:has(#regBox:not([hidden])){max-width:520px}
+.rqres{display:flex;flex-direction:column;gap:2px;margin:4px 0}.rqres button{text-align:left;border:0;background:rgba(47,111,224,.07);border-radius:8px;padding:8px 10px;font:inherit;color:inherit;cursor:pointer}
+.rqsel{display:flex;flex-direction:column;gap:6px;margin-top:6px}.rqchip{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px 8px;border:1px solid var(--line);border-radius:10px}.rqchip small{color:var(--muted)}.rqchip button{margin-left:auto;border:0;background:none;cursor:pointer;color:var(--muted)}
+.rqrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line)}.rqrow>div{flex:1;min-width:200px}.meq{border:2px solid var(--accent)}.mecard h3{margin:4px 0 10px}.merow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0}
 .athdd>summary{outline:none}.athdd>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 .athdlg{max-width:620px;max-height:calc(100vh - 32px);overflow:auto}.athgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}
 .dclmem{display:flex;flex-direction:column;gap:8px;margin:6px 0}.dclmt{border-collapse:collapse;font-size:.88rem}.dclmt td,.dclmt th{padding:4px 10px 4px 0;text-align:left}
@@ -887,7 +895,9 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
     <button type="submit" id="lgGo">Anmelden</button>
     <p class="hint" id="lgErr" aria-live="polite"></p>
     <button type="button" class="testbtn ghost small" id="lgPrev" hidden style="margin:8px auto 0;display:block">Ohne Server testen</button>
+    <button type="button" class="lgreg" id="lgReg">Neu bei Sprintz? Konto anlegen</button>
   </form>
+  <div id="regBox" hidden></div>
   <div class="seg big g3" id="lgLang" role="group" aria-label="Sprache / Language">
     <button type="button" data-v="de" lang="de">Deutsch</button><button type="button" data-v="en" lang="en">English</button><button type="button" data-v="tr" lang="tr">Türkçe</button><button type="button" data-v="ru" lang="ru">Русский</button><button type="button" data-v="nl" lang="nl">Nederlands</button>
   </div>
@@ -5917,7 +5927,7 @@ create table if not exists public.account_roles(
 alter table public.account_roles enable row level security;
 drop policy if exists "Eigene Rolle lesen" on public.account_roles;
 create policy "Eigene Rolle lesen" on public.account_roles for select to authenticated using (user_id = auth.uid() or public.sprintz_is_dev());
-create or replace function public.sprintz_club_coach(club_id) returns boolean language sql stable security definer set search_path = public as $$
+create or replace function public.sprintz_is_coach() returns boolean language sql stable security definer set search_path = public as $$
   select coalesce((select coach from account_roles where user_id = auth.uid()), true) $$;
 create or replace function public.sprintz_club_coach(c uuid) returns boolean language sql stable security definer set search_path = public as $$
   select coalesce((select coach from account_roles where user_id = auth.uid()), true)
@@ -6062,6 +6072,74 @@ create or replace function public.sprintz_my_clubs() returns json language sql s
   select coalesce(json_agg(json_build_object('id', c.id, 'name', c.name, 'sport', c.sport, 'role', m.role, 'can_delete', m.can_delete,
     'code', case when m.role = 'admin' then c.code end) order by c.name), '[]'::json)
   from club_members m join clubs c on c.id = m.club_id where m.user_id = auth.uid() $$;
+-- Registrierung: eigene Rolle einmalig festlegen (danach ändert sie nur der Entwicklermodus)
+create or replace function public.sprintz_register(p_account text, p_coach boolean, p_athlete boolean) returns json language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'not authenticated'; end if;
+  insert into account_roles(user_id, account, coach, athlete) values (auth.uid(), p_account, coalesce(p_coach, true), coalesce(p_athlete, false))
+    on conflict (user_id) do nothing;
+  return json_build_object('ok', true);
+end $$;
+-- Beitrittsanfragen: stellen (alle), annehmen/ablehnen (Vereins-Chef und Entwickler)
+create table if not exists public.club_requests(
+  id uuid primary key default gen_random_uuid(),
+  club_id uuid not null references public.clubs(id) on delete cascade,
+  user_id uuid not null default auth.uid(),
+  account text, role text not null default 'member' check (role in ('member','athlete')),
+  first_name text, last_name text, birth_year int, spec text, consent boolean not null default false,
+  status text not null default 'open' check (status in ('open','accepted','declined')),
+  created_at timestamptz not null default now(), answered_at timestamptz, answered_by uuid);
+create unique index if not exists club_requests_open on public.club_requests (club_id, user_id) where status = 'open';
+alter table public.club_requests enable row level security;
+drop policy if exists "Anfragen lesen" on public.club_requests;
+create policy "Anfragen lesen" on public.club_requests for select to authenticated using (user_id = auth.uid() or public.sprintz_is_admin(club_id) or public.sprintz_is_dev());
+create or replace function public.sprintz_club_search(q text) returns json language sql stable security definer set search_path = public as $$
+  select coalesce(json_agg(json_build_object('id', x.id, 'name', x.name, 'sport', x.sport) order by x.name), '[]'::json)
+  from (select id, name, sport from clubs where length(trim(q)) >= 2 and name ilike '%' || trim(q) || '%' order by name limit 20) x $$;
+create or replace function public.sprintz_request_join(p_club uuid, p_account text, p_role text, p_first text, p_last text, p_birth int, p_spec text, p_consent boolean) returns json language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'not authenticated'; end if;
+  if exists(select 1 from club_members where club_id = p_club and user_id = auth.uid()) then return json_build_object('ok', true, 'member', true); end if;
+  insert into club_requests(club_id, user_id, account, role, first_name, last_name, birth_year, spec, consent)
+    values (p_club, auth.uid(), p_account, case when p_role = 'athlete' then 'athlete' else 'member' end, p_first, p_last, p_birth, p_spec, coalesce(p_consent, false))
+    on conflict (club_id, user_id) where status = 'open' do update set role = excluded.role, first_name = excluded.first_name, last_name = excluded.last_name,
+      birth_year = excluded.birth_year, spec = excluded.spec, consent = excluded.consent, created_at = now();
+  return json_build_object('ok', true);
+end $$;
+create or replace function public.sprintz_club_requests() returns json language sql stable security definer set search_path = public as $$
+  select coalesce(json_agg(json_build_object('id', r.id, 'club_id', r.club_id, 'club', c.name, 'account', r.account, 'role', r.role, 'first', r.first_name, 'last', r.last_name,
+    'birth', r.birth_year, 'spec', r.spec, 'consent', r.consent, 'created_at', r.created_at) order by r.created_at), '[]'::json)
+  from club_requests r join clubs c on c.id = r.club_id where r.status = 'open' and (public.sprintz_is_admin(r.club_id) or public.sprintz_is_dev()) $$;
+create or replace function public.sprintz_my_requests() returns json language sql stable security definer set search_path = public as $$
+  select coalesce(json_agg(json_build_object('id', r.id, 'club', c.name, 'role', r.role, 'status', r.status, 'created_at', r.created_at) order by r.created_at desc), '[]'::json)
+  from club_requests r join clubs c on c.id = r.club_id where r.user_id = auth.uid() $$;
+create or replace function public.sprintz_answer_request(p_id uuid, p_accept boolean, p_role text default null) returns json language plpgsql security definer set search_path = public as $$
+declare r public.club_requests; rl text; aid uuid;
+begin
+  select * into r from club_requests where id = p_id and status = 'open';
+  if r.id is null then raise exception 'not found'; end if;
+  if not (public.sprintz_is_admin(r.club_id) or public.sprintz_is_dev()) then raise exception 'not allowed'; end if;
+  update club_requests set status = case when p_accept then 'accepted' else 'declined' end, answered_at = now(), answered_by = auth.uid() where id = p_id;
+  if not p_accept then return json_build_object('ok', true); end if;
+  rl := case when coalesce(p_role, r.role) = 'athlete' then 'athlete' else 'member' end;
+  insert into club_members(club_id, user_id, account, role) values (r.club_id, r.user_id, r.account, rl)
+    on conflict (club_id, user_id) do update set role = case when club_members.role = 'admin' then 'admin' else excluded.role end;
+  if rl = 'athlete' and r.consent and r.first_name is not null and r.last_name is not null and r.birth_year is not null then
+    select id into aid from club_athletes where club_id = r.club_id and lower(first_name) = lower(r.first_name) and lower(last_name) = lower(r.last_name) and birth_year = r.birth_year;
+    if aid is null then
+      insert into club_athletes(club_id, first_name, last_name, birth_year, spec, consent, created_by) values (r.club_id, r.first_name, r.last_name, r.birth_year, r.spec, true, auth.uid()) returning id into aid;
+    end if;
+    insert into account_roles(user_id, account, coach, athlete, athlete_ids) values (r.user_id, r.account, false, true, array[aid])
+      on conflict (user_id) do update set athlete = true, athlete_ids = array(select distinct unnest(account_roles.athlete_ids || aid)), updated_at = now();
+  end if;
+  return json_build_object('ok', true);
+end $$;
+revoke all on function public.sprintz_register(text, boolean, boolean), public.sprintz_request_join(uuid, text, text, text, text, int, text, boolean),
+  public.sprintz_club_requests(), public.sprintz_my_requests(), public.sprintz_answer_request(uuid, boolean, text), public.sprintz_club_search(text) from public, anon;
+grant execute on function public.sprintz_register(text, boolean, boolean), public.sprintz_request_join(uuid, text, text, text, text, int, text, boolean),
+  public.sprintz_club_requests(), public.sprintz_my_requests(), public.sprintz_answer_request(uuid, boolean, text), public.sprintz_club_search(text) to authenticated;
+-- Vereinssuche schon bei der Registrierung (nur Name und Sportart, keine Codes)
+grant execute on function public.sprintz_club_search(text) to anon;
 revoke all on function public.sprintz_my_clubs() from public, anon;
 grant execute on function public.sprintz_my_clubs() to authenticated;
 revoke all on function public.sprintz_my_codes(), public.sprintz_dev_create_club(text, text), public.sprintz_dev_member(uuid, uuid, text, text) from public, anon;
@@ -6099,7 +6177,6 @@ function devClubsHTML(){ const sp=v=>v==="track"?L("Leichtathletik","Athletics")
             ${mem.map(m=>`<tr><td>${esc(m.account||"?")}</td><td><select class="evsel" data-dcrole="${c.id}|${m.user_id}">${[["admin",L("Vereins-Chef","Club head")],["member",L("Trainer*in","Coach")],["athlete",L("Athlet*in","Athlete")]].map(([v,l])=>`<option value="${v}"${m.role===v?" selected":""}>${l}</option>`).join("")}</select></td><td><input type="checkbox" data-dcdel="${c.id}|${m.user_id}"${m.can_delete?" checked":""}></td><td><button type="button" class="testbtn ghost small" data-dck="${c.id}|${m.user_id}">${L("Entfernen","Remove")}</button></td></tr>`).join("")||`<tr><td colspan="4"><small>${L("Noch keine Personen.","No people yet.")}</small></td></tr>`}</tbody></table>
             ${(()=>{ const free=UM.rows.filter(r=>r.uid && !mem.some(m=>m.user_id===r.uid)); return free.length?`<div class="athadd"><select class="evsel" id="dca-${c.id}">${free.map(r=>`<option value="${r.uid}|${esc(r.account)}">${esc(r.account)}${(UM.meta.accounts[r.account]||{}).person?" – "+esc(UM.meta.accounts[r.account].person):""}</option>`).join("")}</select><button type="button" class="testbtn small" data-dcadd="${c.id}">+ ${L("Person hinzufügen","Add person")}</button></div>`:""; })()}</div></td></tr>`:""}`; }).join(""):`<tr><td colspan="7"><small>${L("Noch keine Vereine.","No clubs yet.")}</small></td></tr>`}</tbody></table></div>
     <div class="athadd" style="margin-top:10px"><input type="text" id="dclNew" class="qkin" maxlength="80" placeholder="${L("Name des Vereins / der Organisation","Name of the club / organisation")}"><select class="evsel" id="dclNewS"><option value="swim">${L("Schwimmen","Swimming")}</option><option value="track">${L("Leichtathletik","Athletics")}</option></select><button type="button" class="testbtn" id="dclNewB">+ ${L("Verein anlegen","Create club")}</button></div>
-    ${(UM.meta.orgs||[]).length?`<div class="card evnote"><p>${L(`Aus der früheren Liste gibt es noch ${UM.meta.orgs.length} Organisationen ohne echten Verein (${UM.meta.orgs.join(", ")}). Übernehmen legt sie als Vereine an und fügt die zugeordneten Konten als Personen hinzu.`,`The earlier list still has ${UM.meta.orgs.length} organisations without a real club (${UM.meta.orgs.join(", ")}). Taking them over creates them as clubs and adds the assigned accounts as people.`)}</p><button type="button" class="testbtn small" id="dclMig">${L("Als Vereine übernehmen","Take over as clubs")}</button></div>`:""}
     <button type="button" class="testbtn ghost small" id="dclSql" style="margin-top:8px">${L("Einrichtung in Supabase anzeigen","Show Supabase setup")}</button>`; }
 async function devMember(club, uid, account, action){ try{ await sbReady(); await sbFetch("/rest/v1/rpc/sprintz_dev_member",{method:"POST", body:{p_club:club, p_user:uid, p_account:account||null, p_action:action}}); return true; }
   catch(e){ toast(L("Das hat nicht geklappt.","That didn't work.")+" "+(e.message||""),4000); return false; } }
@@ -6150,33 +6227,116 @@ create trigger sprintz_on_new_user after insert on auth.users for each row execu
 insert into public.userdata (user_id, key, data, updated_at)
 select id, 'usage', jsonb_build_object('account', split_part(email, '@', 1), 'created', created_at), now() from auth.users
 on conflict (user_id, key) do nothing;`;
+/* ---------- Registrierung: Konto in Supabase anlegen, Rolle, persönliche Angaben, Beitrittsanfragen ---------- */
+const REG={clubs:[], timer:null};
+const PROFILE={ get(){ try{ return JSON.parse(localStorage.getItem("sprintz-profile-"+(USER||""))||"null"); }catch(e){ return null; } },
+  set(p){ try{ localStorage.setItem("sprintz-profile-"+(USER||""), JSON.stringify(p)); }catch(e){} } };
+async function profilePush(p){ try{ await sbReady(); await sbFetch("/rest/v1/userdata?on_conflict=user_id,key",{method:"POST", headers:{Prefer:"resolution=merge-duplicates,return=minimal"}, body:{key:"profile", data:p, updated_at:new Date().toISOString()}}); }catch(e){ blog("warn","profilePush: "+(e.message||e)); } }
+async function profilePull(){ if(!USER || !STORE.online()) return PROFILE.get(); try{ await sbReady(); const r=await sbFetch("/rest/v1/userdata?key=eq.profile&select=data"); const p=r&&r[0]&&r[0].data; if(p) PROFILE.set(p); }catch(e){} return PROFILE.get(); }
+// Vereinssuche mit Auswahl (für Registrierung und „Ich“)
+function reqPickHTML(){ return `<div class="reqpick"><input type="search" id="rqQ" class="qkin" maxlength="60" placeholder="${L("Verein suchen (Name)","Search club (name)")}" autocomplete="off"><div id="rqRes" class="rqres"></div><div id="rqSel" class="rqsel"></div></div>`; }
+function reqPickBind(roles){ const q=$("rqQ"), res=$("rqRes"), sel=$("rqSel"); const rl=()=>roles();
+  const drawSel=()=>{ sel.innerHTML=REG.clubs.map((c,i)=>`<div class="rqchip"><b>${esc(c.name)}</b><small>${c.sport==="track"?L("Leichtathletik","Athletics"):L("Schwimmen","Swimming")}</small>
+      <select class="evsel" data-rqr="${i}">${rl().map(([v,l])=>`<option value="${v}"${c.role===v?" selected":""}>${l}</option>`).join("")}</select><button type="button" data-rqx="${i}" aria-label="${L("Entfernen","Remove")}">✕</button></div>`).join("");
+    sel.querySelectorAll("[data-rqr]").forEach(s2=>s2.onchange=()=>{ REG.clubs[+s2.dataset.rqr].role=s2.value; }); sel.querySelectorAll("[data-rqx]").forEach(b=>b.onclick=()=>{ REG.clubs.splice(+b.dataset.rqx,1); drawSel(); }); };
+  const search=async()=>{ const v=q.value.trim(); if(v.length<2){ res.innerHTML=""; return; } try{ const r=await sbFetch("/rest/v1/rpc/sprintz_club_search",{method:"POST", noAuth:!SESS||!SESS.access_token, body:{q:v}})||[];
+      res.innerHTML=r.length?r.filter(c=>!REG.clubs.some(x=>x.id===c.id)).map(c=>`<button type="button" data-rqa="${c.id}" data-n="${esc(c.name)}" data-s="${c.sport||"swim"}">+ ${esc(c.name)} <small>${c.sport==="track"?L("Leichtathletik","Athletics"):L("Schwimmen","Swimming")}</small></button>`).join(""):`<p class="hint">${L("Kein Verein gefunden.","No club found.")}</p>`;
+      res.querySelectorAll("[data-rqa]").forEach(b=>b.onclick=()=>{ const r0=rl(); REG.clubs.push({id:b.dataset.rqa, name:b.dataset.n, sport:b.dataset.s, role:r0[0][0]}); q.value=""; res.innerHTML=""; drawSel(); }); }
+    catch(e){ res.innerHTML=`<p class="hint">${L("Die Vereinssuche ist gerade nicht erreichbar.","Club search isn't available right now.")}</p>`; } };
+  q.oninput=()=>{ clearTimeout(REG.timer); REG.timer=setTimeout(search,300); }; q.onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"){ e.preventDefault(); search(); } }; drawSel(); }
+async function reqSend(info){ let n=0; for(const c of REG.clubs){ try{ await sbFetch("/rest/v1/rpc/sprintz_request_join",{method:"POST", body:{p_club:c.id, p_account:USER||info.account, p_role:c.role, p_first:info.first, p_last:info.last, p_birth:info.birth||null, p_spec:info.spec||null, p_consent:!!info.consent}}); n++; }catch(e){ blog("warn","request_join: "+(e.message||e)); } } return n; }
+function regOpen(){ REG.clubs=[]; const b=$("regBox"); $("lgForm").hidden=true; b.hidden=false; const yr=new Date().getFullYear();
+  b.innerHTML=`<form id="regForm" class="regform" autocomplete="on"><h2 style="margin:0 0 4px">${L("Konto anlegen","Create an account")}</h2>
+    <p class="hint" style="margin:0 0 6px">${L("Mit dem Konto speicherst du deine Auswertungen online und kannst Vereinen beitreten. Videos lädt Sprintz nie hoch.","With an account your analyses are stored online and you can join clubs. Sprintz never uploads videos.")}</p>
+    <fieldset><legend>${L("Zugang","Access")}</legend>
+      <label for="rgU">${L("Benutzername","Username")}</label><input id="rgU" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="30" required placeholder="${L("z. B. lena.schmidt","e.g. lena.schmidt")}">
+      <small class="hint">${L("Kleinbuchstaben, Ziffern, Punkt, Strich; mindestens 3 Zeichen. Damit meldest du dich an.","Lowercase letters, digits, dot, dash; at least 3 characters. You log in with it.")}</small>
+      <label for="rgP">${L("Passwort","Password")}</label><input id="rgP" type="password" autocomplete="new-password" minlength="8" required>
+      <label for="rgP2">${L("Passwort wiederholen","Repeat password")}</label><input id="rgP2" type="password" autocomplete="new-password" minlength="8" required></fieldset>
+    <fieldset><legend>${L("Ich bin","I am")}</legend><div class="rgroles"><label><input type="checkbox" id="rgCo"> ${L("Trainer*in","Coach")}</label><label><input type="checkbox" id="rgAt"> ${L("Athlet*in","Athlete")}</label></div>
+      <div class="seg" id="rgSp"><button type="button" data-v="swim" aria-pressed="${sport!=="track"}">${L("Schwimmen","Swimming")}</button><button type="button" data-v="track" aria-pressed="${sport==="track"}">${L("Leichtathletik","Athletics")}</button></div></fieldset>
+    <fieldset><legend>${L("Über mich","About me")}</legend>
+      <label for="rgF">${L("Vorname","First name")}</label><input id="rgF" autocomplete="given-name" maxlength="60" required>
+      <label for="rgL">${L("Nachname","Last name")}</label><input id="rgL" autocomplete="family-name" maxlength="60" required>
+      <label for="rgB">${L("Geburtsjahr","Year of birth")}</label><input id="rgB" type="number" inputmode="numeric" min="1920" max="${yr}" step="1" required>
+      <label for="rgC">${L("Stadt (optional)","City (optional)")}</label><input id="rgC" autocomplete="address-level2" maxlength="60">
+      <div id="rgAthW" hidden><label for="rgS">${L("Spezialisierung","Specialisation")}</label><input id="rgS" maxlength="60" list="athSpecL" placeholder="${L("z. B. Kraul Sprint","e.g. freestyle sprint")}">
+        <label class="rgcons"><input type="checkbox" id="rgCons"> <span>${L("Ich bin einverstanden (bei Minderjährigen: meine Erziehungsberechtigten sind einverstanden), dass Name, Geburtsjahr und Leistungsdaten in der Datenbank meiner Vereine gespeichert und von deren Trainer*innen gesehen werden.","I agree (for minors: my parents agree) that name, year of birth and performance data are stored in my clubs' database and seen by their coaches.")}</span></label></div></fieldset>
+    <fieldset><legend>${L("Vereine (optional)","Clubs (optional)")}</legend><p class="hint" style="margin:0 0 6px">${L("Such deinen Verein und stell eine Beitrittsanfrage. Der Vereins-Chef nimmt sie an. Hast du einen Vereinscode, kannst du später auch direkt beitreten.","Search for your club and send a join request. The club head accepts it. If you have a club code, you can also join directly later.")}</p>${reqPickHTML()}</fieldset>
+    <p class="everr" id="rgErr" hidden></p>
+    <button type="submit" id="rgGo">${L("Konto anlegen","Create account")}</button>
+    <button type="button" class="lgreg" id="rgBack">‹ ${L("Zurück zur Anmeldung","Back to login")}</button></form>`;
+  let sp=sport; const roles=()=>{ const o=[]; if($("rgAt").checked) o.push(["athlete",L("als Athlet*in","as athlete")]); if($("rgCo").checked || !o.length) o.push(["member",L("als Trainer*in","as coach")]); return o; };
+  $("rgSp").querySelectorAll("button").forEach(x=>x.onclick=()=>{ sp=x.dataset.v; $("rgSp").querySelectorAll("button").forEach(y=>y.setAttribute("aria-pressed",String(y===x))); });
+  const upd=()=>{ $("rgAthW").hidden=!$("rgAt").checked; REG.clubs.forEach(c=>{ if(!roles().some(r=>r[0]===c.role)) c.role=roles()[0][0]; }); reqPickBind(roles); }; $("rgAt").onchange=upd; $("rgCo").onchange=upd; reqPickBind(roles);
+  $("rgBack").onclick=()=>{ b.hidden=true; $("lgForm").hidden=false; };
+  $("regForm").onsubmit=async e=>{ e.preventDefault(); const v=id=>$(id).value.trim(), err=t=>{ $("rgErr").textContent=t; $("rgErr").hidden=!t; if(t) $("rgErr").scrollIntoView({block:"nearest"}); };
+    const u=v("rgU").toLowerCase(), p1=$("rgP").value, p2=$("rgP2").value, by=+v("rgB");
+    if(!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(u)) return err(L("Der Benutzername passt nicht: 3–30 Zeichen, nur Kleinbuchstaben, Ziffern, Punkt und Strich.","The username doesn't fit: 3–30 characters, only lowercase letters, digits, dot and dash."));
+    if(p1.length<8) return err(L("Das Passwort braucht mindestens 8 Zeichen.","The password needs at least 8 characters.")); if(p1!==p2) return err(L("Die Passwörter stimmen nicht überein.","The passwords don't match."));
+    if(!$("rgCo").checked && !$("rgAt").checked) return err(L("Wähle mindestens eine Rolle: Trainer*in oder Athlet*in.","Choose at least one role: coach or athlete."));
+    if(!v("rgF") || !v("rgL")) return err(L("Bitte Vor- und Nachnamen eingeben.","Please enter first and last name.")); if(!(by>=1920 && by<=new Date().getFullYear())) return err(L("Das Geburtsjahr stimmt nicht.","The year of birth isn't valid."));
+    const info={account:u, coach:$("rgCo").checked, athlete:$("rgAt").checked, first:v("rgF"), last:v("rgL"), birth:by, city:v("rgC"), sport:sp, spec:$("rgAt").checked?v("rgS"):"", consent:$("rgAt").checked && $("rgCons").checked, clubs:REG.clubs.slice()};
+    const go=$("rgGo"); go.disabled=true; err(""); go.textContent=L("Konto wird angelegt …","Creating account …");
+    try{ const j=await sbFetch("/auth/v1/signup",{method:"POST", noAuth:true, body:{email:sbMail(u), password:p1, data:{account:u, first:info.first, last:info.last}}});
+      if(j && j.access_token){ sbTake(j); await CRED.save(u,p1); try{ localStorage.setItem("sprintz-regpend-"+u, JSON.stringify(info)); }catch(x){} if(sp!==sport) setSport(sp); b.hidden=true; $("lgForm").hidden=false; lgDone(u); }
+      else { try{ localStorage.setItem("sprintz-regpend-"+u, JSON.stringify(info)); }catch(x){} b.hidden=true; $("lgForm").hidden=false; $("lgUser").value=u;
+        $("lgErr").textContent=L("Konto angelegt. Es muss noch bestätigt werden, bevor du dich anmelden kannst.","Account created. It still has to be confirmed before you can log in."); } }
+    catch(x){ const m=String(x.message||""); err(/already|registered|exists/i.test(m)?L("Diesen Benutzernamen gibt es schon.","This username already exists."):/signups? not allowed|disabled/i.test(m)?L("Neue Konten sind in Supabase gerade abgeschaltet.","New accounts are currently switched off in Supabase."):x.net?L("Kein Internet. Für ein neues Konto braucht es eine Verbindung.","No internet. A new account needs a connection."):L(`Das Konto ließ sich nicht anlegen (${m}).`,`The account couldn't be created (${m}).`)); }
+    go.disabled=false; go.textContent=L("Konto anlegen","Create account"); }; setTimeout(()=>$("rgU").focus(),50); }
+// nach der ersten Anmeldung: Rolle, Angaben und Anfragen in Supabase eintragen
+async function regPendingFinish(u){ let info=null; try{ info=JSON.parse(localStorage.getItem("sprintz-regpend-"+u)||"null"); }catch(e){} if(!info || !STORE.online()) return;
+  try{ await sbReady(); await sbFetch("/rest/v1/rpc/sprintz_register",{method:"POST", body:{p_account:u, p_coach:!!info.coach, p_athlete:!!info.athlete}});
+    const p={first:info.first, last:info.last, birth:info.birth, city:info.city, sport:info.sport, spec:info.spec}; PROFILE.set(p); await profilePush(p);
+    if(info.coach && !info.athlete){ try{ localStorage.setItem("sprintz-coach-"+u,"1"); }catch(e){} }
+    REG.clubs=info.clubs||[]; const n=await reqSend(info); REG.clubs=[]; localStorage.removeItem("sprintz-regpend-"+u); await roleLoad(); coachUI();
+    toast(n?L(`Willkommen bei Sprintz! ${n} Beitrittsanfragen wurden gestellt.`,`Welcome to Sprintz! ${n} join requests were sent.`):L("Willkommen bei Sprintz!","Welcome to Sprintz!"),4500); }
+  catch(e){ blog("warn","regPendingFinish: "+(e.message||e)); } }
+// Anfragen in „Ich“
+const RQ={open:[], mine:[], ok:false};
+async function rqLoad(){ if(!STORE.online()) return; try{ await sbReady(); const [a,b]=await Promise.all([sbFetch("/rest/v1/rpc/sprintz_club_requests",{method:"POST", body:{}}), sbFetch("/rest/v1/rpc/sprintz_my_requests",{method:"POST", body:{}})]); RQ.open=a||[]; RQ.mine=b||[]; RQ.ok=true; }catch(e){ RQ.ok=false; } }
+function rqDlg(){ REG.clubs=[]; let d=$("rqDlg"); if(!d){ d=document.createElement("div"); d.id="rqDlg"; d.className="dlg"; document.body.appendChild(d); d.addEventListener("click",e=>{ if(e.target===d) d.hidden=true; }); }
+  const R=ROLE.get(), roles=()=>{ const o=[]; if(R&&R.athlete) o.push(["athlete",L("als Athlet*in","as athlete")]); if(!R || R.coach!==false || !o.length) o.push(["member",L("als Trainer*in","as coach")]); return o; }, P=PROFILE.get()||{};
+  d.hidden=false; d.innerHTML=`<div class="dlgbox"><h3 style="margin:0">${L("Beitrittsanfrage stellen","Send a join request")}</h3><p class="hint" style="margin:0">${L("Der Vereins-Chef bekommt deine Anfrage und nimmt sie an oder lehnt sie ab.","The club head gets your request and accepts or declines it.")}</p>${reqPickHTML()}
+    ${R&&R.athlete?`<label class="rgcons"><input type="checkbox" id="rqCons"> <span>${L("Ich bin einverstanden (bei Minderjährigen: meine Erziehungsberechtigten sind einverstanden), dass Name, Geburtsjahr und Leistungsdaten in der Datenbank meiner Vereine gespeichert und von deren Trainer*innen gesehen werden.","I agree (for minors: my parents agree) that name, year of birth and performance data are stored in my clubs' database and seen by their coaches.")}</span></label>`:""}
+    <div class="bugact"><button type="button" class="testbtn" id="rqGo">${L("Anfrage senden","Send request")}</button><button type="button" class="testbtn ghost" id="rqNo">${L("Abbrechen","Cancel")}</button></div></div>`;
+  reqPickBind(roles); $("rqNo").onclick=()=>{ d.hidden=true; };
+  $("rqGo").onclick=async()=>{ if(!REG.clubs.length){ $("rqQ").focus(); return; } const n=await reqSend({account:USER, first:P.first||"", last:P.last||"", birth:P.birth||null, spec:P.spec||"", consent:!!($("rqCons")&&$("rqCons").checked)}); d.hidden=true;
+    toast(n?L(`${n} Beitrittsanfragen gesendet.`,`${n} join requests sent.`):L("Die Anfrage ließ sich nicht senden.","The request couldn't be sent."),3500); await rqLoad(); meList(); }; }
 /* ---------- „Ich“: eigenes Konto, Rollen, verbundene Athlet*innen, Vereine (Vereinscode für den Vereins-Chef), Nutzung ---------- */
 async function meEnter(){ ["spPage","evPage","qkPage","modeSoon","athPage","usersPage"].forEach(k=>{ const e=$(k); if(e) e.hidden=true; }); $("mePage").hidden=false; meList();
-  try{ await roleLoad(); if(clubOn()){ await clubLoad(true); await clubAthPull(); } else if(USER && STORE.online()){ await sbReady(); CLUB.list=(await clubFetchMine()).sort((a,b)=>a.name.localeCompare(b.name)); } }catch(e){} meList(); }
+  try{ await Promise.all([profilePull(), rqLoad()]); meList(); await roleLoad(); if(clubOn()){ await clubLoad(true); await clubAthPull(); } else if(USER && STORE.online()){ await sbReady(); CLUB.list=(await clubFetchMine()).sort((a,b)=>a.name.localeCompare(b.name)); } }catch(e){} meList(); }
 function meList(){ const pg=$("mePage"); if(!pg || appMode!=="me") return; const R=ROLE.get(), coach=!R || R.coach!==false, ath=!!(R && R.athlete), both=coach&&ath, view=meView();
   const ids=(R&&R.athlete_ids)||[], me=PERS.get().list.filter(x=>x.cid && ids.includes(x.cid)), cl=(CLUB.list||[]), st=usageStats();
   const spN=v=>v==="track"?L("Leichtathletik","Athletics"):L("Schwimmen","Swimming"), rN=v=>v==="admin"?L("Vereins-Chef","Club head"):v==="athlete"?L("Athlet*in","Athlete"):L("Trainer*in","Coach");
   pg.innerHTML=`<h2 class="big">${L("Ich","Me")}</h2>
     ${both?`<div class="card mecard"><p class="qt" style="margin:0 0 6px">${L("Ich nutze Sprintz gerade als","I'm currently using Sprintz as")}</p><div class="seg" id="meView"><button type="button" data-v="coach" aria-pressed="${view!=="athlete"}">${L("Trainer*in","Coach")}</button><button type="button" data-v="athlete" aria-pressed="${view==="athlete"}">${L("Athlet*in","Athlete")}</button></div>
       <p class="hint" style="margin:6px 0 0">${view==="athlete"?L("Als Athlet*in siehst du nur deine eigenen Daten.","As an athlete you only see your own data."):L("Als Trainer*in siehst du alle Athlet*innen deiner Vereine.","As a coach you see all athletes of your clubs.")}</p></div>`:""}
-    <div class="card mecard"><h3>${L("Konto","Account")}</h3><div class="umgrid"><span>${L("Konto","Account")}<b>${esc(USER||"–")}</b></span><span>${L("Anmeldung","Sign-in")}<b>${STORE.online()?L("online","online"):L("nur auf diesem Gerät","this device only")}</b></span>
+    ${RQ.open.length?`<div class="card mecard meq"><h3>${L("Beitrittsanfragen","Join requests")} (${RQ.open.length})</h3>${RQ.open.map(q=>`<div class="rqrow"><div><b>${esc([q.first,q.last].filter(Boolean).join(" ")||q.account||"?")}</b> <small class="hint">${esc(q.account||"")}${q.birth?" · "+q.birth:""}${q.spec?" · "+esc(q.spec):""}</small><br><small>${L("möchte in","wants to join")} <b>${esc(q.club)}</b>${q.role==="athlete"?(q.consent?"":" · "+L("ohne Einwilligung","without consent")):""}</small></div>
+      <select class="evsel" data-rqrole="${q.id}"><option value="member"${q.role!=="athlete"?" selected":""}>${L("Trainer*in","Coach")}</option><option value="athlete"${q.role==="athlete"?" selected":""}>${L("Athlet*in","Athlete")}</option></select>
+      <button type="button" class="testbtn small" data-rqok="${q.id}">${L("Annehmen","Accept")}</button><button type="button" class="testbtn ghost small" data-rqno="${q.id}">${L("Ablehnen","Decline")}</button></div>`).join("")}</div>`:""}
+    <div class="card mecard"><h3>${L("Konto","Account")}</h3><div class="umgrid"><span>${L("Konto","Account")}<b>${esc(USER||"–")}</b></span>${(()=>{ const P=PROFILE.get(); return P&&(P.first||P.last)?`<span>${L("Name","Name")}<b>${esc([P.first,P.last].filter(Boolean).join(" "))}</b></span>${P.birth?`<span>${L("Geburtsjahr","Year of birth")}<b>${P.birth} · ${esc(akName(akOf(P.birth)))}</b></span>`:""}${P.city?`<span>${L("Stadt","City")}<b>${esc(P.city)}</b></span>`:""}`:""; })()}<span>${L("Anmeldung","Sign-in")}<b>${STORE.online()?L("online","online"):L("nur auf diesem Gerät","this device only")}</b></span>
       <span>${L("Programm","App")}<b>${DSK?L("Desktop","Desktop"):L("Web","Web")}</b></span><span>${L("Sportart","Sport")}<b>${spN(sport)}</b></span><span>${L("Rolle","Role")}<b>${[coach?L("Trainer*in","Coach"):"", ath?L("Athlet*in","Athlete"):""].filter(Boolean).join(", ")||"–"}</b></span></div></div>
     ${ath?`<div class="card mecard"><h3>${L("Ich als Athlet*in","Me as an athlete")}</h3>${me.length?me.map(x=>`<div class="merow"><b>${esc(persName(x))}</b><span class="hint">${[x.birth?akName(akOf(x.birth)):"", clubName(x.clubId)||x.club, x.spec].filter(Boolean).map(esc).join(" · ")}</span><button type="button" class="testbtn small" data-mestat="${x.id}">📊 ${L("Statistik","Statistics")}</button></div>`).join(""):`<p class="hint">${L("Dein Konto ist noch mit keiner Athlet*in im Verein verbunden. Das macht der Entwicklermodus.","Your account isn't linked to an athlete in a club yet. That's done in developer mode.")}</p>`}</div>`:""}
     <div class="card mecard"><h3>${L("Vereine","Clubs")}</h3>${cl.length?`<table class="veltab"><thead><tr><th>${L("Verein","Club")}</th><th>${L("Sportart","Sport")}</th><th>${L("Rolle im Verein","Role in club")}</th><th>${L("Vereinscode","Club code")}</th></tr></thead><tbody>
       ${cl.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${spN(c.sport)}</td><td>${rN(c.role)}${c.del?` · <small>${L("darf löschen","may delete")}</small>`:""}</td><td>${c.admin&&c.code?`<code class="dclcode">${esc(c.code)}</code> <button type="button" class="testbtn ghost small" data-mecode="${esc(c.code)}">${L("Kopieren","Copy")}</button>`:`<small class="hint">${L("nur für den Vereins-Chef","club head only")}</small>`}</td></tr>`).join("")}</tbody></table>`
       :`<p class="hint">${STORE.online()?L("Du bist noch in keinem Verein.","You're not in a club yet."):L("Die Vereinsdatenbank braucht eine Anmeldung mit Internetverbindung.","The club database needs a sign-in with an internet connection.")}</p>`}
-      ${STORE.online()?`<div class="clubbtns"><button type="button" class="testbtn" id="meJoin">${L("Verein beitreten","Join a club")}</button></div>`:""}</div>
+      ${STORE.online()?`<div class="clubbtns"><button type="button" class="testbtn" id="meJoin">${L("Verein beitreten (Code)","Join a club (code)")}</button><button type="button" class="testbtn ghost" id="meReq">${L("Beitrittsanfrage stellen","Send a join request")}</button></div>`:""}
+      ${RQ.mine.length?`<p class="qt" style="margin:10px 0 4px">${L("Meine Anfragen","My requests")}</p>${RQ.mine.slice(0,8).map(q=>`<div class="merow"><span>${esc(q.club)}</span><small class="hint">${q.status==="open"?L("offen","open"):q.status==="accepted"?L("angenommen","accepted"):L("abgelehnt","declined")}</small></div>`).join("")}`:""}</div>
     <div class="card mecard"><h3>${L("Meine Nutzung","My usage")}</h3><div class="umgrid"><span>${L("Videos hochgeladen","Videos uploaded")}<b>${st.uploaded}</b></span><span>${L("Fertig ausgewertet","Analysis finished")}<b>${st.done}</b></span><span>${L("Auswertung begonnen","Analysis started")}<b>${st.started}</b></span><span>${L("Projekte","Projects")}<b>${st.projects}</b></span><span>${L("Trainingsmessungen","Training measurements")}<b>${st.training}</b></span></div></div>`;
   const vw=$("meView"); if(vw) vw.querySelectorAll("button").forEach(b=>b.onclick=()=>{ try{ localStorage.setItem("sprintz-view-"+USER, b.dataset.v); }catch(e){} PK.st.club="all"; meList(); toast(b.dataset.v==="athlete"?L("Ansicht: Athlet*in","View: athlete"):L("Ansicht: Trainer*in","View: coach"),2000); });
   pg.querySelectorAll("[data-mestat]").forEach(b=>b.onclick=()=>athStats(b.dataset.mestat));
   pg.querySelectorAll("[data-mecode]").forEach(b=>b.onclick=()=>{ try{ navigator.clipboard.writeText(b.dataset.mecode); toast(L("Vereinscode kopiert.","Club code copied.")); }catch(e){} });
-  const j=$("meJoin"); if(j) j.onclick=()=>clubDlg("join"); }
+  const j=$("meJoin"); if(j) j.onclick=()=>clubDlg("join"); const rq=$("meReq"); if(rq) rq.onclick=()=>rqDlg();
+  const ans=async(id,acc)=>{ const sl=pg.querySelector(`[data-rqrole="${id}"]`); try{ await sbReady(); await sbFetch("/rest/v1/rpc/sprintz_answer_request",{method:"POST", body:{p_id:id, p_accept:acc, p_role:sl?sl.value:null}}); toast(acc?L("Angenommen.","Accepted."):L("Abgelehnt.","Declined."),2000); }
+    catch(e){ toast(L("Das hat nicht geklappt.","That didn't work.")+" "+(e.message||""),4000); } await rqLoad(); if(clubOn()){ await clubLoad(true); await clubAthPull(); } meList(); };
+  pg.querySelectorAll("[data-rqok]").forEach(b=>b.onclick=()=>{ b.disabled=true; ans(b.dataset.rqok,true); }); pg.querySelectorAll("[data-rqno]").forEach(b=>b.onclick=()=>{ b.disabled=true; ans(b.dataset.rqno,false); }); }
 function usageStats(){ const all=STORE._all(); let up=0, st=0, dn=0;
   all.forEach(p=>(p.trials||[]).forEach(t=>{ const v=(t.vid?1:0)+((t.vids2||[]).length); up+=v; const done = p.tech==="quick" ? (t.status==="quick"||t.status==="det") : t.status==="done"; if(done) dn++; else if(t.raw && Object.keys(t.raw.marks||{}).length) st++; }));
   return {uploaded:up, started:st, done:dn, projects:all.filter(p=>p.tech!=="quick").length, training:(LOG.videos||[]).length}; }
 let usageT=null, usageLast=0;
 async function usageReport(force){ if(!USER || !STORE.online() || !navigator.onLine) return; if(!force && Date.now()-usageLast<60000) return; usageLast=Date.now();
-  const d={account:USER, lastUsed:new Date().toISOString(), app: DSK ? "desktop" : "web", counts:usageStats(), athletes:PERS.list().map(x=>x.name)};
+  const PF=PROFILE.get(); const d={account:USER, person:PF&&(PF.first||PF.last)?[PF.first,PF.last].filter(Boolean).join(" "):undefined, lastUsed:new Date().toISOString(), app: DSK ? "desktop" : "web", counts:usageStats(), athletes:PERS.list().map(x=>x.name)};
   try{ await sbReady(); await sbFetch("/rest/v1/userdata?on_conflict=user_id,key",{method:"POST", headers:{Prefer:"resolution=merge-duplicates,return=minimal"}, body:{key:"usage", data:d, updated_at:new Date().toISOString()}}); }catch(e){} }
 const usageSoon=()=>{ clearTimeout(usageT); usageT=setTimeout(()=>usageReport(), 5000); };
 // Verwaltung (nur Entwickler): Konto → Person und Organisation, eigene Zeile „accmeta“
@@ -6219,7 +6379,7 @@ function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") retu
     <p class="hint">${L("Datenschutz: Die Nutzungsdaten enthalten die Namen der angelegten Athlet*innen. Weise in der Datenschutzerklärung darauf hin.","Privacy: the usage data contains the names of the athletes created. Mention this in the privacy policy.")}</p>
     <div class="umtblw"><table class="umtbl"><thead><tr><th>${L("Echte Person","Real person")}</th><th>${L("Konto","Account")}</th><th>${L("Vereine / Organisationen","Clubs / organisations")}</th><th>${L("Rolle","Role")}</th><th>${L("Zuletzt genutzt","Last used")}</th></tr></thead><tbody>
     ${rows.map(r=>{ const a=M.accounts[r.account]||{}, c=r.counts||{}, open=UM.open===r.account;
-      return `<tr><td><button type="button" class="umexp" data-ux="${esc(r.account)}" aria-expanded="${open}" aria-label="${L("Daten anzeigen","Show data")}">${open?"▾":"▸"}</button><input type="text" class="qkin" data-up="${esc(r.account)}" maxlength="80" value="${esc(a.person||"")}" placeholder="${L("Echte Person","Real person")}"></td>
+      return `<tr><td><button type="button" class="umexp" data-ux="${esc(r.account)}" aria-expanded="${open}" aria-label="${L("Daten anzeigen","Show data")}">${open?"▾":"▸"}</button><input type="text" class="qkin" data-up="${esc(r.account)}" maxlength="80" value="${esc(a.person||r.person||"")}" placeholder="${L("Echte Person","Real person")}"></td>
         <td>${esc(r.account)}</td><td>${umClubCell(r)}</td><td>${umRoleHTML(r)}</td><td>${rel(r.lastUsed)}</td></tr>
         ${open?`<tr class="umdet"><td colspan="5"><div class="umgrid"><span>${L("Zuletzt genutzt","Last used")}<b>${rel(r.lastUsed)}</b></span><span>${L("Programm","App")}<b>${r.app==="desktop"?L("Desktop","Desktop"):L("Web","Web")}</b></span>
           <span>${L("Videos hochgeladen","Videos uploaded")}<b>${c.uploaded??"–"}</b></span><span>${L("Auswertung begonnen","Analysis started")}<b>${c.started??"–"}</b></span><span>${L("Fertig ausgewertet","Analysis finished")}<b>${c.done??"–"}</b></span><span>${L("Projekte","Projects")}<b>${c.projects??"–"}</b></span><span>${L("Trainingsmessungen","Training measurements")}<b>${c.training??"–"}</b></span></div>
@@ -8003,7 +8163,7 @@ setLang(LANG);
 /* ---------- Anmeldung ----------
    Vorläufig: Prüfung im Browser über einen Hash. Das schützt nicht wirklich (siehe Hinweis an Lasse),
    bis ein Online-Dienst mit echter Anmeldung angebunden ist. */
-function lgUI(){ $("lgUserL").textContent=L("Benutzername","Username"); $("lgPassL").textContent=L("Passwort","Password"); $("lgGo").textContent=L("Anmelden","Log in");
+function lgUI(){ $("lgReg").textContent=L("Neu bei Sprintz? Konto anlegen","New to Sprintz? Create an account"); $("lgUserL").textContent=L("Benutzername","Username"); $("lgPassL").textContent=L("Passwort","Password"); $("lgGo").textContent=L("Anmelden","Log in");
   $("lgLang").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===LANG))); }
 // Training: Video einer Person zuordnen
 function vPersUI(){ const r=$("vPersRow"); if(!r) return; r.hidden=!canPersons(); if(r.hidden) return; const cur=$("vPerson").value; $("vPersLbl").textContent=L("Athlet*in","Athlete");
@@ -8013,7 +8173,7 @@ $("coachChk").onchange=()=>{ try{ localStorage.setItem("sprintz-coach-"+(USER||"
 function userUI(){ coachUI(); try{ if(isDev() && window.sprintzDesktop && sprintzDesktop.setDev) sprintzDesktop.setDev(true, USER); }catch(e){} const db=$("devBtn"); if(db){ db.hidden=!isDev(); if((appMode==="dev"||appMode==="kraft") && !isDev() && typeof setMode==="function") setMode("start"); }
   const n=$("userName"); if(!n) return; n.textContent = USER ? (SESS && SESS.offline ? L(`${USER} · offline`,`${USER} · offline`) : L(`Angemeldet als ${USER}`,`Logged in as ${USER}`)) : ""; $("logoutBtn").textContent=L("Abmelden","Log out"); $("logoutBtn").hidden=!USER; if(!$("login").hidden) lgUI(); }
 function showLogin(msg){ const o=$("login"); o.hidden=false; lgUI(); $("lgPrev").hidden=true; $("lgErr").textContent=msg||""; if(USER) $("lgUser").value=USER; setTimeout(()=>$("lgUser").focus(),50); }
-function lgDone(u){ USER=u; try{ localStorage.setItem("sprintz-user",u); }catch(err){} $("login").hidden=true; $("lgPass").value=""; $("lgErr").textContent=""; lgMigrate(u); userUI(); syncSoon(300); setTimeout(()=>{ if(typeof usageReport==="function") usageReport(true); },1500); if(appMode==="eval") evEnter(); appStart(); }
+function lgDone(u){ setTimeout(()=>regPendingFinish(u),800); USER=u; try{ localStorage.setItem("sprintz-user",u); }catch(err){} $("login").hidden=true; $("lgPass").value=""; $("lgErr").textContent=""; lgMigrate(u); userUI(); syncSoon(300); setTimeout(()=>{ if(typeof usageReport==="function") usageReport(true); },1500); if(appMode==="eval") evEnter(); appStart(); }
 $("lgLang").querySelectorAll("button").forEach(b=>b.onclick=()=>{ setLang(b.dataset.v); lgUI(); });
 // Einmalige Übernahme: Benutzername lasse289 → host289 (Projekte auf diesem Gerät mitnehmen)
 function lgMigrate(u){ const MIG={host289:"lasse289"}; const o=MIG[u]; if(!o) return; try{ const k="sprintz-projects-", a=localStorage.getItem(k+o);
@@ -8032,6 +8192,7 @@ $("lgForm").onsubmit=async e=>{ e.preventDefault(); const u=$("lgUser").value.tr
     }
     else { er.textContent = err.status===400 || err.status===401 ? L("Benutzername oder Passwort ist falsch.","Wrong username or password.") : L(`Anmeldung fehlgeschlagen (${err.message}).`,`Login failed (${err.message}).`); $("lgPass").select(); } }
   finally{ go.disabled=false; } };
+$("lgReg").onclick=()=>regOpen();
 $("lgPrev").onclick=()=>{ const u=$("lgUser").value.trim().toLowerCase(); if(!u){ $("lgUser").focus(); return; } SESS={offline:true, u, preview:true}; sbSave(); $("lgPrev").hidden=true; lgDone(u); };
 $("logoutBtn").onclick=async()=>{ await sbLogout(); try{ localStorage.removeItem("sprintz-user"); }catch(e){} location.reload(); };
 // Info-Knopf und Sprechblase „Sprache ändern“ während Tour und Erststart
