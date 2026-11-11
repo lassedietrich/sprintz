@@ -61,7 +61,7 @@ html[lang="de"] .only-de,html[lang="en"] .only-en,html[lang="tr"] .only-tr,html[
 .contact textarea{min-height:110px;resize:vertical}
 .contact .hint{opacity:1}
 #tourBtn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--accent);font:600 .95rem var(--display);letter-spacing:-.01em;text-transform:none;padding:7px 12px 7px 7px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow)}
-#tourBtn{height:38px}
+#tourBtn{height:38px}#tourBtn[hidden]{display:none!important}
 #tourBtn span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-fg);font-size:.85rem}
 header h1{padding-right:0;text-shadow:0 0 18px var(--water),0 0 4px var(--water);font-family:var(--display);font-weight:600;font-size:2.1rem;letter-spacing:.01em;margin:0;line-height:1.05;text-transform:none}
 header p{margin:.35rem 0 0;color:var(--muted)}
@@ -427,6 +427,8 @@ body.xh-on #xhair{display:block}
 .drsel .drsx{margin-left:auto;min-width:28px;height:28px;padding:0}.drsel .drsdel{color:#ff9a9a}.drsel [aria-pressed="true"]{background:#c0392b;border-color:#c0392b}
 .drsanim{cursor:pointer}.drshint{margin:0;font-size:.78rem;opacity:.85;line-height:1.35}
 .umrole{display:flex;flex-direction:column;gap:4px;min-width:200px}
+.clubbtns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 6px}
+.athdlg{max-width:620px;max-height:calc(100vh - 32px);overflow:auto}.athgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}
 .dclmem{display:flex;flex-direction:column;gap:8px;margin:6px 0}.dclmt{border-collapse:collapse;font-size:.88rem}.dclmt td,.dclmt th{padding:4px 10px 4px 0;text-align:left}
 .qkqt{margin:10px 0 4px;font-size:.8rem;color:var(--muted)}
 .qkslide{animation:qkIn .34s cubic-bezier(.2,.8,.3,1) both}
@@ -1236,7 +1238,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
   <button type="button" id="aboutBtn" aria-label="Über Sprintz und den Entwickler"><span>i</span></button>
 </div>
 <div class="fab" id="fab">
-  <button type="button" id="tourBtn" aria-label="Tour durch die App starten"><span>?</span>Tour</button>
+  <button type="button" id="tourBtn" hidden aria-label="Tour durch die App starten"><span>?</span>Tour</button>
 </div>
 
 <div id="dlDlg" class="dlg" hidden role="dialog" aria-modal="true" aria-labelledby="dlTitle"><div class="dlgbox dlbox"><h2 id="dlTitle"></h2><div id="dlBody"></div><div class="dlact"><span class="dllang"><button type="button" id="dlLang" aria-haspopup="true" aria-expanded="false" aria-label="Sprache / Language" title="Sprache / Language"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span id="dlLangCur"></span></button><span id="dlLangPop" hidden></span></span><button type="button" class="testbtn ghost" id="dlClose"></button></div></div></div>
@@ -5509,13 +5511,13 @@ function athCounts(id){ const all=STORE._all(); let pr=0, vids=0;
   all.forEach(p=>{ if(p.tech==="quick") vids+=(p.trials||[]).filter(e=>e.person===id).length; else if(p.person===id) pr++; });
   const tr=(LOG.videos||[]).filter(v=>v.person===id).length; return {pr, vids, tr}; }
 function athEnter(){ ["spPage","evPage","qkPage","modeSoon","usersPage"].forEach(k=>{ const e=$(k); if(e) e.hidden=true; }); $("athPage").hidden=false; athList(); if(clubOn()) clubLoad(true).then(()=>clubAthPull()).then(()=>athList()); }
-function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; const all=PERS.list(), pl=pkSort(pkFilter(all), PK.st.sort), cl=clubsCur();
+function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; const all=PERS.list(), pl=pkSort(pkFilter(all), PK.st.sort), cl=clubsCur().filter(c=>c.role!=="athlete");
   const fld=(x,k,lab,ph,type)=>`<label class="athf"><span>${lab}</span><input type="${type||"text"}" data-af="${k}" data-id="${x.id}" maxlength="80" value="${esc(x[k]??"")}" placeholder="${ph}"${k==="spec"?' list="athSpecL"':""}${type==="number"?' min="1920" max="2100" step="1" inputmode="numeric"':""}></label>`;
   const sub=x=>[x.birth?akName(akOf(x.birth)):"", x.clubId?clubName(x.clubId)||x.club:x.club, x.spec].filter(Boolean).map(esc).join(" · ")||L("Noch keine Angaben","No details yet");
   pg.innerHTML=`<h2 class="big">${L("Athlet*innen","Athletes")}</h2>
     <p class="evlead">${L("Lege die Athlet*innen an, die du betreust, und ordne sie einem Verein zu. Ergebnisse von Vereinsathlet*innen gehen automatisch in die Vereinsdatenbank und werden mit der eigenen Altersklasse im Verein verglichen.","Add the athletes you coach and assign them to a club. Results of club athletes go to the club database automatically and are compared with their own age group in the club.")}</p>
     ${clubHTML()}
-    ${isAthOnly()?`<p class="hint">${L("Du bist als Athlet*in angemeldet und siehst nur deine eigenen Daten.","You're signed in as an athlete and only see your own data.")}</p>`:""}<div class="athadd"${isAthOnly()?" hidden":""}><input type="text" id="athNew" class="qkin" maxlength="60" placeholder="${L("Vorname Nachname","First name Last name")}"><button type="button" class="testbtn" id="athNewB">+ ${L("Athlet*in anlegen","Add athlete")}</button></div>
+    ${isAthOnly()?`<p class="hint">${L("Du bist als Athlet*in angemeldet und siehst nur deine eigenen Daten.","You're signed in as an athlete and only see your own data.")}</p>`:""}<div class="clubbtns"${isAthOnly()?" hidden":""}><button type="button" class="testbtn" id="athNewB">+ ${L("Athlet*in anlegen","Add athlete")}</button></div>
     <datalist id="athSpecL">${[L("Kraul Sprint","Freestyle sprint"),L("Kraul Mittelstrecke","Freestyle middle distance"),L("Kraul Langstrecke","Freestyle distance"),L("Rücken","Backstroke"),L("Brust","Breaststroke"),L("Schmetterling","Butterfly"),L("Lagen","Individual medley")].map(s=>`<option value="${esc(s)}">`).join("")}</datalist>
     <details class="card athdd" id="athDD"${ATH.dd?" open":""}><summary><b>${L("Athlet*innen","Athletes")}</b> <small>(${pl.length}${pl.length!==all.length?" / "+all.length:""})</small></summary>
     <div class="pkbar">${pkClubSel("athClub", all)}${pkSortSeg("athSort")}</div>
@@ -5532,8 +5534,7 @@ function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; co
           <div class="athact"><button type="button" class="testbtn small" data-astat="${x.id}">📊 ${L("Statistik","Statistics")}</button><button type="button" class="testbtn ghost small" data-adel="${x.id}">${L("Athlet*in löschen","Delete athlete")}</button></div></div>`:""}</div>`; }).join("") : `<p class="hint">${all.length?L("Keine Athlet*innen in diesem Verein.","No athletes in this club."):L("Noch keine Athlet*innen.","No athletes yet.")}</p>`}</div></details>`;
   clubBind(); { const dd=$("athDD"); dd.ontoggle=()=>{ ATH.dd=dd.open; }; $("athClub").onchange=e=>{ PK.st.club=e.target.value; pkSave(); athList(); };
     $("athSort").querySelectorAll("button").forEach(b=>b.onclick=()=>{ PK.st.sort=b.dataset.s; pkSave(); athList(); }); }
-  const add=()=>{ const i=$("athNew"), v=i.value.trim(); if(!v) return; const parts=v.split(/\s+/), x=PERS.add(v); PERS.update(x.id,{first:parts[0], last:parts.slice(1).join(" ")}); ATH.open=x.id; ATH.dd=true; PK.st.club="all"; pkSave(); athList(); };
-  $("athNewB").onclick=add; $("athNew").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); add(); } };
+  $("athNewB").onclick=()=>athDlg();
   pg.querySelectorAll("[data-ao]").forEach(b=>b.onclick=()=>{ ATH.open = ATH.open===b.dataset.ao ? null : b.dataset.ao; athList(); });
   const push=id=>{ clearTimeout(ATH.pt); ATH.pt=setTimeout(async()=>{ try{ await clubAthPush(id); }catch(e){ blog("warn","clubAthPush: "+(e.message||e)); } },900); };
   pg.querySelectorAll("[data-af]").forEach(i=>{ let t=null; const save=()=>{ const k=i.dataset.af; let v=i.value.trim(); if(k==="name" && !v) return; if(k==="birth") v=v?+v:null;
@@ -5562,7 +5563,7 @@ const persName=x=> x ? ((x.first||x.last) ? [x.first, x.nick?`„${x.nick}“`:"
 const clubMissing=e=> e && (e.code==="PGRST205" || e.code==="42P01" || e.status===404 || /does not exist|schema cache/i.test(e.message||""));
 async function clubLoad(force){ if(!clubOn()) return []; if(CLUB.list && !force && Date.now()-CLUB.t<60000) return CLUB.list;
   try{ await sbReady(); const rows=await sbFetch(`/rest/v1/club_members?select=role,can_delete,club_id,clubs(id,name,sport)&user_id=eq.${SESS.uid}`); let codes=[]; try{ codes=await sbFetch("/rest/v1/rpc/sprintz_my_codes",{method:"POST", body:{}})||[]; }catch(e){}
-    CLUB.list=(rows||[]).filter(r=>r.clubs).map(r=>({id:r.club_id, name:r.clubs.name, code:((codes||[]).find(c=>c.id===r.club_id)||{}).code||"", sport:r.clubs.sport||"swim", admin:r.role==="admin", del:!!r.can_delete})).sort((a,b)=>a.name.localeCompare(b.name)); CLUB.t=Date.now(); CLUB.err=null; }
+    CLUB.list=(rows||[]).filter(r=>r.clubs).map(r=>({id:r.club_id, name:r.clubs.name, code:((codes||[]).find(c=>c.id===r.club_id)||{}).code||"", sport:r.clubs.sport||"swim", admin:r.role==="admin", role:r.role, del:!!r.can_delete})).sort((a,b)=>a.name.localeCompare(b.name)); CLUB.t=Date.now(); CLUB.err=null; }
   catch(e){ CLUB.err=clubMissing(e)?"setup":(e.net?"net":"err"); if(!CLUB.list) CLUB.list=[]; blog("warn","clubLoad: "+(e.message||e)); }
   return CLUB.list; }
 const clubName=id=>{ const c=(CLUB.list||[]).find(x=>x.id===id); return c?c.name:""; };
@@ -5676,7 +5677,7 @@ create table if not exists public.club_members(
   club_id uuid not null references public.clubs(id) on delete cascade,
   user_id uuid not null default auth.uid(),
   account text,
-  role text not null default 'member' check (role in ('admin','member')),
+  role text not null default 'member' check (role in ('admin','member','athlete')),
   joined_at timestamptz not null default now(),
   primary key (club_id, user_id));
 create table if not exists public.club_athletes(
@@ -5755,14 +5756,12 @@ function clubHTML(){ if(!canPersons()) return ""; if(!STORE.online()) return `<d
   const cl=clubsCur(), dev=DEV_USERS.includes(USER);
   if(CLUB.err==="setup") return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3><p class="hint">${L("Die Vereinsdatenbank ist in Supabase noch nicht eingerichtet.","The club database hasn't been set up in Supabase yet.")}</p>${dev?`<p class="hint">${L("Einmalig im Supabase-Dashboard unter „SQL Editor“ einfügen und „Run“ drücken:","Paste once in the Supabase dashboard under “SQL Editor” and press “Run”:")}</p><pre class="sqlbox">${esc(clubSQL())}</pre><button type="button" class="testbtn small" id="clubSqlCopy">${L("Befehl kopieren","Copy command")}</button>`:""}</div>`;
   return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3>
-    ${cl.length?cl.map(c=>`<div class="clubrow"><b>${esc(c.name)}</b>${c.admin?`<span class="hint">${L("Vereins-Chef","Club head")} · ${L("Vereinscode","Club code")}: <code>${esc(c.code||"–")}</code></span><button type="button" class="testbtn ghost small" data-cmem="${c.id}">${L("Mitglieder","Members")}</button>`:`<span class="hint">${L("Mitglied","Member")}</span>`}<button type="button" class="testbtn ghost small" data-cleave="${c.id}">${c.admin?L("Verein verlassen","Leave club"):L("Austreten","Leave")}</button>${c.del?`<button type="button" class="testbtn ghost small dcldel" data-cdel="${c.id}">${L("Verein löschen","Delete club")}</button>`:""}<div class="clubmem" id="cm-${c.id}"></div></div>`).join(""):`<p class="hint">${L("Du bist noch in keinem Verein.","You're not in a club yet.")}</p>`}
-    <div class="athadd"><input type="text" id="clubCode" class="qkin" maxlength="12" placeholder="${L("Vereinscode","Club code")}"><button type="button" class="testbtn" id="clubJoinB">${L("Beitreten","Join")}</button></div>
-    <div class="athadd"${isAthOnly()?" hidden":""}><input type="text" id="clubNew" class="qkin" maxlength="80" placeholder="${L("Name des Vereins","Club name")}"><button type="button" class="testbtn ghost" id="clubNewB">+ ${L("Verein anlegen","Create club")}</button></div>
+    ${cl.length?cl.map(c=>`<div class="clubrow"><b>${esc(c.name)}</b>${c.admin?`<span class="hint">${L("Vereins-Chef","Club head")} · ${L("Vereinscode","Club code")}: <code>${esc(c.code||"–")}</code></span><button type="button" class="testbtn ghost small" data-cmem="${c.id}">${L("Mitglieder","Members")}</button>`:`<span class="hint">${c.role==="athlete"?L("Athlet*in","Athlete"):L("Trainer*in","Coach")}</span>`}<button type="button" class="testbtn ghost small" data-cleave="${c.id}">${c.admin?L("Verein verlassen","Leave club"):L("Austreten","Leave")}</button>${c.del?`<button type="button" class="testbtn ghost small dcldel" data-cdel="${c.id}">${L("Verein löschen","Delete club")}</button>`:""}<div class="clubmem" id="cm-${c.id}"></div></div>`).join(""):`<p class="hint">${L("Du bist noch in keinem Verein.","You're not in a club yet.")}</p>`}
+    <div class="clubbtns"><button type="button" class="testbtn" id="clubJoinOpen">${L("Verein beitreten","Join a club")}</button></div>
     <p class="hint" id="clubMsg">${L("Wer einen Verein anlegt, verwaltet ihn und gibt den Vereinscode an andere Trainer*innen weiter. Alle Mitglieder sehen die Athlet*innen und Ergebnisse des Vereins; Videos werden nie hochgeladen.","Whoever creates a club manages it and shares the club code with other coaches. All members see the club's athletes and results; videos are never uploaded.")}</p></div>`; }
 function clubBind(){ const msg=t=>{ const m=$("clubMsg"); if(m) m.textContent=t; };
   const cp=$("clubSqlCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(clubSQL()); cp.textContent=L("Kopiert","Copied"); }catch(e){} };
-  const jb=$("clubJoinB"); if(jb) jb.onclick=async()=>{ const c=$("clubCode").value.trim(); if(!c) return; jb.disabled=true; try{ const r=await clubJoin(c); athList(); toast(L(`Beigetreten: ${r.name} · ${r.got||0} Athlet*innen übernommen`,`Joined: ${r.name} · ${r.got||0} athletes received`),4000); $("clubCode").value=""; }catch(e){ msg(clubMissing(e)?L("Die Vereinsdatenbank ist noch nicht eingerichtet.","The club database isn't set up yet."):L("Der Vereinscode ist unbekannt.","Unknown club code.")); } jb.disabled=false; };
-  const nb=$("clubNewB"); if(nb) nb.onclick=async()=>{ const n=$("clubNew").value.trim(); if(n.length<2) return; nb.disabled=true; try{ const r=await clubCreate(n); athList(); toast(L(`Verein angelegt. Vereinscode: ${r.code}`,`Club created. Club code: ${r.code}`),6000); }catch(e){ msg(clubMissing(e)?L("Die Vereinsdatenbank ist noch nicht eingerichtet.","The club database isn't set up yet."):L("Der Verein ließ sich nicht anlegen.","The club couldn't be created.")); } nb.disabled=false; };
+  const jo=$("clubJoinOpen"); if(jo) jo.onclick=()=>clubDlg("join");
   document.querySelectorAll("[data-cmem]").forEach(b=>b.onclick=async()=>{ const id=b.dataset.cmem, box=$("cm-"+id); if(box.innerHTML){ box.innerHTML=""; return; } try{ const m=await clubMembers(id);
     box.innerHTML=(m||[]).map(r=>`<span class="clubm">${esc(r.account||"?")}${r.role==="admin"?" ("+L("Verwalter","admin")+")":`<button type="button" data-ckick="${id}|${r.user_id}" aria-label="${L("Entfernen","Remove")}">✕</button>`}</span>`).join("");
     box.querySelectorAll("[data-ckick]").forEach(k=>k.onclick=async()=>{ const [c,u]=k.dataset.ckick.split("|"); try{ await clubKick(c,u); k.parentNode.remove(); }catch(e){} }); }catch(e){ box.textContent=L("Mitglieder ließen sich nicht laden.","Members couldn't be loaded."); } });
@@ -5770,6 +5769,55 @@ function clubBind(){ const msg=t=>{ const m=$("clubMsg"); if(m) m.textContent=t;
     try{ await sbReady(); await sbFetch(`/rest/v1/clubs?id=eq.${b.dataset.cdel}`,{method:"DELETE"}); await clubLoad(true); athList(); }catch(e){ toast(L("Das hat nicht geklappt.","That didn't work."),3000); } });
   document.querySelectorAll("[data-cleave]").forEach(b=>b.onclick=async()=>{ if(!b.dataset.sure){ b.dataset.sure="1"; b.textContent=L("Wirklich austreten?","Really leave?"); return; } try{ await clubKick(b.dataset.cleave, SESS.uid); await clubLoad(true); athList(); }catch(e){} }); }
 const ATH={open:null, dd:false};
+// Dialog: Verein beitreten (Code) bzw. – über den Link darin – neuen Verein erstellen
+function clubDlg(mode){ let d=$("clubDlg"); if(!d){ d=document.createElement("div"); d.id="clubDlg"; d.className="dlg"; document.body.appendChild(d); d.addEventListener("click",e=>{ if(e.target===d) d.hidden=true; }); }
+  const sp=sport==="track"?L("Leichtathletik","Athletics"):L("Schwimmen","Swimming"), join=mode!=="create";
+  d.hidden=false; d.innerHTML=`<div class="dlgbox" role="dialog" aria-modal="true"><h3 style="margin:0">${join?L("Verein beitreten","Join a club"):L("Verein erstellen","Create a club")}</h3>
+    ${join?`<p class="hint" style="margin:0">${L("Gib den Vereinscode ein, den du vom Vereins-Chef bekommen hast.","Enter the club code you got from the club head.")}</p><input type="text" id="cdIn" class="qkin" maxlength="12" autocomplete="off" placeholder="${L("Vereinscode","Club code")}" style="text-transform:uppercase;letter-spacing:.08em">`
+      :`<p class="hint" style="margin:0">${L(`Du wirst Vereins-Chef und bekommst den Vereinscode, den du an andere Trainer*innen weitergibst. Sportart: ${sp}.`,`You become club head and get the club code to share with other coaches. Sport: ${sp}.`)}</p><input type="text" id="cdIn" class="qkin" maxlength="80" placeholder="${L("Name des Vereins / der Organisation","Name of the club / organisation")}">`}
+    <p class="everr" id="cdErr" hidden></p>
+    <div class="bugact"><button type="button" class="testbtn" id="cdOk">${join?L("Beitreten","Join"):L("Erstellen","Create")}</button><button type="button" class="testbtn ghost" id="cdNo">${L("Abbrechen","Cancel")}</button></div>
+    ${join&&!isAthOnly()?`<button type="button" class="wskip" id="cdNew">+ ${L("Neuen Verein erstellen","Create a new club")}</button>`:!join?`<button type="button" class="wskip" id="cdBack">‹ ${L("Zurück zum Beitreten","Back to joining")}</button>`:""}</div>`;
+  const inp=$("cdIn"), err=t=>{ $("cdErr").textContent=t; $("cdErr").hidden=!t; }; setTimeout(()=>inp.focus(),30);
+  const ok=async()=>{ const v=inp.value.trim(); if(join ? v.length<4 : v.length<2) return; const b=$("cdOk"); b.disabled=true; err("");
+    try{ if(join){ const r=await clubJoin(v); d.hidden=true; athList(); toast(L(`Beigetreten: ${r.name} · ${r.got||0} Athlet*innen übernommen`,`Joined: ${r.name} · ${r.got||0} athletes received`),4000); }
+      else { const r=await clubCreate(v); d.hidden=true; athList(); toast(L(`Verein angelegt. Vereinscode: ${r.code}`,`Club created. Club code: ${r.code}`),6000); } }
+    catch(e){ err(clubMissing(e)?L("Die Vereinsdatenbank ist noch nicht eingerichtet.","The club database isn't set up yet."):join?L("Der Vereinscode ist unbekannt.","Unknown club code."):L("Der Verein ließ sich nicht anlegen.","The club couldn't be created.")); } b.disabled=false; };
+  $("cdOk").onclick=ok; inp.onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"){ e.preventDefault(); ok(); } if(e.key==="Escape") d.hidden=true; }; $("cdNo").onclick=()=>{ d.hidden=true; };
+  const nw=$("cdNew"); if(nw) nw.onclick=()=>clubDlg("create"); const bk=$("cdBack"); if(bk) bk.onclick=()=>clubDlg("join"); }
+// Athlet*in anlegen: Dialog mit allen Angaben; im Verein wird vorher auf Doppelungen geprüft
+const athNorm=v=>String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/ß/g,"ss").replace(/[^a-z0-9]/g,"");
+function athLev(a,b){ if(Math.abs(a.length-b.length)>2) return 9; const d=Array.from({length:a.length+1},(_,i)=>[i]); for(let j=1;j<=b.length;j++) d[0][j]=j;
+  for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++) d[i][j]=Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return d[a.length][b.length]; }
+function athDup(f){ const F=athNorm(f.first), La=athNorm(f.last), near=(a,b)=> a===b || (a.length>=3 && b.length>=3 && (a.startsWith(b)||b.startsWith(a))) || (Math.min(a.length,b.length)>=4 && athLev(a,b)<=1);
+  return PERS.get().list.find(x=>(x.clubId||null)===(f.clubId||null) && (f.clubId || (x.club||"").trim().toLowerCase()===(f.club||"").trim().toLowerCase()) && near(athNorm(x.first||(x.name||"").split(" ")[0]),F) && near(athNorm(x.last||(x.name||"").split(" ").slice(1).join(" ")),La) && (!x.birth || !f.birth || +x.birth===+f.birth)); }
+function athDlg(){ let d=$("athDlg"); if(!d){ d=document.createElement("div"); d.id="athDlg"; d.className="dlg"; document.body.appendChild(d); d.addEventListener("click",e=>{ if(e.target===d) d.hidden=true; }); }
+  const cl=clubsCur().filter(c=>c.role!=="athlete"), f0=PK.st.club&&cl.some(c=>c.id===PK.st.club)?PK.st.club:(cl.length===1?cl[0].id:"");
+  const fld=(id,lab,ph,type,extra)=>`<label class="athf"><span>${lab}</span><input type="${type||"text"}" id="${id}" class="qkin" maxlength="80" placeholder="${ph||""}"${extra||""}></label>`;
+  d.hidden=false; d.innerHTML=`<form class="dlgbox athdlg" role="dialog" aria-modal="true"><h3 style="margin:0">${L("Athlet*in anlegen","Add athlete")}</h3>
+    <div class="athgrid">${fld("adF",L("Vorname","First name")+" *","")}${fld("adL",L("Nachname","Last name")+" *","")}${fld("adN",L("Spitzname (optional)","Nickname (optional)"),L("wird nicht zur Zuordnung genutzt","not used for matching"))}${fld("adB",L("Geburtsjahr","Year of birth"),"2010","number",' min="1920" max="2100" step="1" inputmode="numeric"')}
+    ${fld("adS",L("Spezialisierung","Specialisation"),L("z. B. Kraul Sprint","e.g. freestyle sprint"),"text",' list="athSpecL"')}
+    <label class="athf"><span>${L("Verein","Club")}</span><select class="evsel" id="adC"><option value="">${L("– kein Verein –","– no club –")}</option>${cl.map(c=>`<option value="${c.id}"${c.id===f0?" selected":""}>${esc(c.name)}</option>`).join("")}</select></label>
+    ${cl.length?"":fld("adCl",L("Verein (nur auf diesem Gerät)","Club (this device only)"),L("z. B. DSW12 Darmstadt","e.g. DSW12 Darmstadt"))}
+    ${fld("adCity",L("Stadt","City"),L("z. B. Darmstadt","e.g. Darmstadt"))}</div>
+    <label class="athcons" id="adConsW"><input type="checkbox" id="adCons"> <span>${L("Eine Einwilligung liegt vor (bei Minderjährigen der Erziehungsberechtigten), dass Name, Geburtsjahr und Leistungsdaten in der Vereinsdatenbank gespeichert und von den Trainer*innen des Vereins gesehen werden.","Consent has been given (by the parents for minors) for name, year of birth and performance data to be stored in the club database and seen by the club's coaches.")}</span></label>
+    <label class="athf"><span>${L("Notizen","Notes")}</span><textarea class="note-in" id="adNo" rows="3" maxlength="2000" placeholder="${L("Allgemeine Notizen, z. B. Trainingsschwerpunkte, Ziele, Besonderheiten","General notes, e.g. training focus, goals, particularities")}"></textarea></label>
+    <p class="everr" id="adErr" hidden></p>
+    <div class="bugact"><button type="submit" class="testbtn" id="adOk">${L("Anlegen","Add")}</button><button type="button" class="testbtn ghost" id="adNoB">${L("Abbrechen","Cancel")}</button></div></form>`;
+  const cons=()=>{ $("adConsW").hidden=!$("adC").value; }; cons(); $("adC").onchange=cons; setTimeout(()=>$("adF").focus(),30);
+  d.querySelectorAll("input,textarea,select").forEach(i=>i.addEventListener("keydown",e=>{ e.stopPropagation(); if(e.key==="Escape") d.hidden=true; }));
+  $("adNoB").onclick=()=>{ d.hidden=true; };
+  d.querySelector("form").onsubmit=async e=>{ e.preventDefault(); const v=id=>($(id)?$(id).value:"").trim(), err=t=>{ $("adErr").textContent=t; $("adErr").hidden=!t; };
+    const f={first:v("adF"), last:v("adL"), nick:v("adN"), birth:v("adB")?+v("adB"):null, spec:v("adS"), clubId:v("adC")||null, club:v("adC")?clubName(v("adC")):v("adCl"), city:v("adCity"), notes:v("adNo"), consent:!!(v("adC") && $("adCons").checked)};
+    if(!f.first || !f.last){ err(L("Bitte Vor- und Nachnamen eingeben.","Please enter first and last name.")); return; }
+    if(f.birth && (f.birth<1920 || f.birth>2100)){ err(L("Das Geburtsjahr stimmt nicht.","The year of birth isn't valid.")); return; }
+    if(f.clubId && !f.birth){ err(L("Für die Vereinsdatenbank braucht es Vorname, Nachname und Geburtsjahr.","The club database needs first name, last name and year of birth.")); return; }
+    $("adOk").disabled=true; if(f.clubId){ try{ await clubAthPull(); }catch(x){} }
+    const dup=athDup(f); if(dup){ d.hidden=true; ATH.open=dup.id; ATH.dd=true; PK.st.club="all"; pkSave(); athList();
+      toast(L(`„${persName(dup)}“${dup.birth?` (${dup.birth})`:""} gibt es in diesem Verein schon. Es wurde niemand doppelt angelegt; die vorhandene Person ist geöffnet.`,`“${persName(dup)}”${dup.birth?` (${dup.birth})`:""} already exists in this club. Nobody was added twice; the existing person is open.`),6000); return; }
+    const x=PERS.add(f.first+" "+f.last); PERS.update(x.id, Object.assign({}, f, {name:persName(f)})); ATH.open=x.id; ATH.dd=true; PK.st.club="all"; pkSave(); d.hidden=true; athList();
+    if(f.clubId){ try{ await clubAthPush(x.id); athList(); }catch(x2){ blog("warn","clubAthPush: "+(x2.message||x2)); } }
+    toast(L(`Angelegt: ${persName(f)}`,`Added: ${persName(f)}`),2500); }; }
 // regelmäßiger Abgleich mit der Vereinsdatenbank (alle 3 Minuten und beim Zurückkehren in die App)
 const CSYNC={t:0, run:false};
 async function clubSyncTick(force){ if(CSYNC.run || !clubOn() || !navigator.onLine || (!force && Date.now()-CSYNC.t<60000)) return; CSYNC.run=true; CSYNC.t=Date.now();
@@ -5854,8 +5902,11 @@ create table if not exists public.account_roles(
 alter table public.account_roles enable row level security;
 drop policy if exists "Eigene Rolle lesen" on public.account_roles;
 create policy "Eigene Rolle lesen" on public.account_roles for select to authenticated using (user_id = auth.uid() or public.sprintz_is_dev());
-create or replace function public.sprintz_is_coach() returns boolean language sql stable security definer set search_path = public as $$
+create or replace function public.sprintz_club_coach(club_id) returns boolean language sql stable security definer set search_path = public as $$
   select coalesce((select coach from account_roles where user_id = auth.uid()), true) $$;
+create or replace function public.sprintz_club_coach(c uuid) returns boolean language sql stable security definer set search_path = public as $$
+  select coalesce((select coach from account_roles where user_id = auth.uid()), true)
+    and exists(select 1 from club_members where club_id = c and user_id = auth.uid() and role in ('admin','member')) $$;
 create or replace function public.sprintz_my_athletes() returns uuid[] language sql stable security definer set search_path = public as $$
   select coalesce((select athlete_ids from account_roles where user_id = auth.uid() and athlete), '{}'::uuid[]) $$;
 drop policy if exists "Mitglieder: Athleten" on public.club_athletes;
@@ -5864,28 +5915,28 @@ drop policy if exists "Athleten anlegen" on public.club_athletes;
 drop policy if exists "Athleten ändern" on public.club_athletes;
 drop policy if exists "Athleten löschen" on public.club_athletes;
 create policy "Athleten lesen" on public.club_athletes for select to authenticated
-  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or id = any(public.sprintz_my_athletes())));
+  using (public.sprintz_is_member(club_id) and (public.sprintz_club_coach(club_id) or id = any(public.sprintz_my_athletes())));
 create policy "Athleten anlegen" on public.club_athletes for insert to authenticated
-  with check (public.sprintz_is_member(club_id) and public.sprintz_is_coach() and consent);
+  with check (public.sprintz_is_member(club_id) and public.sprintz_club_coach(club_id) and consent);
 create policy "Athleten ändern" on public.club_athletes for update to authenticated
-  using (public.sprintz_is_member(club_id) and public.sprintz_is_coach()) with check (public.sprintz_is_member(club_id) and public.sprintz_is_coach() and consent);
+  using (public.sprintz_is_member(club_id) and public.sprintz_club_coach(club_id)) with check (public.sprintz_is_member(club_id) and public.sprintz_club_coach(club_id) and consent);
 create policy "Athleten löschen" on public.club_athletes for delete to authenticated
-  using (public.sprintz_is_member(club_id) and public.sprintz_is_coach());
+  using (public.sprintz_is_member(club_id) and public.sprintz_club_coach(club_id));
 drop policy if exists "Mitglieder: Ergebnisse" on public.club_results;
 drop policy if exists "Ergebnisse lesen" on public.club_results;
 drop policy if exists "Ergebnisse anlegen" on public.club_results;
 drop policy if exists "Ergebnisse ändern" on public.club_results;
 drop policy if exists "Ergebnisse löschen" on public.club_results;
 create policy "Ergebnisse lesen" on public.club_results for select to authenticated
-  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())));
+  using (public.sprintz_is_member(club_id) and (public.sprintz_club_coach(club_id) or athlete_id = any(public.sprintz_my_athletes())));
 create policy "Ergebnisse anlegen" on public.club_results for insert to authenticated
-  with check (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes()))
+  with check (public.sprintz_is_member(club_id) and (public.sprintz_club_coach(club_id) or athlete_id = any(public.sprintz_my_athletes()))
     and exists(select 1 from public.club_athletes a where a.id = athlete_id and a.club_id = club_results.club_id));
 create policy "Ergebnisse ändern" on public.club_results for update to authenticated
-  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())))
-  with check (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())));
+  using (public.sprintz_is_member(club_id) and (public.sprintz_club_coach(club_id) or athlete_id = any(public.sprintz_my_athletes())))
+  with check (public.sprintz_is_member(club_id) and (public.sprintz_club_coach(club_id) or athlete_id = any(public.sprintz_my_athletes())));
 create policy "Ergebnisse löschen" on public.club_results for delete to authenticated
-  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())));
+  using (public.sprintz_is_member(club_id) and (public.sprintz_club_coach(club_id) or athlete_id = any(public.sprintz_my_athletes())));
 create or replace function public.sprintz_dev_roles() returns json language plpgsql stable security definer set search_path = public as $$
 begin
   if not public.sprintz_is_dev() then raise exception 'not allowed'; end if;
@@ -5909,6 +5960,9 @@ end $$;
 revoke all on function public.sprintz_dev_roles(), public.sprintz_dev_set_role(uuid, text, boolean, boolean, uuid[]) from public, anon;
 grant execute on function public.sprintz_dev_roles(), public.sprintz_dev_set_role(uuid, text, boolean, boolean, uuid[]) to authenticated;
 
+-- Rolle im Verein: 'admin' = Vereins-Chef, 'member' = Trainer*in, 'athlete' = Athlet*in (sieht nur sich selbst)
+alter table public.club_members drop constraint if exists club_members_role_check;
+alter table public.club_members add constraint club_members_role_check check (role in ('admin','member','athlete'));
 -- Vereins-Chef (role = 'admin') und Löschrecht; ohne Chef wird automatisch die erste Person im Verein Chef
 alter table public.club_members add column if not exists can_delete boolean not null default false;
 update public.club_members m set can_delete = true where m.role = 'admin'
@@ -5918,7 +5972,7 @@ declare c uuid := coalesce(new.club_id, old.club_id);
 begin
   if exists(select 1 from clubs where id = c) and not exists(select 1 from club_members where club_id = c and role = 'admin') then
     update club_members set role = 'admin', can_delete = true
-      where club_id = c and user_id = (select user_id from club_members where club_id = c order by joined_at, user_id limit 1);
+      where club_id = c and user_id = (select user_id from club_members where club_id = c order by (role = 'athlete'), joined_at, user_id limit 1);
   end if;
   return null;
 end $$;
@@ -5978,7 +6032,10 @@ begin
   elsif p_action = 'autochef' then
     update club_members set role = 'member' where club_id = p_club;
     update club_members set role = 'admin', can_delete = true where club_id = p_club
-      and user_id = (select user_id from club_members where club_id = p_club order by joined_at, user_id limit 1);
+      and user_id = (select user_id from club_members where club_id = p_club order by (role = 'athlete'), joined_at, user_id limit 1);
+  elsif p_action = 'role' then
+    if p_account = 'admin' then update club_members set role = 'member' where club_id = p_club and role = 'admin' and user_id <> p_user; end if;
+    update club_members set role = p_account, can_delete = case when p_account = 'admin' then true else can_delete end where club_id = p_club and user_id = p_user and p_account in ('admin','member','athlete');
   elsif p_action = 'delete_on' then update club_members set can_delete = true where club_id = p_club and user_id = p_user;
   elsif p_action = 'delete_off' then update club_members set can_delete = false where club_id = p_club and user_id = p_user;
   else raise exception 'unknown action'; end if;
@@ -6016,7 +6073,7 @@ function devClubsHTML(){ const sp=v=>v==="track"?L("Leichtathletik","Athletics")
           <button type="button" class="testbtn ghost small dcldel" data-dca="delete|${c.id}">${L("Verein löschen","Delete club")}</button></div>
           <div class="dclmem"><label class="pkrow"><span>${L("Vereins-Chef (sieht den Vereinscode)","Club head (sees the club code)")}</span><select class="evsel" data-dchef="${c.id}"><option value="">${L("– automatisch: erste Person –","– automatic: first person –")}</option>${mem.map(m=>`<option value="${m.user_id}"${m.role==="admin"?" selected":""}>${esc(m.account||"?")}</option>`).join("")}</select></label>
             <table class="dclmt"><thead><tr><th>${L("Person","Person")}</th><th>${L("Rolle im Verein","Role in club")}</th><th>${L("Darf Verein löschen","May delete club")}</th><th></th></tr></thead><tbody>
-            ${mem.map(m=>`<tr><td>${esc(m.account||"?")}</td><td>${m.role==="admin"?`<b>${L("Vereins-Chef","Club head")}</b>`:L("Mitglied","Member")}</td><td><input type="checkbox" data-dcdel="${c.id}|${m.user_id}"${m.can_delete?" checked":""}></td><td><button type="button" class="testbtn ghost small" data-dck="${c.id}|${m.user_id}">${L("Entfernen","Remove")}</button></td></tr>`).join("")||`<tr><td colspan="4"><small>${L("Noch keine Personen.","No people yet.")}</small></td></tr>`}</tbody></table>
+            ${mem.map(m=>`<tr><td>${esc(m.account||"?")}</td><td><select class="evsel" data-dcrole="${c.id}|${m.user_id}">${[["admin",L("Vereins-Chef","Club head")],["member",L("Trainer*in","Coach")],["athlete",L("Athlet*in","Athlete")]].map(([v,l])=>`<option value="${v}"${m.role===v?" selected":""}>${l}</option>`).join("")}</select></td><td><input type="checkbox" data-dcdel="${c.id}|${m.user_id}"${m.can_delete?" checked":""}></td><td><button type="button" class="testbtn ghost small" data-dck="${c.id}|${m.user_id}">${L("Entfernen","Remove")}</button></td></tr>`).join("")||`<tr><td colspan="4"><small>${L("Noch keine Personen.","No people yet.")}</small></td></tr>`}</tbody></table>
             ${(()=>{ const free=UM.rows.filter(r=>r.uid && !mem.some(m=>m.user_id===r.uid)); return free.length?`<div class="athadd"><select class="evsel" id="dca-${c.id}">${free.map(r=>`<option value="${r.uid}|${esc(r.account)}">${esc(r.account)}${(UM.meta.accounts[r.account]||{}).person?" – "+esc(UM.meta.accounts[r.account].person):""}</option>`).join("")}</select><button type="button" class="testbtn small" data-dcadd="${c.id}">+ ${L("Person hinzufügen","Add person")}</button></div>`:""; })()}</div></td></tr>`:""}`; }).join(""):`<tr><td colspan="7"><small>${L("Noch keine Vereine.","No clubs yet.")}</small></td></tr>`}</tbody></table></div>
     <div class="athadd" style="margin-top:10px"><input type="text" id="dclNew" class="qkin" maxlength="80" placeholder="${L("Name des Vereins / der Organisation","Name of the club / organisation")}"><select class="evsel" id="dclNewS"><option value="swim">${L("Schwimmen","Swimming")}</option><option value="track">${L("Leichtathletik","Athletics")}</option></select><button type="button" class="testbtn" id="dclNewB">+ ${L("Verein anlegen","Create club")}</button></div>
     ${(UM.meta.orgs||[]).length?`<div class="card evnote"><p>${L(`Aus der früheren Liste gibt es noch ${UM.meta.orgs.length} Organisationen ohne echten Verein (${UM.meta.orgs.join(", ")}). Übernehmen legt sie als Vereine an und fügt die zugeordneten Konten als Personen hinzu.`,`The earlier list still has ${UM.meta.orgs.length} organisations without a real club (${UM.meta.orgs.join(", ")}). Taking them over creates them as clubs and adds the assigned accounts as people.`)}</p><button type="button" class="testbtn small" id="dclMig">${L("Als Vereine übernehmen","Take over as clubs")}</button></div>`:""}
@@ -6033,6 +6090,7 @@ function devClubsBind(pg){ const cp=$("dclCopy"); if(cp) cp.onclick=()=>{ try{ n
   pg.querySelectorAll("[data-dck]").forEach(b=>b.onclick=async()=>{ const [c,u]=b.dataset.dck.split("|"); if(await devMember(c,u,null,"remove")) done(); });
   pg.querySelectorAll("[data-dcdel]").forEach(i=>i.onchange=async()=>{ const [c,u]=i.dataset.dcdel.split("|"); if(!await devMember(c,u,null,i.checked?"delete_on":"delete_off")) i.checked=!i.checked; else done(); });
   pg.querySelectorAll("[data-dchef]").forEach(sl=>sl.onchange=async()=>{ const c=sl.dataset.dchef; DCL.chef[c]=!!sl.value; if(await devMember(c, sl.value||null, null, sl.value?"chef":"autochef")) done(); });
+  pg.querySelectorAll("[data-dcrole]").forEach(sl=>sl.onchange=async()=>{ const [c,u]=sl.dataset.dcrole.split("|"); if(await devMember(c,u,sl.value,"role")) done(); });
   pg.querySelectorAll("[data-dcadd]").forEach(b=>b.onclick=async()=>{ const c=b.dataset.dcadd, [u,a]=$("dca-"+c).value.split("|"); if(await devMember(c,u,a,"add")) done(); });
   const nb=$("dclNewB"); if(nb) nb.onclick=async()=>{ const n=$("dclNew").value.trim(); if(n.length<2) return; nb.disabled=true; try{ const r=await devCreateClub(n,$("dclNewS").value); DCL.open=r&&r.id; toast(L(`Verein angelegt. Vereinscode: ${r.code}`,`Club created. Club code: ${r.code}`),5000); }catch(e){ toast(L("Der Verein ließ sich nicht anlegen.","The club couldn't be created.")+" "+(e.message||""),4000); } done(); };
   const mg=$("dclMig"); if(mg) mg.onclick=async()=>{ mg.disabled=true; const M=UM.meta;

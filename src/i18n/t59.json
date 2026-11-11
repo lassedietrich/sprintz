@@ -1,0 +1,13 @@
+[
+["Join a club","Kulübe katıl","Вступить в клуб","Lid worden van een club"],
+["Create a club","Kulüp oluştur","Создать клуб","Club aanmaken"],
+["Enter the club code you got from the club head.","Kulüp başkanından aldığın kulüp kodunu gir.","Введи код клуба, который ты получил от руководителя клуба.","Voer de clubcode in die je van het clubhoofd hebt gekregen."],
+["You become club head and get the club code to share with other coaches. Sport: {0}.","Kulüp başkanı olursun ve diğer antrenörlerle paylaşacağın kulüp kodunu alırsın. Spor: {0}.","Ты становишься руководителем клуба и получаешь код клуба, который передаёшь другим тренерам. Вид спорта: {0}.","Je wordt clubhoofd en krijgt de clubcode om met andere trainers te delen. Sport: {0}."],
+["Create","Oluştur","Создать","Aanmaken"],
+["Create a new club","Yeni kulüp oluştur","Создать новый клуб","Nieuwe club aanmaken"],
+["Back to joining","Katılmaya geri dön","Назад к вступлению","Terug naar lid worden"],
+["Please enter first and last name.","Lütfen ad ve soyad gir.","Пожалуйста, введи имя и фамилию.","Voer voor- en achternaam in."],
+["The year of birth isn't valid.","Doğum yılı geçerli değil.","Год рождения указан неверно.","Het geboortejaar is niet geldig."],
+["“{0}”{1} already exists in this club. Nobody was added twice; the existing person is open.","“{0}”{1} bu kulüpte zaten var. Kimse iki kez eklenmedi; mevcut kişi açıldı.","«{0}»{1} уже есть в этом клубе. Никто не добавлен дважды; открыта существующая запись.","„{0}”{1} bestaat al in deze club. Niemand is dubbel aangemaakt; de bestaande persoon is geopend."],
+["Added: {0}","Eklendi: {0}","Добавлено: {0}","Toegevoegd: {0}"]
+]
