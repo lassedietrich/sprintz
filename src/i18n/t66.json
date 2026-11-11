@@ -1,0 +1,17 @@
+[
+["Problem reports","Hata raporları","Сообщения об ошибках","Foutmeldingen"],
+["{0} new","{0} yeni","новых: {0}","{0} nieuw"],
+["The table for problem reports is still missing. Run the Supabase command from developer mode (“Show Supabase setup”).","Hata raporları tablosu henüz yok. Geliştirici modundaki Supabase komutunu çalıştır (“Supabase kurulumunu göster”).","Таблицы для сообщений об ошибках пока нет. Выполни команду Supabase из режима разработчика («Показать настройку Supabase»).","De tabel voor foutmeldingen ontbreekt nog. Voer de Supabase-opdracht uit de ontwikkelaarsmodus uit („Supabase-inrichting tonen”)."],
+["Copy new ones for Claude","Yenileri Claude için kopyala","Скопировать новые для Claude","Nieuwe kopiëren voor Claude"],
+["As file","Dosya olarak","Как файл","Als bestand"],
+["also done","tamamlananlar da","и выполненные","ook afgehandelde"],
+["not signed in","giriş yapılmamış","без входа","niet aangemeld"],
+["(no description)","(açıklama yok)","(без описания)","(geen beschrijving)"],
+["Reopen","Yeniden aç","Открыть снова","Heropenen"],
+["No reports.","Rapor yok.","Сообщений нет.","Geen meldingen."],
+["Copied. Paste it into Claude.","Kopyalandı. Claude'a yapıştır.","Скопировано. Вставь это в Claude.","Gekopieerd. Plak het in Claude."],
+["Briefly describe what went wrong or what you noticed. The report goes to the developers and contains the log of the last actions and the state of the app, but no videos and no passwords.","Neyin ters gittiğini veya neyi fark ettiğini kısaca anlat. Rapor geliştiricilere gider ve son işlemlerin kaydını ve uygulamanın durumunu içerir, ancak video ve parola içermez.","Кратко опиши, что пошло не так или что ты заметил. Сообщение уходит разработчикам и содержит журнал последних действий и состояние приложения, но не содержит видео и паролей.","Beschrijf kort wat er misging of wat je opviel. De melding gaat naar de ontwikkelaars en bevat het logboek van de laatste acties en de toestand van de app, maar geen video's en geen wachtwoorden."],
+["Thanks! The report has reached the developers.","Teşekkürler! Rapor geliştiricilere ulaştı.","Спасибо! Сообщение отправлено разработчикам.","Bedankt! De melding is bij de ontwikkelaars aangekomen."],
+["No connection right now. The report will be sent as soon as you're online again.","Şu anda bağlantı yok. Rapor tekrar çevrimiçi olduğunda gönderilecek.","Сейчас нет подключения. Сообщение будет отправлено, как только ты снова будешь онлайн.","Nu geen verbinding. De melding wordt verstuurd zodra je weer online bent."],
+["From all accounts, newest first","Tüm hesaplardan, en yeniler önce","Со всех аккаунтов, сначала новые","Van alle accounts, nieuwste eerst"]
+]
