@@ -421,6 +421,11 @@ body.xh-on #xhair{display:block}
 .dclact{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;margin:4px 0 8px}.dcldel{color:var(--danger)}
 .dcltbl td{vertical-align:middle}.dcltbl .n{text-align:right}
 #sBox.lupeon{cursor:crosshair}
+.drsel{position:absolute;top:10px;right:64px;z-index:9;width:min(270px,calc(100% - 80px));display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;background:rgba(10,24,32,.88);color:#fff;font-size:.85rem;backdrop-filter:blur(6px);box-shadow:0 6px 20px rgba(0,0,0,.35)}
+.drsrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.drsrow>span{flex:1}
+.drsel button{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;min-width:30px;height:30px;padding:0 10px;font:600 .85rem system-ui;cursor:pointer}
+.drsel .drsx{margin-left:auto;min-width:28px;height:28px;padding:0}.drsel .drsdel{color:#ff9a9a}.drsel [aria-pressed="true"]{background:#c0392b;border-color:#c0392b}
+.drsanim{cursor:pointer}.drshint{margin:0;font-size:.78rem;opacity:.85;line-height:1.35}
 .umrole{display:flex;flex-direction:column;gap:4px;min-width:200px}
 .dclmem{display:flex;flex-direction:column;gap:8px;margin:6px 0}.dclmt{border-collapse:collapse;font-size:.88rem}.dclmt td,.dclmt th{padding:4px 10px 4px 0;text-align:left}
 .qkqt{margin:10px 0 4px;font-size:.8rem;color:var(--muted)}
@@ -5348,7 +5353,7 @@ function lupeAt(q, cx, cy, touch){
    Klicks gehen weiter an Markieren, Messen und Zeichnen. Mausrad über dem Video ändert die Vergrößerung (2× bis 10×). --- */
 const LUPE={on:false, mag:3, last:null};
 function lupeToggle(on){ LUPE.on = on==null ? !LUPE.on : !!on; const b=$("lupeB"); if(b) b.setAttribute("aria-pressed",String(LUPE.on)); $("sBox").classList.toggle("lupeon",LUPE.on);
-  if(!LUPE.on){ if(!SA.meas){ const lp=$("sLupe"); if(lp) lp.hidden=true; } } else if(LUPE.last) lupeFree(LUPE.last); else toast(L("Lupe an: Fahr mit der Maus über das Video, Mausrad ändert die Vergrößerung. L schaltet sie aus.","Magnifier on: move the mouse over the video, the mouse wheel changes the magnification. L turns it off."),3500); }
+  if(!LUPE.on){ if(!SA.meas){ const lp=$("sLupe"); if(lp) lp.hidden=true; } } else if(LUPE.last) lupeFree(LUPE.last); else toast(L("Lupe an: Fahr mit der Maus über das Video, Mausrad ändert die Vergrößerung, Klick setzt die Lupe als Markierung. L schaltet sie aus.","Magnifier on: move the mouse over the video, the mouse wheel changes the magnification, a click places the magnifier as a marking. L turns it off."),4000); }
 function lupeFree(pt){ const lp=$("sLupe"); if(!lp) return; LUPE.last=pt; if(!LUPE.on || SA.meas) return; if(!sVid.videoWidth || !SA.active){ lp.hidden=true; return; }
   const box=$("sBox"), r=box.getBoundingClientRect(), cx=pt.x-r.left, cy=pt.y-r.top; if(cx<0||cy<0||cx>r.width||cy>r.height){ lp.hidden=true; return; }
   const z=measZ(), vw=sVid.videoWidth, vh=sVid.videoHeight, ew=sVid.offsetWidth||r.width, eh=sVid.offsetHeight||r.height, s0=Math.min(ew/vw, eh/vh), ox=sVid.offsetLeft+(ew-vw*s0)/2, oy=sVid.offsetTop+(eh-vh*s0)/2;
@@ -5367,6 +5372,13 @@ function lupeFree(pt){ const lp=$("sLupe"); if(!lp) return; LUPE.last=pt; if(!LU
   bx.addEventListener("pointerleave",()=>{ if(LUPE.on && !SA.meas){ const lp=$("sLupe"); if(lp) lp.hidden=true; } LUPE.last=null; });
   bx.addEventListener("wheel",e=>{ if(!LUPE.on || e.ctrlKey || SA.meas) return; e.preventDefault(); e.stopImmediatePropagation(); LUPE.mag=Math.max(2,Math.min(10,LUPE.mag+(e.deltaY<0?1:-1))); lupeFree({x:e.clientX, y:e.clientY}); },{passive:false, capture:true});
   const re=()=>{ if(LUPE.on && LUPE.last) lupeFree(LUPE.last); }; sVid.addEventListener("seeked",re); sVid.addEventListener("timeupdate",re); }
+{ const bx=$("sBox"); let pd=null;
+  bx.addEventListener("pointerdown",e=>{ pd = (LUPE.on && !DR.tool && !SA.meas && e.button===0 && !e.target.closest(".nbox,#drNote,#drSel,#fsTools,#sMeasCtl,#sMeasTip")) ? {x:e.clientX,y:e.clientY} : null; },true);
+  bx.addEventListener("click",e=>{ const d=pd; pd=null; if(!d || Math.hypot(e.clientX-d.x,e.clientY-d.y)>5 || !LUPE.on || !sVid.videoWidth) return; e.preventDefault(); e.stopPropagation(); lupePin(e); },true); }
+// Lupe festsetzen: wird zur Zeichnung (Typ „lupe“) in diesem Bild, mit Größe und Vergrößerung; danach ist sie ausgewählt
+function lupePin(e){ const cv=$("sDraw"), r=cv.getBoundingClientRect(), z=measZ(), p=[((e.clientX-r.left)-z.x)/z.s/r.width, ((e.clientY-r.top)-z.y)/z.s/r.height];
+  const lp=$("sLupe"), S=parseFloat(lp.style.width)||200, rad=Math.max(0.03,Math.min(0.4,S/2/z.s/r.width));
+  const sh={t:"lupe", c:DRCOL[DR.col], pts:[p], r:Math.round(rad*1e4)/1e4, mag:LUPE.mag}; lupeToggle(false); drAdd(sh); DR.tool="sel"; DR.cur=null; $("sDraw").classList.add("on"); DR.sel=sh.id; drSelPanel(); drRender(); drToolbar(); blog("klick","Lupe gesetzt"); }
 function lupeHide(){ const lp=$("sLupe"); if(lp) lp.hidden=true; if(LUPE.on && LUPE.last) setTimeout(()=>lupeFree(LUPE.last),0); if(SA.meas && SA.meas.hover){ SA.meas.hover=null; measDraw(); } }
 { const cv=$("sMeas");
   const at=e=>{ const r=cv.getBoundingClientRect(); lupeAt(measN(e), e.clientX-r.left, e.clientY-r.top, e.pointerType!=="mouse"); };
@@ -5379,30 +5391,50 @@ function lupeHide(){ const lp=$("sLupe"); if(lp) lp.hidden=true; if(LUPE.on && L
    Schmale senkrechte Werkzeugleiste am rechten Rand im Vollbild. Koordinaten relativ zum (ungezoomten) Videofeld, damit Zoom und Größe stimmen. --- */
 const DR={tool:null, col:0, cur:null, show:true};
 const DRCOL=["#FFD24A","#FF5A5A","#3FD07A","#4FC3FF","#FFFFFF"];
-const DRTOOLS=()=>[["pen","✎",L("Stift","Pen")],["line","╱",L("Linie","Line")],["arrow","➚",L("Pfeil","Arrow")],["circle","◯",L("Kreis","Circle")],["angle","∠",L("Winkel (3 Punkte)","Angle (3 points)")],["hang","⦦",L("Winkel zur Waagerechten","Angle to the horizontal")]];
+const DRTOOLS=()=>[["sel","⤧",L("Auswählen, verschieben und animieren","Select, move and animate")],["pen","✎",L("Stift","Pen")],["line","╱",L("Linie","Line")],["arrow","➚",L("Pfeil","Arrow")],["circle","◯",L("Kreis","Circle")],["angle","∠",L("Winkel (3 Punkte)","Angle (3 points)")],["hang","⦦",L("Winkel zur Waagerechten","Angle to the horizontal")]];
 function drShapes(){ return SA.draw||(SA.draw=[]); }
 function drPx(p){ const cv=$("sDraw"), z=measZ(), dpr=devicePixelRatio||1; return [(p[0]*cv.clientWidth*z.s+z.x)*dpr, (p[1]*cv.clientHeight*z.s+z.y)*dpr]; }
 function drAng(a,b,c){ const W=$("sDraw").clientWidth, H=$("sDraw").clientHeight, v1=[(a[0]-b[0])*W,(a[1]-b[1])*H], v2=[(c[0]-b[0])*W,(c[1]-b[1])*H];
   const d=Math.atan2(v1[0]*v2[1]-v1[1]*v2[0], v1[0]*v2[0]+v1[1]*v2[1]); return Math.abs(d)*180/Math.PI; }
 function drHang(a,b){ const W=$("sDraw").clientWidth, H=$("sDraw").clientHeight; let d=Math.abs(Math.atan2((b[1]-a[1])*H,(b[0]-a[0])*W))*180/Math.PI; if(d>90) d=180-d; return d; }
 const drDeg=v=>(LANG==="en"?v.toFixed(1):v.toFixed(1).replace(".",","))+"°";
+// Zeichnungen malen: map = normierter Punkt (Videofeld) → Leinwandpixel, k = Leinwandpixel je Bildschirmpixel, zs = Zoom
+function drPaint(g, all, map, k, zs){ const lw=2.5*k, bw=$("sDraw").clientWidth||1, cr=resCrop(), vw=sVid.videoWidth||1;
+  const label=(x,y,t,col)=>{ g.font=`700 ${13*k}px system-ui`; const tw=g.measureText(t).width; g.fillStyle="rgba(0,0,0,.65)"; g.fillRect(x-4*k,y-14*k,tw+8*k,19*k); g.fillStyle=col; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(t,x,y); };
+  for(const s of all){ const P=s.pts.map(map), col=s.c||DRCOL[0]; if(!P.length) continue;
+    g.save(); if(s.ghost) g.globalAlpha=0.45; g.strokeStyle=col; g.fillStyle=col; g.lineWidth=lw; g.lineCap="round"; g.lineJoin="round"; g.setLineDash([]);
+    if(s.t==="lupe"){ const R=(s.r||0.08)*bw*(zs||1)*k, c=P[0], m=s.mag||3, vs=vw/cr.w, sh=(s.r||0.08)*bw/m*vs, vx=(s.pts[0][0]*bw-cr.x)*vs, vy=(s.pts[0][1]*($("sDraw").clientHeight||1)-cr.y)*vs;
+      g.save(); g.beginPath(); g.arc(c[0],c[1],R,0,7); g.clip(); g.fillStyle="#000"; g.fillRect(c[0]-R,c[1]-R,2*R,2*R); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
+      try{ g.drawImage(sVid, vx-sh, vy-sh, 2*sh, 2*sh, c[0]-R, c[1]-R, 2*R, 2*R); }catch(e){} g.restore();
+      g.lineWidth=3*k; g.strokeStyle="#fff"; g.beginPath(); g.arc(c[0],c[1],R,0,7); g.stroke(); g.lineWidth=1.5*k; g.strokeStyle=col; g.beginPath(); g.arc(c[0],c[1],R+2.5*k,0,7); g.stroke();
+      label(c[0]+R*0.62, c[1]+R*0.86, xdFmt(m)+"×", "#fff"); }
+    else if(s.t==="pen"){ g.beginPath(); P.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke(); }
+    else if(s.t==="line"||s.t==="arrow"||s.t==="hang"){ if(P.length<2){ g.restore(); continue; } const [a,b]=P; g.beginPath(); g.moveTo(a[0],a[1]); g.lineTo(b[0],b[1]); g.stroke();
+      if(s.t==="arrow"){ const an=Math.atan2(b[1]-a[1],b[0]-a[0]), h=14*k; g.beginPath(); g.moveTo(b[0],b[1]); g.lineTo(b[0]-h*Math.cos(an-0.45),b[1]-h*Math.sin(an-0.45)); g.lineTo(b[0]-h*Math.cos(an+0.45),b[1]-h*Math.sin(an+0.45)); g.closePath(); g.fill(); }
+      if(s.t==="hang"){ const len=Math.max(40*k,Math.abs(b[0]-a[0])); g.setLineDash([5*k,4*k]); g.lineWidth=1.5*k; g.beginPath(); g.moveTo(a[0],a[1]); g.lineTo(a[0]+(b[0]>=a[0]?1:-1)*len,a[1]); g.stroke(); g.setLineDash([]);
+        const d=drHang(s.pts[0],s.pts[1]), r=26*k, a0=b[0]>=a[0]?0:Math.PI, a1=Math.atan2(b[1]-a[1],b[0]-a[0]); g.beginPath(); g.arc(a[0],a[1],r,Math.min(a0,a1),Math.max(a0,a1)); g.stroke(); label(a[0]+(b[0]>=a[0]?r+6*k:-r-60*k), a[1]-6*k, drDeg(d), col); } }
+    else if(s.t==="circle"){ if(P.length>=2){ const r=Math.hypot(P[1][0]-P[0][0],P[1][1]-P[0][1]); g.beginPath(); g.arc(P[0][0],P[0][1],r,0,7); g.stroke(); } }
+    else if(s.t==="angle"){ g.beginPath(); P.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke(); P.forEach(p=>{ g.beginPath(); g.arc(p[0],p[1],3.5*k,0,7); g.fill(); });
+      if(P.length===3){ const [a,b,c]=P, r=28*k, a1=Math.atan2(a[1]-b[1],a[0]-b[0]), a2=Math.atan2(c[1]-b[1],c[0]-b[0]); let d=a2-a1; while(d>Math.PI) d-=2*Math.PI; while(d<-Math.PI) d+=2*Math.PI;
+        g.lineWidth=1.5*k; g.beginPath(); g.arc(b[0],b[1],r,a1,a1+d,d<0); g.stroke(); const m=a1+d/2; label(b[0]+Math.cos(m)*(r+10*k)-12*k, b[1]+Math.sin(m)*(r+10*k)+5*k, drDeg(drAng(s.pts[0],s.pts[1],s.pts[2])), col); } }
+    g.restore(); } }
+// Animation: Schlüsselbilder s.kf=[{t, pts, r?, np?}]; dazwischen linear überblendet
+const drHf=()=>0.55/sFps();
+function drRange(s){ return s.kf&&s.kf.length ? [s.kf[0].t, s.kf[s.kf.length-1].t] : [s.tv,s.tv]; }
+function drAt(s,t){ if(!s.kf||!s.kf.length) return s; const K=s.kf; let a=K[0], b=K[K.length-1];
+  if(t<=a.t) return Object.assign({},s,{pts:a.pts, r:a.r??s.r}); if(t>=b.t) return Object.assign({},s,{pts:b.pts, r:b.r??s.r});
+  for(let i=0;i<K.length-1;i++) if(t>=K[i].t && t<=K[i+1].t){ a=K[i]; b=K[i+1]; break; } const u=(t-a.t)/Math.max(1e-6,b.t-a.t);
+  return Object.assign({},s,{pts:a.pts.map((p,i)=>{ const q=b.pts[i]||p; return [p[0]+(q[0]-p[0])*u, p[1]+(q[1]-p[1])*u]; }), r:(a.r??s.r)!=null?(a.r??s.r)+(((b.r??s.r)??(a.r??s.r))-(a.r??s.r))*u:s.r}); }
+function drKfAt(s,t){ const hf=drHf(); let k=s.kf.find(x=>Math.abs(x.t-t)<=hf); if(!k){ const cur=drAt(s,t); k={t:Math.round(t*1e5)/1e5, pts:cur.pts.map(p=>p.slice())}; if(cur.r!=null) k.r=cur.r; s.kf.push(k); s.kf.sort((a,b)=>a.t-b.t); } return k; }
 function drRender(){ try{ nlRender(); }catch(e){}
   const cv=$("sDraw"); if(!cv) return; const dpr=devicePixelRatio||1, W=Math.round(cv.clientWidth*dpr), H=Math.round(cv.clientHeight*dpr); if(cv.width!==W||cv.height!==H){ cv.width=W; cv.height=H; }
-  const g=cv.getContext("2d"); g.clearRect(0,0,W,H); if(!SA.active || !DR.show) return;
-  const all=drShapes().filter(drVisible).concat(DR.cur?[DR.cur]:[]), lw=2.5*dpr;
-  const label=(x,y,t,col)=>{ g.font=`700 ${13*dpr}px system-ui`; const tw=g.measureText(t).width; g.fillStyle="rgba(0,0,0,.65)"; g.fillRect(x-4*dpr,y-14*dpr,tw+8*dpr,19*dpr); g.fillStyle=col; g.textBaseline="alphabetic"; g.textAlign="left"; g.fillText(t,x,y); };
-  for(const s of all){ const P=s.pts.map(drPx), col=s.c||DRCOL[0]; if(!P.length) continue;
-    g.strokeStyle=col; g.fillStyle=col; g.lineWidth=lw; g.lineCap="round"; g.lineJoin="round"; g.setLineDash([]);
-    if(s.t==="pen"){ g.beginPath(); P.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke(); }
-    else if(s.t==="line"||s.t==="arrow"||s.t==="hang"){ if(P.length<2) continue; const [a,b]=P; g.beginPath(); g.moveTo(a[0],a[1]); g.lineTo(b[0],b[1]); g.stroke();
-      if(s.t==="arrow"){ const an=Math.atan2(b[1]-a[1],b[0]-a[0]), h=14*dpr; g.beginPath(); g.moveTo(b[0],b[1]); g.lineTo(b[0]-h*Math.cos(an-0.45),b[1]-h*Math.sin(an-0.45)); g.lineTo(b[0]-h*Math.cos(an+0.45),b[1]-h*Math.sin(an+0.45)); g.closePath(); g.fill(); }
-      if(s.t==="hang"){ const len=Math.max(40*dpr,Math.abs(b[0]-a[0])); g.setLineDash([5*dpr,4*dpr]); g.lineWidth=1.5*dpr; g.beginPath(); g.moveTo(a[0],a[1]); g.lineTo(a[0]+(b[0]>=a[0]?1:-1)*len,a[1]); g.stroke(); g.setLineDash([]);
-        const d=drHang(s.pts[0],s.pts[1]), r=26*dpr, a0=b[0]>=a[0]?0:Math.PI, a1=Math.atan2(b[1]-a[1],b[0]-a[0]); g.beginPath(); g.arc(a[0],a[1],r,Math.min(a0,a1),Math.max(a0,a1)); g.stroke(); label(a[0]+(b[0]>=a[0]?r+6*dpr:-r-60*dpr), a[1]-6*dpr, drDeg(d), col); } }
-    else if(s.t==="circle"){ if(P.length<2) continue; const r=Math.hypot(P[1][0]-P[0][0],P[1][1]-P[0][1]); g.beginPath(); g.arc(P[0][0],P[0][1],r,0,7); g.stroke(); }
-    else if(s.t==="angle"){ g.beginPath(); P.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke(); P.forEach(p=>{ g.beginPath(); g.arc(p[0],p[1],3.5*dpr,0,7); g.fill(); });
-      if(P.length===3){ const [a,b,c]=P, r=28*dpr, a1=Math.atan2(a[1]-b[1],a[0]-b[0]), a2=Math.atan2(c[1]-b[1],c[0]-b[0]); let d=a2-a1; while(d>Math.PI) d-=2*Math.PI; while(d<-Math.PI) d+=2*Math.PI;
-        g.lineWidth=1.5*dpr; g.beginPath(); g.arc(b[0],b[1],r,a1,a1+d,d<0); g.stroke(); const m=a1+d/2; label(b[0]+Math.cos(m)*(r+10*dpr)-12*dpr, b[1]+Math.sin(m)*(r+10*dpr)+5*dpr, drDeg(drAng(s.pts[0],s.pts[1],s.pts[2])), col); } } }
-}
+  const g=cv.getContext("2d"); g.clearRect(0,0,W,H); if(!SA.active || !DR.show) return; const t=sCurT();
+  let all=drShapes().filter(x=>drVisible(x) && !(DR.noAnim && x.kf)).map(x=>drAt(x,t));
+  const sel=DR.sel&&drShapes().find(x=>x.id===DR.sel); if(sel && !all.some(x=>x.id===sel.id)) all.push(Object.assign(drAt(sel,t),{ghost:true}));
+  if(DR.cur) all.push(DR.cur); drPaint(g, all, drPx, dpr, measZ().s);
+  if(sel && !DR.noAnim){ const S=drAt(sel,t), P=S.pts.map(drPx); g.save(); g.fillStyle="#fff"; g.strokeStyle="#2F8FD8"; g.lineWidth=2*dpr;
+    const hs=S.t==="lupe"?[P[0],drLupeRim(S)]:S.t==="pen"?[P[0]]:P; hs.forEach(p=>{ g.beginPath(); g.arc(p[0],p[1],6*dpr,0,7); g.fill(); g.stroke(); }); g.restore(); } }
+function drLupeRim(S){ const c=drPx(S.pts[0]), R=(S.r||0.08)*$("sDraw").clientWidth*measZ().s*(devicePixelRatio||1); return [c[0]+R*0.7071, c[1]-R*0.7071]; }
 function drToolbar(){ const tb=$("fsTools"); if(!tb) return; const n=drShapes().length;
   tb.innerHTML=`<button type="button" id="lupeB" aria-pressed="${LUPE.on}" title="${L("Lupe (Taste L): vergrößert die Stelle unter dem Mauszeiger, Mausrad ändert die Vergrößerung","Magnifier (key L): enlarges the spot under the pointer, the mouse wheel changes the magnification")}" aria-label="${L("Lupe","Magnifier")}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6"/></svg></button><i class="fstsep"></i><button type="button" data-dt="" aria-pressed="${!DR.tool}" title="${L("Kein Werkzeug (Video bedienen)","No tool (control the video)")}">✋</button>`
     +DRTOOLS().map(([k,ic,lab])=>`<button type="button" data-dt="${k}" aria-pressed="${DR.tool===k}" title="${lab}" aria-label="${lab}">${ic}</button>`).join("")
@@ -5413,24 +5445,27 @@ function drToolbar(){ const tb=$("fsTools"); if(!tb) return; const n=drShapes().
   tb.querySelectorAll("[data-dt]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); drSetTool(b.dataset.dt||null); b.blur(); });
   $("lupeB").onclick=e=>{ e.stopPropagation(); lupeToggle(); $("lupeB").blur(); };
   $("drCol").onclick=e=>{ e.stopPropagation(); DR.col=(DR.col+1)%DRCOL.length; drToolbar(); };
-  $("drUndo").onclick=e=>{ e.stopPropagation(); drShapes().pop(); drNotesClean(); drRender(); drToolbar(); };
-  $("drClr").onclick=e=>{ e.stopPropagation(); SA.draw=[]; drNotesClean(); drRender(); drToolbar(); };
+  $("drUndo").onclick=e=>{ e.stopPropagation(); drShapes().pop(); drSelect(null); drNotesClean(); drRender(); drToolbar(); };
+  $("drClr").onclick=e=>{ e.stopPropagation(); SA.draw=[]; drSelect(null); drNotesClean(); drRender(); drToolbar(); };
   $("drEye").onclick=e=>{ e.stopPropagation(); DR.show=!DR.show; drRender(); drToolbar(); }; }
-function drSetTool(t){ if(t && SA.meas) measEnd(); DR.tool=t; DR.cur=null; const cv=$("sDraw"); cv.classList.toggle("on",!!t); drToolbar(); drRender();
+function drSetTool(t){ if(t && SA.meas) measEnd(); DR.tool=t; DR.cur=null; if(t!=="sel") drSelect(null); const cv=$("sDraw"); cv.classList.toggle("on",!!t); drToolbar(); drRender();
+  if(t==="sel"){ toast(L("Tippe eine Zeichnung oder Lupe an, um sie zu verschieben, in der Größe zu ändern oder zu animieren.","Tap a drawing or magnifier to move it, resize it or animate it."),3000); return; }
   if(t) toast(t==="angle"?L("Winkel: Tippe den ersten Endpunkt, dann den Scheitel, dann den zweiten Endpunkt.","Angle: tap the first end point, then the vertex, then the second end point."):t==="pen"?L("Zeichne mit gedrückter Maustaste.","Draw while holding the mouse button."):L("Ziehe von Anfang bis Ende.","Drag from start to end."),2600); }
 { const cv=$("sDraw"); let down=false;
   const q=e=>{ const r=cv.getBoundingClientRect(), z=measZ(); return [((e.clientX-r.left)-z.x)/z.s/r.width, ((e.clientY-r.top)-z.y)/z.s/r.height]; };
   cv.addEventListener("pointerdown",e=>{ if(!DR.tool) return; e.preventDefault(); e.stopPropagation(); const p=q(e), c=DRCOL[DR.col];
+    if(DR.tool==="sel"){ drSelDown(e,p); if(DR.ed) cv.setPointerCapture(e.pointerId); return; }
     if(DR.tool==="angle"){ if(!DR.cur) DR.cur={t:"angle", c, pts:[p]}; else DR.cur.pts.push(p);
       if(DR.cur.pts.length===3){ drAdd(DR.cur); const d=drAng(...DR.cur.pts); DR.cur=null; drToolbar(); toast(L(`Winkel: ${drDeg(d)}`,`Angle: ${drDeg(d)}`),2200); } drRender(); return; }
     down=true; cv.setPointerCapture(e.pointerId); DR.cur={t:DR.tool, c, pts: DR.tool==="pen" ? [p] : [p,p]}; drRender(); });
-  cv.addEventListener("pointermove",e=>{ if(!DR.tool) return; const p=q(e);
+  cv.addEventListener("pointermove",e=>{ if(!DR.tool) return; const p=q(e); if(DR.tool==="sel"){ drSelMove(p); return; }
     if(DR.cur && DR.tool==="angle" && DR.cur.pts.length){ DR.cur.prev=p; const tmp=DR.cur.pts.concat([p]); const keep=DR.cur.pts; DR.cur.pts=tmp; drRender(); DR.cur.pts=keep; return; }
     if(!down || !DR.cur) return; if(DR.tool==="pen") DR.cur.pts.push(p); else DR.cur.pts[1]=p; drRender(); });
-  const up=()=>{ if(!down) return; down=false; const s=DR.cur; DR.cur=null; if(s){ const W=cv.clientWidth, H=cv.clientHeight, a=s.pts[0], b=s.pts[s.pts.length-1];
+  const up=()=>{ if(DR.ed){ drSelUp(); return; } if(!down) return; down=false; const s=DR.cur; DR.cur=null; if(s){ const W=cv.clientWidth, H=cv.clientHeight, a=s.pts[0], b=s.pts[s.pts.length-1];
       if(s.t==="pen" ? s.pts.length>2 : Math.hypot((b[0]-a[0])*W,(b[1]-a[1])*H)>6){ drAdd(s); if(s.t==="hang") toast(L(`Winkel zur Waagerechten: ${drDeg(drHang(a,b))}`,`Angle to the horizontal: ${drDeg(drHang(a,b))}`),2200); } }
     drRender(); drToolbar(); };
-  cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up); }
+  cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
+  cv.addEventListener("wheel",e=>{ const S=DR.sel&&drShapes().find(x=>x.id===DR.sel); if(DR.tool!=="sel" || !S || S.t!=="lupe" || e.ctrlKey) return; e.preventDefault(); e.stopPropagation(); drLupeSet(S, e.shiftKey?"r":"mag", e.deltaY<0?1:-1); },{passive:false}); }
 addEventListener("resize",()=>{ if(SA.active) drRender(); });
 
 /* --- Prüfschleife bei jedem neuen Video (Technikevaluation, Auswertungsmodus, Training):
@@ -6187,9 +6222,9 @@ function resRows(C){ const PH=SPPH(), rows=[], o=C.o||{};
 // ein Videobild als Bild (JPEG) inkl. Zeichnungen
 function resCrop(){ const cv=$("sDraw"), W=cv.clientWidth||sVid.clientWidth, H=cv.clientHeight||sVid.clientHeight, vw=sVid.videoWidth, vh=sVid.videoHeight;
   const ew=sVid.offsetWidth||W, eh=sVid.offsetHeight||H, s0=Math.min(ew/vw, eh/vh); return {x:sVid.offsetLeft+(ew-vw*s0)/2, y:sVid.offsetTop+(eh-vh*s0)/2, w:vw*s0, h:vh*s0}; }
-function resOverlay(cw,ch){ const z0=FS.z; if(FS.on) FS.z={s:1,x:0,y:0}; const show=DR.show; DR.show=true; drRender(); const cv=$("sDraw"), dpr=devicePixelRatio||1, r=resCrop();
+function resOverlay(cw,ch){ const z0=FS.z; if(FS.on) FS.z={s:1,x:0,y:0}; const show=DR.show, sel=DR.sel; DR.show=true; DR.sel=null; drRender(); const cv=$("sDraw"), dpr=devicePixelRatio||1, r=resCrop();
   const o=document.createElement("canvas"); o.width=cw; o.height=ch; if((SA.draw||[]).length) o.getContext("2d").drawImage(cv, r.x*dpr, r.y*dpr, r.w*dpr, r.h*dpr, 0, 0, cw, ch);
-  DR.show=show; if(FS.on){ FS.z=z0; } drRender(); return o; }
+  DR.show=show; DR.sel=sel; if(FS.on){ FS.z=z0; } drRender(); return o; }
 async function resSeek(t){ await new Promise(res=>{ let done=false; const fin=()=>{ if(done) return; done=true; res(); }; sVid.addEventListener("seeked",fin,{once:true}); setTimeout(fin,1500); sSeekTo(t); }); await new Promise(r=>setTimeout(r,60)); }
 async function resFrame(t,mw){ const back=sVid.currentTime; if(t!=null) await resSeek(t); const vw=sVid.videoWidth, vh=sVid.videoHeight, k=Math.min(1,(mw||1400)/vw), c=document.createElement("canvas"); c.width=Math.round(vw*k); c.height=Math.round(vh*k);
   const g=c.getContext("2d"); g.drawImage(sVid,0,0,c.width,c.height); g.drawImage(resOverlay(c.width,c.height),0,0); const b64=c.toDataURL("image/jpeg",0.9).split(",")[1];
@@ -6330,15 +6365,15 @@ function kinoEvents(C){ const M=SA.marks||{}, o=C.o||{}, cat=C.p?METCAT(C.p):[],
     const tl=after(G.tv), dv=n2(Math.max(0,v),spUnitD()), lab=`${st.t()}: ${dv}`+(tl?` · ${tl}`:""); let e=out.find(x=>near(x.t,G.tv));
     if(!e){ e={t:G.tv, step:st.t(), lab:st.t(), val:dv, notes:[], pn:[], geo:[], sub:tl?[tl]:[]}; out.push(e); } else e.sub.push(`${st.t()}: ${dv}`); e.geo.push({G,lab}); });
   // Zeichnungen: Halt in jedem Bild, in dem gezeichnet wurde
-  const seen=new Set(); drShapes().filter(s=>s.tv!=null).forEach(s=>{ const fk=drFk(s.tv); if(seen.has(fk)) return; seen.add(fk);
-    const nt=(SA.notes||[]).filter(n=>n.k==="draw" && Math.abs(n.fk-fk)<=1); let e=out.find(x=>near(x.t,s.tv));
+  const seen=new Set(); drShapes().filter(s=>s.tv!=null && !s.kf).forEach(s=>{ const fk=drFk(s.tv); if(seen.has(fk)) return; seen.add(fk);
+    const nt=(SA.notes||[]).filter(n=>n.k==="draw" && Math.abs(n.fk-fk)<=1 && !(nlShape(n)&&nlShape(n).kf)); let e=out.find(x=>near(x.t,s.tv));
     if(!e){ e={t:s.tv, step:"", lab:"", val:"", notes:[], pn:[], geo:[], sub:[]}; out.push(e); }
     e.dr=true; nt.forEach(n=>{ if(n.pos){ if(!e.pn.includes(n)) e.pn.push(n); } else if(!e.notes.includes(n.txt)) e.notes.push(n.txt); }); });
   return out.sort((a,b)=>a.t-b.t); }
 function kinoWrap(g,txt,maxW){ const words=String(txt).split(/\s+/), lines=[]; let l=""; words.forEach(w=>{ const t=l?l+" "+w:w; if(g.measureText(t).width>maxW && l){ lines.push(l); l=w; } else l=t; }); if(l) lines.push(l); return lines; }
 async function kinoExport(){
   if(KINO.on || !SA.active) return; if(!sVid.videoWidth){ blog("warn","kinoExport: Video nicht geladen"); toast(L("Das Video ist noch nicht geladen. Warte kurz oder lade es erneut hoch.","The video hasn't loaded yet. Wait a moment or upload it again."),5000); return; } const C=resCtx(), ev=kinoEvents(C);
-  if(!ev.length){ toast(L("Setz zuerst Markierungen, dann gibt es Stellen zum Anhalten.","Set marks first, then there are points to pause at.")); return; }
+  if(!ev.length && !drShapes().some(x=>x.kf&&x.kf.length>1)){ toast(L("Setz zuerst Markierungen, dann gibt es Stellen zum Anhalten.","Set marks first, then there are points to pause at.")); return; }
   const canRec=window.MediaRecorder&&MediaRecorder.isTypeSupported, AU=["video/mp4;codecs=avc1.640033,mp4a.40.2","video/mp4;codecs=avc1.640028,mp4a.40.2","video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus"], VO=["video/mp4;codecs=avc1.640033","video/mp4;codecs=avc1.640028","video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"];
   const amime=canRec?AU.find(m=>MediaRecorder.isTypeSupported(m)):null, vmime=canRec?VO.find(m=>MediaRecorder.isTypeSupported(m)):null, mime0=amime||vmime;
   if(!mime0){ toast(L("Dieser Browser kann keine Videos erstellen. Nutze das Desktop-Programm oder Chrome.","This browser can't create videos. Use the desktop program or Chrome.")); return; }
@@ -6347,14 +6382,20 @@ async function kinoExport(){
   const vw=sVid.videoWidth, vh=sVid.videoHeight, k=Math.min(1,3840/Math.max(vw,vh)), W=Math.round(vw*k/2)*2, H=Math.round(vh*k/2)*2;
   const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d",{alpha:false}), f=sFps(); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
   const ofps=Math.min(60,Math.max(30,Math.round(f))), vbr=Math.round(Math.min(100e6,Math.max(30e6,W*H*ofps*0.5)));
-  const t0=Math.max(0, SA.marks.sig!=null ? Math.min(SA.marks.sig, ev[0].t)-2 : ev[0].t-2), t1=Math.min(sVid.duration, ev[ev.length-1].t+1.5), base=0.5;
+  // animierte Abschnitte: [a, b] je Zeichnung, überlappende zusammengefasst
+  const secs=[]; drShapes().filter(x=>x.kf&&x.kf.length>1).map(x=>({a:drRange(x)[0], b:drRange(x)[1], shapes:[x]})).sort((p,q)=>p.a-q.a).forEach(x=>{ const l=secs[secs.length-1]; if(l && x.a<=l.b+0.5/f){ l.b=Math.max(l.b,x.b); l.shapes.push(...x.shapes); } else secs.push(x); });
+  const evT=ev.map(e=>e.t).concat(secs.flatMap(x=>[x.a,x.b]));
+  const t0=Math.max(0, SA.marks.sig!=null ? Math.min(SA.marks.sig, ...evT)-2 : Math.min(...evT)-2), t1=Math.min(sVid.duration, Math.max(...evT)+1.5), base=0.5;
   const ov=$("kinoOv"), ovHome=ov.parentNode, fsEl=document.fullscreenElement||document.webkitFullscreenElement||(FS.on?$("fsOv"):null); if(fsEl) fsEl.appendChild(ov); // im Vollbild sonst unsichtbar
   ov.hidden=false; $("kinoStop").textContent=L("Abbrechen","Cancel"); KINO.on=true; KINO.stop=false;
   let mtxt=""; const pct=()=>{ const p=Math.max(0,Math.min(1,(sVid.currentTime-t0)/Math.max(0.1,t1-t0))); return ` · ${Math.round(p*100)} %`; };
   const msg=t=>{ mtxt=t; $("kinoMsg").textContent=t+pct(); };
   const U=Math.min(W,H), fs=Math.round(U/26), pad=Math.round(U/40), MW=W>H?W*0.6:W-pad*3.6;
-  let cur=null; // aktuell angezeigtes Ereignis
-  const draw=()=>{ g.drawImage(sVid,0,0,W,H); if(cur){ if(cur.ovl) g.drawImage(cur.ovl,0,0); cur.geo.forEach(x=>kinoGeo(g,x.G,W,H,x.lab)); (cur.pn||[]).forEach(n=>kinoNote(g,n,W,H)); }
+  let cur=null, anim=null; // aktuell angezeigtes Ereignis bzw. laufende Animation
+  const cr0=resCrop(), bw0=$("sDraw").clientWidth, bh0=$("sDraw").clientHeight, kk=W/cr0.w, mapK=p=>[(p[0]*bw0-cr0.x)*kk, (p[1]*bh0-cr0.y)*kk];
+  const drawAnim=()=>{ const t=sCurT(), hf=0.6/f, sh=anim.shapes.filter(x=>{ const r=drRange(x); return t>=r[0]-hf && t<=r[1]+hf; }); drPaint(g, sh.map(x=>drAt(x,t)), mapK, kk, 1);
+    sh.forEach(x=>{ const n=drNoteOf(x); if(n) kinoNote(g, {txt:n.txt, pos:nlPos(n,t)||{x:0.03,y:0.62,w:0.42,fs:0.034}}, W, H); }); };
+  const draw=()=>{ g.drawImage(sVid,0,0,W,H); if(anim) drawAnim(); if(cur){ if(cur.ovl) g.drawImage(cur.ovl,0,0); cur.geo.forEach(x=>kinoGeo(g,x.G,W,H,x.lab)); (cur.pn||[]).forEach(n=>kinoNote(g,n,W,H)); }
     let tw=0; g.textBaseline="middle";
     if(SA.marks.sig!=null){ const r=relR(RT(sVid.currentTime)); if(r!=null){ const tt=(r<0?"−":"")+evFmt(Math.abs(r),"s"); g.font=`700 ${fs}px system-ui,sans-serif`; const w=g.measureText(tt).width; tw=w+pad*2; g.fillStyle="rgba(0,0,0,.45)"; g.fillRect(W-w-pad*1.6,pad*0.6,w+pad,fs*1.3); g.fillStyle="#FFD24A"; g.fillText(tt,W-w-pad*1.1,pad*0.6+fs*0.65); } }
     { g.font=`600 ${Math.round(fs*0.7)}px system-ui,sans-serif`; const head=[C.ath,C.name].filter(Boolean).join(" · "), hl=kinoWrap(g,head,Math.max(fs*4,W-tw-pad*2.6)).slice(0,3), hw=Math.max(...hl.map(l=>g.measureText(l).width)), lh=fs*0.85;
@@ -6380,13 +6421,18 @@ async function kinoExport(){
   try{
     msg(L("Ergebnisvideo wird erstellt … Das Video läuft dabei in halber Geschwindigkeit durch.","Creating the result video … The video plays through at half speed."));
     await resSeek(t0); rec.start(250); loop();
-    for(let i=0;i<=ev.length && !KINO.stop;i++){ const target = i<ev.length ? ev[i].t : t1; cur=null;
-      if(target>sVid.currentTime+0.5/f){ SA.curBase=baseAt(); smoRate(); audio(); await sVid.play().catch(()=>{});
-        await new Promise(res=>{ const chk=()=>{ if(KINO.stop || sVid.currentTime>=target-0.5/f || sVid.ended){ res(); return; } SA.curBase=baseAt(); smoRate(); audio(); $("kinoMsg").textContent=mtxt+pct(); requestAnimationFrame(chk); }; chk(); }); sVid.pause(); }
-      if(i<ev.length && !KINO.stop){ const e=ev[i]; await resSeek(e.t+0.5/f); e.ovl=e.dr?resOverlay(W,H):null; cur=e; msg(L(`Ergebnisvideo: ${i+1} von ${ev.length} Stellen`,`Result video: ${i+1} of ${ev.length} points`));
+    // Ablauf: Ereignisse (anhalten) und animierte Abschnitte (¼ Geschwindigkeit). Liegt ein Ereignis im Abschnitt, kommt der Abschnitt danach noch einmal ganz von vorn.
+    const plan=ev.map(e=>({k:"ev", t:e.t, e})); secs.forEach(x=>{ const inside=ev.some(e=>e.t>=x.a-0.5/f && e.t<=x.b+0.5/f); plan.push(inside?{k:"anim", t:x.b, x, replay:true}:{k:"anim", t:x.a, x}); });
+    plan.sort((p,q)=>p.t-q.t || (p.k==="ev"?-1:1));
+    const playTo=async(target,rate)=>{ if(target<=sVid.currentTime+0.5/f) return; SA.curBase=rate||baseAt(); smoRate(); audio(); await sVid.play().catch(()=>{});
+      await new Promise(res=>{ const chk=()=>{ if(KINO.stop || sVid.currentTime>=target-0.5/f || sVid.ended){ res(); return; } SA.curBase=rate||baseAt(); smoRate(); audio(); $("kinoMsg").textContent=mtxt+pct(); requestAnimationFrame(chk); }; chk(); }); sVid.pause(); };
+    DR.noAnim=true; let ei=0;
+    for(let i=0;i<=plan.length && !KINO.stop;i++){ const P=plan[i], target = P ? P.t : t1; cur=null; await playTo(target);
+      if(P && P.k==="anim" && !KINO.stop){ const x=P.x; if(P.replay) await resSeek(x.a); anim=x; msg(L("Ergebnisvideo: animierte Markierung (¼ Geschwindigkeit)","Result video: animated marking (¼ speed)")); await playTo(x.b+0.5/f, 0.25); await new Promise(r=>setTimeout(r,700)); anim=null; continue; }
+      if(P && P.k==="ev" && !KINO.stop){ const e=P.e; ei++; await resSeek(e.t+0.5/f); e.ovl=e.dr?resOverlay(W,H):null; cur=e; msg(L(`Ergebnisvideo: ${ei} von ${ev.length} Stellen`,`Result video: ${ei} of ${ev.length} points`));
         const chars=e.notes.join(" ").length+e.sub.join(" ").length+(e.pn||[]).map(n=>n.txt).join(" ").length; await new Promise(r=>setTimeout(r,Math.min(8000,2600+chars*45+(e.geo.length?1200:0)))); } }
     cur=null; await new Promise(r=>setTimeout(r,500));
-  }finally{ cancelAnimationFrame(raf); sVid.pause(); try{ rec.stop(); }catch(e){} await done; kinoAudioEnd(dst); sVid.muted=wasMuted; ov.hidden=true; if(ov.parentNode!==ovHome) ovHome.appendChild(ov); KINO.on=false; await resSeek(back); }
+  }finally{ DR.noAnim=false; anim=null; cancelAnimationFrame(raf); sVid.pause(); try{ rec.stop(); }catch(e){} await done; kinoAudioEnd(dst); sVid.muted=wasMuted; ov.hidden=true; if(ov.parentNode!==ovHome) ovHome.appendChild(ov); KINO.on=false; await resSeek(back); }
   if(KINO.stop){ toast(L("Abgebrochen.","Cancelled.")); return; }
   let blob=new Blob(chunks,{type:mime.split(";")[0]});
   if(ext==="mp4"){ try{ toast(L("Ergebnisvideo wird gespeichert …","Saving the result video …"),4000); const o=await mp4Defrag(blob); if(o) blob=o; blog("video","Ergebnisvideo",{mb:Math.round(blob.size/1e6), umgebaut:!!o, mime}); }catch(e){ blog("warn","mp4Defrag: "+(e&&e.message||e)); } }
@@ -6480,21 +6526,71 @@ function xdSumHTML(){ const rows=xdRows(); if(!rows.length) return ""; return `<
 
 /* ---------- Zeichnungen gehören zu dem Bild, in dem sie gezeichnet wurden; Notiz je Bild ---------- */
 const drFk=t=>Math.round(t*1000);
-function drAdd(s){ s.tv=Math.round(sCurT()*1e5)/1e5; s.id=Date.now()+"-"+Math.round(Math.random()*1e4); drShapes().push(s); drNoteAsk(s.tv); }
-function drVisible(s){ if(s.tv==null) return true; return Math.abs(s.tv-sCurT())<=0.6/sFps(); }
-function drNoteAsk(tv){ const fk=drFk(tv); if((SA.notes||[]).some(n=>n.k==="draw" && n.fk===fk)) return; let bx=$("drNote");
+function drAdd(s){ s.tv=Math.round(sCurT()*1e5)/1e5; s.id=Date.now()+"-"+Math.round(Math.random()*1e4); drShapes().push(s); drNoteAsk(s.tv, s.id); }
+function drVisible(s){ const t=sCurT(); if(s.kf&&s.kf.length){ const r=drRange(s), hf=0.6/sFps(); return t>=r[0]-hf && t<=r[1]+hf; } if(s.tv==null) return true; return Math.abs(s.tv-t)<=0.6/sFps(); }
+function drNoteAsk(tv, sid){ const fk=drFk(tv); if((SA.notes||[]).some(n=>n.k==="draw" && n.fk===fk)) return; let bx=$("drNote");
   if(!bx){ bx=document.createElement("div"); bx.id="drNote"; bx.className="drnote"; $("sBox").appendChild(bx); }
   if(!bx.hidden && bx.dataset.fk===String(fk)) return; bx.dataset.fk=String(fk); bx.hidden=false;
   bx.innerHTML=`<b>${L("Notiz zur Zeichnung","Note on the drawing")}</b><textarea id="drNoteT" rows="2" maxlength="300" placeholder="${L("Was zeigt die Zeichnung? (freiwillig)","What does the drawing show? (optional)")}"></textarea><div class="drnrow"><button type="button" class="testbtn small" id="drNoteOk">${L("Speichern","Save")}</button><button type="button" class="testbtn ghost small" id="drNoteNo">${L("Ohne Notiz","Without note")}</button></div>`;
   const ta=$("drNoteT"); ["pointerdown","click"].forEach(ev=>bx.addEventListener(ev,e=>e.stopPropagation()));
   const ok=()=>{ const txt=ta.value.trim(); bx.hidden=true; if(!txt) return;
-    (SA.notes=SA.notes||[]).push({k:"draw", fk, lab:L("Zeichnung","Drawing"), step:null, t:tv, txt}); if(SA.steps[SA.i]&&SA.steps[SA.i].k==="sum") wizRender(); else nlRender(); };
+    (SA.notes=SA.notes||[]).push({k:"draw", fk, sid, lab:L("Zeichnung","Drawing"), step:null, t:tv, txt}); if(SA.steps[SA.i]&&SA.steps[SA.i].k==="sum") wizRender(); else nlRender(); };
   $("drNoteOk").onclick=ok; $("drNoteNo").onclick=()=>{ bx.hidden=true; }; ta.onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ok(); } if(e.key==="Escape"){ bx.hidden=true; } }; }
-function drNotesClean(){ const fks=new Set(drShapes().filter(s=>s.tv!=null).map(s=>drFk(s.tv))); SA.notes=(SA.notes||[]).filter(n=>n.k!=="draw" || fks.has(n.fk)); }
+function drNotesClean(){ const fks=new Set(drShapes().filter(s=>s.tv!=null).map(s=>drFk(s.tv))), ids=new Set(drShapes().map(s=>s.id)); SA.notes=(SA.notes||[]).filter(n=>n.k!=="draw" || (n.sid ? ids.has(n.sid) : fks.has(n.fk))); }
 // bei jedem Bildwechsel neu zeichnen, damit Zeichnungen nur in ihrem Bild erscheinen
 sVid.addEventListener("seeked",()=>{ if(SA.active) drRender(); }); sVid.addEventListener("timeupdate",()=>{ if(SA.active) drRender(); });
 if(typeof sVid.requestVideoFrameCallback==="function"){ const f=()=>{ if(SA.active && (SA.draw||[]).length) drRender(); sVid.requestVideoFrameCallback(f); }; sVid.requestVideoFrameCallback(f); }
 
+/* ---------- Zeichnungen auswählen, verschieben, Lupe einstellen, über mehrere Bilder animieren ---------- */
+function drSelect(id){ DR.sel=id||null; DR.rec=false; drSelPanel(); drRender(); }
+function drHitTest(p){ const cv=$("sDraw"), W=cv.clientWidth, H=cv.clientHeight, t=sCurT(), d=(a,b)=>Math.hypot((a[0]-b[0])*W,(a[1]-b[1])*H), tol=12/measZ().s;
+  const segD=(p,a,b)=>{ const ax=a[0]*W, ay=a[1]*H, bx=b[0]*W, by=b[1]*H, px=p[0]*W, py=p[1]*H, l=(bx-ax)**2+(by-ay)**2; let u=l?((px-ax)*(bx-ax)+(py-ay)*(by-ay))/l:0; u=Math.max(0,Math.min(1,u)); return Math.hypot(px-(ax+u*(bx-ax)), py-(ay+u*(by-ay))); };
+  const list=drShapes().filter(x=>drVisible(x) || x.id===DR.sel).map(x=>drAt(x,t)).reverse();
+  for(const S of list){ if(S.t==="lupe"){ const R=(S.r||0.08)*W, c=S.pts[0], rim=[c[0]+R*0.7071/W, c[1]-R*0.7071/H]; if(d(p,rim)<tol) return {id:S.id, mode:"r"}; if(d(p,c)<=R) return {id:S.id, mode:"all"}; continue; }
+    if(S.t!=="pen"){ const i=S.pts.findIndex(q=>d(p,q)<tol); if(i>=0) return {id:S.id, mode:"pt", i}; }
+    if(S.t==="circle" && S.pts.length>1){ const R=d(S.pts[0],S.pts[1]); if(Math.abs(d(p,S.pts[0])-R)<tol || d(p,S.pts[0])<R) return {id:S.id, mode:"all"}; continue; }
+    for(let i=0;i<S.pts.length-1;i++) if(segD(p,S.pts[i],S.pts[i+1])<tol) return {id:S.id, mode:"all"}; }
+  return null; }
+function drSelDown(e,p){ const h=drHitTest(p); if(!h){ drSelect(null); return; } if(DR.sel!==h.id){ DR.sel=h.id; DR.rec=false; drSelPanel(); }
+  const S=drShapes().find(x=>x.id===h.id), cur=drAt(S,sCurT()); DR.ed={h, p0:p, pts:cur.pts.map(q=>q.slice()), r:cur.r, moved:false}; drRender(); }
+function drSelMove(p){ const E=DR.ed; if(!E) return; const S=drShapes().find(x=>x.id===E.h.id); if(!S) return; const dx=p[0]-E.p0[0], dy=p[1]-E.p0[1]; if(Math.abs(dx)+Math.abs(dy)>0.001) E.moved=true; if(!E.moved) return;
+  let pts=E.pts.map(q=>q.slice()), r=E.r; if(E.h.mode==="all") pts=pts.map(q=>[q[0]+dx,q[1]+dy]); else if(E.h.mode==="pt") pts[E.h.i]=[E.pts[E.h.i][0]+dx, E.pts[E.h.i][1]+dy];
+  else if(E.h.mode==="r"){ const cv=$("sDraw"), W=cv.clientWidth, H=cv.clientHeight; r=Math.max(0.02,Math.min(0.6,Math.hypot((p[0]-pts[0][0])*W,(p[1]-pts[0][1])*H)/W)); }
+  if(S.kf){ const k=drKfAt(S,sCurT()); k.pts=pts; if(r!=null) k.r=r; } else { S.pts=pts; if(r!=null) S.r=r; } drRender(); }
+function drSelUp(){ DR.ed=null; drSelPanel(); drRender(); }
+function drLupeSet(S, what, dir){ if(what==="mag"){ S.mag=Math.max(1.5,Math.min(12,Math.round(((S.mag||3)+dir*0.5)*2)/2)); }
+  else { const step=v=>Math.max(0.02,Math.min(0.6,v*(dir>0?1.12:1/1.12))); if(S.kf){ const k=drKfAt(S,sCurT()); k.r=step(k.r??S.r??0.08); } else S.r=step(S.r||0.08); } drSelPanel(); drRender(); }
+function drAnimToggle(S){ if(S.kf){ const k0=drAt(S,sCurT()); S.pts=k0.pts.map(p=>p.slice()); if(k0.r!=null) S.r=k0.r; S.tv=Math.round(sCurT()*1e5)/1e5; delete S.kf; DR.rec=false; }
+  else { S.kf=[{t:S.tv!=null?S.tv:Math.round(sCurT()*1e5)/1e5, pts:S.pts.map(p=>p.slice()), r:S.r}]; DR.rec=true; toast(L("Animation an: Spring mit → ein Bild weiter und verschieb die Markierung. Jedes Bild wird Teil der Animation.","Animation on: step one frame forward with → and move the marking. Every frame becomes part of the animation."),4500); }
+  drNotesClean(); drSelPanel(); drRender(); drToolbar(); }
+function drAnimEnd(S){ if(!S.kf) return; const t=sCurT()+drHf(); S.kf=S.kf.filter(k=>k.t<=t); if(!S.kf.length) delete S.kf; DR.rec=false; drSelPanel(); drRender(); }
+function drNoteOf(S){ return (SA.notes||[]).find(n=>n.k==="draw" && (n.sid===S.id || (!n.sid && S.tv!=null && n.fk===drFk(S.tv)))); }
+function drSelPanel(){ let p=$("drSel"); const S=DR.sel&&drShapes().find(x=>x.id===DR.sel);
+  if(!S || !SA.active){ if(p) p.hidden=true; return; } if(!p){ p=document.createElement("div"); p.id="drSel"; p.className="drsel"; $("sBox").appendChild(p); ["pointerdown","click","wheel"].forEach(ev=>p.addEventListener(ev,e=>e.stopPropagation())); }
+  const nm={lupe:L("Lupe","Magnifier"), pen:L("Stift","Pen"), line:L("Linie","Line"), arrow:L("Pfeil","Arrow"), circle:L("Kreis","Circle"), angle:L("Winkel","Angle"), hang:L("Winkel zur Waagerechten","Angle to the horizontal")}[S.t]||"";
+  const cur=drAt(S,sCurT()), n=drNoteOf(S), rg=drRange(S), f=sFps(), nfr=S.kf?Math.round((rg[1]-rg[0])*f)+1:1;
+  p.hidden=false; p.innerHTML=`<div class="drsrow"><b>${esc(nm)}</b><button type="button" class="drsx" id="drsClose" aria-label="${L("Fertig","Done")}">✕</button></div>
+    ${S.t==="lupe"?`<div class="drsrow"><span>${L("Vergrößerung","Magnification")}</span><button type="button" data-dl="mag|-1">−</button><b>${xdFmt(S.mag||3)}×</b><button type="button" data-dl="mag|1">+</button></div>
+      <div class="drsrow"><span>${L("Größe","Size")}</span><button type="button" data-dl="r|-1">−</button><b>${Math.round((cur.r||0.08)*100)}</b><button type="button" data-dl="r|1">+</button></div>`:""}
+    <label class="drsrow drsanim"><input type="checkbox" id="drsAnim"${S.kf?" checked":""}> <span>${L("Über mehrere Bilder animieren","Animate over several frames")}</span></label>
+    ${S.kf?`<p class="drshint">${L(`${nfr} Bilder. Mit → ein Bild weiter, dann die Markierung (und ihren Text) verschieben. Im Ergebnisvideo läuft der Abschnitt in ¼ Geschwindigkeit.`,`${nfr} frames. Step one frame forward with →, then move the marking (and its text). In the result video this section plays at ¼ speed.`)}</p>
+      <div class="drsrow"><button type="button" class="drsb" id="drsRec" aria-pressed="${!!DR.rec}">${DR.rec?L("● Aufnahme an","● Recording on"):L("○ Aufnahme aus","○ Recording off")}</button><button type="button" class="drsb" id="drsEnd">${L("Hier enden","End here")}</button></div>`:""}
+    <div class="drsrow"><button type="button" class="drsb" id="drsTxt">${n?L("Text ändern","Edit text"):L("+ Text","+ Text")}</button><button type="button" class="drsb drsdel" id="drsDel">${L("Löschen","Delete")}</button></div>`;
+  $("drsClose").onclick=()=>{ drSelect(null); if(!FS.on) drSetTool(null); }; $("drsAnim").onchange=()=>drAnimToggle(S);
+  p.querySelectorAll("[data-dl]").forEach(b=>b.onclick=()=>{ const [w,d]=b.dataset.dl.split("|"); drLupeSet(S,w,+d); });
+  const rc=$("drsRec"); if(rc) rc.onclick=()=>{ DR.rec=!DR.rec; drSelPanel(); }; const en=$("drsEnd"); if(en) en.onclick=()=>drAnimEnd(S);
+  $("drsTxt").onclick=()=>drNoteEdit(S);
+  $("drsDel").onclick=()=>{ SA.draw=drShapes().filter(x=>x.id!==S.id); SA.notes=(SA.notes||[]).filter(x=>x.sid!==S.id); drNotesClean(); drSelect(null); drToolbar(); }; }
+function drNoteEdit(S){ const n=drNoteOf(S); let bx=$("drNote"); if(!bx){ bx=document.createElement("div"); bx.id="drNote"; bx.className="drnote"; $("sBox").appendChild(bx); ["pointerdown","click"].forEach(ev=>bx.addEventListener(ev,e=>e.stopPropagation())); }
+  bx.hidden=false; bx.dataset.fk="";
+  bx.innerHTML=`<b>${L("Text zur Markierung","Text for the marking")}</b><textarea id="drNoteT" rows="2" maxlength="300"></textarea><div class="drnrow"><button type="button" class="testbtn small" id="drNoteOk">${L("Speichern","Save")}</button><button type="button" class="testbtn ghost small" id="drNoteNo">${L("Abbrechen","Cancel")}</button></div>`;
+  const ta=$("drNoteT"); ta.value=n?n.txt:""; setTimeout(()=>ta.focus(),30);
+  const ok=()=>{ const txt=ta.value.trim(); bx.hidden=true; if(n){ if(txt) n.txt=txt; else SA.notes=SA.notes.filter(x=>x!==n); }
+    else if(txt){ const tv=S.kf?S.kf[0].t:S.tv; (SA.notes=SA.notes||[]).push({k:"draw", fk:drFk(tv), sid:S.id, lab:L("Zeichnung","Drawing"), step:null, t:tv, txt}); } drSelPanel(); nlRender(); };
+  $("drNoteOk").onclick=ok; $("drNoteNo").onclick=()=>{ bx.hidden=true; }; ta.onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ok(); } if(e.key==="Escape") bx.hidden=true; }; }
+// beim Weiterspringen während der Aufnahme: neues Schlüsselbild an der neuen Stelle (hält die Lage, bis du sie verschiebst)
+sVid.addEventListener("seeked",()=>{ const go=()=>{ if(!SA.active || !DR.rec || !DR.sel) return; const S=drShapes().find(x=>x.id===DR.sel); if(!S || !S.kf) return; const t=sCurT(), last=S.kf[S.kf.length-1];
+  if(t>last.t+drHf()){ drKfAt(S,t); drSelPanel(); drRender(); } }; setTimeout(go,60); setTimeout(go,250); });
 /* ---------- Ausmessen: Bezugslinie und Senkrechte merken (für das Ergebnisvideo) ---------- */
 function measKeep(st){ const M=SA.meas; if(!M || M.foot==null || M.pts.length<2) return; const cv=$("sMeas"), bw=cv.clientWidth, bh=cv.clientHeight, r=resCrop(), [ra,rb]=measRefs(M);
   const cn=p=>[Math.round(((p[0]*bw)-r.x)/r.w*1e5)/1e5, Math.round(((p[1]*bh)-r.y)/r.h*1e5)/1e5];
@@ -6574,25 +6670,29 @@ async function mp4Defrag(blob){
 /* ---------- Notizen im Video platzieren: jede Notiz erscheint in ihrem Bild als Textbox; ziehen verschiebt, die Ecke unten rechts vergrößert/verkleinert.
    Die Lage wird relativ zum Videobild gespeichert (pos: x, y, Breite w, Schriftgröße fs als Anteil der Bildhöhe) und im Ergebnisvideo genauso gezeigt. ---------- */
 const NL={drag:null};
-function nlNotes(){ const now=sCurT(), hf=0.6/sFps(); return (SA.notes||[]).filter(n=>n && n.t!=null && Math.abs(n.t-now)<=hf); }
+const nlShape=n=> n && n.sid ? drShapes().find(x=>x.id===n.sid) : null;
+function nlNotes(){ const now=sCurT(), hf=0.6/sFps(); return (SA.notes||[]).filter(n=>{ if(!n || n.t==null) return false; const S=nlShape(n); if(S && S.kf){ if(DR.noAnim) return false; const r=drRange(S); return now>=r[0]-hf && now<=r[1]+hf; } return Math.abs(n.t-now)<=hf; }); }
+// Lage einer Notiz zur Zeit t (bei animierten Formen aus den Schlüsselbildern überblendet)
+function nlPos(n,t){ const S=nlShape(n); if(!S || !S.kf) return n.pos; const K=S.kf.filter(k=>k.np); if(!K.length) return n.pos; if(t<=K[0].t) return K[0].np; const b=K[K.length-1]; if(t>=b.t) return b.np;
+  for(let i=0;i<K.length-1;i++) if(t>=K[i].t && t<=K[i+1].t){ const a=K[i].np, c=K[i+1].np, u=(t-K[i].t)/Math.max(1e-6,K[i+1].t-K[i].t); return {x:a.x+(c.x-a.x)*u, y:a.y+(c.y-a.y)*u, w:a.w+(c.w-a.w)*u, fs:a.fs+(c.fs-a.fs)*u}; } return n.pos; }
 function nlRender(){ if(NL.drag) return; const box=$("sBox"); if(!box) return; let lay=$("noteLayer");
   if(!lay){ lay=document.createElement("div"); lay.id="noteLayer"; box.appendChild(lay); }
   if(!SA.active || !sVid.videoWidth || !DR.show || SA.meas){ lay.innerHTML=""; return; }
   const ns=nlNotes(), r=resCrop(), z=measZ(); lay.innerHTML="";
-  ns.forEach((n,i)=>{ const p=n.pos||{x:0.03, y:Math.max(0.05,0.62-i*0.12), w:0.42, fs:0.034}, el=document.createElement("div");
+  const tn=sCurT(); ns.forEach((n,i)=>{ const pp=nlPos(n,tn), p=pp||{x:0.03, y:Math.max(0.05,0.62-i*0.12), w:0.42, fs:0.034}, el=document.createElement("div");
     el.className="nbox"+(n.pos?"":" unplaced"); el.dataset.i=String(SA.notes.indexOf(n));
     el.style.left=((r.x+p.x*r.w)*z.s+z.x)+"px"; el.style.top=((r.y+p.y*r.h)*z.s+z.y)+"px"; el.style.width=(p.w*r.w*z.s)+"px"; el.style.fontSize=Math.max(9,p.fs*r.h*z.s)+"px";
     el.title=L("Ziehen zum Verschieben, Ecke unten rechts zum Vergrößern","Drag to move, bottom-right corner to resize");
     el.innerHTML=`<span class="ntx">${esc(n.txt)}</span><i class="nres" aria-hidden="true"></i>`; lay.appendChild(el); }); }
 { const start=(e)=>{ const el=e.target.closest&&e.target.closest(".nbox"); if(!el) return; const n=SA.notes[+el.dataset.i]; if(!n) return;
-    e.preventDefault(); e.stopPropagation(); const r=resCrop(), z=measZ(), p=Object.assign({x:0.03,y:0.62,w:0.42,fs:0.034}, n.pos||{});
+    e.preventDefault(); e.stopPropagation(); const r=resCrop(), z=measZ(), p=Object.assign({x:0.03,y:0.62,w:0.42,fs:0.034}, nlPos(n,sCurT())||{});
     if(!n.pos){ const b=el.getBoundingClientRect(), bx=$("sBox").getBoundingClientRect(); p.x=((b.left-bx.left-z.x)/z.s-r.x)/r.w; p.y=((b.top-bx.top-z.y)/z.s-r.y)/r.h; }
     NL.drag={el, n, p, r, z, sx:e.clientX, sy:e.clientY, res:e.target.classList.contains("nres"), moved:false}; el.setPointerCapture(e.pointerId); el.classList.add("drag"); };
   const move=e=>{ const d=NL.drag; if(!d) return; const dx=(e.clientX-d.sx)/d.z.s, dy=(e.clientY-d.sy)/d.z.s; if(Math.hypot(dx,dy)>2) d.moved=true;
     if(d.res){ const w=Math.max(0.12,Math.min(1,d.p.w+dx/d.r.w)), k=w/d.p.w; d.q={x:d.p.x,y:d.p.y,w,fs:Math.max(0.015,Math.min(0.12,d.p.fs*k))}; }
     else d.q={x:Math.max(0,Math.min(0.97,d.p.x+dx/d.r.w)), y:Math.max(0,Math.min(0.97,d.p.y+dy/d.r.h)), w:d.p.w, fs:d.p.fs};
     const q=d.q, r=d.r, z=d.z; d.el.style.left=((r.x+q.x*r.w)*z.s+z.x)+"px"; d.el.style.top=((r.y+q.y*r.h)*z.s+z.y)+"px"; d.el.style.width=(q.w*r.w*z.s)+"px"; d.el.style.fontSize=Math.max(9,q.fs*r.h*z.s)+"px"; };
-  const end=()=>{ const d=NL.drag; if(!d) return; NL.drag=null; if(d.moved && d.q){ const R=v=>Math.round(v*1e4)/1e4; d.n.pos={x:R(d.q.x),y:R(d.q.y),w:R(d.q.w),fs:R(d.q.fs)}; blog("klick","Notiz verschoben"); } nlRender(); };
+  const end=()=>{ const d=NL.drag; if(!d) return; NL.drag=null; if(d.moved && d.q){ const R=v=>Math.round(v*1e4)/1e4, np={x:R(d.q.x),y:R(d.q.y),w:R(d.q.w),fs:R(d.q.fs)}, S=nlShape(d.n); if(S && S.kf){ drKfAt(S,sCurT()).np=np; if(!d.n.pos) d.n.pos=np; } else d.n.pos=np; blog("klick","Notiz verschoben"); } nlRender(); };
   document.addEventListener("pointerdown",start,true); document.addEventListener("pointermove",move,true); document.addEventListener("pointerup",end,true); document.addEventListener("pointercancel",end,true); }
 // im Ergebnisvideo: Notiz an ihrer Stelle zeichnen
 function kinoNote(g, n, W, H){ const p=n.pos, fpx=Math.max(10,p.fs*H), pad=fpx*0.45, w=p.w*W; g.save(); g.font=`italic 500 ${Math.round(fpx)}px system-ui,sans-serif`;
