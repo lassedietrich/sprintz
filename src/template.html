@@ -5561,10 +5561,20 @@ const akOf=(by,yr)=>{ yr=yr||new Date().getFullYear(); by=+by; if(!by) return nu
 const akName=ak=> ak==null ? "–" : ak==="open" ? L("Offene Klasse","Open class") : L(`AK ${ak}`,`Age group ${ak}`);
 const persName=x=> x ? ((x.first||x.last) ? [x.first, x.nick?`„${x.nick}“`:"", x.last].filter(Boolean).join(" ") : x.name) : "";
 const clubMissing=e=> e && (e.code==="PGRST205" || e.code==="42P01" || e.status===404 || /does not exist|schema cache/i.test(e.message||""));
+// eigene Vereine laden: zuerst über die Funktion sprintz_my_clubs (unabhängig von Spaltenrechten), sonst direkt, für Entwickler zuletzt über die Entwicklerfunktion
+async function clubFetchMine(){ const errs=[]; const map=x=>({id:x.id, name:x.name, code:x.code||"", sport:x.sport||"swim", role:x.role||"member", admin:x.role==="admin", del:!!x.can_delete});
+  try{ const r=await sbFetch("/rest/v1/rpc/sprintz_my_clubs",{method:"POST", body:{}}); if(Array.isArray(r)) return r.map(map); }catch(e){ errs.push(e); }
+  try{ let rows; try{ rows=await sbFetch(`/rest/v1/club_members?select=role,can_delete,club_id,clubs(id,name,sport)&user_id=eq.${SESS.uid}`); }
+      catch(e){ errs.push(e); rows=await sbFetch(`/rest/v1/club_members?select=role,club_id,clubs(id,name)&user_id=eq.${SESS.uid}`); }
+    let codes=[]; try{ codes=await sbFetch("/rest/v1/rpc/sprintz_my_codes",{method:"POST", body:{}})||[]; }catch(e){}
+    const ok=(rows||[]).filter(r=>r.clubs); if(ok.length || !(rows||[]).length) return ok.map(r=>map({id:r.club_id, name:r.clubs.name, sport:r.clubs.sport, role:r.role, can_delete:r.can_delete, code:((codes||[]).find(c=>c.id===r.club_id)||{}).code}));
+    errs.push(new Error("clubs not readable")); }catch(e){ errs.push(e); }
+  if(typeof isDev==="function" && isDev()){ try{ const all=await sbFetch("/rest/v1/rpc/sprintz_dev_clubs",{method:"POST", body:{}})||[];
+      return all.filter(c=>(c.members||[]).some(m=>m.user_id===SESS.uid)).map(c=>{ const m=c.members.find(m=>m.user_id===SESS.uid); return map({id:c.id, name:c.name, sport:c.sport, role:m.role, can_delete:m.can_delete, code:c.code}); }); }catch(e){ errs.push(e); } }
+  const e=errs.find(x=>!clubMissing(x))||errs[0]||new Error("err"); e.all=errs.map(x=>x.message||String(x)).join(" | "); throw e; }
 async function clubLoad(force){ if(!clubOn()) return []; if(CLUB.list && !force && Date.now()-CLUB.t<60000) return CLUB.list;
-  try{ await sbReady(); const rows=await sbFetch(`/rest/v1/club_members?select=role,can_delete,club_id,clubs(id,name,sport)&user_id=eq.${SESS.uid}`); let codes=[]; try{ codes=await sbFetch("/rest/v1/rpc/sprintz_my_codes",{method:"POST", body:{}})||[]; }catch(e){}
-    CLUB.list=(rows||[]).filter(r=>r.clubs).map(r=>({id:r.club_id, name:r.clubs.name, code:((codes||[]).find(c=>c.id===r.club_id)||{}).code||"", sport:r.clubs.sport||"swim", admin:r.role==="admin", role:r.role, del:!!r.can_delete})).sort((a,b)=>a.name.localeCompare(b.name)); CLUB.t=Date.now(); CLUB.err=null; }
-  catch(e){ CLUB.err=clubMissing(e)?"setup":(e.net?"net":"err"); if(!CLUB.list) CLUB.list=[]; blog("warn","clubLoad: "+(e.message||e)); }
+  try{ await sbReady(); CLUB.list=(await clubFetchMine()).sort((a,b)=>a.name.localeCompare(b.name)); CLUB.t=Date.now(); CLUB.err=null; CLUB.errMsg=""; }
+  catch(e){ CLUB.err=clubMissing(e)?"setup":(e.net?"net":"err"); CLUB.errMsg=e.all||e.message||""; if(!CLUB.list) CLUB.list=[]; blog("warn","clubLoad: "+CLUB.errMsg); }
   return CLUB.list; }
 const clubName=id=>{ const c=(CLUB.list||[]).find(x=>x.id===id); return c?c.name:""; };
 const clubsCur=()=>(CLUB.list||[]).filter(c=>(c.sport||"swim")===sport);
@@ -5756,6 +5766,7 @@ function clubHTML(){ if(!canPersons()) return ""; if(!STORE.online()) return `<d
   const cl=clubsCur(), dev=DEV_USERS.includes(USER);
   if(CLUB.err==="setup") return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3><p class="hint">${L("Die Vereinsdatenbank ist in Supabase noch nicht eingerichtet.","The club database hasn't been set up in Supabase yet.")}</p>${dev?`<p class="hint">${L("Einmalig im Supabase-Dashboard unter „SQL Editor“ einfügen und „Run“ drücken:","Paste once in the Supabase dashboard under “SQL Editor” and press “Run”:")}</p><pre class="sqlbox">${esc(clubSQL())}</pre><button type="button" class="testbtn small" id="clubSqlCopy">${L("Befehl kopieren","Copy command")}</button>`:""}</div>`;
   return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3>
+    ${CLUB.err && CLUB.err!=="setup" && !cl.length?`<p class="everr">${L("Die Vereine ließen sich gerade nicht laden.","The clubs couldn't be loaded right now.")}${dev&&CLUB.errMsg?" ("+esc(CLUB.errMsg)+")":""}</p>`:""}
     ${cl.length?cl.map(c=>`<div class="clubrow"><b>${esc(c.name)}</b>${c.admin?`<span class="hint">${L("Vereins-Chef","Club head")} · ${L("Vereinscode","Club code")}: <code>${esc(c.code||"–")}</code></span><button type="button" class="testbtn ghost small" data-cmem="${c.id}">${L("Mitglieder","Members")}</button>`:`<span class="hint">${c.role==="athlete"?L("Athlet*in","Athlete"):L("Trainer*in","Coach")}</span>`}<button type="button" class="testbtn ghost small" data-cleave="${c.id}">${c.admin?L("Verein verlassen","Leave club"):L("Austreten","Leave")}</button>${c.del?`<button type="button" class="testbtn ghost small dcldel" data-cdel="${c.id}">${L("Verein löschen","Delete club")}</button>`:""}<div class="clubmem" id="cm-${c.id}"></div></div>`).join(""):`<p class="hint">${L("Du bist noch in keinem Verein.","You're not in a club yet.")}</p>`}
     <div class="clubbtns"><button type="button" class="testbtn" id="clubJoinOpen">${L("Verein beitreten","Join a club")}</button></div>
     <p class="hint" id="clubMsg">${L("Wer einen Verein anlegt, verwaltet ihn und gibt den Vereinscode an andere Trainer*innen weiter. Alle Mitglieder sehen die Athlet*innen und Ergebnisse des Vereins; Videos werden nie hochgeladen.","Whoever creates a club manages it and shares the club code with other coaches. All members see the club's athletes and results; videos are never uploaded.")}</p></div>`; }
@@ -6041,6 +6052,12 @@ begin
   else raise exception 'unknown action'; end if;
   return json_build_object('ok', true);
 end $$;
+create or replace function public.sprintz_my_clubs() returns json language sql stable security definer set search_path = public as $$
+  select coalesce(json_agg(json_build_object('id', c.id, 'name', c.name, 'sport', c.sport, 'role', m.role, 'can_delete', m.can_delete,
+    'code', case when m.role = 'admin' then c.code end) order by c.name), '[]'::json)
+  from club_members m join clubs c on c.id = m.club_id where m.user_id = auth.uid() $$;
+revoke all on function public.sprintz_my_clubs() from public, anon;
+grant execute on function public.sprintz_my_clubs() to authenticated;
 revoke all on function public.sprintz_my_codes(), public.sprintz_dev_create_club(text, text), public.sprintz_dev_member(uuid, uuid, text, text) from public, anon;
 grant execute on function public.sprintz_my_codes(), public.sprintz_dev_create_club(text, text), public.sprintz_dev_member(uuid, uuid, text, text) to authenticated;`;
 const DCL={list:null, err:null, open:null, sql:false, chef:{}};
@@ -6141,7 +6158,7 @@ const umOrgs=a=> Array.isArray(a&&a.orgs) ? a.orgs : (a&&a.org ? [a.org] : []);
 function umRoleHTML(r){ if(!DRO.ok || !r.uid) return `<small>${L("Einrichtung unten nötig","Setup below needed")}</small>`; const R=roleOf(r.uid), RC=L("Trainer*in","Coach"), RA=L("Athlet*in","Athlete");
   const sel=[R.athlete?RA:null, R.coach?RC:null].filter(Boolean), byId={}; DRO.ath.forEach(a=>byId[a.id]=athLab(a));
   return `<div class="umrole">${msHTML("ur:"+r.account, sel, [RA, RC], L("– keine –","– none –"), v=>roleSet(r,{coach:v.includes(RC), athlete:v.includes(RA)}, (v.includes(RA))!==!!R.athlete))}
-    ${R.athlete?msHTML("ua:"+r.account, (R.athlete_ids||[]).map(i=>byId[i]).filter(Boolean), DRO.ath.map(athLab), L("– mit Athlet*in verbinden –","– link to athlete –"), v=>roleSet(r,{athlete_ids:DRO.ath.filter(a=>v.includes(athLab(a))).map(a=>a.id)})):""}</div>`; }
+    ${R.athlete?msHTML("ua:"+r.account, (R.athlete_ids||[]).map(i=>byId[i]).filter(Boolean), DRO.ath.map(athLab), L("– mit Athlet*in verbinden –","– link to athlete –"), v=>roleSet(r,{athlete_ids:DRO.ath.filter(a=>v.includes(athLab(a))).map(a=>a.id)}), L("Noch keine Athlet*innen in der Vereinsdatenbank. Ordne sie auf der Seite Athlet*innen einem Verein zu (mit Geburtsjahr und Einwilligung), dann erscheinen sie hier.","No athletes in the club database yet. Assign them to a club on the Athletes page (with year of birth and consent), then they appear here.")):""}</div>`; }
 const umClubLab=c=>c.name+(c.sport==="track"?" ("+L("Leichtathletik","Athletics")+")":"");
 function umClubCell(r){ const cl=DCL.list||[]; if(!cl.length) return `<small>${L("Unten zuerst Vereine anlegen","Create clubs below first")}</small>`; if(!r.uid) return "–";
   const sel=cl.filter(c=>(c.members||[]).some(m=>m.user_id===r.uid));
@@ -6151,10 +6168,10 @@ function umClubCell(r){ const cl=DCL.list||[]; if(!cl.length) return `<small>${L
 const umAll=()=>[...new Set([...(UM.meta.orgs||[]), ...((typeof DCL!=="undefined" && DCL.list)||[]).map(c=>c.name)])].sort((a,b)=>a.localeCompare(b));
 // Mehrfachauswahl als Ausklappmenü (Häkchen); nutzt dasselbe Aufklappfenster wie die Athletenauswahl
 const MS={r:{}};
-function msHTML(key, sel, opts, none, onChange){ MS.r[key]={sel:sel.slice(), opts, none, onChange}; return `<button type="button" class="evsel pkbtn" data-ms="${esc(key)}" aria-haspopup="listbox">${esc(sel.length?sel.join(", "):none)}</button>`; }
+function msHTML(key, sel, opts, none, onChange, empty){ MS.r[key]={sel:sel.slice(), opts, none, onChange, empty}; return `<button type="button" class="evsel pkbtn" data-ms="${esc(key)}" aria-haspopup="listbox">${esc(sel.length?sel.join(", "):none)}</button>`; }
 function msOpen(btn){ const key=btn.dataset.ms, R=MS.r[key]; if(!R) return; const same=PK.pop && PK.pop.dataset.k==="ms:"+key; pkClose(); if(same) return;
   const d=document.createElement("div"); d.id="pkPop"; d.className="pkpop"; d.dataset.k="ms:"+key; document.body.appendChild(d); PK.pop=d;
-  d.innerHTML=`<div class="pklist" role="listbox" aria-multiselectable="true">${R.opts.map(o=>`<label class="mso"><input type="checkbox" value="${esc(o)}"${R.sel.includes(o)?" checked":""}> <span>${esc(o)}</span></label>`).join("")}</div>`;
+  d.innerHTML=`<div class="pklist" role="listbox" aria-multiselectable="true">${R.opts.length?"":`<p class="hint" style="margin:6px 8px">${esc(R.empty||L("Keine Auswahl vorhanden.","Nothing to choose from."))}</p>`}${R.opts.map(o=>`<label class="mso"><input type="checkbox" value="${esc(o)}"${R.sel.includes(o)?" checked":""}> <span>${esc(o)}</span></label>`).join("")}</div>`;
   d.querySelectorAll("input").forEach(i=>i.onchange=()=>{ R.sel=[...d.querySelectorAll("input:checked")].map(x=>x.value); btn.textContent=R.sel.length?R.sel.join(", "):R.none; R.onChange(R.sel.slice()); });
   const r=btn.getBoundingClientRect(), w=Math.min(window.innerWidth-16, Math.max(240, r.width)); d.style.width=w+"px"; d.style.left=Math.max(8, Math.min(r.left, window.innerWidth-w-8))+"px";
   const below=window.innerHeight-r.bottom-12; if(below>=200){ d.style.top=(r.bottom+4)+"px"; d.style.maxHeight=below+"px"; } else { d.style.bottom=(window.innerHeight-r.top+4)+"px"; d.style.maxHeight=(r.top-12)+"px"; } }
