@@ -421,6 +421,11 @@ body.xh-on #xhair{display:block}
 .dclact{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;margin:4px 0 8px}.dcldel{color:var(--danger)}
 .dcltbl td{vertical-align:middle}.dcltbl .n{text-align:right}
 #sBox.lupeon{cursor:crosshair}
+.umrole{display:flex;flex-direction:column;gap:4px;min-width:200px}
+.qkqt{margin:10px 0 4px;font-size:.8rem;color:var(--muted)}
+.qkslide{animation:qkIn .34s cubic-bezier(.2,.8,.3,1) both}
+@keyframes qkIn{from{opacity:0;transform:translateX(48px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.qkslide{animation:none}}
 .pkbtn{text-align:left;min-width:180px;max-width:100%;cursor:pointer;padding-right:30px;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pkbtn::after{content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);opacity:.6}
 .pkpop{position:fixed;z-index:9000;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.22);padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
@@ -3695,7 +3700,11 @@ async function evList(){
 }
 /* --- Personen: Projekte Athletinnen und Athleten zuordnen (nur für freigegebene Konten) --- */
 const PERSON_USERS=["host289","freaky200"]; const coachOn=()=>{ try{ return localStorage.getItem("sprintz-coach-"+(USER||"gast"))==="1"; }catch(e){ return false; } };
-const canPersons=()=>!!USER && (PERSON_USERS.includes(USER) || coachOn());
+const ROLE={ get(){ try{ return JSON.parse(localStorage.getItem("sprintz-role-"+(USER||""))||"null"); }catch(e){ return null; } } };
+const isAthOnly=()=>{ const r=ROLE.get(); return !!(r && r.athlete && !r.coach); };
+async function roleLoad(){ if(!USER || !STORE.online() || !SESS || !SESS.uid || !navigator.onLine) return; try{ await sbReady(); const r=await sbFetch(`/rest/v1/account_roles?select=coach,athlete,athlete_ids&user_id=eq.${SESS.uid}`), v=JSON.stringify((r&&r[0])||null), k="sprintz-role-"+USER;
+    if(localStorage.getItem(k)!==v){ localStorage.setItem(k,v); if(typeof coachUI==="function") coachUI(); if(appMode==="ath") athList(); } }catch(e){} }
+const canPersons=()=>!!USER && (PERSON_USERS.includes(USER) || coachOn() || !!(ROLE.get()&&ROLE.get().athlete));
 const PERS={ key:()=>"sprintz-persons-"+(USER||"gast"),
   get(){ try{ const o=JSON.parse(localStorage.getItem(this.key())||"null"); return o && o.list ? o : {list:[], del:[], _u:0}; }catch(e){ return {list:[], del:[], _u:0}; } },
   set(o){ o._u=Date.now(); o._p=true; try{ localStorage.setItem(this.key(), JSON.stringify(o)); }catch(e){} if(typeof syncSoon==="function") syncSoon(2500); },
@@ -5097,15 +5106,21 @@ function qkEnter(){
 function qkLeave(){ if(SA.mode==="quick") qkCloseAna(); $("qkPage").hidden=true; }
 
 // Auswahl, was in einem Video ausgewertet wird (mit Unterscheidungen)
-function qkKindHTML(e,pre){ const seg=(k,opts,val)=>`<div class="seg qkseg">${opts.map(([v,l])=>`<button type="button" data-${pre}="${k}" data-v="${v}" aria-pressed="${val===v}">${l}</button>`).join("")}</div>`;
+// Die Fragen kommen nacheinander: erst die Art, dann (eingewischt) die nächste Frage, sobald die vorige beantwortet ist.
+// e.q = beantwortete Fragen; ältere Einträge ohne e.q zeigen alles wie bisher.
+function qkKindHTML(e,pre){ const A=e.q, ok=k=>!A||A.includes(k), anim=QK.anim===e.id;
+  const seg=(k,opts,val,q,extra)=>{ const pend=!!q && !ok(k); return `<div class="qkq${pend&&anim?" qkslide":""}">${q?`<p class="qkqt">${q}</p>`:""}${extra||""}<div class="seg qkseg">${opts.map(([v,l])=>`<button type="button" data-${pre}="${k}" data-v="${v}" aria-pressed="${!pend&&val===v}">${l}</button>`).join("")}</div></div>`; };
+  const UW=[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]], qUw=L("Welche Unterwasserphase?","Which underwater phase?");
   let h=seg("kind",QKKINDS(),e.kind);
-  if(e.kind==="start"){ h+=seg("start",[["block",L("Startblock","Starting block")],["back",L("Rückenstart","Backstroke start")]],e.start||"block"); if(e.start!=="back") h+=seg("uw",[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],e.uw||"fly"); }
-  if(e.kind==="turn"){ h+=`<label class="evsw qksw"><input type="checkbox" data-${pre}="turnDetail"${e.turnDetail?" checked":""}><span></span>${L("Genauer unterscheiden (nach Schwimmart)","Differentiate in more detail (by stroke)")}</label>`+seg("turn",TURNTYPES(!!e.turnDetail),e.turn||"flip");
-    if(e.turn==="open") h+=seg("uw",[["fly",L("Delfinbeinschläge","Dolphin kicks")],["breast",L("Brust-Tauchzug","Breaststroke pull-out")]],e.uw||"fly"); }
-  if(e.kind==="finish") h+=seg("stroke",FINSTROKES(),e.stroke||"free");
+  if(e.kind==="start"){ h+=seg("start",[["block",L("Startblock","Starting block")],["back",L("Rückenstart","Backstroke start")]],e.start||"block",L("Welche Startart?","Which start?")); if(ok("start") && e.start!=="back") h+=seg("uw",UW,e.uw||"fly",qUw); }
+  if(e.kind==="turn"){ h+=seg("turn",TURNTYPES(!!e.turnDetail),e.turn||"flip",L("Welche Wende?","Which turn?"),`<label class="evsw qksw"><input type="checkbox" data-${pre}="turnDetail"${e.turnDetail?" checked":""}><span></span>${L("Genauer unterscheiden (nach Schwimmart)","Differentiate in more detail (by stroke)")}</label>`);
+    if(ok("turn") && e.turn==="open") h+=seg("uw",UW,e.uw||"fly",qUw); }
+  if(e.kind==="finish") h+=seg("stroke",FINSTROKES(),e.stroke||"free",L("Welche Schwimmart?","Which stroke?"));
   return h; }
 function qkKindSet(e,k,v){
   if(k==="turnDetail"){ e.turnDetail=v; if(v){ if(e.turn==="open") e.turn = e.uw==="breast" ? "openBr" : "openFly"; } else if(e.turn==="openBr"||e.turn==="openFly"){ e.uw = e.turn==="openBr" ? "breast" : "fly"; e.turn="open"; } return; }
+  QK.anim=e.id; clearTimeout(QK.animT); QK.animT=setTimeout(()=>{ QK.anim=null; },600);
+  if(k==="kind"){ if(e.kind!==v) e.q=[]; } else { e.q=e.q||[]; if(!e.q.includes(k)) e.q.push(k); }
   e[k]=v; if(k==="kind"){ if(v==="start"){ e.start=e.start||"block"; e.uw=e.uw||"fly"; } if(v==="turn") e.turn=e.turn||"flip"; if(v==="finish") e.stroke=e.stroke||"free"; } }
 function qkBindKind(root,pre,getE,after){ root.querySelectorAll(`[data-${pre}]`).forEach(b=>{ const k=b.dataset[pre];
   if(b.type==="checkbox") b.onchange=()=>{ const e=getE(b); qkKindSet(e,k,b.checked); after(e); };
@@ -5464,7 +5479,7 @@ function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; co
   pg.innerHTML=`<h2 class="big">${L("Athlet*innen","Athletes")}</h2>
     <p class="evlead">${L("Lege die Athlet*innen an, die du betreust, und ordne sie einem Verein zu. Ergebnisse von Vereinsathlet*innen gehen automatisch in die Vereinsdatenbank und werden mit der eigenen Altersklasse im Verein verglichen.","Add the athletes you coach and assign them to a club. Results of club athletes go to the club database automatically and are compared with their own age group in the club.")}</p>
     ${clubHTML()}
-    <div class="athadd"><input type="text" id="athNew" class="qkin" maxlength="60" placeholder="${L("Vorname Nachname","First name Last name")}"><button type="button" class="testbtn" id="athNewB">+ ${L("Athlet*in anlegen","Add athlete")}</button></div>
+    ${isAthOnly()?`<p class="hint">${L("Du bist als Athlet*in angemeldet und siehst nur deine eigenen Daten.","You're signed in as an athlete and only see your own data.")}</p>`:""}<div class="athadd"${isAthOnly()?" hidden":""}><input type="text" id="athNew" class="qkin" maxlength="60" placeholder="${L("Vorname Nachname","First name Last name")}"><button type="button" class="testbtn" id="athNewB">+ ${L("Athlet*in anlegen","Add athlete")}</button></div>
     <datalist id="athSpecL">${[L("Kraul Sprint","Freestyle sprint"),L("Kraul Mittelstrecke","Freestyle middle distance"),L("Kraul Langstrecke","Freestyle distance"),L("Rücken","Backstroke"),L("Brust","Breaststroke"),L("Schmetterling","Butterfly"),L("Lagen","Individual medley")].map(s=>`<option value="${esc(s)}">`).join("")}</datalist>
     <details class="card athdd" id="athDD"${ATH.dd?" open":""}><summary><b>${L("Athlet*innen","Athletes")}</b> <small>(${pl.length}${pl.length!==all.length?" / "+all.length:""})</small></summary>
     <div class="pkbar">${pkClubSel("athClub", all)}${pkSortSeg("athSort")}</div>
@@ -5706,7 +5721,7 @@ function clubHTML(){ if(!canPersons()) return ""; if(!STORE.online()) return `<d
   return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3>
     ${cl.length?cl.map(c=>`<div class="clubrow"><b>${esc(c.name)}</b>${c.admin?`<span class="hint">${L("Vereinscode","Club code")}: <code>${esc(c.code)}</code></span><button type="button" class="testbtn ghost small" data-cmem="${c.id}">${L("Mitglieder","Members")}</button>`:`<span class="hint">${L("Mitglied","Member")}</span>`}<button type="button" class="testbtn ghost small" data-cleave="${c.id}">${c.admin?L("Verein verlassen","Leave club"):L("Austreten","Leave")}</button><div class="clubmem" id="cm-${c.id}"></div></div>`).join(""):`<p class="hint">${L("Du bist noch in keinem Verein.","You're not in a club yet.")}</p>`}
     <div class="athadd"><input type="text" id="clubCode" class="qkin" maxlength="12" placeholder="${L("Vereinscode","Club code")}"><button type="button" class="testbtn" id="clubJoinB">${L("Beitreten","Join")}</button></div>
-    <div class="athadd"><input type="text" id="clubNew" class="qkin" maxlength="80" placeholder="${L("Name des Vereins","Club name")}"><button type="button" class="testbtn ghost" id="clubNewB">+ ${L("Verein anlegen","Create club")}</button></div>
+    <div class="athadd"${isAthOnly()?" hidden":""}><input type="text" id="clubNew" class="qkin" maxlength="80" placeholder="${L("Name des Vereins","Club name")}"><button type="button" class="testbtn ghost" id="clubNewB">+ ${L("Verein anlegen","Create club")}</button></div>
     <p class="hint" id="clubMsg">${L("Wer einen Verein anlegt, verwaltet ihn und gibt den Vereinscode an andere Trainer*innen weiter. Alle Mitglieder sehen die Athlet*innen und Ergebnisse des Vereins; Videos werden nie hochgeladen.","Whoever creates a club manages it and shares the club code with other coaches. All members see the club's athletes and results; videos are never uploaded.")}</p></div>`; }
 function clubBind(){ const msg=t=>{ const m=$("clubMsg"); if(m) m.textContent=t; };
   const cp=$("clubSqlCopy"); if(cp) cp.onclick=()=>{ try{ navigator.clipboard.writeText(clubSQL()); cp.textContent=L("Kopiert","Copied"); }catch(e){} };
@@ -5722,8 +5737,8 @@ const CSYNC={t:0, run:false};
 async function clubSyncTick(force){ if(CSYNC.run || !clubOn() || !navigator.onLine || (!force && Date.now()-CSYNC.t<60000)) return; CSYNC.run=true; CSYNC.t=Date.now();
   try{ await clubLoad(true); const r=await clubAthPull(); const ae=document.activeElement, editing=ae && $("athPage") && $("athPage").contains(ae) && /INPUT|TEXTAREA|SELECT/.test(ae.tagName);
     if(r && r.ch && appMode==="ath" && !editing) athList(); }catch(e){} CSYNC.run=false; }
-setInterval(()=>{ if(document.visibilityState==="visible") clubSyncTick(true); }, 180000);
-document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible") clubSyncTick(); });
+setInterval(()=>{ if(document.visibilityState==="visible"){ roleLoad(); clubSyncTick(true); } }, 180000); setTimeout(()=>roleLoad(), 2500);
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="visible"){ roleLoad(); clubSyncTick(); } });
 /* ---------- Auswahl von Athlet*innen als Ausklappmenü: erst Verein/Organisation, dann alle Personen, sortiert nach Vorname oder Geburtsjahr ---------- */
 const PK={r:{}, pop:null, st:(()=>{ try{ return JSON.parse(localStorage.getItem("sprintz-pk")||"{}")||{}; }catch(e){ return {}; } })()};
 const pkSave=()=>{ try{ localStorage.setItem("sprintz-pk",JSON.stringify(PK.st)); }catch(e){} };
@@ -5791,8 +5806,80 @@ begin
   return json_build_object('ok', true, 'code', k);
 end $$;
 revoke all on function public.sprintz_dev_clubs(), public.sprintz_dev_club(uuid, text, text) from public, anon;
-grant execute on function public.sprintz_dev_clubs(), public.sprintz_dev_club(uuid, text, text) to authenticated;`;
+grant execute on function public.sprintz_dev_clubs(), public.sprintz_dev_club(uuid, text, text) to authenticated;
+
+-- Rollen je Konto: Trainer*in (alle Athlet*innen der eigenen Vereine) und/oder Athlet*in (nur die verbundenen eigenen Einträge)
+create table if not exists public.account_roles(
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  account text, coach boolean not null default true, athlete boolean not null default false,
+  athlete_ids uuid[] not null default '{}', updated_at timestamptz not null default now());
+alter table public.account_roles enable row level security;
+drop policy if exists "Eigene Rolle lesen" on public.account_roles;
+create policy "Eigene Rolle lesen" on public.account_roles for select to authenticated using (user_id = auth.uid() or public.sprintz_is_dev());
+create or replace function public.sprintz_is_coach() returns boolean language sql stable security definer set search_path = public as $$
+  select coalesce((select coach from account_roles where user_id = auth.uid()), true) $$;
+create or replace function public.sprintz_my_athletes() returns uuid[] language sql stable security definer set search_path = public as $$
+  select coalesce((select athlete_ids from account_roles where user_id = auth.uid() and athlete), '{}'::uuid[]) $$;
+drop policy if exists "Mitglieder: Athleten" on public.club_athletes;
+drop policy if exists "Athleten lesen" on public.club_athletes;
+drop policy if exists "Athleten anlegen" on public.club_athletes;
+drop policy if exists "Athleten ändern" on public.club_athletes;
+drop policy if exists "Athleten löschen" on public.club_athletes;
+create policy "Athleten lesen" on public.club_athletes for select to authenticated
+  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or id = any(public.sprintz_my_athletes())));
+create policy "Athleten anlegen" on public.club_athletes for insert to authenticated
+  with check (public.sprintz_is_member(club_id) and public.sprintz_is_coach() and consent);
+create policy "Athleten ändern" on public.club_athletes for update to authenticated
+  using (public.sprintz_is_member(club_id) and public.sprintz_is_coach()) with check (public.sprintz_is_member(club_id) and public.sprintz_is_coach() and consent);
+create policy "Athleten löschen" on public.club_athletes for delete to authenticated
+  using (public.sprintz_is_member(club_id) and public.sprintz_is_coach());
+drop policy if exists "Mitglieder: Ergebnisse" on public.club_results;
+drop policy if exists "Ergebnisse lesen" on public.club_results;
+drop policy if exists "Ergebnisse anlegen" on public.club_results;
+drop policy if exists "Ergebnisse ändern" on public.club_results;
+drop policy if exists "Ergebnisse löschen" on public.club_results;
+create policy "Ergebnisse lesen" on public.club_results for select to authenticated
+  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())));
+create policy "Ergebnisse anlegen" on public.club_results for insert to authenticated
+  with check (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes()))
+    and exists(select 1 from public.club_athletes a where a.id = athlete_id and a.club_id = club_results.club_id));
+create policy "Ergebnisse ändern" on public.club_results for update to authenticated
+  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())))
+  with check (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())));
+create policy "Ergebnisse löschen" on public.club_results for delete to authenticated
+  using (public.sprintz_is_member(club_id) and (public.sprintz_is_coach() or athlete_id = any(public.sprintz_my_athletes())));
+create or replace function public.sprintz_dev_roles() returns json language plpgsql stable security definer set search_path = public as $$
+begin
+  if not public.sprintz_is_dev() then raise exception 'not allowed'; end if;
+  return json_build_object(
+    'roles', (select coalesce(json_agg(r), '[]'::json) from account_roles r),
+    'athletes', (select coalesce(json_agg(json_build_object('id', a.id, 'first', a.first_name, 'last', a.last_name, 'birth', a.birth_year, 'club', c.name, 'sport', c.sport) order by a.first_name, a.last_name), '[]'::json)
+      from club_athletes a join clubs c on c.id = a.club_id));
+end $$;
+create or replace function public.sprintz_dev_set_role(p_user uuid, p_account text, p_coach boolean, p_athlete boolean, p_ids uuid[]) returns json language plpgsql security definer set search_path = public as $$
+begin
+  if not public.sprintz_is_dev() then raise exception 'not allowed'; end if;
+  insert into account_roles(user_id, account, coach, athlete, athlete_ids, updated_at) values (p_user, p_account, p_coach, p_athlete, coalesce(p_ids, '{}'), now())
+    on conflict (user_id) do update set account = excluded.account, coach = excluded.coach, athlete = excluded.athlete, athlete_ids = excluded.athlete_ids, updated_at = now();
+  if p_athlete then
+    insert into club_members(club_id, user_id, account, role)
+      select distinct a.club_id, p_user, p_account, 'member' from club_athletes a where a.id = any(coalesce(p_ids, '{}'))
+      on conflict (club_id, user_id) do nothing;
+  end if;
+  return json_build_object('ok', true);
+end $$;
+revoke all on function public.sprintz_dev_roles(), public.sprintz_dev_set_role(uuid, text, boolean, boolean, uuid[]) from public, anon;
+grant execute on function public.sprintz_dev_roles(), public.sprintz_dev_set_role(uuid, text, boolean, boolean, uuid[]) to authenticated;`;
 const DCL={list:null, err:null, open:null, sql:false};
+const DRO={roles:{}, ath:[], ok:false};
+async function devRolesLoad(){ try{ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_dev_roles",{method:"POST", body:{}}); DRO.roles={}; ((r&&r.roles)||[]).forEach(x=>DRO.roles[x.user_id]=x); DRO.ath=(r&&r.athletes)||[]; DRO.ok=true; }
+  catch(e){ DRO.ok=false; if(!DCL.err && (e.code==="PGRST202"||e.status===404||/sprintz_dev_roles|does not exist|schema cache/i.test(e.message||""))) DCL.err="setup"; } }
+const athLab=a=>`${a.first} ${a.last} · ${a.birth} · ${a.club}${a.sport==="track"?" ("+L("Leichtathletik","Athletics")+")":""}`;
+const roleOf=uid=> DRO.roles[uid] || {coach:true, athlete:false, athlete_ids:[]};
+async function roleSet(r, patch, redraw){ if(!r.uid) return; const cur=Object.assign({}, roleOf(r.uid), patch);
+  try{ await sbReady(); await sbFetch("/rest/v1/rpc/sprintz_dev_set_role",{method:"POST", body:{p_user:r.uid, p_account:r.account, p_coach:!!cur.coach, p_athlete:!!cur.athlete, p_ids:cur.athlete_ids||[]}});
+    DRO.roles[r.uid]=Object.assign({user_id:r.uid, account:r.account}, cur); if(redraw){ pkClose(); usersList(); const b=document.querySelector(`[data-ms="ur:${CSS.escape(r.account)}"]`); if(b) msOpen(b); } }
+  catch(e){ toast(L("Das hat nicht geklappt.","That didn't work.")+" "+(e.message||""),4000); } }
 async function devClubsLoad(){ DCL.err=null; try{ await sbReady(); DCL.list=await sbFetch("/rest/v1/rpc/sprintz_dev_clubs",{method:"POST", body:{}})||[]; }
   catch(e){ DCL.list=null; DCL.err = (e.code==="PGRST202"||e.status===404||/sprintz_dev_clubs|does not exist|schema cache/i.test(e.message||"")) ? "setup" : (e.message||"err"); } }
 async function devClubAct(id, action, value){ try{ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_dev_club",{method:"POST", body:{p_club:id, p_action:action, p_value:value??null}}); await devClubsLoad(); if(action==="join"||action==="delete") await clubLoad(true); usersList(); return r; }
@@ -5860,6 +5947,10 @@ const usageSoon=()=>{ clearTimeout(usageT); usageT=setTimeout(()=>usageReport(),
 // Verwaltung (nur Entwickler): Konto → Person und Organisation, eigene Zeile „accmeta“
 const UM={meta:{accounts:{}, orgs:[]}, rows:[], open:null, err:null};
 const umOrgs=a=> Array.isArray(a&&a.orgs) ? a.orgs : (a&&a.org ? [a.org] : []);
+function umRoleHTML(r){ if(!DRO.ok || !r.uid) return `<small>${L("Einrichtung unten nötig","Setup below needed")}</small>`; const R=roleOf(r.uid), RC=L("Trainer*in","Coach"), RA=L("Athlet*in","Athlete");
+  const sel=[R.athlete?RA:null, R.coach?RC:null].filter(Boolean), byId={}; DRO.ath.forEach(a=>byId[a.id]=athLab(a));
+  return `<div class="umrole">${msHTML("ur:"+r.account, sel, [RA, RC], L("– keine –","– none –"), v=>roleSet(r,{coach:v.includes(RC), athlete:v.includes(RA)}, (v.includes(RA))!==!!R.athlete))}
+    ${R.athlete?msHTML("ua:"+r.account, (R.athlete_ids||[]).map(i=>byId[i]).filter(Boolean), DRO.ath.map(athLab), L("– mit Athlet*in verbinden –","– link to athlete –"), v=>roleSet(r,{athlete_ids:DRO.ath.filter(a=>v.includes(athLab(a))).map(a=>a.id)})):""}</div>`; }
 const umAll=()=>[...new Set([...(UM.meta.orgs||[]), ...((typeof DCL!=="undefined" && DCL.list)||[]).map(c=>c.name)])].sort((a,b)=>a.localeCompare(b));
 // Mehrfachauswahl als Ausklappmenü (Häkchen); nutzt dasselbe Aufklappfenster wie die Athletenauswahl
 const MS={r:{}};
@@ -5872,12 +5963,12 @@ function msOpen(btn){ const key=btn.dataset.ms, R=MS.r[key]; if(!R) return; cons
   const below=window.innerHeight-r.bottom-12; if(below>=200){ d.style.top=(r.bottom+4)+"px"; d.style.maxHeight=below+"px"; } else { d.style.bottom=(window.innerHeight-r.top+4)+"px"; d.style.maxHeight=(r.top-12)+"px"; } }
 async function usersLoad(){ UM.err=null;
   try{ await sbReady(); const r=await sbFetch("/rest/v1/userdata?key=eq.accmeta&select=data"); const m=r&&r[0]&&r[0].data; if(m) UM.meta=Object.assign({accounts:{}, orgs:[]}, m); }catch(e){ UM.err=e; }
-  try{ await usageReport(true); const r=await sbFetch("/rest/v1/userdata?key=eq.usage&select=user_id,data,updated_at"); UM.rows=(r||[]).map(x=>x.data).filter(Boolean); }catch(e){ UM.err=e; UM.rows=[]; } }
+  try{ await usageReport(true); const r=await sbFetch("/rest/v1/userdata?key=eq.usage&select=user_id,data,updated_at"); UM.rows=(r||[]).filter(x=>x.data).map(x=>Object.assign({uid:x.user_id}, x.data)); }catch(e){ UM.err=e; UM.rows=[]; } }
 async function usersSaveMeta(){ try{ await sbReady(); await sbFetch("/rest/v1/userdata?on_conflict=user_id,key",{method:"POST", headers:{Prefer:"resolution=merge-duplicates,return=minimal"}, body:{key:"accmeta", data:UM.meta, updated_at:new Date().toISOString()}}); }catch(e){ toast(L("Speichern fehlgeschlagen. Bist du online angemeldet?","Saving failed. Are you signed in online?")); } }
 async function usersEnter(){ ["spPage","evPage","qkPage","modeSoon","athPage"].forEach(k=>{ const e=$(k); if(e) e.hidden=true; }); const pg=$("usersPage"); pg.hidden=false;
   pg.innerHTML=`<h2 class="big">${L("Nutzende Personen","Users")}</h2><p class="hint">${L("Wird geladen …","Loading …")}</p>`;
   if(!STORE.online()){ pg.innerHTML=`<h2 class="big">${L("Nutzende Personen","Users")}</h2><div class="card evnote"><p>${L("Dafür musst du online angemeldet sein.","You need to be signed in online for this.")}</p></div>`; return; }
-  await Promise.all([usersLoad(), devClubsLoad()]); usersList(); }
+  await Promise.all([usersLoad(), devClubsLoad()]); await devRolesLoad(); usersList(); }
 function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") return; const M=UM.meta, orgs=M.orgs||[];
   const rel=iso=>{ if(!iso) return L("noch nie angemeldet","never signed in"); const d=(Date.now()-Date.parse(iso))/864e5; return fmtDate(iso)+" ("+(d<1?L("heute","today"):L(`vor ${Math.round(d)} Tagen`,`${Math.round(d)} days ago`))+")"; };
   const rows=UM.rows.slice().sort((a,b)=>Date.parse(b.lastUsed||0)-Date.parse(a.lastUsed||0)), onlyMe = rows.length<=1;
@@ -5886,11 +5977,11 @@ function usersList(){ const pg=$("usersPage"); if(!pg || appMode!=="users") retu
     ${onlyMe||UM.sqlOpen?`<div class="card evnote"><p>${L("Damit hier alle Konten erscheinen, auch neu angelegte noch vor ihrer ersten Anmeldung, führe diesen Befehl einmal im Supabase-Dashboard unter „SQL Editor“ aus (einfügen, „Run“). Er erlaubt das Lesen nur den Entwicklerkonten und nur für die Nutzungsdaten.","For all accounts to appear here, including newly created ones before they first sign in, run this command once in the Supabase dashboard under “SQL Editor” (paste, “Run”). It allows reading only for the developer accounts and only for the usage data.")}}</p><pre class="sqlbox">${esc(usersSQL())}</pre><button type="button" class="testbtn small" id="umCopy">${L("Befehl kopieren","Copy command")}</button></div>`:`<button type="button" class="testbtn ghost small" id="umSql">${L("Einrichtung in Supabase anzeigen","Show Supabase setup")}</button>`}
     <p class="hint">${L("Datenschutz: Die Nutzungsdaten enthalten die Namen der angelegten Athlet*innen. Weise in der Datenschutzerklärung darauf hin.","Privacy: the usage data contains the names of the athletes created. Mention this in the privacy policy.")}</p>
     <div class="umorgs"><b>${L("Organisationen","Organisations")}</b> ${orgs.map((o,i)=>`<span class="umorg">${esc(o)} <button type="button" data-odel="${i}" aria-label="${L("Entfernen","Remove")}">×</button></span>`).join("")}<input type="text" id="umOrgN" class="qkin" maxlength="60" placeholder="${L("Neue Organisation","New organisation")}"><button type="button" class="testbtn small" id="umOrgB">+</button></div>
-    <div class="umtblw"><table class="umtbl"><thead><tr><th>${L("Echte Person","Real person")}</th><th>${L("Konto","Account")}</th><th>${L("Organisationen","Organisations")}</th><th>${L("Zuletzt genutzt","Last used")}</th></tr></thead><tbody>
+    <div class="umtblw"><table class="umtbl"><thead><tr><th>${L("Echte Person","Real person")}</th><th>${L("Konto","Account")}</th><th>${L("Organisationen","Organisations")}</th><th>${L("Rolle","Role")}</th><th>${L("Zuletzt genutzt","Last used")}</th></tr></thead><tbody>
     ${rows.map(r=>{ const a=M.accounts[r.account]||{}, c=r.counts||{}, open=UM.open===r.account;
       return `<tr><td><button type="button" class="umexp" data-ux="${esc(r.account)}" aria-expanded="${open}" aria-label="${L("Daten anzeigen","Show data")}">${open?"▾":"▸"}</button><input type="text" class="qkin" data-up="${esc(r.account)}" maxlength="80" value="${esc(a.person||"")}" placeholder="${L("Echte Person","Real person")}"></td>
-        <td>${esc(r.account)}</td><td>${umAll().length?msHTML("uo:"+r.account, umOrgs(a), umAll(), L("– keine –","– none –"), v=>{ const A=(M.accounts[r.account]=M.accounts[r.account]||{}); A.orgs=v; delete A.org; usersSaveMeta(); }):`<small>${L("Oben zuerst Organisationen anlegen","Add organisations above first")}</small>`}</td><td>${rel(r.lastUsed)}</td></tr>
-        ${open?`<tr class="umdet"><td colspan="4"><div class="umgrid"><span>${L("Zuletzt genutzt","Last used")}<b>${rel(r.lastUsed)}</b></span><span>${L("Programm","App")}<b>${r.app==="desktop"?L("Desktop","Desktop"):L("Web","Web")}</b></span>
+        <td>${esc(r.account)}</td><td>${umAll().length?msHTML("uo:"+r.account, umOrgs(a), umAll(), L("– keine –","– none –"), v=>{ const A=(M.accounts[r.account]=M.accounts[r.account]||{}); A.orgs=v; delete A.org; usersSaveMeta(); }):`<small>${L("Oben zuerst Organisationen anlegen","Add organisations above first")}</small>`}</td><td>${umRoleHTML(r)}</td><td>${rel(r.lastUsed)}</td></tr>
+        ${open?`<tr class="umdet"><td colspan="5"><div class="umgrid"><span>${L("Zuletzt genutzt","Last used")}<b>${rel(r.lastUsed)}</b></span><span>${L("Programm","App")}<b>${r.app==="desktop"?L("Desktop","Desktop"):L("Web","Web")}</b></span>
           <span>${L("Videos hochgeladen","Videos uploaded")}<b>${c.uploaded??"–"}</b></span><span>${L("Auswertung begonnen","Analysis started")}<b>${c.started??"–"}</b></span><span>${L("Fertig ausgewertet","Analysis finished")}<b>${c.done??"–"}</b></span><span>${L("Projekte","Projects")}<b>${c.projects??"–"}</b></span><span>${L("Trainingsmessungen","Training measurements")}<b>${c.training??"–"}</b></span></div>
           <p class="umath"><b>${L("Angelegte Athlet*innen","Athletes created")}:</b> ${(r.athletes||[]).length?(r.athletes||[]).map(esc).join(", "):"–"}</p></td></tr>`:""}`; }).join("")}</tbody></table></div>
     ${devClubsHTML()}`;
