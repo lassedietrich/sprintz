@@ -414,7 +414,23 @@ body.xh-on #xhair{display:block}
 .seg.big.g4{display:grid;grid-template-columns:repeat(4,1fr)}.seg.big.g4 button{padding:11px 2px;font-size:.95rem}
 #sSpkCard{margin-top:16px}
 #spAna .vbox{position:relative}#sLupe{position:absolute;z-index:5;pointer-events:none;border-radius:50%;border:2px solid #fff;box-shadow:0 3px 14px rgba(0,0,0,.55);background:#000}
-.dcoach{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);margin:0 0 10px;line-height:1.35;cursor:pointer}.dcoach input{margin-top:2px}.qkask{transition:transform .32s cubic-bezier(.4,0,.6,1),opacity .32s;}.qkask.swl{transform:translateX(-120%);opacity:0}.qkask.swr{transform:translateX(120%);opacity:0}.qkcard{overflow:hidden}.qkask{margin:8px 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}.qkask .qt{margin:0 0 4px;font-weight:600}.qkseg{display:flex;flex-wrap:wrap;margin:4px 0}.qkseg button{flex:1 1 auto;padding:7px 10px}.qksw{margin:6px 0}.qkkd{margin:6px 0 8px;font-size:.85rem}.qkkd summary{cursor:pointer;color:var(--accent)}.qkpers{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.qkpsel{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);margin:0 0 8px}.qkcard .qkmain{flex:1;padding:12px 14px;min-width:0}.qkcard small{display:block;color:var(--muted);margin-top:2px}.qkname{font-weight:700}.qkren{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:0 4px}
+.dcoach{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);margin:0 0 10px;line-height:1.35;cursor:pointer}.dcoach input{margin-top:2px}.qkask{transition:transform .32s cubic-bezier(.4,0,.6,1),opacity .32s;}.qkask.swl{transform:translateX(-120%);opacity:0}.qkask.swr{transform:translateX(120%);opacity:0}.qkcard{overflow:hidden}.qkask{margin:8px 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}.qkask .qt{margin:0 0 4px;font-weight:600}.qkseg{display:flex;flex-wrap:wrap;margin:4px 0}.qkseg button{flex:1 1 auto;padding:7px 10px}.qksw{margin:6px 0}.qkkd{margin:6px 0 8px;font-size:.85rem}.qkkd summary{cursor:pointer;color:var(--accent)}.qkpers{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.qkpsel{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);margin:0 0 8px}
+.pklab{font-size:.82rem;color:var(--muted)}
+.pkbtn{text-align:left;min-width:180px;max-width:100%;cursor:pointer;padding-right:30px;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkbtn::after{content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);opacity:.6}
+.pkpop{position:fixed;z-index:9000;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.22);padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.pkbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:flex-end;margin:0 0 8px}
+.pkrow{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--muted)}
+.pkrow .evsel{min-width:170px}
+.pkseg button{padding:6px 10px;font-size:.82rem}
+.pklist{display:flex;flex-direction:column;gap:2px}
+.pklist button{display:flex;justify-content:space-between;gap:10px;align-items:baseline;text-align:left;background:none;border:0;border-radius:8px;padding:8px 10px;font:inherit;color:inherit;cursor:pointer}
+.pklist button:hover{background:rgba(47,111,224,.08)}
+.pklist button[aria-selected="true"]{background:rgba(47,111,224,.15);font-weight:600}
+.pklist small{color:var(--muted);font-weight:400;white-space:nowrap}
+.athdd{padding:12px 14px}.athdd>summary{cursor:pointer;font-size:1.05rem}.athdd[open]>summary{margin-bottom:10px}
+.qkgh{margin:10px 0 8px;font-size:1rem}
+.qkdone{margin-top:16px}.qkdone>summary{cursor:pointer;font-weight:600;font-size:1rem;margin-bottom:8px}.qkcard .qkmain{flex:1;padding:12px 14px;min-width:0}.qkcard small{display:block;color:var(--muted);margin-top:2px}.qkname{font-weight:700}.qkren{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:0 4px}
 .qktimes{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0;font-size:.9rem;color:var(--muted)}.qktimes b{color:var(--fg);font-variant-numeric:tabular-nums}
 .qkbtns{display:flex;gap:8px;flex-wrap:wrap}.qkmiss{color:var(--danger)}.qkin{font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:8px;max-width:70%}
 .qkdet{margin-top:22px;padding:12px 14px}.qkdet summary{cursor:pointer}.qkdet .mscard{margin:12px 0 0}
@@ -1600,7 +1616,7 @@ function sportLabels(){
   $("setOff").innerHTML = L(`Take-off hier<br><small>${t?"Füße verlassen die Startblöcke":"Füße verlassen den Block"}</small>`,`Take-off here<br><small>${t?L("Füße verlassen die Startblöcke","feet leave the blocks"):L("Füße verlassen den Block","feet leave the block")}</small>`);
   $("handPad").textContent = "Leg deine Hände hier auf";
 }
-function setSport(v){ setTimeout(()=>{ if(typeof updMenuIcons==="function") updMenuIcons(); },0); const changed = v!==sport; sport=v; document.documentElement.classList.toggle("track", v==="track"); $("track").hidden = v!=="track";
+function setSport(v){ const changed = v!==sport; setTimeout(()=>{ if(typeof updMenuIcons==="function") updMenuIcons(); if(changed){ if(appMode==="ath") athList(); else if(appMode==="eval" && typeof evList==="function" && !$("evPage").hidden) evList(); } },0); sport=v; document.documentElement.classList.toggle("track", v==="track"); $("track").hidden = v!=="track";
   sportLabels(); loadOwn(); renderPresets(); summary();
   if(changed || !A.env){ S=freshS(); updaters.forEach(f=>f()); resetDialog(); if(typeof tab!=="undefined"){ if(tab==="stats") renderStats(); if(tab==="video") renderVList(); } }
   $("sport").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.v===v)));
@@ -3677,9 +3693,9 @@ const canPersons=()=>!!USER && (PERSON_USERS.includes(USER) || coachOn());
 const PERS={ key:()=>"sprintz-persons-"+(USER||"gast"),
   get(){ try{ const o=JSON.parse(localStorage.getItem(this.key())||"null"); return o && o.list ? o : {list:[], del:[], _u:0}; }catch(e){ return {list:[], del:[], _u:0}; } },
   set(o){ o._u=Date.now(); o._p=true; try{ localStorage.setItem(this.key(), JSON.stringify(o)); }catch(e){} if(typeof syncSoon==="function") syncSoon(2500); },
-  list(){ return this.get().list.slice().sort((a,b)=>a.name.localeCompare(b.name)); },
+  list(){ return this.get().list.filter(x=>(x.sport||"swim")===sport).sort((a,b)=>(a.name||"").localeCompare(b.name||"")); },
   name(id){ const x=this.get().list.find(q=>q.id===id); return x?x.name:null; },
-  add(name){ const o=this.get(); const x={id:evId(), name:name.trim(), created:Date.now()}; o.list.push(x); this.set(o); return x; },
+  add(name){ const o=this.get(); const x={id:evId(), name:name.trim(), created:Date.now(), sport}; o.list.push(x); this.set(o); return x; },
   rename(id,name){ const o=this.get(), x=o.list.find(q=>q.id===id); if(x){ x.name=name.trim(); this.set(o); } },
   del(id){ const o=this.get(); o.list=o.list.filter(q=>q.id!==id); (o.del=o.del||[]).push(id); this.set(o); } };
 async function persSync(){
@@ -3695,18 +3711,16 @@ async function persSync(){
 function evPersonsSel(p){ if(!canPersons()) return ""; const pl=PERS.list();
   return `<div class="q"><p class="qt">${L("Athlet*in","Athlete")}</p><select id="evPerson" class="evsel"><option value="">${L("– keine Zuordnung –","– not assigned –")}</option>${pl.map(x=>`<option value="${x.id}"${p.person===x.id?" selected":""}>${esc(x.name)}</option>`).join("")}</select></div>`; }
 // Auswahl in der Projektübersicht: Filter, neue Person, umbenennen, löschen
-function evPersonsBar(ps){ if(!canPersons()) return ""; const pl=PERS.list(), f=EV.personF||"all", cnt=id=>ps.filter(p=>(p.person||"")===id).length, un=ps.filter(p=>!p.person||!PERS.name(p.person)).length;
+function evPersonsBar(ps){ if(!canPersons()) return ""; const pl=PERS.list(), f=EV.personF||"all", cnt=v=>v==="all"?ps.length:v==="none"?ps.filter(p=>!p.person||!PERS.name(p.person)).length:ps.filter(p=>(p.person||"")===v).length;
   const sel=pl.find(x=>x.id===f);
   return `<div class="evpers"><p class="qt" style="margin:0 0 6px">${L("Athlet*innen","Athletes")}</p><div class="evchips" id="evPersF">
-    <button type="button" data-p="all" aria-pressed="${f==="all"}">${L("Alle","All")} (${ps.length})</button>
-    ${pl.map(x=>`<button type="button" data-p="${x.id}" aria-pressed="${f===x.id}">${esc(x.name)} (${cnt(x.id)})</button>`).join("")}
-    ${un&&pl.length?`<button type="button" data-p="none" aria-pressed="${f==="none"}">${L("Ohne Zuordnung","Not assigned")} (${un})</button>`:""}
+    ${pkHTML("evPF", f, {all:true, none:true, count:cnt, pick:v=>{ EV.personF=v; evList(); }})}
     <button type="button" data-p="add" class="evpadd">+ ${L("Athlet*in","Athlete")}</button></div>
     <p class="hint" style="margin:6px 0 0">${L("Tipp: Solange keine Einwilligung vorliegt, Kürzel statt Klarnamen verwenden.","Tip: as long as there's no consent, use initials instead of full names.")}</p>
     <div id="evPersEd"></div>
     ${sel?`<div class="evpact"><button type="button" class="testbtn ghost small" id="evPRen">${L("Umbenennen","Rename")}</button><button type="button" class="testbtn ghost small" id="evPDel">${L("Person löschen","Delete person")}</button></div>`:""}</div>`; }
 function evPersonsBind(){ const box=$("evPersF"); if(!box) return;
-  box.querySelectorAll("button").forEach(b=>b.onclick=()=>{ if(b.dataset.p==="add"){ evPersonEdit(null); return; } EV.personF=b.dataset.p; evList(); });
+  box.querySelectorAll("button[data-p]").forEach(b=>b.onclick=()=>{ if(b.dataset.p==="add"){ evPersonEdit(null); return; } EV.personF=b.dataset.p; evList(); });
   const rn=$("evPRen"); if(rn) rn.onclick=()=>evPersonEdit(EV.personF);
   const dl=$("evPDel"); if(dl) dl.onclick=async()=>{ if(!dl.dataset.sure){ dl.dataset.sure="1"; dl.textContent=L("Wirklich löschen? Die Projekte bleiben erhalten.","Really delete? The projects are kept."); return; }
     const id=EV.personF; PERS.del(id); for(const p of STORE._all().filter(x=>x.person===id)){ p.person=null; await STORE.put(p); } EV.personF="all"; evList(); }; }
@@ -5097,6 +5111,11 @@ function qkResHTML(e){ const m=e.m||{}, tm=v=>v!=null&&isFinite(v)?evFmt(v,"s"):
   if(e.kind==="tech"){ const n=(e.notes||[]).length, d=(e.raw&&e.raw.draw||[]).length; return `<span>${L(`${n} Notizen`,`${n} notes`)}</span><span>${L(`${d} Zeichnungen`,`${d} drawings`)}</span>`; }
   return sp("5 m",m.t5)+sp("10 m",m.t10)+sp("15 m",m.t15); }
 
+const qkCnt=v=>{ const t=QK.p?QK.p.trials:[]; return v==="all"?t.length:v==="none"?t.filter(e=>!e.person||!PERS.name(e.person)).length:t.filter(e=>e.person===v).length; };
+// abgeschlossen = detailliert ausgewertet; diese Liste ist zunächst eingeklappt
+function qkGrp(ord, card){ if(!ord.length) return `<p class="hint">${L("Noch keine Videos.","No videos yet.")}</p>`; const done=ord.filter(e=>e.status==="det"), op=ord.filter(e=>e.status!=="det");
+  return `<h3 class="qkgh">${L("Offen","Open")} (${op.length})</h3><div class="evlist">${op.length?op.map(card).join(""):`<p class="hint">${L("Keine offenen Videos.","No open videos.")}</p>`}</div>
+    ${done.length?`<details class="qkdone" id="qkDone"${QK.doneOpen?" open":""}><summary>${L("Abgeschlossen","Completed")} (${done.length})</summary><div class="evlist">${done.map(card).join("")}</div></details>`:""}`; }
 function qkList(){
   const pg=$("qkPage"); if(!pg || appMode!=="quick") return; const p=QK.p; pg.hidden=false;
   if(T()){ pg.innerHTML=`<h2 class="big">${L("Technikauswertung","Technique analysis")}</h2><div class="card evnote"><p>${L("Die Technikauswertung gibt es vorerst nur fürs Schwimmen. Wechsle im Menü die Sportart.","Technique analysis is only available for swimming for now. Switch sport in the menu.")}</p></div>`; return; }
@@ -5105,29 +5124,25 @@ function qkList(){
   const st=e=>e.status==="det"?L("Detailliert ausgewertet","Analysed in detail"):e.status==="quick"?L("Schnell bewertet","Quick rating done"):L("Offen","Open");
   pg.innerHTML=`<h2 class="big">${L("Technikauswertung","Technique analysis")}</h2>
     <p class="evlead">${L("Videos ohne Projekt hochladen, in Zeitlupe sichten und schnell bewerten. Die Markierungen bleiben gespeichert, die detaillierte Auswertung machst du später. Videos speichert Sprintz nicht.","Upload videos without a project, view them in slow motion and rate them quickly. The marks are saved; you do the detailed analysis later. Sprintz doesn't store videos.")}</p>
-    <label class="filebtn evup">${L("Videos hochladen","Upload videos")}<input type="file" id="qkFiles" accept="video/*,.mov,.mp4,.m4v,.webm" multiple></label><label class="testbtn ghost small mp4fix">🎞 ${L("Ergebnisvideo in normale MP4 umwandeln","Convert result video to a normal MP4")}<input type="file" id="mp4Fix" hidden></label><p class="hint upq" data-upq></p><p class="hint" id="qkMsg"></p>
+    <label class="filebtn evup">${L("Videos hochladen","Upload videos")}<input type="file" id="qkFiles" accept="video/*,.mov,.mp4,.m4v,.webm" multiple></label><p class="hint upq" data-upq></p><p class="hint" id="qkMsg"></p>
     ${open?`<button type="button" class="evbig" id="qkAll" style="margin:6px 0 4px">${L(`Nacheinander bewerten (${open} offen)`,`Rate one after another (${open} open)`)}</button>`:""}
     <h2 class="big" style="margin-top:22px">${L("Deine Videos","Your videos")}</h2>
-    ${cp?`<div class="qkpers"><label>${L("Athlet*in","Athlete")} <select id="qkPF" class="evsel"><option value="all">${L("Alle","All")}</option>${pl.map(x=>`<option value="${x.id}"${QK.pf===x.id?" selected":""}>${esc(x.name)}</option>`).join("")}<option value="none"${QK.pf==="none"?" selected":""}>${L("Ohne Zuordnung","Not assigned")}</option></select></label><button type="button" class="testbtn ghost small" id="qkPAdd">+ ${L("Athlet*in","Athlete")}</button><span id="qkPEd"></span></div>`:""}
-    <div class="evlist">${ord.length ? ord.map(e=>{ const has=qkHasVid(e);
+    ${cp?`<div class="qkpers"><span class="pklab">${L("Athlet*in","Athlete")}</span>${pkHTML("qkPF", QK.pf, {all:true, none:true, count:qkCnt, pick:v=>{ QK.pf=v; qkList(); }})}<button type="button" class="testbtn ghost small" id="qkPAdd">+ ${L("Athlet*in","Athlete")}</button><span id="qkPEd"></span></div>`:""}
+    ${qkGrp(ord, e=>{ const has=qkHasVid(e);
       return `<div class="evcard qkcard" data-id="${e.id}"><div class="qkmain"><b class="qkname">${esc(qkName(e))}</b> <button type="button" class="evren qkren" data-ren="${e.id}" aria-label="${L("Umbenennen","Rename")}">✎</button>
         <small>${e.vid&&e.vid.t?fmtDate(new Date(e.vid.t).toISOString())+" · ":""}${e.kind?qkKindName(e.kind)+(qkSub(e)?" · "+qkSub(e):"")+" · ":""}${st(e)}${(e.vids2||[]).length?" · "+L(`${e.vids2.length+1} Kameras`,`${e.vids2.length+1} cameras`):""}${has?"":` · <span class="qkmiss">${L("Video erneut hochladen","Upload the video again")}</span>`}</small>
         <div class="qktimes">${qkResHTML(e)}</div>
         ${e.kind ? `<details class="qkkd"${QK.openK===e.id?" open":""}><summary>${L("Was wird ausgewertet?","What is analysed?")}</summary><div data-kid="${e.id}">${qkKindHTML(e,"ek")}</div></details>`
           : `<div class="qkask"><p class="qt">${L("Was wird in diesem Video ausgewertet?","What is analysed in this video?")}</p><div data-kid="${e.id}">${qkKindHTML(e,"ek")}</div></div>`}
         ${e.kind && noKind && QK.openK===e.id ? `<button type="button" class="testbtn ghost small" data-kall="${e.id}">${L(`Auch für die ${noKind} Videos ohne Angabe übernehmen`,`Also apply to the ${noKind} videos without a choice`)}</button>`:""}
-        ${cp?`<label class="qkpsel">${L("Athlet*in","Athlete")} <select class="evsel" data-pers="${e.id}"><option value="">${L("– keine Zuordnung –","– not assigned –")}</option>${pl.map(x=>`<option value="${x.id}"${e.person===x.id?" selected":""}>${esc(x.name)}</option>`).join("")}</select></label>`:""}
+        ${cp?`<div class="qkpsel"><span class="pklab">${L("Athlet*in","Athlete")}</span>${pkHTML("qkp-"+e.id, e.person&&PERS.name(e.person)?e.person:"", {none:true, noneLab:L("– keine Zuordnung –","– not assigned –"), pick:v=>{ const q=qkE(e.id); if(!q) return; q.person=v==="none"?null:v; qkSave(); qkList(); }})}</div>`:""}
         <div class="qkbtns"><button type="button" class="testbtn small" data-qa="${e.id}"${has&&e.kind?"":" disabled"}>${e.kind==="tech"?L("Ansehen","View"):e.status==="open"?L("Schnell bewerten","Quick rating"):L("Zeiten ansehen","View times")}</button>${e.kind==="tech"?"":`<button type="button" class="testbtn small ghost" data-qd="${e.id}"${has&&e.kind?"":" disabled"}>${L("Detailliert auswerten","Analyse in detail")}</button>`}${e.kind && e.status!=="open" && has?`<button type="button" class="testbtn small ghost" data-qpdf="${e.id}">📄 ${L("Ergebnis-PDF","Result PDF")}</button>`:""}</div></div>
-        <button type="button" class="evdel" data-del="${e.id}" aria-label="${L("Eintrag löschen","Delete entry")}">×</button></div>`; }).join("") : `<p class="hint">${L("Noch keine Videos.","No videos yet.")}</p>`}</div>
+        <button type="button" class="evdel" data-del="${e.id}" aria-label="${L("Eintrag löschen","Delete entry")}">×</button></div>`; })}
     ${ord.some(e=>e.m)?`<button type="button" class="testbtn ghost" id="qkCsv" style="margin-top:14px">${L("Zeiten herunterladen (CSV)","Download times (CSV)")}</button>`:""}
     <details class="card qkdet"${QK.detOpen?" open":""}><summary><b>${L("Kennwerte für die detaillierte Auswertung","Parameters for the detailed analysis")}</b></summary>
       <div class="seg qkseg" id="qkMetK">${[["start",L("Start","Start")],["turn",L("Wende","Turn")]].map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${QK.metK===v}">${l}</button>`).join("")}</div>
       ${spMetSelHTML(qkP({kind:QK.metK, start:"block", uw:"fly", turn:"flip"}))}</details>`;
   $("qkFiles").onchange=e=>{ const f=[...e.target.files]; e.target.value=""; qkUpload(f); };
-  $("mp4Fix").onchange=async e=>{ const f=e.target.files[0]; e.target.value=""; if(!f) return; toast(L("Wird umgewandelt …","Converting …"),3000);
-    try{ const o=await mp4Defrag(f); if(!o){ toast(L("Diese Datei ist kein fragmentiertes MP4-Video und muss nicht umgewandelt werden.","This file isn't a fragmented MP4 video and doesn't need converting."),5000); return; }
-      const nm=f.name.replace(/\.[a-z0-9]{2,4}$/i,"")+" (MP4).mp4", ask=await fileAsk(nm,"video/mp4","mp4",L("Ergebnisvideo","Result video")); if(!ask) return; await fileWrite(ask,o,L("Ergebnisvideo","Result video")); blog("video","MP4 umgewandelt",{mb:Math.round(f.size/1e6)}); }
-    catch(err){ blog("error","mp4Fix: "+(err&&err.message||err)); toast(L("Die Datei ließ sich nicht umwandeln.","The file couldn't be converted."),5000); } };
   pg.querySelectorAll("[data-kid]").forEach(box=>{ const ask=box.closest(".qkask"); if(ask) box.addEventListener("pointerdown",ev=>{ const r=box.getBoundingClientRect(); QK.swDir = ev.clientX < r.left+r.width/2 ? -1 : 1; },true);
     qkBindKind(box,"ek",()=>qkE(box.dataset.kid),e=>{ QK.openK=e.id; qkSave(); if(ask){ ask.classList.add(QK.swDir<0?"swl":"swr"); setTimeout(qkList,320); } else qkList(); }); });
   pg.querySelectorAll("[data-kall]").forEach(b=>b.onclick=()=>{ const src=qkE(b.dataset.kall); QK.p.trials.filter(x=>!x.kind).forEach(x=>["kind","start","uw","turn","turnDetail","stroke"].forEach(k=>{ if(src[k]!==undefined) x[k]=src[k]; })); qkSave(); qkList(); });
@@ -5136,7 +5151,7 @@ function qkList(){
   pg.querySelectorAll("[data-qd]").forEach(b=>b.onclick=()=>qkAnalyze(qkE(b.dataset.qd),true));
   pg.querySelectorAll("[data-qpdf]").forEach(b=>b.onclick=()=>qkPdf(qkE(b.dataset.qpdf)));
   pg.querySelectorAll("[data-pers]").forEach(s=>s.onchange=()=>{ const e=qkE(s.dataset.pers); e.person=s.value||null; qkSave(); });
-  const pf=$("qkPF"); if(pf) pf.onchange=()=>{ QK.pf=pf.value; qkList(); };
+  const dn=$("qkDone"); if(dn) dn.ontoggle=()=>{ QK.doneOpen=dn.open; };
   const pa=$("qkPAdd"); if(pa) pa.onclick=()=>{ const ed=$("qkPEd"); ed.innerHTML=`<input type="text" class="qkin" id="qkPN" maxlength="40" placeholder="${L("Name oder Kürzel","Name or initials")}"><button type="button" class="testbtn small" id="qkPOk">${L("Hinzufügen","Add")}</button>`; const i=$("qkPN"); i.focus();
     const ok=()=>{ const v=i.value.trim(); if(!v) return; const x=PERS.add(v); QK.pf=x.id; qkList(); }; $("qkPOk").onclick=ok; i.onkeydown=k=>{ if(k.key==="Enter"){ k.preventDefault(); ok(); } }; };
   pg.querySelectorAll("[data-ren]").forEach(b=>b.onclick=()=>{ const e=qkE(b.dataset.ren), nm=b.parentNode.querySelector(".qkname"); const i=document.createElement("input"); i.type="text"; i.className="qkin"; i.value=e.label||""; i.placeholder=(e.vid&&e.vid.name)||""; i.maxLength=60; nm.replaceWith(i); b.hidden=true; i.focus();
@@ -5413,7 +5428,7 @@ function athCounts(id){ const all=STORE._all(); let pr=0, vids=0;
   all.forEach(p=>{ if(p.tech==="quick") vids+=(p.trials||[]).filter(e=>e.person===id).length; else if(p.person===id) pr++; });
   const tr=(LOG.videos||[]).filter(v=>v.person===id).length; return {pr, vids, tr}; }
 function athEnter(){ ["spPage","evPage","qkPage","modeSoon","usersPage"].forEach(k=>{ const e=$(k); if(e) e.hidden=true; }); $("athPage").hidden=false; athList(); if(clubOn()) clubLoad(true).then(()=>clubAthPull()).then(()=>athList()); }
-function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; const pl=PERS.list().sort((a,b)=>persName(a).localeCompare(persName(b))), cl=CLUB.list||[];
+function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; const all=PERS.list(), pl=pkSort(pkFilter(all), PK.st.sort), cl=clubsCur();
   const fld=(x,k,lab,ph,type)=>`<label class="athf"><span>${lab}</span><input type="${type||"text"}" data-af="${k}" data-id="${x.id}" maxlength="80" value="${esc(x[k]??"")}" placeholder="${ph}"${k==="spec"?' list="athSpecL"':""}${type==="number"?' min="1920" max="2100" step="1" inputmode="numeric"':""}></label>`;
   const sub=x=>[x.birth?akName(akOf(x.birth)):"", x.clubId?clubName(x.clubId)||x.club:x.club, x.spec].filter(Boolean).map(esc).join(" · ")||L("Noch keine Angaben","No details yet");
   pg.innerHTML=`<h2 class="big">${L("Athlet*innen","Athletes")}</h2>
@@ -5421,6 +5436,8 @@ function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; co
     ${clubHTML()}
     <div class="athadd"><input type="text" id="athNew" class="qkin" maxlength="60" placeholder="${L("Vorname Nachname","First name Last name")}"><button type="button" class="testbtn" id="athNewB">+ ${L("Athlet*in anlegen","Add athlete")}</button></div>
     <datalist id="athSpecL">${[L("Kraul Sprint","Freestyle sprint"),L("Kraul Mittelstrecke","Freestyle middle distance"),L("Kraul Langstrecke","Freestyle distance"),L("Rücken","Backstroke"),L("Brust","Breaststroke"),L("Schmetterling","Butterfly"),L("Lagen","Individual medley")].map(s=>`<option value="${esc(s)}">`).join("")}</datalist>
+    <details class="card athdd" id="athDD"${ATH.dd?" open":""}><summary><b>${L("Athlet*innen","Athletes")}</b> <small>(${pl.length}${pl.length!==all.length?" / "+all.length:""})</small></summary>
+    <div class="pkbar">${pkClubSel("athClub", all)}${pkSortSeg("athSort")}</div>
     <div class="athlist">${pl.length ? pl.map(x=>{ const c=athCounts(x.id), open=ATH.open===x.id, need=x.clubId && !(x.first&&x.last&&x.birth);
       return `<div class="card athcard"><button type="button" class="athhd" data-ao="${x.id}" aria-expanded="${open}"><b>${esc(persName(x))}</b><small>${sub(x)}${x.clubId?(x.cid?" · ☁︎":" · "+L("noch nicht online","not online yet")):""}</small><span class="athcnt">${L(`${c.pr} Projekte · ${c.vids} Videos · ${c.tr} Messungen`,`${c.pr} projects · ${c.vids} videos · ${c.tr} measurements`)}</span></button>
         ${open?`<div class="athbody">${(x.first||x.last)?"":fld(x,"name",L("Name (bisher)","Name (previous)"),"")}${fld(x,"first",L("Vorname","First name"),"")}${fld(x,"last",L("Nachname","Last name"),"")}${fld(x,"nick",L("Spitzname (optional)","Nickname (optional)"),L("wird nicht zur Zuordnung genutzt","not used for matching"))}
@@ -5431,9 +5448,10 @@ function athList(){ const pg=$("athPage"); if(!pg || appMode!=="ath") return; co
             ${need?`<p class="everr">${L("Für die Vereinsdatenbank braucht es Vorname, Nachname und Geburtsjahr.","The club database needs first name, last name and year of birth.")}</p>`:""}${x.clubId&&!x.consent?`<p class="everr">${L("Ohne Einwilligung bleibt die Person nur auf diesem Gerät.","Without consent the person stays on this device only.")}</p>`:""}`:""}
           ${fld(x,"city",L("Stadt","City"),L("z. B. Darmstadt","e.g. Darmstadt"))}
           <label class="athf"><span>${L("Notizen","Notes")}</span><textarea class="note-in" rows="4" maxlength="2000" data-af="notes" data-id="${x.id}" placeholder="${L("Allgemeine Notizen, z. B. Trainingsschwerpunkte, Ziele, Besonderheiten","General notes, e.g. training focus, goals, particularities")}">${esc(x.notes||"")}</textarea></label>
-          <div class="athact"><button type="button" class="testbtn small" data-astat="${x.id}">📊 ${L("Statistik","Statistics")}</button><button type="button" class="testbtn ghost small" data-adel="${x.id}">${L("Athlet*in löschen","Delete athlete")}</button></div></div>`:""}</div>`; }).join("") : `<p class="hint">${L("Noch keine Athlet*innen.","No athletes yet.")}</p>`}</div>`;
-  clubBind();
-  const add=()=>{ const i=$("athNew"), v=i.value.trim(); if(!v) return; const parts=v.split(/\s+/), x=PERS.add(v); PERS.update(x.id,{first:parts[0], last:parts.slice(1).join(" ")}); ATH.open=x.id; athList(); };
+          <div class="athact"><button type="button" class="testbtn small" data-astat="${x.id}">📊 ${L("Statistik","Statistics")}</button><button type="button" class="testbtn ghost small" data-adel="${x.id}">${L("Athlet*in löschen","Delete athlete")}</button></div></div>`:""}</div>`; }).join("") : `<p class="hint">${all.length?L("Keine Athlet*innen in diesem Verein.","No athletes in this club."):L("Noch keine Athlet*innen.","No athletes yet.")}</p>`}</div></details>`;
+  clubBind(); { const dd=$("athDD"); dd.ontoggle=()=>{ ATH.dd=dd.open; }; $("athClub").onchange=e=>{ PK.st.club=e.target.value; pkSave(); athList(); };
+    $("athSort").querySelectorAll("button").forEach(b=>b.onclick=()=>{ PK.st.sort=b.dataset.s; pkSave(); athList(); }); }
+  const add=()=>{ const i=$("athNew"), v=i.value.trim(); if(!v) return; const parts=v.split(/\s+/), x=PERS.add(v); PERS.update(x.id,{first:parts[0], last:parts.slice(1).join(" ")}); ATH.open=x.id; ATH.dd=true; PK.st.club="all"; pkSave(); athList(); };
   $("athNewB").onclick=add; $("athNew").onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); add(); } };
   pg.querySelectorAll("[data-ao]").forEach(b=>b.onclick=()=>{ ATH.open = ATH.open===b.dataset.ao ? null : b.dataset.ao; athList(); });
   const push=id=>{ clearTimeout(ATH.pt); ATH.pt=setTimeout(async()=>{ try{ await clubAthPush(id); }catch(e){ blog("warn","clubAthPush: "+(e.message||e)); } },900); };
@@ -5462,12 +5480,13 @@ const akName=ak=> ak==null ? "–" : ak==="open" ? L("Offene Klasse","Open class
 const persName=x=> x ? ((x.first||x.last) ? [x.first, x.nick?`„${x.nick}“`:"", x.last].filter(Boolean).join(" ") : x.name) : "";
 const clubMissing=e=> e && (e.code==="PGRST205" || e.code==="42P01" || e.status===404 || /does not exist|schema cache/i.test(e.message||""));
 async function clubLoad(force){ if(!clubOn()) return []; if(CLUB.list && !force && Date.now()-CLUB.t<60000) return CLUB.list;
-  try{ await sbReady(); const rows=await sbFetch(`/rest/v1/club_members?select=role,club_id,clubs(id,name,code)&user_id=eq.${SESS.uid}`);
-    CLUB.list=(rows||[]).filter(r=>r.clubs).map(r=>({id:r.club_id, name:r.clubs.name, code:r.clubs.code, admin:r.role==="admin"})).sort((a,b)=>a.name.localeCompare(b.name)); CLUB.t=Date.now(); CLUB.err=null; }
+  try{ await sbReady(); const rows=await sbFetch(`/rest/v1/club_members?select=role,club_id,clubs(id,name,code,sport)&user_id=eq.${SESS.uid}`);
+    CLUB.list=(rows||[]).filter(r=>r.clubs).map(r=>({id:r.club_id, name:r.clubs.name, code:r.clubs.code, sport:r.clubs.sport||"swim", admin:r.role==="admin"})).sort((a,b)=>a.name.localeCompare(b.name)); CLUB.t=Date.now(); CLUB.err=null; }
   catch(e){ CLUB.err=clubMissing(e)?"setup":(e.net?"net":"err"); if(!CLUB.list) CLUB.list=[]; blog("warn","clubLoad: "+(e.message||e)); }
   return CLUB.list; }
 const clubName=id=>{ const c=(CLUB.list||[]).find(x=>x.id===id); return c?c.name:""; };
-async function clubCreate(name){ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_create_club",{method:"POST", body:{p_name:name, p_account:USER}}); await clubLoad(true); return r; }
+const clubsCur=()=>(CLUB.list||[]).filter(c=>(c.sport||"swim")===sport);
+async function clubCreate(name){ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_create_club",{method:"POST", body:{p_name:name, p_account:USER, p_sport:sport}}); await clubLoad(true); return r; }
 async function clubJoin(code){ await sbReady(); const r=await sbFetch("/rest/v1/rpc/sprintz_join_club",{method:"POST", body:{p_code:code, p_account:USER}}); await clubLoad(true); await clubAthPull(); return r; }
 async function clubMembers(cid){ await sbReady(); return await sbFetch(`/rest/v1/club_members?select=user_id,account,role,joined_at&club_id=eq.${cid}&order=joined_at`); }
 async function clubKick(cid,uid){ await sbReady(); await sbFetch(`/rest/v1/club_members?club_id=eq.${cid}&user_id=eq.${uid}`,{method:"DELETE"}); }
@@ -5477,7 +5496,7 @@ async function clubAthPull(){ if(!clubOn()) return; const cl=await clubLoad(); i
     const o=PERS.get(); let ch=false; const key=(c,f,l,b)=>[c,(f||"").trim().toLowerCase(),(l||"").trim().toLowerCase(),+b].join("|");
     (rows||[]).forEach(r=>{ let x=o.list.find(q=>q.cid===r.id) || o.list.find(q=>q.clubId===r.club_id && key(q.clubId,q.first,q.last,q.birth)===key(r.club_id,r.first_name,r.last_name,r.birth_year));
       const f={cid:r.id, clubId:r.club_id, first:r.first_name, last:r.last_name, nick:r.nickname||"", birth:r.birth_year, spec:r.spec||"", consent:!!r.consent}; f.name=persName(f);
-      if(!x){ if((o.del||[]).includes("c:"+r.id)) return; x=Object.assign({id:evId(), created:Date.now(), club:clubName(r.club_id)}, f); o.list.push(x); ch=true; }
+      if(!x){ if((o.del||[]).includes("c:"+r.id)) return; x=Object.assign({id:evId(), created:Date.now(), club:clubName(r.club_id), sport:(cl.find(c=>c.id===r.club_id)||{}).sport||"swim"}, f); o.list.push(x); ch=true; }
       else if(["cid","clubId","first","last","nick","birth","spec","consent"].some(k=>String(x[k]??"")!==String(f[k]??""))){ Object.assign(x,f,{club:clubName(r.club_id)}); ch=true; } });
     if(ch){ o._u=Date.now(); try{ localStorage.setItem(PERS.key(), JSON.stringify(o)); }catch(e){} } CLUB.err=null; }
   catch(e){ if(clubMissing(e)) CLUB.err="setup"; blog("warn","clubAthPull: "+(e.message||e)); } }
@@ -5587,6 +5606,7 @@ create table if not exists public.club_athletes(
   spec text, consent boolean not null default false,
   created_by uuid not null default auth.uid(),
   created_at timestamptz not null default now(), updated_at timestamptz not null default now());
+alter table public.clubs add column if not exists sport text not null default 'swim';
 create unique index if not exists club_athletes_person on public.club_athletes (club_id, lower(first_name), lower(last_name), birth_year);
 create table if not exists public.club_results(
   id text primary key,
@@ -5602,7 +5622,8 @@ create or replace function public.sprintz_is_member(c uuid) returns boolean lang
   select exists(select 1 from club_members where club_id = c and user_id = auth.uid()) $$;
 create or replace function public.sprintz_is_admin(c uuid) returns boolean language sql stable security definer set search_path = public as $$
   select exists(select 1 from club_members where club_id = c and user_id = auth.uid() and role = 'admin') $$;
-create or replace function public.sprintz_create_club(p_name text, p_account text) returns json language plpgsql security definer set search_path = public as $$
+drop function if exists public.sprintz_create_club(text, text);
+create or replace function public.sprintz_create_club(p_name text, p_account text, p_sport text default 'swim') returns json language plpgsql security definer set search_path = public as $$
 declare c public.clubs; k text;
 begin
   if auth.uid() is null then raise exception 'not authenticated'; end if;
@@ -5610,9 +5631,9 @@ begin
     k := upper(substr(md5(random()::text || clock_timestamp()::text), 1, 8));
     exit when not exists(select 1 from clubs where code = k);
   end loop;
-  insert into clubs(name, code, created_by) values (trim(p_name), k, auth.uid()) returning * into c;
+  insert into clubs(name, code, created_by, sport) values (trim(p_name), k, auth.uid(), case when p_sport = 'track' then 'track' else 'swim' end) returning * into c;
   insert into club_members(club_id, user_id, account, role) values (c.id, auth.uid(), p_account, 'admin');
-  return json_build_object('id', c.id, 'name', c.name, 'code', c.code);
+  return json_build_object('id', c.id, 'name', c.name, 'code', c.code, 'sport', c.sport);
 end $$;
 create or replace function public.sprintz_join_club(p_code text, p_account text) returns json language plpgsql security definer set search_path = public as $$
 declare c public.clubs;
@@ -5624,8 +5645,8 @@ begin
     on conflict (club_id, user_id) do update set account = excluded.account;
   return json_build_object('id', c.id, 'name', c.name);
 end $$;
-revoke all on function public.sprintz_create_club(text, text), public.sprintz_join_club(text, text) from public, anon;
-grant execute on function public.sprintz_create_club(text, text), public.sprintz_join_club(text, text) to authenticated;
+revoke all on function public.sprintz_create_club(text, text, text), public.sprintz_join_club(text, text) from public, anon;
+grant execute on function public.sprintz_create_club(text, text, text), public.sprintz_join_club(text, text) to authenticated;
 
 alter table public.clubs enable row level security;
 alter table public.club_members enable row level security;
@@ -5650,7 +5671,7 @@ create policy "Mitglieder: Ergebnisse" on public.club_results for all to authent
   with check (public.sprintz_is_member(club_id) and exists(select 1 from public.club_athletes a where a.id = athlete_id and a.club_id = club_results.club_id));`;
 // Bereich „Vereine“ auf der Seite Athlet*innen
 function clubHTML(){ if(!canPersons()) return ""; if(!STORE.online()) return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3><p class="hint">${L("Die Vereinsdatenbank braucht eine Anmeldung mit Internetverbindung.","The club database needs a sign-in with an internet connection.")}</p></div>`;
-  const cl=CLUB.list||[], dev=DEV_USERS.includes(USER);
+  const cl=clubsCur(), dev=DEV_USERS.includes(USER);
   if(CLUB.err==="setup") return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3><p class="hint">${L("Die Vereinsdatenbank ist in Supabase noch nicht eingerichtet.","The club database hasn't been set up in Supabase yet.")}</p>${dev?`<p class="hint">${L("Einmalig im Supabase-Dashboard unter „SQL Editor“ einfügen und „Run“ drücken:","Paste once in the Supabase dashboard under “SQL Editor” and press “Run”:")}</p><pre class="sqlbox">${esc(clubSQL())}</pre><button type="button" class="testbtn small" id="clubSqlCopy">${L("Befehl kopieren","Copy command")}</button>`:""}</div>`;
   return `<div class="card clubbox"><h3>${L("Vereine","Clubs")}</h3>
     ${cl.length?cl.map(c=>`<div class="clubrow"><b>${esc(c.name)}</b>${c.admin?`<span class="hint">${L("Vereinscode","Club code")}: <code>${esc(c.code)}</code></span><button type="button" class="testbtn ghost small" data-cmem="${c.id}">${L("Mitglieder","Members")}</button>`:`<span class="hint">${L("Mitglied","Member")}</span>`}<button type="button" class="testbtn ghost small" data-cleave="${c.id}">${c.admin?L("Verein verlassen","Leave club"):L("Austreten","Leave")}</button><div class="clubmem" id="cm-${c.id}"></div></div>`).join(""):`<p class="hint">${L("Du bist noch in keinem Verein.","You're not in a club yet.")}</p>`}
@@ -5665,7 +5686,38 @@ function clubBind(){ const msg=t=>{ const m=$("clubMsg"); if(m) m.textContent=t;
     box.innerHTML=(m||[]).map(r=>`<span class="clubm">${esc(r.account||"?")}${r.role==="admin"?" ("+L("Verwalter","admin")+")":`<button type="button" data-ckick="${id}|${r.user_id}" aria-label="${L("Entfernen","Remove")}">✕</button>`}</span>`).join("");
     box.querySelectorAll("[data-ckick]").forEach(k=>k.onclick=async()=>{ const [c,u]=k.dataset.ckick.split("|"); try{ await clubKick(c,u); k.parentNode.remove(); }catch(e){} }); }catch(e){ box.textContent=L("Mitglieder ließen sich nicht laden.","Members couldn't be loaded."); } });
   document.querySelectorAll("[data-cleave]").forEach(b=>b.onclick=async()=>{ if(!b.dataset.sure){ b.dataset.sure="1"; b.textContent=L("Wirklich austreten?","Really leave?"); return; } try{ await clubKick(b.dataset.cleave, SESS.uid); await clubLoad(true); athList(); }catch(e){} }); }
-const ATH={open:null};
+const ATH={open:null, dd:false};
+/* ---------- Auswahl von Athlet*innen als Ausklappmenü: erst Verein/Organisation, dann alle Personen, sortiert nach Vorname oder Geburtsjahr ---------- */
+const PK={r:{}, pop:null, st:(()=>{ try{ return JSON.parse(localStorage.getItem("sprintz-pk")||"{}")||{}; }catch(e){ return {}; } })()};
+const pkSave=()=>{ try{ localStorage.setItem("sprintz-pk",JSON.stringify(PK.st)); }catch(e){} };
+const pkClubKey=x=> x.clubId ? x.clubId : (x.club||"").trim() ? "l:"+x.club.trim().toLowerCase() : "-";
+function pkClubs(pl){ const m=new Map(); clubsCur().forEach(c=>m.set(c.id,c.name)); pl.forEach(x=>{ const k=pkClubKey(x); if(k!=="-" && !m.has(k)) m.set(k, x.clubId?(x.club||"?"):x.club.trim()); }); return [...m.entries()].sort((a,b)=>a[1].localeCompare(b[1])); }
+function pkSort(pl, s){ const fn=x=>(x.first||x.name||"").toLowerCase(), ln=x=>(x.last||"").toLowerCase(), nm=(a,b)=>fn(a).localeCompare(fn(b))||ln(a).localeCompare(ln(b));
+  return pl.slice().sort((a,b)=> s==="birth" ? ((+a.birth||9999)-(+b.birth||9999)) || nm(a,b) : nm(a,b)); }
+function pkFilter(pl){ const c=PK.st.club||"all"; if(c==="all") return pl; if(c!=="-" && !pkClubs(pl).some(k=>k[0]===c)){ PK.st.club="all"; return pl; } return pl.filter(x=>pkClubKey(x)===c); }
+function pkClubSel(id, pl){ const c=PK.st.club||"all", cls=pkClubs(pl); return `<label class="pkrow"><span>${L("Verein / Organisation","Club / organisation")}</span><select class="evsel" id="${id}"><option value="all">${L("Alle Vereine","All clubs")}</option>${cls.map(([k,n])=>`<option value="${esc(k)}"${c===k?" selected":""}>${esc(n)}</option>`).join("")}${pl.some(x=>pkClubKey(x)==="-")?`<option value="-"${c==="-"?" selected":""}>${L("Ohne Verein","No club")}</option>`:""}</select></label>`; }
+function pkSortSeg(id){ const s=PK.st.sort||"first"; return `<div class="pkrow"><span>${L("Sortieren nach","Sort by")}</span><div class="seg pkseg" id="${id}"><button type="button" data-s="first" aria-pressed="${s!=="birth"}">${L("Vorname","First name")}</button><button type="button" data-s="birth" aria-pressed="${s==="birth"}">${L("Geburtsjahr","Year of birth")}</button></div></div>`; }
+function pkLabel(cur,o){ if(cur==="all") return L("Alle","All"); if(cur==="none"||!cur) return o.noneLab||L("Ohne Zuordnung","Not assigned"); const x=PERS.get().list.find(q=>q.id===cur); return x?persName(x):(o.noneLab||"–"); }
+function pkHTML(key, cur, o){ PK.r[key]={cur, o:o||{}}; return `<button type="button" class="evsel pkbtn" data-pk="${esc(key)}" aria-haspopup="listbox">${esc(pkLabel(cur,o||{}))}</button>`; }
+function pkClose(){ if(PK.pop){ PK.pop.remove(); PK.pop=null; } }
+function pkOpen(btn){ const key=btn.dataset.pk, R=PK.r[key]; if(!R) return; const same=PK.pop && PK.pop.dataset.k===key; pkClose(); if(same) return;
+  const d=document.createElement("div"); d.id="pkPop"; d.className="pkpop"; d.dataset.k=key; document.body.appendChild(d); PK.pop=d;
+  const place=()=>{ const r=btn.getBoundingClientRect(), w=Math.min(window.innerWidth-16, Math.min(460, Math.max(300, r.width))); d.style.width=w+"px"; d.style.left=Math.max(8, Math.min(r.left, window.innerWidth-w-8))+"px";
+    const below=window.innerHeight-r.bottom-12, above=r.top-12; if(below>=260 || below>=above){ d.style.top=(r.bottom+4)+"px"; d.style.bottom=""; d.style.maxHeight=Math.max(160,below)+"px"; } else { d.style.top=""; d.style.bottom=(window.innerHeight-r.top+4)+"px"; d.style.maxHeight=above+"px"; } };
+  const draw=()=>{ const all=PERS.list(), list=pkSort(pkFilter(all), PK.st.sort), cnt=R.o.count, cur=R.cur;
+    d.innerHTML=`<div class="pkbar">${pkClubSel("pkClub", all)}${pkSortSeg("pkSort")}</div><div class="pklist" role="listbox">
+      ${R.o.all?`<button type="button" role="option" data-v="all" aria-selected="${cur==="all"}"><span>${L("Alle","All")}</span>${cnt?`<small>${cnt("all")}</small>`:""}</button>`:""}
+      ${list.map(x=>`<button type="button" role="option" data-v="${x.id}" aria-selected="${cur===x.id}"><span>${esc(persName(x))}</span><small>${[x.birth||"", x.clubId?(clubName(x.clubId)||x.club):x.club, cnt?cnt(x.id):""].filter(v=>v!==""&&v!=null).map(v=>esc(String(v))).join(" · ")}</small></button>`).join("")||`<p class="hint" style="margin:6px 8px">${all.length?L("Keine Athlet*innen in diesem Verein.","No athletes in this club."):L("Noch keine Athlet*innen.","No athletes yet.")}</p>`}
+      ${R.o.none?`<button type="button" role="option" data-v="none" aria-selected="${cur==="none"||!cur}"><span>${esc(R.o.noneLab||L("Ohne Zuordnung","Not assigned"))}</span>${cnt?`<small>${cnt("none")}</small>`:""}</button>`:""}</div>`;
+    $("pkClub").onchange=e=>{ PK.st.club=e.target.value; pkSave(); draw(); };
+    $("pkSort").querySelectorAll("button").forEach(b=>b.onclick=()=>{ PK.st.sort=b.dataset.s; pkSave(); draw(); });
+    d.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{ pkClose(); const v=b.dataset.v; R.cur=v; if(R.o.pick) R.o.pick(v); });
+    place(); };
+  draw(); }
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-pk]"); if(b){ e.preventDefault(); pkOpen(b); } });
+document.addEventListener("pointerdown",e=>{ if(PK.pop && !e.target.closest("#pkPop") && !e.target.closest("[data-pk]")) pkClose(); },true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && PK.pop){ pkClose(); e.stopPropagation(); } },true);
+window.addEventListener("resize",()=>pkClose());
 
 /* ---------- Entwicklermodus: nutzende Personen ----------
    Jedes Konto meldet seine Nutzungsdaten (zuletzt genutzt, Videos, Auswertungen, Namen der angelegten Athlet*innen) in seine eigene Zeile „usage“.
@@ -5973,7 +6025,7 @@ function kinoEvents(C){ const M=SA.marks||{}, o=C.o||{}, cat=C.p?METCAT(C.p):[],
   return out.sort((a,b)=>a.t-b.t); }
 function kinoWrap(g,txt,maxW){ const words=String(txt).split(/\s+/), lines=[]; let l=""; words.forEach(w=>{ const t=l?l+" "+w:w; if(g.measureText(t).width>maxW && l){ lines.push(l); l=w; } else l=t; }); if(l) lines.push(l); return lines; }
 async function kinoExport(){
-  if(KINO.on || !SA.active || !sVid.videoWidth) return; const C=resCtx(), ev=kinoEvents(C);
+  if(KINO.on || !SA.active) return; if(!sVid.videoWidth){ blog("warn","kinoExport: Video nicht geladen"); toast(L("Das Video ist noch nicht geladen. Warte kurz oder lade es erneut hoch.","The video hasn't loaded yet. Wait a moment or upload it again."),5000); return; } const C=resCtx(), ev=kinoEvents(C);
   if(!ev.length){ toast(L("Setz zuerst Markierungen, dann gibt es Stellen zum Anhalten.","Set marks first, then there are points to pause at.")); return; }
   const canRec=window.MediaRecorder&&MediaRecorder.isTypeSupported, AU=["video/mp4;codecs=avc1.640033,mp4a.40.2","video/mp4;codecs=avc1.640028,mp4a.40.2","video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus"], VO=["video/mp4;codecs=avc1.640033","video/mp4;codecs=avc1.640028","video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"];
   const amime=canRec?AU.find(m=>MediaRecorder.isTypeSupported(m)):null, vmime=canRec?VO.find(m=>MediaRecorder.isTypeSupported(m)):null, mime0=amime||vmime;
@@ -6034,7 +6086,7 @@ function resName(pre, e){ const C=e?null:resCtx(), v=(e?e.vid:(SA.trialRef&&SA.t
   const kd=e?e.kind:(C.kind||(C.p&&C.p.tech)||null), kind=kd?qkKindName(kd):"";
   return [pre,base,ds,kind].filter(Boolean).join(" ").replace(/[\\/:*?"<>|]+/g,"-").replace(/\s+/g," ").trim(); }
 // muss direkt beim Klick aufgerufen werden (vor längeren Wartezeiten), sonst blockiert der Browser die Rückfrage
-async function fileAsk(name, mime, ext, desc){ if(typeof window.showSaveFilePicker==="function"){ try{ const h=await window.showSaveFilePicker({suggestedName:name, types:[{description:desc, accept:{[mime]:["."+ext]}}]}); return {h, name}; }catch(e){ if(e && e.name==="AbortError") return null; } } return {h:null, name}; }
+async function fileAsk(name, mime, ext, desc){ if(window.sprintzDesktop) return {h:null, name}; if(typeof window.showSaveFilePicker==="function"){ try{ const h=await window.showSaveFilePicker({suggestedName:name, types:[{description:desc, accept:{[mime]:["."+ext]}}]}); return {h, name}; }catch(e){ blog("warn","fileAsk: "+(e&&e.name)+" "+(e&&e.message||"")); if(e && e.name==="AbortError") return null; } } return {h:null, name}; }
 async function fileWrite(ask, blob, title){ const name=ask.name;
   if(ask.h){ try{ const w=await ask.h.createWritable(); await w.write(blob); await w.close(); toast(L(`Gespeichert: ${ask.h.name||name}`,`Saved: ${ask.h.name||name}`),3000); return; }catch(e){ blog("warn","fileWrite: "+(e&&e.message||e)); } }
   await evSaveFile(blob, name, title); }
