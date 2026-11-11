@@ -1,0 +1,15 @@
+[
+["Also remove “{0}” online from {1}? The results there are deleted.","“{0}” çevrimiçi olarak da {1} kulübünden çıkarılsın mı? Oradaki sonuçlar silinir.","Удалить «{0}» и онлайн из: {1}? Результаты там будут удалены.","„{0}” ook online verwijderen uit {1}? De resultaten daar worden verwijderd."],
+["Remove online too","Çevrimiçi de çıkar","Удалить и онлайн","Ook online verwijderen"],
+["“{0}” already existed (other club). The club was added there; nobody was added twice.","“{0}” zaten vardı (başka kulüp). Kulüp oraya eklendi; kimse iki kez eklenmedi.","«{0}» уже был (другой клуб). Клуб добавлен туда; никто не добавлен дважды.","„{0}” bestond al (andere club). De club is daar toegevoegd; niemand is dubbel aangemaakt."],
+["Test the view","Görünümü test et","Проверить вид","Weergave testen"],
+["The app behaves as if you had this role and were only in these clubs. This only changes the display on this device, not your real rights in Supabase; data of other clubs stays empty.","Uygulama bu role sahipmişsin ve yalnızca bu kulüplerdeymişsin gibi davranır. Bu yalnızca bu cihazdaki görünümü değiştirir, Supabase'deki gerçek haklarını değil; başka kulüplerin verileri boş kalır.","Приложение ведёт себя так, будто у тебя эта роль и ты состоишь только в этих клубах. Это меняет только отображение на этом устройстве, а не твои настоящие права в Supabase; данные чужих клубов остаются пустыми.","De app gedraagt zich alsof je deze rol hebt en alleen in deze clubs zit. Dit verandert alleen de weergave op dit apparaat, niet je echte rechten in Supabase; gegevens van andere clubs blijven leeg."],
+["– not a member –","– üye değil –","– не участник –","– geen lid –"],
+["No clubs found.","Kulüp bulunamadı.","Клубы не найдены.","Geen clubs gevonden."],
+["Start preview","Önizlemeyi başlat","Начать предпросмотр","Voorbeeld starten"],
+["Real view","Gerçek görünüm","Настоящий вид","Echte weergave"],
+["Preview","Önizleme","Предпросмотр","Voorbeeld"],
+["clubs","kulüp","клубов","clubs"],
+["Change","Değiştir","Изменить","Wijzigen"],
+["As coach or athlete, with any clubs","Antrenör veya sporcu olarak, istediğin kulüplerle","Как тренер или спортсмен, с любыми клубами","Als trainer of atleet, met willekeurige clubs"]
+]
