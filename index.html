@@ -7906,16 +7906,26 @@ $("modeNav").querySelectorAll("button[data-m]").forEach(b=>b.onclick=()=>{ setMo
 document.querySelectorAll("#devList [data-dm]").forEach(b=>b.onclick=()=>{ setMode(b.dataset.dm); scrollTo(0,0); });
 $("simOpen").onclick=()=>simDlg(); $("bugsOpen").onclick=()=>bugsDlg(); $("setupOpen").onclick=()=>setupDlg();
 // alle Befehle zusammen (jeder Teil kann beliebig oft ausgeführt werden) und Prüfung, welche Funktionen in Supabase schon da sind
-const fullSQL=()=>`-- Sprintz: komplette Einrichtung (${new Date().toLocaleDateString("de-DE")}). Kann beliebig oft ausgeführt werden.\n\n`+usersSQL()+"\n\n"+clubSQL()+"\n\n"+clubDevSQL()+"\n\n-- Supabase soll die neuen Funktionen sofort kennen\nnotify pgrst, 'reload schema';\n";
+const fullSQL=()=>`-- Sprintz: komplette Einrichtung (${new Date().toLocaleDateString("de-DE")}). Kann beliebig oft ausgeführt werden.\n\n`+usersSQL()+"\n\n"+clubSQL()+"\n\n"+clubDevSQL()+"\n\n"+statusSQL()+"\n\n-- Supabase soll die neuen Funktionen sofort kennen\nnotify pgrst, 'reload schema';\n";
+// Prüffunktion: listet, welche Sprintz-Funktionen und -Tabellen es in der Datenbank gibt (nur Namen, keine Daten)
+const statusSQL=()=>`-- Prüfung für „Supabase-Einrichtung“ in Sprintz
+create or replace function public.sprintz_setup_status() returns text[] language sql stable security definer set search_path = public as $$
+  select coalesce(array_agg(n order by n), '{}') from (
+    select distinct p.proname::text n from pg_proc p join pg_namespace s on s.oid=p.pronamespace where s.nspname='public' and p.proname like 'sprintz\\_%'
+    union select c.relname::text from pg_class c join pg_namespace s on s.oid=c.relnamespace where s.nspname='public' and c.relkind='r') x $$;
+revoke all on function public.sprintz_setup_status() from public, anon;
+grant execute on function public.sprintz_setup_status() to authenticated;`;
 const SETUP_FN=[["sprintz_my_clubs",{}],["sprintz_my_codes",{}],["sprintz_club_search",{q:"zz"}],["sprintz_my_requests",{}],["sprintz_club_requests",{}],["sprintz_dev_clubs",{}],["sprintz_dev_roles",{}]];
 const SETUP_FN2=["sprintz_create_club","sprintz_join_club","sprintz_register","sprintz_request_join","sprintz_answer_request","sprintz_dev_member","sprintz_dev_create_club","sprintz_dev_set_role","sprintz_dev_athlete"];
 async function setupCheck(){ const out=[]; try{ await sbReady(); }catch(e){ return null; }
+  // zuverlässig: die Datenbank selbst fragen; nur wenn die Prüffunktion noch fehlt, einzeln abtasten
+  try{ const have=new Set(await sbFetch("/rest/v1/rpc/sprintz_setup_status",{method:"POST", body:{}})||[]); return [...SETUP_FN.map(x=>x[0]), ...SETUP_FN2, "club_requests","bug_reports","account_roles"].map(n=>[n, have.has(n)]); }catch(e){}
   // fehlt die Funktion ganz, meldet Supabase PGRST202 ohne Hinweis auf sie; mit falschen Angaben kommt ein Hinweis auf die vorhandene Funktion
   const probe=async(name,body)=>{ try{ await sbFetch("/rest/v1/rpc/"+name,{method:"POST", body}); return true; }catch(e){ if(e.code==="PGRST202"||e.status===404) return !!(e.hint && e.hint.includes(name+"(")); return true; } };
   for(const [n,b] of SETUP_FN) out.push([n, await probe(n,b)]);
   for(const n of SETUP_FN2) out.push([n, await probe(n,{__probe:1})]);
   for(const t of ["club_requests","bug_reports","account_roles"]){ try{ await sbFetch(`/rest/v1/${t}?select=*&limit=0`); out.push([t,true]); }catch(e){ out.push([t, !(clubMissing(e))]); } }
-  return out; }
+  out.push(["sprintz_setup_status",false]); return out; }
 async function setupDlg(){ let d=$("setupDlg"); if(!d){ d=document.createElement("div"); d.id="setupDlg"; d.className="dlg"; document.body.appendChild(d); d.addEventListener("click",e=>{ if(e.target===d) d.hidden=true; }); }
   d.hidden=false; d.innerHTML=`<div class="dlgbox bugsbox"><div class="cmhead"><h3 style="margin:0">${L("Supabase-Einrichtung","Supabase setup")}</h3><button type="button" class="dclose" id="suX" aria-label="${L("Schließen","Close")}">×</button></div><p class="hint">${L("Wird geprüft …","Checking …")}</p></div>`; $("suX").onclick=()=>{ d.hidden=true; };
   const r=await setupCheck(), miss=(r||[]).filter(x=>!x[1]);
