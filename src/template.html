@@ -435,6 +435,16 @@ body.xh-on #xhair{display:block}
 .dclact{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end;margin:4px 0 8px}.dcldel{color:var(--danger)}
 .dcltbl td{vertical-align:middle}.dcltbl .n{text-align:right}
 #sBox.lupeon{cursor:crosshair}
+.cmppick{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.cmppick select{flex:1;min-width:180px}
+#cmpOv{position:fixed;inset:0;z-index:80;background:#05121a;color:#fff;display:flex;flex-direction:column;gap:8px;padding:10px;overflow:auto}#cmpOv[hidden]{display:none}
+.cmphead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.cmphead b{font-size:1.1rem;margin-right:6px}.cmphead #cmpX{margin-left:auto}
+.cmpl{padding:3px 10px;border-radius:999px;font-size:.85rem;font-weight:600}.cmpl.A,.cmpv i.A{background:#2F8FD8}.cmpl.B,.cmpv i.B{background:#E8590C}
+.cmpgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0}@media (max-aspect-ratio:1/1){.cmpgrid{grid-template-columns:1fr}}
+.cmpv{position:relative;background:#000;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:0}.cmpv video{width:100%;height:100%;max-height:calc(100vh - 200px);object-fit:contain}
+.cmpv i{position:absolute;left:8px;top:8px;font-style:normal;font-weight:700;padding:2px 9px;border-radius:8px}
+.cmpbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.cmpbar button{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;padding:6px 10px;font:600 .9rem system-ui;cursor:pointer}
+.cmpbar label{display:flex;gap:6px;align-items:center;font-size:.85rem}.cmpbar input[type=range]{flex:1;min-width:140px}.cmpt{font:600 .95rem system-ui;font-variant-numeric:tabular-nums;min-width:70px;text-align:right}
+.cmptab table{border-collapse:collapse;font-size:.86rem;width:100%;max-width:640px}.cmptab td,.cmptab th{padding:4px 8px;border-bottom:1px solid rgba(255,255,255,.12);text-align:right}.cmptab td:first-child,.cmptab th:first-child{text-align:left}
 .tagplus{position:absolute;left:10px;bottom:10px;z-index:8;width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.8);background:rgba(10,24,32,.72);color:#fff;font:600 1.6rem/1 system-ui;cursor:pointer;display:grid;place-items:center;padding:0 0 3px;backdrop-filter:blur(4px)}
 .tagplus[aria-expanded="true"]{background:#E8590C;border-color:#E8590C}.tagplus[hidden]{display:none}
 .tagpop{position:absolute;left:10px;bottom:58px;z-index:9;width:min(290px,calc(100% - 20px));max-height:calc(100% - 70px);overflow:auto;background:rgba(10,24,32,.92);color:#fff;border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:3px;font-size:.86rem;backdrop-filter:blur(6px)}
@@ -462,6 +472,8 @@ body.xh-on #xhair{display:block}
 #simBadge{position:fixed;left:50%;top:8px;transform:translateX(-50%);z-index:60;background:#6b3fd0;color:#fff;font:600 .82rem system-ui;padding:6px 8px 6px 12px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.25);display:flex;gap:8px;align-items:center}
 #simBadge[hidden]{display:none}#simBadge button{border:0;border-radius:999px;background:rgba(255,255,255,.2);color:#fff;font:600 .78rem system-ui;padding:4px 10px;cursor:pointer}
 .clubbtns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 6px}
+.mehead{display:flex;align-items:center;justify-content:space-between;gap:10px}.megear{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--fg);display:grid;place-items:center;cursor:pointer;flex:none}.megear:hover{color:var(--accent)}
+.setrow{display:flex;gap:10px;align-items:center;padding:6px 0;font-size:.95rem;cursor:pointer}
 .mecard{padding:12px 16px;margin-bottom:14px}
 .lgreg{display:block;margin:14px auto 0;background:none;border:0;color:var(--accent);font:600 .95rem var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 #regBox .regform{display:flex;flex-direction:column;gap:6px}#regBox fieldset{border:1px solid var(--line);border-radius:12px;padding:8px 12px 12px;margin:6px 0;display:flex;flex-direction:column;gap:4px}
@@ -4027,6 +4039,44 @@ async function evBlob(t){
   const c=await vidFetch(t); if(c){ EV.files[k]={blob:c, name:t.vid.name, t:t.vid.t}; return c; }
   return null;
 }
+/* --- Zwei Versuche vergleichen: nebeneinander, an einem Ereignis ausgerichtet (Startsignal, Abflug, Eintauchen, Wandkontakt …), gemeinsam abspielen --- */
+const CMP={a:null, b:null, al:"sig", tau:0, rate:0.25, play:false, raf:0};
+const CMPEV=()=>({sig:L("Startsignal","Start signal"), hands:L("Hände lösen","Hands leave"), rear:L("Hinterer Fuß löst","Rear foot leaves"), off:L("Abflug / Abstoß","Take-off / push-off"), entry:L("Eintauchen","Entry"), mid:L("Kopf unter Wasser","Head under water"), kick1:L("Erster Beinschlag","First kick"), brk:L("Durchbruch","Breakout"), touch:L("Anschlag","Touch"), feetOn:L("Füße an der Wand","Feet on the wall"), p5:L("5-m-Marke","5 m mark"), p10:L("10-m-Marke","10 m mark"), p15:L("15-m-Marke","15 m mark")});
+function cmpLab(p,D,t){ const g=t.v==="BL"?D.BL:t.v==="A"?D.A:D.B, i=g.indexOf(t)+1; return `${t.v==="BL"?L("Baseline","Baseline"):evVN(p,t.v)} · ${L(`Versuch ${i}`,`Attempt ${i}`)}`; }
+function cmpPickHTML(p,D){ const T=D.done.filter(t=>t.vid); if(T.length<2) return "";
+  const opt=(sel)=>T.map(t=>`<option value="${t.id}"${sel===t.id?" selected":""}>${esc(cmpLab(p,D,t))}</option>`).join(""), a=CMP.a&&T.some(t=>t.id===CMP.a)?CMP.a:(D.A[0]||T[0]).id, b=CMP.b&&T.some(t=>t.id===CMP.b)?CMP.b:((D.B[0]&&D.B[0].id!==a?D.B[0]:T.find(t=>t.id!==a))||T[1]).id;
+  return `<h3 class="evh3">${L("Zwei Versuche vergleichen","Compare two attempts")}</h3><div class="cmppick"><select class="evsel" id="cmpA">${opt(a)}</select><span>vs.</span><select class="evsel" id="cmpB">${opt(b)}</select><button type="button" class="testbtn" id="cmpGo">▶ ${L("Vergleichen","Compare")}</button></div><p class="hint">${L("Beide Videos laufen nebeneinander und sind an einem Ereignis ausgerichtet, z. B. am Startsignal oder am Abflug.","Both videos play side by side, aligned at an event such as the start signal or take-off.")}</p>`; }
+function cmpPickBind(p,D){ const g=$("cmpGo"); if(!g) return; $("cmpA").onchange=e=>{ CMP.a=e.target.value; }; $("cmpB").onchange=e=>{ CMP.b=e.target.value; };
+  g.onclick=()=>{ CMP.a=$("cmpA").value; CMP.b=$("cmpB").value; if(CMP.a===CMP.b){ toast(L("Wähle zwei verschiedene Versuche.","Choose two different attempts."),2500); return; } cmpOpen(p,D); }; }
+async function cmpOpen(p,D){ const ta=p.trials.find(t=>t.id===CMP.a), tb=p.trials.find(t=>t.id===CMP.b); if(!ta||!tb) return;
+  let ov=$("cmpOv"); if(!ov){ ov=document.createElement("div"); ov.id="cmpOv"; document.body.appendChild(ov); }
+  ov.hidden=false; ov.innerHTML=`<p class="hint" style="color:#fff;padding:20px">${L("Videos werden geladen …","Loading videos …")}</p>`;
+  const [ba,bb]=await Promise.all([evBlob(ta), evBlob(tb)]); if(!ba||!bb){ ov.innerHTML=`<div class="cmpbar"><span>${L("Für den Vergleich müssen beide Videos auf diesem Gerät sein. Lade das fehlende Video im Ablauf erneut hoch.","Both videos need to be on this device for the comparison. Upload the missing video again in the sequence.")}</span><button type="button" class="testbtn" id="cmpX">${L("Schließen","Close")}</button></div>`; $("cmpX").onclick=()=>cmpClose(); return; }
+  const ma=(ta.raw&&ta.raw.marks)||{}, mb=(tb.raw&&tb.raw.marks)||{}, EVN=CMPEV(), common=Object.keys(EVN).filter(k=>ma[k]!=null&&mb[k]!=null); if(!common.includes(CMP.al)) CMP.al=common[0]||null;
+  const M=D.M.filter(([k])=>ta.m[k]!=null&&tb.m[k]!=null&&isFinite(ta.m[k])&&isFinite(tb.m[k]));
+  ov.innerHTML=`<div class="cmphead"><b>${L("Vergleich","Comparison")}</b><span class="cmpl A">${esc(cmpLab(p,D,ta))}</span><span class="cmpl B">${esc(cmpLab(p,D,tb))}</span><button type="button" class="testbtn small" id="cmpX">✕ ${L("Schließen","Close")}</button></div>
+    <div class="cmpgrid"><div class="cmpv"><video id="cmpVA" playsinline muted preload="auto"></video><i class="A">A</i></div><div class="cmpv"><video id="cmpVB" playsinline muted preload="auto"></video><i class="B">B</i></div></div>
+    <div class="cmpbar"><label>${L("Ausrichten an","Align at")} <select class="evsel" id="cmpAl">${common.length?common.map(k=>`<option value="${k}"${k===CMP.al?" selected":""}>${esc(EVN[k])}</option>`).join(""):`<option value="">${L("Videoanfang","Video start")}</option>`}</select></label>
+      <button type="button" data-cs="-10">−10</button><button type="button" data-cs="-1">−1</button><button type="button" id="cmpPlay">▶</button><button type="button" data-cs="1">+1</button><button type="button" data-cs="10">+10</button>
+      <button type="button" id="cmpRate">¼×</button><input type="range" id="cmpPos" min="-2" max="4" step="0.001" value="0"><span id="cmpT" class="cmpt"></span></div>
+    ${M.length?`<div class="cmptab"><table><thead><tr><th>${L("Kennwert","Parameter")}</th><th>A</th><th>B</th><th>B − A</th></tr></thead><tbody>${M.map(([k,l,u])=>{ const d=tb.m[k]-ta.m[k]; return `<tr><td>${esc(l)}${u&&u!=="n"?` <small style="opacity:.6">${U(u)}</small>`:""}</td><td>${evFmt(ta.m[k],u,true)}</td><td>${evFmt(tb.m[k],u,true)}</td><td><b>${d>0?"+":d<0?"−":"±"}${evFmt(Math.abs(d),u,true)}</b></td></tr>`; }).join("")}</tbody></table></div>`:""}`;
+  const va=$("cmpVA"), vb=$("cmpVB"); va.src=URL.createObjectURL(ba); vb.src=URL.createObjectURL(bb); CMP.va=va; CMP.vb=vb; CMP.ma=ma; CMP.mb=mb; CMP.fps=ta.fps||tb.fps||30;
+  await Promise.all([va,vb].map(v=>new Promise(r=>{ if(v.readyState>=1) r(); else v.addEventListener("loadedmetadata",r,{once:true}); setTimeout(r,4000); })));
+  const anc=()=>[CMP.al?ma[CMP.al]:0, CMP.al?mb[CMP.al]:0]; const range=()=>{ const [a,b]=anc(); return [Math.max(-a,-b), Math.min((va.duration||0)-a,(vb.duration||0)-b)]; };
+  const pos=$("cmpPos"); const setR=()=>{ const [lo,hi]=range(); pos.min=String(lo); pos.max=String(Math.max(lo+0.01,hi)); };
+  const show=()=>{ const [a,b]=anc(); $("cmpT").textContent=(CMP.tau<0?"−":"+")+evFmt(Math.abs(CMP.tau),"s"); pos.value=String(CMP.tau); };
+  const seek=tau=>{ const [lo,hi]=range(); CMP.tau=Math.max(lo,Math.min(hi,tau)); const [a,b]=anc(); va.currentTime=a+CMP.tau; vb.currentTime=b+CMP.tau; show(); };
+  const stop=()=>{ CMP.play=false; va.pause(); vb.pause(); cancelAnimationFrame(CMP.raf); $("cmpPlay").textContent="▶"; };
+  const loop=()=>{ if(!CMP.play) return; const [a,b]=anc(); CMP.tau=va.currentTime-a; if(Math.abs((vb.currentTime-b)-CMP.tau)>1.5/CMP.fps) vb.currentTime=b+CMP.tau; if(va.ended||vb.ended||CMP.tau>=range()[1]) stop(); show(); CMP.raf=requestAnimationFrame(loop); };
+  $("cmpPlay").onclick=()=>{ if(CMP.play){ stop(); return; } CMP.play=true; va.playbackRate=vb.playbackRate=CMP.rate; va.play().catch(()=>{}); vb.play().catch(()=>{}); $("cmpPlay").textContent="❚❚"; loop(); };
+  ov.querySelectorAll("[data-cs]").forEach(b=>b.onclick=()=>{ stop(); seek(CMP.tau+(+b.dataset.cs)/CMP.fps); });
+  $("cmpRate").onclick=()=>{ const R=[1,0.5,0.25], i=(R.indexOf(CMP.rate)+1)%R.length; CMP.rate=R[i]; $("cmpRate").textContent=["1×","½×","¼×"][i]; va.playbackRate=vb.playbackRate=CMP.rate; };
+  pos.oninput=()=>{ stop(); seek(+pos.value); };
+  $("cmpAl").onchange=e=>{ CMP.al=e.target.value||null; stop(); setR(); seek(0); };
+  $("cmpX").onclick=()=>cmpClose();
+  CMP.key=e=>{ if(ov.hidden) return; if(e.key==="Escape"){ cmpClose(); } else if(e.key===" "){ e.preventDefault(); $("cmpPlay").click(); } else if(e.key==="ArrowRight"||e.key==="ArrowLeft"){ e.preventDefault(); stop(); seek(CMP.tau+(e.key==="ArrowRight"?1:-1)*(e.shiftKey?10:1)/CMP.fps); } else return; e.stopPropagation(); };
+  document.addEventListener("keydown",CMP.key,true); setR(); seek(-Math.min(1, -range()[0])); blog("klick","Vergleich geöffnet"); }
+function cmpClose(){ const ov=$("cmpOv"); if(!ov) return; CMP.play=false; cancelAnimationFrame(CMP.raf); [CMP.va,CMP.vb].forEach(v=>{ if(v){ v.pause(); try{ URL.revokeObjectURL(v.src); }catch(e){} } }); if(CMP.key) document.removeEventListener("keydown",CMP.key,true); ov.hidden=true; ov.innerHTML=""; }
 /* --- Auswertung eines Versuchs mit dem Schritt-für-Schritt-Assistenten --- */
 function evSteps(P){
   P=P||EV.cur||{}; if(isTurn(P)) return turnSteps(P); const back=P.start==="back", breast=P.uw==="breast" && !back, u=U("m"); const {S1,t,n}=mkSteps();
@@ -4524,6 +4574,7 @@ function evReport(){
     <p class="hint">${L(`Ausgewertet: Baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`,`Analysed: baseline ${BL.length}, ${esc(evVN(p,"A"))} ${A.length}, ${esc(evVN(p,"B"))} ${B.length}`)}${tl.days>1?" · "+L(`${tl.days} Testtage`,`${tl.days} test days`):""}</p>`;
   if(!D.done.length){ top.innerHTML=h+`<p class="hint">${L("Noch keine ausgewerteten Versuche.","No analysed attempts yet.")}</p>`; $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); return; }
   h+=`<button type="button" class="evbig" id="evPdf" style="margin-top:6px">${L("Ergebnisblatt als PDF","Results sheet as PDF")}</button>`;
+  h+=cmpPickHTML(p,D);
   // 1) Baseline: Tabelle und Grafik, jeweils mit eigener Kennwert-Auswahl
   h+=`<h3 class="evh3">${L("Baseline","Baseline")}</h3>`;
   if(BL.length){
@@ -4574,7 +4625,7 @@ function evReport(){
     if(all.length){ const g=[]; all.forEach(n=>{ let o=g.find(x=>x.lab===n.lab); if(!o){ o={lab:n.lab,a:[]}; g.push(o); } o.a.push(n); });
       h+=`<h3 class="evh3">${L("Notizen zur Technik","Technique notes")}</h3><div class="card wnotesum">${g.map(o=>`<p><b>${esc(o.lab)}</b></p><ul>${o.a.map(n=>`<li><i class="evv ${n.v}">${n.v}</i> ${L(`Versuch ${n.no}`,`Attempt ${n.no}`)}: ${esc(n.txt)}</li>`).join("")}</ul>`).join("")}</div>`; } }
   top.innerHTML=h; evMetBar(D);
-  $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); $("evPdf").onclick=()=>evPdfAsk(p);
+  $("evBack").onclick=()=>evShow("plan"); $("evDl").onclick=()=>evExport(p); $("evPdf").onclick=()=>evPdfAsk(p); cmpPickBind(p,D);
   top.querySelectorAll("[data-chip]").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{ EV.rk=EV.rk||{}; EV.rk[g.dataset.chip]=b.dataset.k; const y=scrollY; evReport(); scrollTo(0,y); }));
 }
 function evBoxGroups(D,k,p){ return [{k:"BL",lab:"Baseline",vals:evVals(D.BL,k)},{k:"A",lab:evVN(p,"A"),vals:evVals(D.A,k)},{k:"B",lab:evVN(p,"B"),vals:evVals(D.B,k)}].filter(g=>g.k!=="BL"||g.vals.length); }
@@ -5452,7 +5503,7 @@ function lupeHide(){ const lp=$("sLupe"); if(lp) lp.hidden=true; if(LUPE.on && L
    Schmale senkrechte Werkzeugleiste am rechten Rand im Vollbild. Koordinaten relativ zum (ungezoomten) Videofeld, damit Zoom und Größe stimmen. --- */
 const DR={tool:null, col:0, cur:null, show:true};
 const DRCOL=["#FFD24A","#FF5A5A","#3FD07A","#4FC3FF","#FFFFFF"];
-const DRTOOLS=()=>[["sel","⤧",L("Auswählen, verschieben und animieren","Select, move and animate")],["pen","✎",L("Stift","Pen")],["line","╱",L("Linie","Line")],["arrow","➚",L("Pfeil","Arrow")],["circle","◯",L("Kreis","Circle")],["angle","∠",L("Winkel (3 Punkte)","Angle (3 points)")],["hang","⦦",L("Winkel zur Waagerechten","Angle to the horizontal")],["chain","⟟",L("Mehrgelenkiger Winkel (Punkte nacheinander, Doppelklick beendet)","Multi-joint angle (points one after another, double-click to finish)")]];
+const DRTOOLS=()=>[["sel","⤧",L("Auswählen, verschieben und animieren","Select, move and animate")],["pen","✎",L("Stift","Pen")],["line","╱",L("Linie","Line")],["arrow","➚",L("Pfeil","Arrow")],["circle","◯",L("Kreis","Circle")],["angle","∠",L("Winkel (3 Punkte)","Angle (3 points)")],["hang","⦦",L("Winkel zur Waagerechten","Angle to the horizontal")],["chain",'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4l4 7 7 2 3 7"/><circle cx="5" cy="4" r="1.6" fill="currentColor"/><circle cx="9" cy="11" r="1.6" fill="currentColor"/><circle cx="16" cy="13" r="1.6" fill="currentColor"/><circle cx="19" cy="20" r="1.6" fill="currentColor"/></svg>',L("Mehrgelenkiger Winkel (Punkte nacheinander, Doppelklick beendet)","Multi-joint angle (points one after another, double-click to finish)")]];
 function drShapes(){ return SA.draw||(SA.draw=[]); }
 function drPx(p){ const cv=$("sDraw"), z=measZ(), dpr=devicePixelRatio||1; return [(p[0]*cv.clientWidth*z.s+z.x)*dpr, (p[1]*cv.clientHeight*z.s+z.y)*dpr]; }
 function drAng(a,b,c){ const W=$("sDraw").clientWidth, H=$("sDraw").clientHeight, v1=[(a[0]-b[0])*W,(a[1]-b[1])*H], v2=[(c[0]-b[0])*W,(c[1]-b[1])*H];
@@ -6494,7 +6545,7 @@ async function meEnter(){ ["spPage","evPage","qkPage","modeSoon","athPage","user
 function meList(){ const pg=$("mePage"); if(!pg || appMode!=="me") return; const R=ROLE.get(), coach=!R || R.coach!==false, ath=!!(R && R.athlete), both=coach&&ath, view=meView();
   const ids=(R&&R.athlete_ids)||[], me=PERS.get().list.filter(x=>persCids(x).some(c=>ids.includes(c))), cl=(CLUB.list||[]), st=usageStats();
   const spN=v=>v==="track"?L("Leichtathletik","Athletics"):L("Schwimmen","Swimming"), rN=v=>v==="admin"?L("Vereins-Chef","Club head"):v==="athlete"?L("Athlet*in","Athlete"):L("Trainer*in","Coach");
-  pg.innerHTML=`<h2 class="big">${L("Mein Bereich","My area")}</h2>
+  pg.innerHTML=`<div class="mehead"><h2 class="big">${L("Mein Bereich","My area")}</h2><button type="button" class="megear" id="meSet" title="${L("Einstellungen","Settings")}" aria-label="${L("Einstellungen","Settings")}"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div>
     ${both?`<div class="card mecard"><p class="qt" style="margin:0 0 6px">${L("Ich nutze Sprintz gerade als","I'm currently using Sprintz as")}</p><div class="seg" id="meView"><button type="button" data-v="coach" aria-pressed="${view!=="athlete"}">${L("Trainer*in","Coach")}</button><button type="button" data-v="athlete" aria-pressed="${view==="athlete"}">${L("Athlet*in","Athlete")}</button></div>
       <p class="hint" style="margin:6px 0 0">${view==="athlete"?L("Als Athlet*in siehst du nur deine eigenen Daten.","As an athlete you only see your own data."):L("Als Trainer*in siehst du alle Athlet*innen deiner Vereine.","As a coach you see all athletes of your clubs.")}</p></div>`:""}
     ${RQ.open.length?`<div class="card mecard meq"><h3>${L("Beitrittsanfragen","Join requests")} (${RQ.open.length})</h3>${RQ.open.map(q=>`<div class="rqrow"><div><b>${esc([q.first,q.last].filter(Boolean).join(" ")||q.account||"?")}</b> <small class="hint">${esc(q.account||"")}${q.birth?" · "+q.birth:""}${q.spec?" · "+esc(q.spec):""}</small><br><small>${L("möchte in","wants to join")} <b>${esc(q.club)}</b>${q.role==="athlete"?(q.consent?"":" · "+L("ohne Einwilligung","without consent")):""}</small></div>
@@ -6512,7 +6563,7 @@ function meList(){ const pg=$("mePage"); if(!pg || appMode!=="me") return; const
   const vw=$("meView"); if(vw) vw.querySelectorAll("button").forEach(b=>b.onclick=()=>{ try{ localStorage.setItem("sprintz-view-"+USER, b.dataset.v); }catch(e){} PK.st.club="all"; coachUI(); meList(); toast(b.dataset.v==="athlete"?L("Ansicht: Athlet*in","View: athlete"):L("Ansicht: Trainer*in","View: coach"),2000); });
   pg.querySelectorAll("[data-mestat]").forEach(b=>b.onclick=()=>athStats(b.dataset.mestat));
   pg.querySelectorAll("[data-mecode]").forEach(b=>b.onclick=()=>{ try{ navigator.clipboard.writeText(b.dataset.mecode); toast(L("Vereinscode kopiert.","Club code copied.")); }catch(e){} });
-  const j=$("meJoin"); if(j) j.onclick=()=>clubDlg("join"); const rq=$("meReq"); if(rq) rq.onclick=()=>rqDlg();
+  $("meSet").onclick=()=>setDlg(); const j=$("meJoin"); if(j) j.onclick=()=>clubDlg("join"); const rq=$("meReq"); if(rq) rq.onclick=()=>rqDlg();
   const ans=async(id,acc)=>{ const sl=pg.querySelector(`[data-rqrole="${id}"]`); try{ await sbReady(); await sbFetch("/rest/v1/rpc/sprintz_answer_request",{method:"POST", body:{p_id:id, p_accept:acc, p_role:sl?sl.value:null}}); toast(acc?L("Angenommen.","Accepted."):L("Abgelehnt.","Declined."),2000); }
     catch(e){ toast(L("Das hat nicht geklappt.","That didn't work.")+" "+(e.message||""),4000); } await rqLoad(); if(clubOn()){ await clubLoad(true); await clubAthPull(); } meList(); };
   pg.querySelectorAll("[data-rqok]").forEach(b=>b.onclick=()=>{ b.disabled=true; ans(b.dataset.rqok,true); }); pg.querySelectorAll("[data-rqno]").forEach(b=>b.onclick=()=>{ b.disabled=true; ans(b.dataset.rqno,false); }); }
@@ -8480,9 +8531,26 @@ function lgUI(){ $("lgReg").textContent=L("Neu bei Sprintz? Konto anlegen","New 
 // Training: Video einer Person zuordnen
 function vPersUI(){ const r=$("vPersRow"); if(!r) return; r.hidden=!canPersons(); if(r.hidden) return; const cur=$("vPerson").value; $("vPersLbl").textContent=L("Athlet*in","Athlete");
   $("vPerson").innerHTML=`<option value="">${L("– keine Zuordnung –","– not assigned –")}</option>`+PERS.list().map(x=>`<option value="${x.id}"${cur===x.id?" selected":""}>${esc(x.name)}</option>`).join(""); }
+// Einstellungen je Konto: ausgeblendete Menüpunkte (auf dem Gerät und im Konto gespeichert)
+const PREF={ get(){ try{ return JSON.parse(localStorage.getItem("sprintz-prefs-"+(USER||""))||"{}")||{}; }catch(e){ return {}; } },
+  set(p){ p._u=Date.now(); try{ localStorage.setItem("sprintz-prefs-"+(USER||""), JSON.stringify(p)); }catch(e){} prefPush(p); } };
+async function prefPush(p){ if(!STORE.online()) return; try{ await sbReady(); await sbFetch("/rest/v1/userdata?on_conflict=user_id,key",{method:"POST", headers:{Prefer:"resolution=merge-duplicates,return=minimal"}, body:{key:"prefs", data:p, updated_at:new Date().toISOString()}}); }catch(e){} }
+async function prefPull(){ if(!USER || !STORE.online()) return; try{ await sbReady(); const r=await sbFetch("/rest/v1/userdata?key=eq.prefs&select=data"), d=r&&r[0]&&r[0].data, cur=PREF.get(); if(d && (d._u||0)>(cur._u||0)){ try{ localStorage.setItem("sprintz-prefs-"+USER, JSON.stringify(d)); }catch(e){} coachUI(); } }catch(e){} }
+setTimeout(()=>prefPull(), 3000);
+function menuHidden(m){ try{ return ((PREF.get().hide)||[]).includes(m); }catch(e){ return false; } }
+const MENU_ITEMS=()=>[["quick",L("Technikauswertung","Technique analysis"),true],["eval",L("Technikevaluation","Technique evaluation"),isCoachRole()],["kraft",L("Krafttraining","Strength training"),isDev()],["start",L("Start- und Reaktionstraining","Start and reaction training"),true],["ath",L("Vereine und Athlet*innen","Clubs and athletes"),canPersons()&&isCoachRole()]];
+function setDlg(){ let d=$("setDlg"); if(!d){ d=document.createElement("div"); d.id="setDlg"; d.className="dlg"; document.body.appendChild(d); d.addEventListener("click",e=>{ if(e.target===d) d.hidden=true; }); }
+  const P=PREF.get(), hide=P.hide||[];
+  d.hidden=false; d.innerHTML=`<div class="dlgbox"><div class="cmhead"><h3 style="margin:0">${L("Einstellungen","Settings")}</h3><button type="button" class="dclose" id="stX" aria-label="${L("Schließen","Close")}">×</button></div>
+    <div class="cmsec"><p class="qt">${L("Sprache","Language")}</p><div class="langwrap" style="justify-content:flex-start;margin:0"><button type="button" class="langbtn" id="stLang" aria-haspopup="listbox"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><span>Language</span><b class="langcur"></b><i aria-hidden="true">▾</i></button></div></div>
+    <div class="cmsec"><p class="qt">${L("Menüpunkte anzeigen","Show menu items")}</p><p class="hint" style="margin:0 0 6px">${L("Was du nicht nutzt, kannst du ausblenden. „Mein Bereich“ bleibt immer sichtbar.","Hide what you don't use. “My area” always stays visible.")}</p>
+      ${MENU_ITEMS().filter(x=>x[2]).map(([m,l])=>`<label class="setrow"><input type="checkbox" data-mh="${m}"${hide.includes(m)?"":" checked"}> <span>${esc(l)}</span></label>`).join("")}</div></div>`;
+  langBtns(); $("stX").onclick=()=>{ d.hidden=true; }; $("stLang").onclick=e=>{ e.stopPropagation(); langOpen($("stLang"), ()=>setDlg()); };
+  d.querySelectorAll("[data-mh]").forEach(c=>c.onchange=()=>{ const P2=PREF.get(), h=new Set(P2.hide||[]); if(c.checked) h.delete(c.dataset.mh); else h.add(c.dataset.mh); P2.hide=[...h]; PREF.set(P2); coachUI(); }); }
 function isCoachRole(){ try{ return !isAthOnly(); }catch(e){ return true; } }
-function coachUI(){ const mb=$("meBtn"); if(mb) mb.hidden=!USER; const evb=$("evalBtn"); if(evb) evb.hidden=!isCoachRole(); const kb=$("kraftBtn"); if(kb) kb.hidden=!isDev();
-  if(appMode==="eval" && !isCoachRole() && typeof setMode==="function") setTimeout(()=>setMode("quick"),0); if(appMode==="me" && !USER && typeof setMode==="function") setTimeout(()=>setMode("start"),0); const ab=$("athBtn"); if(ab) ab.hidden=!canPersons() || !isCoachRole(); if(appMode==="ath" && (!canPersons() || !isCoachRole()) && typeof setMode==="function") setTimeout(()=>setMode("start"),0); const r=$("coachRow"); if(!r) return; r.hidden=!USER || PERSON_USERS.includes(USER); $("coachChk").checked=coachOn(); $("coachLbl").textContent=L("Ich bin Trainer*in: Athlet*innen anlegen und ihnen Videos, Auswertungen und Projekte zuordnen","I'm a coach: create athletes and assign videos, analyses and projects to them"); }
+function coachUI(){ const mb=$("meBtn"); if(mb) mb.hidden=!USER; const evb=$("evalBtn"); if(evb) evb.hidden=!isCoachRole()||menuHidden("eval"); const kb=$("kraftBtn"); if(kb) kb.hidden=!isDev()||menuHidden("kraft");
+  ["quick","start"].forEach(m=>{ const b=document.querySelector(`#modeNav [data-m="${m}"]`); if(b) b.hidden=menuHidden(m); });
+  if(appMode==="eval" && !isCoachRole() && typeof setMode==="function") setTimeout(()=>setMode("quick"),0); if(appMode==="me" && !USER && typeof setMode==="function") setTimeout(()=>setMode("start"),0); const ab=$("athBtn"); if(ab) ab.hidden=!canPersons() || !isCoachRole() || menuHidden("ath"); if(appMode==="ath" && (!canPersons() || !isCoachRole()) && typeof setMode==="function") setTimeout(()=>setMode("start"),0); const r=$("coachRow"); if(!r) return; r.hidden=!USER || PERSON_USERS.includes(USER); $("coachChk").checked=coachOn(); $("coachLbl").textContent=L("Ich bin Trainer*in: Athlet*innen anlegen und ihnen Videos, Auswertungen und Projekte zuordnen","I'm a coach: create athletes and assign videos, analyses and projects to them"); }
 $("coachChk").onchange=()=>{ try{ localStorage.setItem("sprintz-coach-"+(USER||"gast"), $("coachChk").checked?"1":"0"); }catch(e){} coachUI(); if(appMode==="quick") qkList(); else if(appMode==="eval" && EV.view==="list") evList(); if(typeof vPersUI==="function") vPersUI(); };
 function userUI(){ coachUI(); try{ if(isDev() && window.sprintzDesktop && sprintzDesktop.setDev) sprintzDesktop.setDev(true, USER); }catch(e){} const db=$("devBtn"); if(db){ db.hidden=!isDev(); if((appMode==="dev"||appMode==="kraft") && !isDev() && typeof setMode==="function") setMode("start"); }
   const n=$("userName"); if(!n) return; n.textContent = USER ? (SESS && SESS.offline ? L(`${USER} · offline`,`${USER} · offline`) : L(`Angemeldet als ${USER}`,`Logged in as ${USER}`)) : ""; $("logoutBtn").textContent=L("Abmelden","Log out"); $("logoutBtn").hidden=!USER; if(!$("login").hidden) lgUI(); }
