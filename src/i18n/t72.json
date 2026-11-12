@@ -1,0 +1,11 @@
+[
+["Saved in Supabase but not visible to your account (check your role in the club).","Supabase'e kaydedildi ama hesabın tarafından görülemiyor (kulüpteki rolünü kontrol et).","Сохранено в Supabase, но не видно твоему аккаунту (проверь свою роль в клубе).","Opgeslagen in Supabase, maar niet zichtbaar voor je account (controleer je rol in de club)."],
+["First and last name are missing.","Ad ve soyad eksik.","Не указаны имя и фамилия.","Voor- en achternaam ontbreken."],
+["Year of birth is missing.","Doğum yılı eksik.","Не указан год рождения.","Geboortejaar ontbreekt."],
+["Consent for the club database is missing.","Kulüp veritabanı için onay eksik.","Нет согласия на клубную базу данных.","Toestemming voor de clubdatabase ontbreekt."],
+["Upload failed: ","Yükleme başarısız: ","Загрузка не удалась: ","Uploaden mislukt: "],
+["Not uploaded yet.","Henüz yüklenmedi.","Ещё не загружено.","Nog niet geüpload."],
+["Online data could not be loaded:","Çevrimiçi veriler yüklenemedi:","Не удалось загрузить онлайн-данные:","Online gegevens konden niet worden geladen:"],
+["Assigned on this device only","Yalnızca bu cihazda atanmış","Назначено только на этом устройстве","Alleen op dit apparaat toegewezen"],
+["Upload again","Tekrar yükle","Загрузить снова","Opnieuw uploaden"]
+]
