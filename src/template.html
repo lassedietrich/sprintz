@@ -3985,6 +3985,36 @@ async function evPlay(i, btn){
   tm.push(setTimeout(stop, Math.max(0,(endT-base)*1000))); EV.play={stop};
 }
 /* --- Hochladen: Zuordnung über den Aufnahmezeitpunkt im Video --- */
+// Kamera-Kennung: Gerät aus den Metadaten (iPhone-Modell, GoPro, DJI …) oder Namensanfang der Datei, dazu die Bildgröße
+function vidCam(name, b){ let dev="", wh="";
+  try{ const txt=new TextDecoder("latin1").decode(b.subarray(0, Math.min(b.length, 2e6)));
+    const m=txt.match(/iPhone[ \w,]{0,14}?(?=\0|[^ \w,])/)||txt.match(/iPad[ \w,]{0,14}?(?=\0|[^ \w,])/)||txt.match(/HERO\d+[ \w]{0,8}/)||txt.match(/GoPro/)||txt.match(/DJI[ \w]{0,10}/)||txt.match(/SM-[A-Z]\d{3}\w*|Pixel \d\w*/);
+    if(m) dev=m[0].replace(/\0/g,"").trim();
+    for(let i=0;i+100<b.length;i++){ if(b[i]===0x74&&b[i+1]===0x6b&&b[i+2]===0x68&&b[i+3]===0x64){ const d=new DataView(b.buffer, b.byteOffset+i+4), o=d.getUint8(0)===1?88:76, w=d.getUint32(o)>>>16, h=d.getUint32(o+4)>>>16; if(w&&h){ wh=Math.max(w,h)+"x"+Math.min(w,h); break; } } } }catch(e){}
+  const pre=(String(name||"").match(/^[A-Za-z]+/)||[""])[0].toUpperCase().slice(0,4);
+  return (dev||pre||"?")+"|"+wh; }
+// Videos zu Läufen zusammenfassen: Zeitfenster aus Aufnahmebeginn und Videodauer.
+// Mehrere Kameras: deren Uhren können versetzt sein (z. B. Unterwasserkamera ohne Zeitabgleich, Zeitzone falsch).
+// Je Kamera wird der Uhrversatz gesucht, bei dem sich die meisten Videos zeitlich mit denen der Hauptkamera decken.
+function vidGroupRuns(list){
+  const it=list.filter(x=>x.t).map(x=>({x, s:x.t, e:x.t+Math.max(1,(x.dur||0))*1000, cam:x.cam||"?"}));
+  const cams={}; it.forEach(v=>(cams[v.cam]=cams[v.cam]||[]).push(v));
+  const keys=Object.keys(cams);
+  // eine Kamera bzw. gleiche Geräte: nur Videos zusammenfassen, die sich tatsächlich überschneiden (eine Kamera nimmt nie zwei Videos gleichzeitig auf)
+  if(keys.length<2){ const g=[]; it.sort((a,b)=>a.s-b.s).forEach(v=>{ const l=g[g.length-1]; if(l && Math.min(l.e,v.e)-v.s >= 0.3*Math.min(l.e-l.s, v.e-v.s)){ l.items.push(v); l.e=Math.max(l.e,v.e); } else g.push({s:v.s, e:v.e, items:[v]}); }); return g.map(z=>z.items.map(v=>v.x)); }
+  keys.sort((a,b)=>cams[b].length-cams[a].length || Math.min(...cams[a].map(v=>v.s))-Math.min(...cams[b].map(v=>v.s)));
+  const groups=cams[keys[0]].sort((a,b)=>a.s-b.s).map(r=>({s:r.s, e:r.e, items:[r]}));
+  const ov=(a0,a1,b0,b1)=>{ const o=Math.min(a1,b1)-Math.max(a0,b0); return o<=0?0:o/Math.min(a1-a0,b1-b0); };
+  const match=(S,d)=>{ const pr=[]; S.forEach((v,i)=>groups.forEach((g,j)=>{ const q=ov(v.s+d,v.e+d,g.s,g.e); if(q>=0.5) pr.push([q,i,j]); })); pr.sort((a,b)=>b[0]-a[0]);
+    const ui=new Set(), uj=new Set(), m=[]; let sum=0; pr.forEach(([q,i,j])=>{ if(ui.has(i)||uj.has(j)) return; ui.add(i); uj.add(j); m.push([i,j]); sum+=q; }); return {m, sum}; };
+  for(const k of keys.slice(1)){ const S=cams[k].sort((a,b)=>a.s-b.s), cand=new Set([0]);
+    S.forEach(v=>groups.forEach(g=>{ cand.add(g.s-v.s); cand.add(g.e-v.e); cand.add((g.s+g.e)/2-(v.s+v.e)/2); }));
+    let best={d:0, ...match(S,0)};
+    cand.forEach(d=>{ if(d===0) return; const r=match(S,d); if(r.m.length>best.m.length || (r.m.length===best.m.length && best.d!==0 && (r.sum>best.sum+1e-6 || (Math.abs(r.sum-best.sum)<1e-6 && Math.abs(d)<Math.abs(best.d))))) best={d, ...r}; });
+    const used=new Set(); best.m.forEach(([i,j])=>{ groups[j].items.push(S[i]); used.add(i); });
+    S.forEach((v,i)=>{ if(!used.has(i)) groups.push({s:v.s+best.d, e:v.e+best.d, items:[v]}); });
+    if(best.d) blog("video","Kamera-Uhrversatz", {cam:k, s:Math.round(best.d/1000), paare:best.m.length}); }
+  return groups.sort((a,b)=>a.s-b.s).map(g=>g.items.map(v=>v.x)); }
 async function vidTime(f){
   // MP4/MOV: Erstellzeit aus dem mvhd-Block (Sekunden seit 1904, UTC)
   try{
@@ -3997,9 +4027,9 @@ async function vidTime(f){
           const secs = v===1 ? Number(d.getBigUint64(4)) : d.getUint32(4); const ms=(secs-2082844800)*1000;
           const ts = v===1 ? d.getUint32(20) : d.getUint32(12), du = v===1 ? Number(d.getBigUint64(24)) : d.getUint32(16), dur = ts ? du/ts : 0;
           // iPhone: Beginn der Aufnahme mit Zeitzone (com.apple.quicktime.creationdate), genauer als mvhd
-          let t0=null; try{ const txt=new TextDecoder("latin1").decode(b); const mm=txt.match(/(20\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?[+-]\d\d:?\d\d)/); if(mm){ const z=Date.parse(mm[1].replace(/([+-]\d\d)(\d\d)$/,"$1:$2")); if(z>946684800000) t0=z; } }catch(e){}
-          if(t0) return {t:t0, src:"meta", dur};
-          if(ms>946684800000 && ms<Date.now()+864e5) return {t:ms, src:"meta", dur}; break; } } break; }
+          let t0=null, cam=vidCam(f.name, b); try{ const txt=new TextDecoder("latin1").decode(b); const mm=txt.match(/(20\d\d-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?[+-]\d\d:?\d\d)/); if(mm){ const z=Date.parse(mm[1].replace(/([+-]\d\d)(\d\d)$/,"$1:$2")); if(z>946684800000) t0=z; } }catch(e){}
+          if(t0) return {t:t0, src:"meta", dur, cam};
+          if(ms>946684800000 && ms<Date.now()+864e5) return {t:ms, src:"meta", dur, cam}; break; } } break; }
       if(size<hl) break; off+=size; }
   }catch(e){}
   return {t:f.lastModified||0, src:"file"};
@@ -4007,7 +4037,7 @@ async function vidTime(f){
 async function evUpload(files){
   const p=EV.cur, msg=$("evUpMsg"); if(!files.length) return;
   msg.textContent=L("Videos werden gelesen …","Reading videos …");
-  const list=[]; for(const f of files){ const {t,src,dur}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur}; list.push({key,t,src,f,dur}); }
+  const list=[]; for(const f of files){ const {t,src,dur,cam}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur, cam}; list.push({key,t,src,f,dur,cam}); }
   list.sort((a,b)=>a.t-b.t);
   // schon bekannte Videos (früher zugeordnet, nach Neuladen erneut gewählt) nur wieder öffnen
   let known=0; for(let i=list.length-1;i>=0;i--){ const x=list[i]; let hit=false;
@@ -4023,7 +4053,7 @@ async function evUpload(files){
           "This happens when the iPhone creates a converted copy when sending.<br><b>How to include all photo data:</b> select the videos in the Photos app → Share → tap “Options” at the top → turn on “All Photos Data” → AirDrop. Alternatively transfer them by cable with the Mac app “Image Capture”. Then upload the videos again. You can also assign the videos manually in each attempt's selection box.");
   } else {
     // Reihenfolge der Aufnahmen = Reihenfolge der Versuche; zuerst an Versuche ohne Video
-    const runs=evGroupRuns(list), multi=runs.filter(r=>r.length>1).length;
+    const runs=vidGroupRuns(list), multi=runs.filter(r=>r.length>1).length;
     const free=evOrd(p).filter(t=>!t.vid); const target = free.length>=runs.length ? free : evOrd(p);
     runs.forEach((g,k)=>{ const t=target[k]; if(!t) return; evSetVid(p,t,g[0].key); evSetVids2(p,t,g.slice(1).map(x=>x.key)); });
     evSave(); evPlanView();
@@ -5309,14 +5339,20 @@ function qkList(){
 async function qkUpload(files){
   if(!files.length) return; const msg=$("qkMsg"); if(msg) msg.textContent=L("Videos werden gelesen …","Reading videos …");
   let neu=0, again=0; const p=QK.p;
-  for(const f of files){ const {t,src,dur}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur};
+  for(const f of files){ const {t,src,dur,cam}=await vidTime(f); const key="up-"+f.name+"-"+f.size; EV.files[key]={blob:f, name:f.name, t, src, dur, cam};
     const hit=p.trials.find(e=>[e.vid,...(e.vids2||[])].some(v=>v && (v.key===key || (v.name===f.name && v.size===f.size))));
     if(hit){ for(const v of [hit.vid,...(hit.vids2||[])]) if(v && v.key!==key && v.name===f.name && v.size===f.size) EV.files[v.key]=EV.files[key]; again++; continue; }
     const e={id:evId(), vid:{key, src:"upload", name:f.name, t, dur:dur||null, size:f.size, dev:DEVID}, status:"open", label:"", added:Date.now(), person:(QK.pf!=="all"&&QK.pf!=="none")?QK.pf:null, kind:null};
     p.trials.push(e); neu++; }
+  const runs=qkGroup(p);
   await qkSave(); qkList(); deskPrep(files);
-  const m=$("qkMsg"); if(m) m.textContent=[neu?L(`${neu} neue Videos.`,`${neu} new videos.`):"", again?L(`${again} schon bekannte Videos wieder geöffnet.`,`${again} known videos reopened.`):""].filter(Boolean).join(" ");
+  const m=$("qkMsg"); if(m) m.textContent=[neu?L(`${neu} neue Videos.`,`${neu} new videos.`):"", again?L(`${again} schon bekannte Videos wieder geöffnet.`,`${again} known videos reopened.`):"", runs?L(`${runs} Läufe mit mehreren Kameras erkannt und zusammengefasst.`,`${runs} runs with several cameras detected and combined.`):""].filter(Boolean).join(" ");
 }
+// noch nicht ausgewertete Einzelvideos mit Aufnahmezeit zu Läufen zusammenfassen; gibt die Zahl der Läufe mit mehreren Kameras zurück
+function qkGroup(p){ const free=p.trials.filter(e=>e.status==="open" && !e.kind && !(e.vids2&&e.vids2.length) && e.vid && e.vid.t && EV.files[e.vid.key] && EV.files[e.vid.key].src==="meta");
+  if(free.length<2) return 0; const runs=vidGroupRuns(free.map(e=>({e, t:e.vid.t, dur:e.vid.dur||EV.files[e.vid.key].dur, cam:EV.files[e.vid.key].cam})));
+  let n=0; runs.forEach(g=>{ if(g.length<2) return; const main=g[0].e; main.vids2=g.slice(1).map(x=>Object.assign({}, x.e.vid, {off:null})); const drop=new Set(g.slice(1).map(x=>x.e)); p.trials=p.trials.filter(x=>!drop.has(x)); n++; });
+  return n; }
 function qkCsv(){
   const dec=x=>x==null||!isFinite(x)?"":(LANG==="en"?x.toFixed(2):x.toFixed(2).replace(".",",")), sep=LANG==="en"?",":";";
   const rows=[[L("Name","Name"),L("Datei","File"),L("Aufnahme","Recorded"),L("Art","Type"),L("Athlet*in","Athlete"),"5 m (s)","10 m (s)","15 m (s)",L("Wende 5 + 5 m (s)","Turn 5 + 5 m (s)"),L("Anschlag letzte 5 m (s)","Finish last 5 m (s)"),L("Status","Status")]];
