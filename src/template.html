@@ -443,7 +443,8 @@ body.xh-on #xhair{display:block}
 #synOv .cmphead #synX{margin-left:auto;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;padding:6px 10px;font:600 .9rem system-ui;cursor:pointer}
 #synOv .synmain{background:#2F6FE0;border-color:#2F6FE0}#synOv .cmpt{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);font-size:.9rem}
 .synadj{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.6);border-radius:10px;padding:4px 8px;font-size:.85rem;white-space:nowrap}.synadj button{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;border-radius:6px;padding:3px 9px;font-weight:700;cursor:pointer}
-.fsadj .fssyn{margin-left:6px}.fsadj .fssnd{padding:1px 6px}
+.fsadj .fssyn{margin-left:6px}
+.camref{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin:0 0 8px;font-size:.85rem}.camref .seg{flex:1}.fsadj .fssnd{padding:1px 6px}
 .sndb{position:absolute;right:8px;bottom:8px;z-index:20;border:0;border-radius:999px;width:34px;height:34px;background:rgba(0,0,0,.55);color:#fff;font-size:1rem;cursor:pointer;line-height:1}.sndb.off{opacity:.8}
 .fsmove{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:7;display:flex;gap:4px}.fsmove button{border:0;border-radius:8px;background:rgba(0,0,0,.55);color:#fff;padding:3px 9px;font-size:.8rem;cursor:pointer}.fsmove button:disabled{opacity:.25;cursor:default}
 #sSnd{right:auto;left:62px;bottom:14px}
@@ -3234,7 +3235,8 @@ const VG={exp:null, cmdT:0, loadT:0, rev:0};
 function vgCmd(t){ VG.cmdT=performance.now(); if(t!=null) VG.exp=t; }
 // erlaubter Bereich: nach bestätigtem Startsignal ab 2 s davor
 const sMin=()=> SA.sigOk && SA.marks && SA.marks.sig!=null ? Math.max(0, SA.marks.sig-2) : 0;
-function sStep(k){ SA.userSeekT=performance.now(); sVid.pause(); SST.min=sMin(); frameStep(sVid, SA.frameT, sFps(), k, SST); vgCmd(SST.t); }
+function sStep(k){ { const S=typeof camRefSec==="function"?camRefSec():null; if(S && S.el.duration>0){ const f=S2fps.get(S.v.key)||sFps(), c=Math.round(S.el.currentTime*f), t2=(c+k+0.5)/f; SA.userSeekT=performance.now(); sSeekTo(Math.max(sMin(), t2-(S.v.off||0))); return; } }
+  SA.userSeekT=performance.now(); sVid.pause(); SST.min=sMin(); frameStep(sVid, SA.frameT, sFps(), k, SST); vgCmd(SST.t); }
 sVid.addEventListener("seeked",()=>{ if(!SA.active || !sVid.paused || VG.exp==null || sVid.seeking) return; const f=sFps(), now=performance.now();
   if(Math.abs(sVid.currentTime-VG.exp) > 0.6/f && now-VG.cmdT>1500){ VG.rev++; console.warn("Sprintz: unerwarteter Sprung verhindert", sVid.currentTime, "→", VG.exp); try{ sVid.currentTime=VG.exp; }catch(e){} } });
 sVid.addEventListener("pause",()=>{ if(SA.active) vgCmd(sVid.currentTime); });
@@ -3415,8 +3417,8 @@ function wizRender(){
         + (SA.cands && SA.cands.length>1 ? `<div class="cands" id="eCands"><span>${L("Weitere Treffer – tippe den richtigen an:","Other matches – tap the right one:")}</span>${SA.cands.map((x,i)=>`<button type="button" data-i="${i}" aria-pressed="${SA.marks.sig!=null && Math.abs(SA.marks.sig-x.t)<0.002}">${fmtS(x.t)}${x.type?` <small>${SIGLBL()[x.type]}</small>`:""}<i aria-hidden="true"><b style="width:${Math.round(x.q*100)}%"></b></i></button>`).join("")}</div>` : "") : ""}
       <button type="button" class="wbig" id="wOk">${L("Passt so","Looks right")}</button>
       <div class="wrow"><button type="button" class="testbtn" id="wMark">${L("Hier setzen","Set here")}</button><button type="button" class="testbtn" id="wAuto">${L("Automatisch finden","Find automatically")}</button></div>`; }
-    else { h+=`<p>${st.x()}</p><button type="button" class="wbig" id="wMark">${L("Hier markieren","Mark here")}</button>
-      <div class="wset">${v!=null ? "✓ "+fmtS(v)+(spRel(v)!=null?` · ${ms3(spRel(v))} ${L("nach dem Startsignal","after the start signal")}`:"")+` <button type="button" class="wgo" id="wGo">${L("Zur Markierung","Go to mark")}</button>` : ""}</div>
+    else { h+=`<p>${st.x()}</p>${camRefHTML(st)}<button type="button" class="wbig" id="wMark">${L("Hier markieren","Mark here")}</button>
+      <div class="wset">${v!=null ? "✓ "+fmtS(v)+(spRel(v)!=null?` · ${ms3(spRel(v))} ${L("nach dem Startsignal","after the start signal")}`:"")+((SA.markCam||{})[st.id]!=null&&camN()>1?` · ${L(`Video ${SA.markCam[st.id]+1}`,`video ${SA.markCam[st.id]+1}`)}`:"")+` <button type="button" class="wgo" id="wGo">${L("Zur Markierung","Go to mark")}</button>` : ""}</div>
       <button type="button" class="wskip" id="wSkip">${L("Nicht zu sehen – überspringen","Not visible – skip")}</button>`; }
   } else if(st.k==="num"){
     const ta=st.seg?mAt(st.seg.a):null, tb=st.seg?mAt(st.seg.b):null;
@@ -3430,7 +3432,8 @@ function wizRender(){
   if((SA.mode==="eval"||SA.mode==="train"||(SA.mode==="quick"&&(qkE(QK.cur)||{}).kind==="start")) && !(SA.mode==="eval"&&isTurn(EV.cur))){ try{ slowAutoFix(); }catch(e){} }
   c.innerHTML=h; wizProgress(); try{ nlRender(); }catch(e){} if(st.k!=="sum") noteBind(st); else resActBind(); if(st.k==="more") xdMoreBind(); xdPlusBind();
   const adv=()=>setTimeout(()=>wizGo(SA.i+1,1),380);
-  const mk=$("wMark"); if(mk) mk.onclick=()=>{ SA.navT=performance.now(); if(st.sig) SA.sigOk=true; SA.marks[st.id]=sCurT(); if(st.sig) SA.sigAuto="manual"; spDraw(); wizRender(); adv(); };
+  camRefBind(st);
+  const mk=$("wMark"); if(mk) mk.onclick=()=>{ SA.navT=performance.now(); if(st.sig) SA.sigOk=true; SA.marks[st.id]=camMarkT(); if(!st.sig && camN()>1){ SA.markCam=SA.markCam||{}; SA.markCam[st.id]=SA.camRef||0; } if(st.sig) SA.sigAuto="manual"; spDraw(); wizRender(); adv(); };
   const ok=$("wOk"); if(ok) ok.onclick=()=>{ SA.navT=performance.now(); if(st.sig) SA.sigOk=true; adv(); };
   const wg=$("wGo"); if(wg) wg.onclick=()=>{ const v=SA.marks[st.id]; if(v!=null) sSeekTo(v+0.5/sFps()); };
   const au=$("wAuto"); if(au && (SA.mode==="eval"||SA.mode==="train") && !(SA.mode==="train" && !SA.upload)) au.onclick=async()=>{ au.textContent=L("Suche …","Searching …"); await evFindSig(); if(SA.marks.sig!=null) sSeekTo(SA.marks.sig); spDraw(); wizRender(); };
@@ -4169,6 +4172,7 @@ async function evAnalyze(t){
   SA.meta={hornT:t.sigEst||0, sig:[]}; SA.events=[]; SA.recT0=0; SA.sigType=null; SA.cands=null; SA.fps=t.fps||30;
   // gespeicherte Markierungen wiederherstellen
   if(t.raw){ SA.marks=Object.assign({}, t.raw.marks); SA.vals=Object.assign({spk:SA.vals.spk}, t.raw.vals); SA.sigAuto="manual"; SA.sigOk=SA.marks.sig!=null; if(SA.marks.dk!=null && SA.marks.kick1==null){ SA.marks.kick1=SA.marks.dk; delete SA.marks.dk; } SA.notes=(t.raw.notes||[]).slice(); SA.draw=(t.raw.draw||[]).slice(); SA.tags=(t.raw.tags||[]).slice(); SA.vel=t.raw.vel||null; SA.mgeo=t.raw.mgeo||null; if(t.raw.smo){ SA.smo=smoNorm(t.raw.smo); SA.smoChecked=true; } }
+  SA.markCam=Object.assign({}, (SA.trialRef&&SA.trialRef.raw&&SA.trialRef.raw.mcam)||{}); SA.camRef=0; synApply(false);
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; document.body.classList.add("reviewing"); scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); sVid.src=SA.url;
   SA.startAt = SA.marks.sig!=null ? SA.marks.sig : null; SA.startSess=SA.sess;
@@ -4246,7 +4250,7 @@ function evSumHTML(){
 }
 function evSaveTrial(){
   const p=EV.cur, t=p.trials[EV.trial]; const o=evMetrics();
-  t.m=o; t.raw={marks:Object.assign({},SA.marks), vals:Object.assign({},SA.vals), notes:(SA.notes||[]).slice(), smo:SA.smo||null, draw:(SA.draw||[]).slice(), tags:(SA.tags||[]).slice(), vel:SA.vel||null, mgeo:SA.mgeo||null}; t.notes=(SA.notes||[]).slice(); t.fps=SA.fps; t.status="done"; t.analysed=Date.now(); evSave();
+  t.m=o; t.raw={mcam:Object.assign({},SA.markCam||{}), marks:Object.assign({},SA.marks), vals:Object.assign({},SA.vals), notes:(SA.notes||[]).slice(), smo:SA.smo||null, draw:(SA.draw||[]).slice(), tags:(SA.tags||[]).slice(), vel:SA.vel||null, mgeo:SA.mgeo||null}; t.notes=(SA.notes||[]).slice(); t.fps=SA.fps; t.status="done"; t.analysed=Date.now(); evSave();
   clubPushEv(p,t); evNextTrial(true);
 }
 // zum nächsten offenen Versuch (gespeichert oder nicht); im Vollbild bleibt das Vollbild bestehen
@@ -4373,6 +4377,8 @@ async function fsEnter(){
   FS.secs=[]; const tr=SA.trialRef;
   for(const v of (tr&&tr.vids2)||[]){ const b=await evBlobOf(v); if(!b) continue; const cell=document.createElement("div"); cell.className="fscell";
     const el=document.createElement("video"); el.muted=v.mute!==false; el.playsInline=true; el.preload="auto"; el.src=URL.createObjectURL(b); cell.appendChild(el); cell.dataset.k=v.key;
+    deskQuick(b).then(u=>{ if(!u || !FS.on || !cell.isConnected) return; const t=el.currentTime, own=el.src; el.src=u; el.addEventListener("loadedmetadata",()=>{ try{ URL.revokeObjectURL(own); }catch(e){} el.currentTime=t; fsSync(true); },{once:true}); });
+    deskFps(b).then(f=>{ if(f>0) S2fps.set(v.key,f); });
     const lab=document.createElement("span"); lab.className="fslab"; lab.textContent=v.name||L("Video 2","Video 2"); cell.appendChild(lab);
     const adj=document.createElement("div"); adj.className="fsadj"; adj.innerHTML=`<button type="button" data-o="-1">−1</button><span>${L("Versatz","offset")}</span><button type="button" data-o="1">+1</button><button type="button" class="fssyn">⇆ ${L("Abgleichen","Sync")}</button><button type="button" class="fssnd"></button>`; cell.appendChild(adj);
     grid.appendChild(cell); const S2={v, el, cell, blob:b, z:{s:1,x:0,y:0}}; FS.secs.push(S2); fsCellBind(S2);
@@ -4450,8 +4456,10 @@ addEventListener("resize",()=>{ if(FS.on) fsLayout(); });
 function fsSync(force){ if(!FS.on) return; const tp=sVid.currentTime;
   FS.secs.forEach(s=>{ const tgt=tp+(s.v.off||0); if(!(s.el.duration>0)) return; const tt=Math.min(s.el.duration, Math.max(0,tgt));
     if(sVid.paused){ if(!s.el.paused) s.el.pause(); if(force || Math.abs(s.el.currentTime-tt)>0.3/sFps()) s.el.currentTime=tt; }
-    else { s.el.playbackRate=sVid.playbackRate; if(s.el.paused) s.el.play().catch(()=>{}); if(Math.abs(s.el.currentTime-tt)>0.06) s.el.currentTime=tt; } });
-  vmDraw($("fsVmC")); fsHint(); }
+    else { if(s.el.paused){ s.el.currentTime=tt; s.el.play().catch(()=>{}); } const d=s.el.currentTime-tt;
+      if(Math.abs(d)>0.3 && !s.el.seeking && performance.now()-(s.seekT||0)>800){ s.seekT=performance.now(); s.el.currentTime=tt+0.05*sVid.playbackRate; }
+      else { const r=sVid.playbackRate*(1-Math.max(-0.12,Math.min(0.12,d*1.5))); if(Math.abs(s.el.playbackRate-r)>0.004) s.el.playbackRate=r; } } });
+  const now=performance.now(); if(force || sVid.paused || now-(FS.hintT||0)>400){ FS.hintT=now; vmDraw($("fsVmC")); fsHint(); } }
 sVid.addEventListener("seeked",()=>fsSync(true)); sVid.addEventListener("pause",()=>fsSync(true)); sVid.addEventListener("play",()=>{ const lp=()=>{ if(FS.on && !sVid.paused){ fsSync(false); requestAnimationFrame(lp); } }; lp(); });
 // Zeitabgleich zweier Kameras über das Startsignal in beiden Tonspuren (ersatzweise über die Aufnahmezeit)
 async function fsAlign(S2){
@@ -4466,6 +4474,20 @@ async function fsAlign(S2){
   else { v.off=0; v.offAuto=false; }
   evSave(); fsSync(true); fsHint();
 }
+// Ausmessen anhand eines bestimmten Videos (mehrere Kameras): Auswahl je Ereignis, Bildschritte und Marke folgen diesem Video
+const camN=()=>1+(((SA.trialRef&&SA.trialRef.vids2)||[]).length);
+function camRefHTML(st){ const n=camN(); if(n<2) return ""; const tr=SA.trialRef, names=[tr.vid,...tr.vids2].map(v=>(v&&v.name)||""), cur=(SA.markCam||{})[st.id]??SA.camRef??0;
+  return `<div class="camref"><span>${L("Ausmessen anhand von:","Measure using:")}</span><div class="seg" id="wCam">${names.map((nm,k)=>`<button type="button" data-k="${k}" aria-pressed="${k===cur}" title="${esc(nm)}">${L(`Video ${k+1}`,`Video ${k+1}`)}</button>`).join("")}</div></div>`; }
+function camRefSec(){ const k=SA.camRef||0; if(!k || !FS.on) return null; const v=SA.trialRef.vids2[k-1]; return FS.secs.find(s=>s.v===v)||null; }
+function camRefBind(st){ const w=$("wCam"); if(!w) return; const cur=(SA.markCam||{})[st.id]; if(cur!=null) SA.camRef=cur; camRefShow();
+  w.querySelectorAll("button").forEach(b=>b.onclick=async()=>{ SA.camRef=+b.dataset.k; if(SA.camRef && !FS.on) await fsEnter(); w.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); camRefShow(); }); }
+function camRefShow(){ if(!FS.on) return; const S=camRefSec(); fsAct(S); }
+function camMarkT(){ const S=camRefSec(); return S ? Math.max(0, S.el.currentTime-(S.v.off||0)) : sCurT(); }
+// Desktop-Programm: Arbeitskopie, falls sie schon fertig ist bzw. gleich fertig wird (sonst null, dann bleibt das Original)
+const S2fps=new Map();
+async function deskQuick(blob, wait){ if(!DSK || !DSK.proxy || !blob) return null; let fp=null; try{ fp=DSK.pathFor(blob); }catch(e){} if(!fp) return null;
+  const p=DSK.proxy(fp).then(r=>r&&r.url||null).catch(()=>null); if(wait==null) return p; return await Promise.race([p, new Promise(r=>setTimeout(()=>r(null), wait))]); }
+async function deskFps(blob){ if(!DSK || !DSK.probe || !blob) return 0; try{ const fp=DSK.pathFor(blob); if(!fp) return 0; const i=await DSK.probe(fp); return (i&&i.fps)||0; }catch(e){ return 0; } }
 /* --- Ton je Video: Hauptvideo an, weitere Kameras aus; per Knopf umschalten (wird je Video gemerkt) --- */
 const SND_ON="🔊", SND_OFF="🔇";
 function sndMain(){ const v=SA.trialRef&&SA.trialRef.vid; return !!(v && v.mute); }
@@ -4477,6 +4499,11 @@ $("sSnd").addEventListener("pointerdown",e=>e.stopPropagation());
 /* --- Kameras abgleichen: Startsignal nacheinander in jedem Video setzen, danach alle Videos gemeinsam prüfen und fein verschieben --- */
 const SY={on:false};
 function synBtn(){ sndUI(); const b=$("sSync"); if(!b) return; const n=((SA.trialRef&&SA.trialRef.vids2)||[]).length; b.hidden=!SA.active || !n; if(n) b.textContent="⇆ "+L(`Kameras abgleichen (${n+1})`,`Sync cameras (${n+1})`); }
+// nach dem Abgleich: Startsignal des Hauptvideos gilt als bestätigt (Schritt wird übersprungen, Videos beginnen 2 s davor)
+function synApply(live){ const tr=SA.trialRef; if(!tr || !(tr.sync&&tr.sync.done) || tr.sync.main==null || !(SA.steps||[]).some(s=>s.sig)) return;
+  if(SA.marks.sig==null) SA.marks.sig=tr.sync.main; SA.sigOk=true; SA.sigAuto="manual";
+  const st=SA.steps[SA.i]; if(st && st.sig){ const k=SA.steps.findIndex((s,i)=>i>SA.i && s.k==="time" && !s.sig && SA.marks[s.id]==null); const n=k>0?k:SA.i+1; if(live) wizGo(n,1); else SA.i=n; }
+  if(live){ if(sVid.currentTime<sMin()) sSeekTo(sMin()); spDraw(); } }
 function synAutoOpen(){ const tr=SA.trialRef, ss=SA.sess; if(!tr || !(tr.vids2||[]).length || (tr.sync&&tr.sync.done)) return; setTimeout(()=>{ if(SA.sess===ss && SA.active && !SY.on) synOpen(); },700); }
 async function synOpen(){ const tr=SA.trialRef; if(!tr || !(tr.vids2||[]).length || SY.on) return; if(!sVid.paused) sVid.pause();
   let d=$("synOv"); if(!d){ d=document.createElement("div"); d.id="synOv"; } (FS.on?$("fsOv"):document.body).appendChild(d); d.hidden=false; SY.on=true; SY.items=null; const tok=(SY.tok=(SY.tok||0)+1);
@@ -4484,9 +4511,7 @@ async function synOpen(){ const tr=SA.trialRef; if(!tr || !(tr.vids2||[]).length
   const vids=[{v:tr.vid, blob:null, main:true}, ...tr.vids2.map(v=>({v, blob:null}))];
   try{ for(const x of vids){ x.blob=await evBlobOf(x.v); if(SY.tok!==tok) return;
       // Desktop-Programm: bildgenaue Arbeitskopie nutzen (große 4K/HEVC-Dateien spielt der Browser sonst nicht flüssig oder gar nicht)
-      if(x.blob && DSK && DSK.proxy){ let fp=null; try{ fp=DSK.pathFor(x.blob); }catch(e){} if(fp){ const ld=$("synLd"); if(ld) ld.textContent=L(`Arbeitskopie für ${x.v.name||"Video"} …`,`Working copy for ${x.v.name||"video"} …`);
-        const off=DSK.onProgress(p=>{ if(p.file===fp && $("synLd")) $("synLd").textContent=L(`Arbeitskopie für ${x.v.name||"Video"}: ${Math.round(p.p*100)} %`,`Working copy for ${x.v.name||"video"}: ${Math.round(p.p*100)} %`); });
-        try{ const r=await DSK.proxy(fp); if(r && r.url) x.url=r.url; }catch(e){} off(); if(SY.tok!==tok) return; } } } }
+      if(x.blob){ const u=await deskQuick(x.blob, 400); if(u) x.url=u; if(SY.tok!==tok) return; } } }
   catch(e){ blog("warn","synOpen: "+(e.message||e)); if(SY.tok!==tok) return; d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Die Videos konnten nicht geladen werden: ","The videos could not be loaded: ")}${esc(e.message||String(e))}</p>`; $("synX").onclick=synClose; return; }
   const miss=vids.filter(x=>!x.blob); if(miss.length){ d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Nicht auf diesem Gerät: ","Not on this device: ")}${miss.map(x=>esc(x.v.name||"?")).join(", ")}</p>`; $("synX").onclick=synClose; return; }
   let s0 = SA.marks.sig ?? (tr.sync&&tr.sync.main) ?? null; if(s0!=null && s0<0.02) s0=null;
@@ -4523,7 +4548,7 @@ function synBind(){ const d=$("synOv");
   $("synPlay").onclick=synToggle; const r=$("synR"); r.oninput=()=>{ const v=SY.el; if(v.duration>0){ synPause(); synTo(r.value/1000*v.duration); } };
   const w=$("synW"); if(w) synWaveBind(w);
   SY.els.forEach(v=>v.addEventListener("timeupdate",synUI)); SY.el.addEventListener("seeked",synUI); }
-function synTo(t){ const v=SY.el; v.currentTime=Math.max(0,Math.min(v.duration||t,t)); if(SY.phase==="check") synFollow(true); }
+function synTo(t){ const v=SY.el; const lo=SY.phase==="check" && SY.items && SY.items[0].sig!=null ? Math.max(0,SY.items[0].sig-2) : 0; v.currentTime=Math.max(lo,Math.min(v.duration||t,t)); if(SY.phase==="check") synFollow(true); }
 function synSeek(dt){ synPause(); synTo(SY.el.currentTime+dt); }
 function synPause(){ SY.els.forEach(v=>{ if(!v.paused) v.pause(); }); const p=$("synPlay"); if(p) p.textContent="▶"; }
 function synToggle(){ const v=SY.el; if(v.paused){ if(SY.phase==="check"){ synFollow(true); SY.els.slice(1).forEach(e=>e.play().catch(()=>{})); } v.play().catch(()=>{}); $("synPlay").textContent="⏸"; const lp=()=>{ if(SY.on && !v.paused){ if(SY.phase==="check") synFollow(false); requestAnimationFrame(lp); } }; lp(); } else synPause(); }
@@ -4567,7 +4592,7 @@ function synCheck(){ const d=$("synOv"), it=SY.items; SY.phase="check";
   d.querySelectorAll("[data-fo]").forEach(b=>b.onclick=()=>{ const x=it[+b.dataset.fo]; x.fine=(x.fine||0)+(+b.dataset.d)/synFps(); synPause(); synFollow(true); synUI(); });
   $("synToSig").onclick=()=>{ synPause(); synTo(it[0].sig); }; $("synBack").onclick=()=>{ synPause(); SY.i=it.length-1; synStep(); }; $("synX").onclick=synClose;
   $("synOk").onclick=()=>{ const tr=SY.tr; tr.vids2.forEach((v,j)=>{ const x=it[j+1]; v.sig=x.sig+(x.fine||0); v.off=synOff(j+1); v.offAuto="sig"; }); tr.sync={main:it[0].sig, done:true};
-    if(SA.trialRef===tr && SA.marks.sig==null && (SA.steps||[]).some(s=>s.id==="sig")){ SA.marks.sig=it[0].sig; SA.sigOk=true; }
+    if(SA.trialRef===tr){ if(!SA.sigOk) SA.marks.sig=it[0].sig; synApply(true); }
     if(SA.mode==="quick") qkSave(); else evSave(); blog("klick","Kameras abgeglichen",{off:tr.vids2.map(v=>Math.round(v.off*1000))}); synClose(); if(FS.on) fsSync(true); if(typeof wUpd==="function") wUpd(); toast(L("Kameras abgeglichen. Im Vollbild laufen sie jetzt zeitgleich nebeneinander.","Cameras synced. In full screen they now run side by side in sync."),3500); };
   SY.els[0].addEventListener("loadedmetadata",()=>{ synTo(it[0].sig ?? 0); synUI(); },{once:true}); SY.els.slice(1).forEach(e=>e.addEventListener("loadedmetadata",()=>synFollow(true),{once:true})); synUI(); }
 function synKey(e){ if(!SY.on) return; const t=e.target; if(t && /INPUT|TEXTAREA|SELECT/.test(t.tagName) && t.type!=="range") return;
@@ -5536,6 +5561,7 @@ async function qkAnalyze(e, det){
   if(e.raw){ SA.marks=Object.assign({}, e.raw.marks); SA.vals=Object.assign({spk:SA.vals.spk}, e.raw.vals); SA.sigAuto="manual"; SA.sigOk=SA.marks.sig!=null; SA.notes=(e.raw.notes||[]).slice(); SA.draw=(e.raw.draw||[]).slice(); SA.tags=(e.raw.tags||[]).slice(); SA.vel=e.raw.vel||null; SA.mgeo=e.raw.mgeo||null; if(e.raw.smo){ SA.smo=smoNorm(e.raw.smo); SA.smoChecked=true; } }
   // detailliert: beim ersten noch nicht markierten Schritt beginnen
   if(QK.det && e.raw){ const k=SA.steps.findIndex(s=>s.k==="time" && !s.sig && SA.marks[s.id]==null); if(k>0) SA.i=k; }
+  SA.markCam=Object.assign({}, (SA.trialRef&&SA.trialRef.raw&&SA.trialRef.raw.mcam)||{}); SA.camRef=0; synApply(false);
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; document.body.classList.add("reviewing"); scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); SA.vidUrl=null; sVid.src=SA.url;
   // Start dort, wo das Startsignal gesetzt ist (bzw. bei der ersten gesetzten Marke)
@@ -5603,7 +5629,7 @@ function qkSumHTML(){
 function qkNextE(e){ const ord=qkOrd(), i=ord.indexOf(e), ok=x=>x!==e && qkHasVid(x) && (QK.det ? x.status!=="det" && x.kind!=="tech" : x.status==="open");
   return ord.slice(i+1).find(ok) || ord.slice(0,Math.max(0,i)).find(ok) || null; }
 function qkSaveCur(){ const e=qkE(QK.cur); if(!e) return; const o=qkMetrics();
-  const prev=e.raw||{}; e.raw={marks:Object.assign({}, prev.marks||{}, SA.marks), vals:Object.assign({}, prev.vals||{}, SA.vals), notes:(SA.notes||[]).slice(), smo:SA.smo||null, draw:(SA.draw||[]).slice(), tags:(SA.tags||[]).slice(), vel:SA.vel||null, mgeo:SA.mgeo||null};
+  const prev=e.raw||{}; e.raw={mcam:Object.assign({}, prev.mcam||{}, SA.markCam||{}), marks:Object.assign({}, prev.marks||{}, SA.marks), vals:Object.assign({}, prev.vals||{}, SA.vals), notes:(SA.notes||[]).slice(), smo:SA.smo||null, draw:(SA.draw||[]).slice(), tags:(SA.tags||[]).slice(), vel:SA.vel||null, mgeo:SA.mgeo||null};
   const m={}; Object.keys(o).forEach(k=>{ if(o[k]!=null && (typeof o[k]!=="number" || isFinite(o[k]))) m[k]=o[k]; });
   e.m = QK.det ? m : Object.assign({}, e.m||{}, m);
   e.status = QK.det ? "det" : (e.status==="det" ? "det" : "quick"); e.notes=(SA.notes||[]).slice(); e.fps=SA.fps; e.analysed=Date.now(); qkSave(); clubPushQk(e); }
