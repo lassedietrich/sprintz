@@ -150,6 +150,7 @@ const running = new Map();
 // Arbeitskopie: höchstens 2560 Bildpunkte an der langen Seite (für Zoom und Zeichnungen ausreichend, deutlich leichter abzuspielen als 4K).
 // Vorschau (weitere Kameras, Abgleich): 960 Bildpunkte, sehr schnell erstellt und flüssig abspielbar.
 const KINDS = { proxy: { tag: 'v2|2560', max: 2560, crf: 16, ab: '192k' }, preview: { tag: 'pv|960', max: 960, crf: 24, ab: '96k' } };
+const KIDS = new Set(); // laufende FFmpeg-Umwandlungen, werden beim Beenden gestoppt
 const THREADS = String(Math.max(2, os.cpus().length - 2));
 function transcode(e, file, kind) {
   const K = KINDS[kind], st = fs.statSync(file), key = crypto.createHash('sha1').update(K.tag + '|sdr709tm|' + file + '|' + st.size + '|' + st.mtimeMs).digest('hex').slice(0, 20);
@@ -173,7 +174,7 @@ function transcode(e, file, kind) {
         '-c:v', 'libx264', '-preset', preset, '-crf', String(K.crf), '-g', '1', '-bf', '0', '-profile:v', 'high', '-level:v', '5.1', '-threads', THREADS,
         '-fps_mode', 'passthrough',
         '-c:a', 'aac', '-b:a', K.ab, '-movflags', '+faststart', tmp];
-      const p = spawn(FFMPEG, args);
+      const p = spawn(FFMPEG, args); KIDS.add(p); p.on('exit', () => KIDS.delete(p));
       try { os.setPriority(p.pid, 15); } catch (x) {}
       p.stderr.on('data', d => {
         const s = d.toString(), m = s.match(/Duration: (\d+):(\d+):([\d.]+)/); if (m) dur.v = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]);
@@ -231,4 +232,7 @@ app.whenReady().then(() => {
   loadSet(); permissions(); createWindow(); cleanup(); setTimeout(checkUpdate, 4000);
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
-app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+// Fenster zu: laufende Umwandlungen beenden (halbe Kopien werden beim nächsten Start aufgeräumt), Mac beendet das Programm ganz
+function stopKids() { for (const p of KIDS) { try { p.kill('SIGKILL'); } catch (x) {} } KIDS.clear(); }
+app.on('window-all-closed', () => { stopKids(); app.quit(); });
+app.on('before-quit', stopKids);
