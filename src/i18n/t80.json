@@ -1,0 +1,15 @@
+[
+["Same moment in video {0} of {1}","Video {0} / {1} içinde aynı an","Тот же момент в видео {0} из {1}","Hetzelfde moment in video {0} van {1}"],
+["Mark the same clearly visible moment in every video, e.g. the start signal, leaving the block or the first water contact. The videos are then locked together.","Her videoda aynı, iyi görünen anı işaretle; ör. başlama sinyali, bloktan ayrılma veya suyla ilk temas. Ardından videolar birbirine sabitlenir.","Отметь в каждом видео один и тот же хорошо различимый момент, например стартовый сигнал, отрыв от тумбочки или первое касание воды. После этого видео жёстко связаны.","Markeer in elke video hetzelfde goed zichtbare moment, bijv. het startsignaal, het loskomen van het blok of het eerste watercontact. Daarna zijn de video's vast aan elkaar gekoppeld."],
+["Moment:","An:","Момент:","Moment:"],
+["Other moment","Başka bir an","Другой момент","Ander moment"],
+["Set here (Enter)","Buraya koy (Enter)","Поставить здесь (Enter)","Hier zetten (Enter)"],
+["Find start signal in audio","Seste başlama sinyalini bul","Найти стартовый сигнал в звуке","Startsignaal in geluid zoeken"],
+["Audio track","Ses izi","Звуковая дорожка","Geluidsspoor"],
+["Show audio track","Ses izini göster","Показать звуковую дорожку","Geluidsspoor tonen"],
+["Lock together","Birbirine sabitle","Связать","Koppelen"],
+["Locked – check","Sabitlendi – kontrol et","Связано – проверь","Gekoppeld – controleer"],
+["The videos are now locked via the marked moment. Check at a second point (e.g. entry) and shift frame by frame if needed.","Videolar artık işaretlenen an üzerinden sabitlendi. İkinci bir noktada (ör. suya giriş) kontrol et ve gerekirse kare kare kaydır.","Видео теперь связаны по отмеченному моменту. Проверь во второй точке (например, вход в воду) и при необходимости сдвинь покадрово.","De video's zijn nu gekoppeld via het gemarkeerde moment. Controleer op een tweede punt (bijv. intreden) en verschuif zo nodig beeld voor beeld."],
+["To marked moment","İşaretlenen ana git","К отмеченному моменту","Naar gemarkeerd moment"],
+["Change moments","Anları değiştir","Изменить моменты","Momenten wijzigen"]
+]

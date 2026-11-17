@@ -145,41 +145,54 @@ function probeFile(file) { return new Promise((resolve) => {
 // Arbeitskopie für bildgenaues Arbeiten: jedes Bild ein Schlüsselbild (sofortige, exakte Sprünge), hohe Qualität, Zeitstempel unverändert
 const proxyDir = () => { const d = path.join(app.getPath('userData'), 'arbeitskopien'); fs.mkdirSync(d, { recursive: true }); return d; };
 const running = new Map();
-ipcMain.handle('proxy', async (e, file) => {
-  const st = fs.statSync(file), key = crypto.createHash('sha1').update('sdr709tm|' + file + '|' + st.size + '|' + st.mtimeMs).digest('hex').slice(0, 20);
-  const out = path.join(proxyDir(), key + '.mp4');
-  if (fs.existsSync(out) && fs.statSync(out).size > 1000) { fs.utimesSync(out, new Date(), new Date()); return { url: pathToFileURL(out).href, cached: true }; }
+// Umwandeln mit FFmpeg: jedes Bild ein Schlüsselbild (sofortige, exakte Sprünge), Zeitstempel unverändert.
+// Läuft mit niedriger Priorität und lässt Rechenkerne frei, damit der Rechner bedienbar bleibt; auf dem Mac dekodiert die Grafikeinheit (VideoToolbox).
+// Arbeitskopie: höchstens 2560 Bildpunkte an der langen Seite (für Zoom und Zeichnungen ausreichend, deutlich leichter abzuspielen als 4K).
+// Vorschau (weitere Kameras, Abgleich): 960 Bildpunkte, sehr schnell erstellt und flüssig abspielbar.
+const KINDS = { proxy: { tag: 'v2|2560', max: 2560, crf: 16, ab: '192k' }, preview: { tag: 'pv|960', max: 960, crf: 24, ab: '96k' } };
+const THREADS = String(Math.max(2, os.cpus().length - 2));
+function transcode(e, file, kind) {
+  const K = KINDS[kind], st = fs.statSync(file), key = crypto.createHash('sha1').update(K.tag + '|sdr709tm|' + file + '|' + st.size + '|' + st.mtimeMs).digest('hex').slice(0, 20);
+  const out = path.join(proxyDir(), (kind === 'preview' ? 'pv-' : '') + key + '.mp4');
+  if (fs.existsSync(out) && fs.statSync(out).size > 1000) { fs.utimesSync(out, new Date(), new Date()); return Promise.resolve({ url: pathToFileURL(out).href, cached: true }); }
   if (running.has(out)) return running.get(out);
   const job = new Promise(async (resolve) => {
     const tmp = out + '.part.mp4', dur = { v: null };
-    // volle Auflösung und Bildrate (auch 4K mit hoher Bildrate); bei sehr vielen Bildpunkten je Sekunde ein schnelleres Profil, die Qualität bleibt über CRF gleich
-    const info = await probeFile(file), px = info ? (info.width || 0) * (info.height || 0) * (info.fps || 30) : 0;
-    const preset = px > 3840 * 2160 * 60 ? 'ultrafast' : px > 1920 * 1080 * 120 ? 'superfast' : 'veryfast';
+    const info = await probeFile(file), w = info ? info.width || 0 : 0, h = info ? info.height || 0 : 0, big = Math.max(w, h) > K.max;
+    const px = (big ? K.max * K.max * 0.75 : w * h) * ((info && info.fps) || 30);
+    const preset = kind === 'preview' ? 'ultrafast' : px > 2560 * 1440 * 60 ? 'superfast' : 'veryfast';
+    // zuerst verkleinern (spart Rechenzeit bei allen weiteren Schritten), gerade Maße für H.264
+    const SC = big ? (w >= h ? `scale=${K.max}:-2:flags=bicubic,` : `scale=-2:${K.max}:flags=bicubic,`) : '';
     // immer SDR nach BT.709: iPhone-Videos sind oft HDR (HLG/PQ, BT.2020). Als 8-Bit-Kopie mit HDR-Kennzeichnung zeigt macOS teils ein schwarzes
     // oder ein stark überbelichtetes Bild. HDR wird deshalb per Tone-Mapping (Hable) auf SDR gebracht; klappt das nicht, einfache Umrechnung.
-    const TM = 'zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p';
-    const PLAIN = 'scale=out_color_matrix=bt709:out_range=tv,format=yuv420p';
-    const run = vf => new Promise(res => {
-      const args = ['-y', '-hide_banner', '-i', file, '-map', '0:v:0', '-map', '0:a:0?',
+    const TM = SC + 'zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p';
+    const PLAIN = SC + 'scale=out_color_matrix=bt709:out_range=tv,format=yuv420p';
+    const run = (vf, hw) => new Promise(res => {
+      const args = ['-y', '-hide_banner', ...(hw ? ['-hwaccel', 'videotoolbox'] : []), '-i', file, '-map', '0:v:0', '-map', '0:a:0?',
         '-vf', vf, '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv',
-        '-c:v', 'libx264', '-preset', preset, '-crf', '14', '-g', '1', '-bf', '0', '-profile:v', 'high', '-level:v', '5.1', '-threads', '0',
+        '-c:v', 'libx264', '-preset', preset, '-crf', String(K.crf), '-g', '1', '-bf', '0', '-profile:v', 'high', '-level:v', '5.1', '-threads', THREADS,
         '-fps_mode', 'passthrough',
-        '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', tmp];
+        '-c:a', 'aac', '-b:a', K.ab, '-movflags', '+faststart', tmp];
       const p = spawn(FFMPEG, args);
+      try { os.setPriority(p.pid, 15); } catch (x) {}
       p.stderr.on('data', d => {
         const s = d.toString(), m = s.match(/Duration: (\d+):(\d+):([\d.]+)/); if (m) dur.v = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]);
         const t = [...s.matchAll(/time=(\d+):(\d+):([\d.]+)/g)].pop();
-        if (t && dur.v) { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]); if (!e.sender.isDestroyed()) e.sender.send('proxy-progress', { file, p: Math.min(1, sec / dur.v) }); }
+        if (t && dur.v && kind === 'proxy') { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]); if (!e.sender.isDestroyed()) e.sender.send('proxy-progress', { file, p: Math.min(1, sec / dur.v) }); }
       });
       p.on('close', code => res(code === 0)); p.on('error', () => res(false));
     });
-    let ok = await run(info && info.hdr ? TM : PLAIN);
-    if (!ok && info && info.hdr) { try { fs.unlinkSync(tmp); } catch (x) {} ok = await run(PLAIN); }
+    const hw = process.platform === 'darwin';
+    let ok = await run(info && info.hdr ? TM : PLAIN, hw);
+    if (!ok && hw) { try { fs.unlinkSync(tmp); } catch (x) {} ok = await run(info && info.hdr ? TM : PLAIN, false); }
+    if (!ok && info && info.hdr) { try { fs.unlinkSync(tmp); } catch (x) {} ok = await run(PLAIN, false); }
     running.delete(out);
     if (ok) { fs.renameSync(tmp, out); resolve({ url: pathToFileURL(out).href }); } else { try { fs.unlinkSync(tmp); } catch (x) {} resolve(null); }
   });
   running.set(out, job); return job;
-});
+}
+ipcMain.handle('proxy', async (e, file) => transcode(e, file, 'proxy'));
+ipcMain.handle('preview', async (e, file) => transcode(e, file, 'preview'));
 
 // Alte Arbeitskopien aufräumen (älter als 14 Tage oder mehr als 8 GB)
 function cleanup() {

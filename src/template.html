@@ -4377,14 +4377,14 @@ async function fsEnter(){
   FS.secs=[]; const tr=SA.trialRef;
   for(const v of (tr&&tr.vids2)||[]){ const b=await evBlobOf(v); if(!b) continue; const cell=document.createElement("div"); cell.className="fscell";
     const el=document.createElement("video"); el.muted=v.mute!==false; el.playsInline=true; el.preload="auto"; el.src=URL.createObjectURL(b); cell.appendChild(el); cell.dataset.k=v.key;
-    deskQuick(b).then(u=>{ if(!u || !FS.on || !cell.isConnected) return; const t=el.currentTime, own=el.src; el.src=u; el.addEventListener("loadedmetadata",()=>{ try{ URL.revokeObjectURL(own); }catch(e){} el.currentTime=t; fsSync(true); },{once:true}); });
+    if(DSK && DSK.preview) deskPreview(b).then(u=>{ if(!u || !FS.on || !cell.isConnected) return; const t=el.currentTime, own=el.src; el.src=u; el.addEventListener("loadedmetadata",()=>{ try{ URL.revokeObjectURL(own); }catch(e){} el.currentTime=t; fsSync(true); },{once:true}); });
     deskFps(b).then(f=>{ if(f>0) S2fps.set(v.key,f); });
     const lab=document.createElement("span"); lab.className="fslab"; lab.textContent=v.name||L("Video 2","Video 2"); cell.appendChild(lab);
     const adj=document.createElement("div"); adj.className="fsadj"; adj.innerHTML=`<button type="button" data-o="-1">−1</button><span>${L("Versatz","offset")}</span><button type="button" data-o="1">+1</button><button type="button" class="fssyn">⇆ ${L("Abgleichen","Sync")}</button><button type="button" class="fssnd"></button>`; cell.appendChild(adj);
-    grid.appendChild(cell); const S2={v, el, cell, blob:b, z:{s:1,x:0,y:0}}; FS.secs.push(S2); fsCellBind(S2);
+    grid.appendChild(cell); const S2={v, el, cell, blob:b, z:{s:1,x:0,y:0}}; FS.secs.push(S2); fsCellBind(S2); el.addEventListener("seeked",()=>{ if(S2.pend!=null && sVid.paused){ const t=S2.pend; S2.pend=null; el.currentTime=t; } });
     adj.querySelector(".fssyn").onclick=()=>synOpen(); { const sb=adj.querySelector(".fssnd"); sndBtn(sb, el.muted); sb.onclick=()=>{ v.mute = !el.muted ? true : false; el.muted=v.mute; sndBtn(sb, el.muted); sndSave(); }; } adj.querySelectorAll("button[data-o]").forEach(x=>x.onclick=()=>{ v.off=(v.off||0)+(+x.dataset.o)/sFps(); v.offAuto=false; evSave(); fsSync(true); });
     el.addEventListener("loadedmetadata",()=>{ fsLayout(); fsSync(true); });
-    if(v.off==null) fsAlign(S2); }
+    if(v.off==null){ const pv=tr&&tr.vid; v.off = pv&&pv.t&&v.t ? (pv.t-v.t)/1000 : 0; v.offAuto="time"; } }
   $("fsVm").hidden=!(tr&&tr.vm); if(!(document.fullscreenElement||document.webkitFullscreenElement)){ try{ if(ov.requestFullscreen) await ov.requestFullscreen(); else if(ov.webkitRequestFullscreen) ov.webkitRequestFullscreen(); }catch(e){} }
   fsMoveUI(); fsLayout(); fsSync(true); fsHint(); fsSmoBar(); drToolbar(); fsZoomApply(); setTimeout(anaCheck,400); setTimeout(()=>{ try{ if(localStorage.getItem("sprintz-fsbox")) $("fsBox").dataset.user="1"; }catch(e){} fsLayout(); spDraw(); },60);
 }
@@ -4455,7 +4455,7 @@ addEventListener("resize",()=>{ if(FS.on) fsLayout(); });
 // weitere Kameras zeitgleich zum Haupt-Video halten
 function fsSync(force){ if(!FS.on) return; const tp=sVid.currentTime;
   FS.secs.forEach(s=>{ const tgt=tp+(s.v.off||0); if(!(s.el.duration>0)) return; const tt=Math.min(s.el.duration, Math.max(0,tgt));
-    if(sVid.paused){ if(!s.el.paused) s.el.pause(); if(force || Math.abs(s.el.currentTime-tt)>0.3/sFps()) s.el.currentTime=tt; }
+    if(sVid.paused){ if(!s.el.paused) s.el.pause(); if(force || Math.abs(s.el.currentTime-tt)>0.3/sFps()){ if(s.el.seeking){ s.pend=tt; } else s.el.currentTime=tt; } }
     else { if(s.el.paused){ s.el.currentTime=tt; s.el.play().catch(()=>{}); } const d=s.el.currentTime-tt;
       if(Math.abs(d)>0.3 && !s.el.seeking && performance.now()-(s.seekT||0)>800){ s.seekT=performance.now(); s.el.currentTime=tt+0.05*sVid.playbackRate; }
       else { const r=sVid.playbackRate*(1-Math.max(-0.12,Math.min(0.12,d*1.5))); if(Math.abs(s.el.playbackRate-r)>0.004) s.el.playbackRate=r; } } });
@@ -4485,8 +4485,9 @@ function camRefShow(){ if(!FS.on) return; const S=camRefSec(); fsAct(S); }
 function camMarkT(){ const S=camRefSec(); return S ? Math.max(0, S.el.currentTime-(S.v.off||0)) : sCurT(); }
 // Desktop-Programm: Arbeitskopie, falls sie schon fertig ist bzw. gleich fertig wird (sonst null, dann bleibt das Original)
 const S2fps=new Map();
-async function deskQuick(blob, wait){ if(!DSK || !DSK.proxy || !blob) return null; let fp=null; try{ fp=DSK.pathFor(blob); }catch(e){} if(!fp) return null;
-  const p=DSK.proxy(fp).then(r=>r&&r.url||null).catch(()=>null); if(wait==null) return p; return await Promise.race([p, new Promise(r=>setTimeout(()=>r(null), wait))]); }
+// kleine Vorschau-Kopie (neues Desktop-Programm): leicht abzuspielen, sofort springbar; wird bei Bedarf schnell erstellt
+async function deskPreview(blob, wait){ if(!DSK || !DSK.preview || !blob) return null; let fp=null; try{ fp=DSK.pathFor(blob); }catch(e){} if(!fp) return null;
+  const p=DSK.preview(fp).then(r=>r&&r.url||null).catch(()=>null); if(wait==null) return p; return await Promise.race([p, new Promise(r=>setTimeout(()=>r(null), wait))]); }
 async function deskFps(blob){ if(!DSK || !DSK.probe || !blob) return 0; try{ const fp=DSK.pathFor(blob); if(!fp) return 0; const i=await DSK.probe(fp); return (i&&i.fps)||0; }catch(e){ return 0; } }
 /* --- Ton je Video: Hauptvideo an, weitere Kameras aus; per Knopf umschalten (wird je Video gemerkt) --- */
 const SND_ON="🔊", SND_OFF="🔇";
@@ -4500,7 +4501,7 @@ $("sSnd").addEventListener("pointerdown",e=>e.stopPropagation());
 const SY={on:false};
 function synBtn(){ sndUI(); const b=$("sSync"); if(!b) return; const n=((SA.trialRef&&SA.trialRef.vids2)||[]).length; b.hidden=!SA.active || !n; if(n) b.textContent="⇆ "+L(`Kameras abgleichen (${n+1})`,`Sync cameras (${n+1})`); }
 // nach dem Abgleich: Startsignal des Hauptvideos gilt als bestätigt (Schritt wird übersprungen, Videos beginnen 2 s davor)
-function synApply(live){ const tr=SA.trialRef; if(!tr || !(tr.sync&&tr.sync.done) || tr.sync.main==null || !(SA.steps||[]).some(s=>s.sig)) return;
+function synApply(live){ const tr=SA.trialRef; if(!tr || !(tr.sync&&tr.sync.done) || tr.sync.ev==="other" || tr.sync.main==null || !(SA.steps||[]).some(s=>s.sig)) return;
   if(SA.marks.sig==null) SA.marks.sig=tr.sync.main; SA.sigOk=true; SA.sigAuto="manual";
   const st=SA.steps[SA.i]; if(st && st.sig){ const k=SA.steps.findIndex((s,i)=>i>SA.i && s.k==="time" && !s.sig && SA.marks[s.id]==null); const n=k>0?k:SA.i+1; if(live) wizGo(n,1); else SA.i=n; }
   if(live){ if(sVid.currentTime<sMin()) sSeekTo(sMin()); spDraw(); } }
@@ -4511,10 +4512,11 @@ async function synOpen(){ const tr=SA.trialRef; if(!tr || !(tr.vids2||[]).length
   const vids=[{v:tr.vid, blob:null, main:true}, ...tr.vids2.map(v=>({v, blob:null}))];
   try{ for(const x of vids){ x.blob=await evBlobOf(x.v); if(SY.tok!==tok) return;
       // Desktop-Programm: bildgenaue Arbeitskopie nutzen (große 4K/HEVC-Dateien spielt der Browser sonst nicht flüssig oder gar nicht)
-      if(x.blob){ const u=await deskQuick(x.blob, 400); if(u) x.url=u; if(SY.tok!==tok) return; } } }
+      if(x.blob && DSK && DSK.preview){ const u=await deskPreview(x.blob, 300); if(u) x.url=u; if(SY.tok!==tok) return; } } }
   catch(e){ blog("warn","synOpen: "+(e.message||e)); if(SY.tok!==tok) return; d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Die Videos konnten nicht geladen werden: ","The videos could not be loaded: ")}${esc(e.message||String(e))}</p>`; $("synX").onclick=synClose; return; }
   const miss=vids.filter(x=>!x.blob); if(miss.length){ d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Nicht auf diesem Gerät: ","Not on this device: ")}${miss.map(x=>esc(x.v.name||"?")).join(", ")}</p>`; $("synX").onclick=synClose; return; }
   let s0 = SA.marks.sig ?? (tr.sync&&tr.sync.main) ?? null; if(s0!=null && s0<0.02) s0=null;
+  SY.ev = (tr.sync&&tr.sync.ev) || ((SA.steps||[]).some(s=>s.sig) ? "sig" : "other"); if(SY.ev!=="sig") s0=(tr.sync&&tr.sync.main)??null;
   SY.tr=tr; SY.i=0; SY.items=vids.map((x,k)=>({v:x.v, blob:x.blob, url:x.url||URL.createObjectURL(x.blob), own:!x.url, main:!!x.main, sig: k===0 ? s0 : (x.v.sig ?? (x.v.off!=null && s0!=null ? s0+x.v.off : null)), cand:null, wave:null}));
   blog("klick","Kameras abgleichen",{n:vids.length}); synStep(); }
 function synClose(){ const d=$("synOv"); if(d){ d.querySelectorAll("video").forEach(v=>{ try{ v.pause(); }catch(e){} }); d.hidden=true; d.innerHTML=""; } (SY.items||[]).forEach(x=>{ try{ if(x.own) URL.revokeObjectURL(x.url); }catch(e){} }); SY.items=null; SY.on=false; SY.tok=(SY.tok||0)+1; document.removeEventListener("keydown",synKey,true); synBtn(); }
@@ -4522,21 +4524,28 @@ const synFps=()=>sFps();
 function synStepBar(){ return `<div class="cmpbar"><button type="button" data-sf="-10">−10</button><button type="button" data-sf="-1">−1</button><button type="button" id="synPlay">▶</button><button type="button" data-sf="1">+1</button><button type="button" data-sf="10">+10</button><input type="range" id="synR" min="0" max="1000" value="0" style="flex:1;min-width:120px"><span id="synT" class="cmpt"></span></div>`; }
 // Schritt 1 … n: Startsignal in einem Video
 async function synStep(){ const d=$("synOv"), it=SY.items, x=it[SY.i], n=it.length; SY.phase="sig";
-  d.innerHTML=`<div class="cmphead"><b>${L(`Startsignal in Video ${SY.i+1} von ${n}`,`Start signal in video ${SY.i+1} of ${n}`)}</b><span class="cmpl ${SY.i?"B":"A"}">${esc(x.v.name||"")}</span><button type="button" id="synX">${L("Später","Later")}</button></div>
-    <p class="synhint">${L("Such das Bild bzw. den Ausschlag in der Tonspur, an dem das Startsignal zu hören ist, und setze es. Danach kommt das nächste Video.","Find the frame or the peak in the audio track where the start signal is heard and set it. Then the next video follows.")}</p>
-    <div class="cmpgrid syngrid" style="grid-template-columns:1fr"><div class="cmpv"><video id="synV" playsinline preload="auto" src="${x.url}"></video><i class="${SY.i?"B":"A"}">${SY.i+1}</i></div></div>
-    <div class="synwbox"><canvas id="synW" class="synwave" height="70"></canvas><div class="synwz"><button type="button" id="synZo" title="${L("Herauszoomen","Zoom out")}">−</button><button type="button" id="synZf" title="${L("Ganze Tonspur","Whole audio track")}">⤢</button><button type="button" id="synZi" title="${L("Hineinzoomen","Zoom in")}">+</button></div></div>${synStepBar()}
-    <div class="cmpbar"><button type="button" id="synAuto">${L("Automatisch finden","Find automatically")}</button><button type="button" id="synSet" class="synmain">${L("Startsignal hier setzen","Set start signal here")}</button><span id="synVal" class="cmpt"></span>
-      <span style="margin-left:auto;display:flex;gap:6px">${SY.i?`<button type="button" id="synBack">‹ ${L("Zurück","Back")}</button>`:""}<button type="button" id="synNext" class="synmain">${SY.i<n-1?L("Weiter","Next")+" ›":L("Abgleich prüfen","Check sync")+" ›"}</button></span></div>`;
+  // vorheriges Video freigeben, damit immer nur ein großes Video dekodiert wird
+  d.querySelectorAll("video").forEach(v=>{ try{ v.pause(); v.removeAttribute("src"); v.load(); }catch(e){} });
+  const evSig=SY.ev==="sig";
+  d.innerHTML=`<div class="cmphead"><b>${L(`Gleicher Moment in Video ${SY.i+1} von ${n}`,`Same moment in video ${SY.i+1} of ${n}`)}</b><span class="cmpl ${SY.i?"B":"A"}">${esc(x.v.name||"")}</span><button type="button" id="synX">${L("Später","Later")}</button></div>
+    <p class="synhint">${L("Markiere in jedem Video denselben gut erkennbaren Moment, z. B. das Startsignal, das Lösen vom Block oder den ersten Wasserkontakt. Danach sind die Videos fest miteinander verbunden.","Mark the same clearly visible moment in every video, e.g. the start signal, leaving the block or the first water contact. The videos are then locked together.")}</p>
+    ${SY.i===0?`<div class="cmpbar"><span>${L("Moment:","Moment:")}</span><div class="seg synev"><button type="button" data-ev="sig" aria-pressed="${evSig}">${L("Startsignal","Start signal")}</button><button type="button" data-ev="other" aria-pressed="${!evSig}">${L("Anderer Moment","Other moment")}</button></div></div>`:""}
+    <div class="cmpgrid syngrid" style="grid-template-columns:1fr"><div class="cmpv"><video id="synV" playsinline muted preload="auto" src="${x.url}"></video><i class="${SY.i?"B":"A"}">${SY.i+1}</i></div></div>
+    <div class="synwbox"${x.wave?"":" hidden"}><canvas id="synW" class="synwave" height="70"></canvas><div class="synwz"><button type="button" id="synZo" title="${L("Herauszoomen","Zoom out")}">−</button><button type="button" id="synZf" title="${L("Ganze Tonspur","Whole audio track")}">⤢</button><button type="button" id="synZi" title="${L("Hineinzoomen","Zoom in")}">+</button></div></div>${synStepBar()}
+    <div class="cmpbar"><button type="button" id="synSet" class="synmain">${L("Hier setzen (Enter)","Set here (Enter)")}</button><span id="synVal" class="cmpt"></span><button type="button" id="synAudio">${x.wave?(evSig?L("Startsignal im Ton suchen","Find start signal in audio"):"🔊 "+L("Tonspur","Audio track")):"🔊 "+L("Tonspur anzeigen","Show audio track")}</button>
+      <span style="margin-left:auto;display:flex;gap:6px">${SY.i?`<button type="button" id="synBack">‹ ${L("Zurück","Back")}</button>`:""}<button type="button" id="synNext" class="synmain">${SY.i<n-1?L("Weiter","Next")+" ›":L("Verbinden","Lock together")+" ›"}</button></span></div>`;
   const v=$("synV"); SY.el=v; SY.els=[v];
   $("synX").onclick=synClose; $("synSet").onclick=()=>{ x.sig=v.currentTime; synUI(); };
+  d.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{ SY.ev=b.dataset.ev; d.querySelectorAll("[data-ev]").forEach(y=>y.setAttribute("aria-pressed",String(y===b))); });
   $("synNext").onclick=()=>{ if(x.sig==null){ x.sig=v.currentTime; } if(SY.i<n-1){ SY.i++; synStep(); } else synCheck(); };
   if($("synBack")) $("synBack").onclick=()=>{ SY.i--; synStep(); };
-  $("synAuto").onclick=async()=>{ await synFind(x, true); if(x.cand&&x.cand.length){ x.sig=x.cand[0].t; v.currentTime=x.sig; synFocus(x); } else toast(L("Kein Startsignal gefunden. Setze es von Hand.","No start signal found. Set it by hand."),3000); synUI(); };
-  synBind(); v.addEventListener("loadedmetadata",()=>{ v.currentTime = x.sig ?? 0; synUI(); },{once:true});
-  // Tonspur lesen und Kandidaten zeigen; ohne gesetztes Signal den wahrscheinlichsten vorschlagen
-  try{ await synFind(x, false); }catch(e){} if(!SY.on || SY.phase!=="sig" || SY.items!==it || it[SY.i]!==x) return;
-  if(x.sig==null && x.cand && x.cand.length){ x.sig=x.cand[0].t; if(v.readyState>0) v.currentTime=x.sig; } if(x.sig!=null && !x.zf){ x.zf=1; synFocus(x); } synUI(); }
+  // Ton nur auf Wunsch lesen (spart Rechenleistung)
+  $("synAudio").onclick=async()=>{ const b=$("synAudio"); b.disabled=true; b.textContent=L("Tonspur wird gelesen …","Reading audio …"); await synFind(x, !!x.wave); if(!SY.on || it[SY.i]!==x) return;
+    if(SY.ev==="sig" && x.cand && x.cand.length){ x.sig=x.cand[0].t; v.currentTime=x.sig; } d.querySelector(".synwbox").hidden=false; if(x.sig!=null) synFocus(x); b.disabled=false; b.textContent=SY.ev==="sig"?L("Startsignal im Ton suchen","Find start signal in audio"):"🔊 "+L("Tonspur","Audio track"); synUI(); };
+  synBind();
+  // Vorschlag: gesetzter Moment, sonst über die Aufnahmezeit aus Video 1 geschätzt
+  const m=it[0], est = x.sig ?? (!x.main && m.sig!=null && m.v.t && x.v.t ? m.sig+(m.v.t-x.v.t)/1000 : null);
+  v.addEventListener("loadedmetadata",()=>{ v.currentTime = Math.max(0, est ?? 0); synUI(); },{once:true}); synUI(); }
 function synFocus(x){ const D=SY.el&&SY.el.duration||x.dur||1, sp=Math.min(D,6); x.zv={a:Math.max(0,Math.min(D-sp,x.sig-sp/2)), b:0}; x.zv.b=x.zv.a+sp; synWave(x); }
 async function synFind(x, force){ if(x.wave && !force) return;
   try{ const buf=await readAudio(x.blob), rr=Math.min(24000,buf.sampleRate), raw=ds(buf,rr); { const ch=buf.getChannelData(0), n=Math.max(1,Math.round(buf.duration*1000)), w=new Float32Array(n), st=ch.length/n; for(let i=0;i<n;i++){ let m=0; const a=Math.floor(i*st), z=Math.min(ch.length,Math.floor((i+1)*st)); for(let j=a;j<z;j+=4) m=Math.max(m,Math.abs(ch[j])); w[i]=m; } x.wave=w; } x.dur=buf.duration;
@@ -4548,13 +4557,15 @@ function synBind(){ const d=$("synOv");
   $("synPlay").onclick=synToggle; const r=$("synR"); r.oninput=()=>{ const v=SY.el; if(v.duration>0){ synPause(); synTo(r.value/1000*v.duration); } };
   const w=$("synW"); if(w) synWaveBind(w);
   SY.els.forEach(v=>v.addEventListener("timeupdate",synUI)); SY.el.addEventListener("seeked",synUI); }
-function synTo(t){ const v=SY.el; const lo=SY.phase==="check" && SY.items && SY.items[0].sig!=null ? Math.max(0,SY.items[0].sig-2) : 0; v.currentTime=Math.max(lo,Math.min(v.duration||t,t)); if(SY.phase==="check") synFollow(true); }
+function synTo(t){ const v=SY.el; const lo=SY.phase==="check" && SY.ev==="sig" && SY.items && SY.items[0].sig!=null ? Math.max(0,SY.items[0].sig-2) : 0; v.currentTime=Math.max(lo,Math.min(v.duration||t,t)); if(SY.phase==="check") synFollow(true); }
 function synSeek(dt){ synPause(); synTo(SY.el.currentTime+dt); }
 function synPause(){ SY.els.forEach(v=>{ if(!v.paused) v.pause(); }); const p=$("synPlay"); if(p) p.textContent="▶"; }
 function synToggle(){ const v=SY.el; if(v.paused){ if(SY.phase==="check"){ synFollow(true); SY.els.slice(1).forEach(e=>e.play().catch(()=>{})); } v.play().catch(()=>{}); $("synPlay").textContent="⏸"; const lp=()=>{ if(SY.on && !v.paused){ if(SY.phase==="check") synFollow(false); requestAnimationFrame(lp); } }; lp(); } else synPause(); }
 // Prüfen: weitere Videos folgen dem ersten mit dem Versatz aus den Startsignalen
 function synOff(k){ const it=SY.items; return it[k].sig - it[0].sig + (it[k].fine||0); }
-function synFollow(force){ const t0=SY.el.currentTime; SY.els.slice(1).forEach((e,j)=>{ const tt=t0+synOff(j+1); if(!(e.duration>0)) return; const c=Math.max(0,Math.min(e.duration,tt)); if(force || Math.abs(e.currentTime-c)>0.08){ e.currentTime=c; } if(!SY.el.paused){ e.playbackRate=SY.el.playbackRate; } }); }
+function synFollow(force){ const t0=SY.el.currentTime; SY.els.slice(1).forEach((e,j)=>{ const tt=t0+synOff(j+1); if(!(e.duration>0)) return; const c=Math.max(0,Math.min(e.duration,tt));
+  if(force || SY.el.paused){ if(e.seeking){ e._pend=c; return; } e.currentTime=c; return; }
+  const dd=e.currentTime-c; if(Math.abs(dd)>0.3 && !e.seeking){ e.currentTime=c+0.05; } else { const r=SY.el.playbackRate*(1-Math.max(-0.12,Math.min(0.12,dd*1.5))); if(Math.abs(e.playbackRate-r)>0.004) e.playbackRate=r; } }); }
 function synUI(){ if(!SY.on || !SY.el) return; const v=SY.el, it=SY.items, f=synFps(); const r=$("synR"); if(r && v.duration>0) r.value=Math.round(v.currentTime/v.duration*1000);
   const ms=t=>(t>=0?"":"−")+Math.abs(t).toFixed(3).replace(".",",")+" s", sg=t=>{ const r=Math.round(t*1000); return (r>=0?"+":"−")+Math.abs(r)+" ms"; };
   if(SY.phase==="sig"){ const x=it[SY.i]; $("synT").textContent=ms(v.currentTime)+(x.sig!=null?" · "+L("zum Signal","to signal")+" "+sg(v.currentTime-x.sig):"");
@@ -4572,7 +4583,7 @@ function synWaveBind(w){ const x=()=>SY.items&&SY.items[SY.i]; let pd=null;
   w.addEventListener("pointermove",e=>{ if(!pd||!x()) return; if(Math.abs(e.clientX-pd.x0)>4) pd.mv=true; if(!pd.mv) return; const z=synView(x()), sp=z.b-z.a, D=SY.el.duration||sp, d=-(e.clientX-pd.x)/w.clientWidth*sp; pd.x=e.clientX; z.a=Math.max(0,Math.min(D-sp,z.a+d)); z.b=z.a+sp; synWave(x()); });
   w.addEventListener("pointerup",e=>{ const m=pd&&pd.mv; pd=null; if(m||!x()) return; const v=SY.el; if(v.duration>0){ synPause(); synTo(tAt(e)); } });
   $("synZi").onclick=()=>x()&&synZoom(x(),0.5); $("synZo").onclick=()=>x()&&synZoom(x(),2); $("synZf").onclick=()=>{ const it=x(); if(!it) return; it.zv=null; synWave(it); }; }
-function synWave(x){ const c=$("synW"); if(!c) return; const dpr=devicePixelRatio||1, W=c.width=c.clientWidth*dpr, H=c.height=70*dpr, g=c.getContext("2d"); g.clearRect(0,0,W,H); const v=SY.el, D=v.duration||x.dur||1, z=synView(x), sp=(z.b-z.a)||1, X=t=>(t-z.a)/sp*W;
+function synWave(x){ const c=$("synW"); if(!c || !x.wave || c.offsetParent===null) return; const dpr=devicePixelRatio||1, W=c.width=c.clientWidth*dpr, H=c.height=70*dpr, g=c.getContext("2d"); g.clearRect(0,0,W,H); const v=SY.el, D=v.duration||x.dur||1, z=synView(x), sp=(z.b-z.a)||1, X=t=>(t-z.a)/sp*W;
   if(x.wave){ const a=x.wave, n=a.length, r=n/(x.dur||D); if(!x.wmx){ let mx=1e-6; for(let i=0;i<n;i++) mx=Math.max(mx,a[i]); x.wmx=mx; } g.fillStyle="rgba(255,255,255,.55)";
     for(let px=0;px<W;px++){ const i0=Math.floor((z.a+px/W*sp)*r), i1=Math.max(i0+1,Math.floor((z.a+(px+1)/W*sp)*r)); let m=0; for(let i=Math.max(0,i0);i<i1&&i<n;i++) m=Math.max(m,a[i]); const h=m/x.wmx*(H-6); g.fillRect(px,(H-h)/2,1,Math.max(1,h)); } }
   else { g.fillStyle="rgba(255,255,255,.4)"; g.font=`${12*dpr}px system-ui`; g.fillText(L("Tonspur wird gelesen …","Reading audio …"),8,H/2); }
@@ -4583,16 +4594,17 @@ function synWave(x){ const c=$("synW"); if(!c) return; const dpr=devicePixelRati
   const zl=$("synZf"); if(zl) zl.classList.toggle("on", sp<D-0.01);
   if(sp<D-0.01){ g.fillStyle="rgba(255,255,255,.7)"; g.font=`${11*dpr}px system-ui`; g.fillText((sp<2?Math.round(sp*1000)+" ms":sp.toFixed(1).replace(".",",")+" s"),6*dpr,13*dpr); } }
 function synCheck(){ const d=$("synOv"), it=SY.items; SY.phase="check";
-  d.innerHTML=`<div class="cmphead"><b>${L("Abgleich prüfen","Check sync")}</b><span class="synhint" style="margin:0">${L("Alle Videos laufen über die Startsignale zeitgleich. Prüf es an einem gut sichtbaren Moment (z. B. Abflug oder Eintauchen) und verschieb bei Bedarf bildweise.","All videos run in sync via the start signals. Check at a clearly visible moment (e.g. take-off or entry) and shift frame by frame if needed.")}</span></div>
+  d.innerHTML=`<div class="cmphead"><b>${L("Verbunden – prüfen","Locked – check")}</b><span class="synhint" style="margin:0">${L("Die Videos sind jetzt über den markierten Moment verbunden. Prüf es an einer zweiten Stelle (z. B. Eintauchen) und verschieb bei Bedarf bildweise.","The videos are now locked via the marked moment. Check at a second point (e.g. entry) and shift frame by frame if needed.")}</span></div>
     <div class="cmpgrid syngrid" style="grid-template-columns:repeat(${Math.min(it.length,3)},1fr)">${it.map((x,k)=>`<div class="cmpv"><video id="synC${k}" playsinline muted preload="auto" src="${x.url}"></video><i class="${k?"B":"A"}">${k+1}</i><button type="button" class="sndb${k?" off":""}" data-snd="${k}">${k?SND_OFF:SND_ON}</button>${k?`<div class="synadj"><button type="button" data-fo="${k}" data-d="-1">−1</button><span id="synO${k}"></span><button type="button" data-fo="${k}" data-d="1">+1</button></div>`:""}</div>`).join("")}</div>
     ${synStepBar()}
-    <div class="cmpbar"><button type="button" id="synToSig">${L("Zum Startsignal","To start signal")}</button><button type="button" id="synBack">‹ ${L("Startsignale ändern","Change start signals")}</button><span style="margin-left:auto;display:flex;gap:6px"><button type="button" id="synX">${L("Abbrechen","Cancel")}</button><button type="button" id="synOk" class="synmain">✓ ${L("Übernehmen","Apply")}</button></span></div>`;
+    <div class="cmpbar"><button type="button" id="synToSig">${L("Zum markierten Moment","To marked moment")}</button><button type="button" id="synBack">‹ ${L("Momente ändern","Change moments")}</button><span style="margin-left:auto;display:flex;gap:6px"><button type="button" id="synX">${L("Abbrechen","Cancel")}</button><button type="button" id="synOk" class="synmain">✓ ${L("Übernehmen","Apply")}</button></span></div>`;
   SY.els=it.map((x,k)=>$("synC"+k)); SY.el=SY.els[0]; SY.els[0].muted=false; synBind();
+  SY.els.slice(1).forEach(e=>e.addEventListener("seeked",()=>{ if(e._pend!=null){ const c=e._pend; e._pend=null; e.currentTime=c; } }));
   d.querySelectorAll("[data-snd]").forEach(b=>b.onclick=()=>{ const e=SY.els[+b.dataset.snd]; e.muted=!e.muted; sndBtn(b,e.muted); });
   d.querySelectorAll("[data-fo]").forEach(b=>b.onclick=()=>{ const x=it[+b.dataset.fo]; x.fine=(x.fine||0)+(+b.dataset.d)/synFps(); synPause(); synFollow(true); synUI(); });
   $("synToSig").onclick=()=>{ synPause(); synTo(it[0].sig); }; $("synBack").onclick=()=>{ synPause(); SY.i=it.length-1; synStep(); }; $("synX").onclick=synClose;
-  $("synOk").onclick=()=>{ const tr=SY.tr; tr.vids2.forEach((v,j)=>{ const x=it[j+1]; v.sig=x.sig+(x.fine||0); v.off=synOff(j+1); v.offAuto="sig"; }); tr.sync={main:it[0].sig, done:true};
-    if(SA.trialRef===tr){ if(!SA.sigOk) SA.marks.sig=it[0].sig; synApply(true); }
+  $("synOk").onclick=()=>{ const tr=SY.tr; tr.vids2.forEach((v,j)=>{ const x=it[j+1]; v.sig=x.sig+(x.fine||0); v.off=synOff(j+1); v.offAuto="sig"; }); tr.sync={main:it[0].sig, done:true, ev:SY.ev};
+    if(SA.trialRef===tr && SY.ev==="sig"){ if(!SA.sigOk) SA.marks.sig=it[0].sig; synApply(true); }
     if(SA.mode==="quick") qkSave(); else evSave(); blog("klick","Kameras abgeglichen",{off:tr.vids2.map(v=>Math.round(v.off*1000))}); synClose(); if(FS.on) fsSync(true); if(typeof wUpd==="function") wUpd(); toast(L("Kameras abgeglichen. Im Vollbild laufen sie jetzt zeitgleich nebeneinander.","Cameras synced. In full screen they now run side by side in sync."),3500); };
   SY.els[0].addEventListener("loadedmetadata",()=>{ synTo(it[0].sig ?? 0); synUI(); },{once:true}); SY.els.slice(1).forEach(e=>e.addEventListener("loadedmetadata",()=>synFollow(true),{once:true})); synUI(); }
 function synKey(e){ if(!SY.on) return; const t=e.target; if(t && /INPUT|TEXTAREA|SELECT/.test(t.tagName) && t.type!=="range") return;
@@ -7753,7 +7765,7 @@ sVid.addEventListener("error",()=>{ if(DSK && SA.proxPending){ SA.origBad=true; 
 const PREP={q:[], run:false};
 async function deskPrep(files){ if(!DSK) return; files.forEach(f=>{ try{ const fp=DSK.pathFor(f); if(fp) PREP.q.push({fp, name:f.name}); }catch(e){} }); if(PREP.run) return; PREP.run=true;
   const msg=t=>{ const m=$("qkMsg"); if(m && !$("qkPage").hidden) m.textContent=t; };
-  while(PREP.q.length){ const it=PREP.q.shift(), left=PREP.q.length; const off=DSK.onProgress(d=>{ if(d.file===it.fp) msg(L(`Arbeitskopie für „${it.name}“ wird vorbereitet … ${Math.round(d.p*100)} %`,`Preparing working copy for “${it.name}” … ${Math.round(d.p*100)} %`)+(left?" "+L(`(danach noch ${left})`,`(${left} more after that)`):"")); });
+  while(PREP.q.length){ while(SA.active) await new Promise(r=>setTimeout(r,3000)); const it=PREP.q.shift(), left=PREP.q.length; const off=DSK.onProgress(d=>{ if(d.file===it.fp) msg(L(`Arbeitskopie für „${it.name}“ wird vorbereitet … ${Math.round(d.p*100)} %`,`Preparing working copy for “${it.name}” … ${Math.round(d.p*100)} %`)+(left?" "+L(`(danach noch ${left})`,`(${left} more after that)`):"")); });
     try{ await DSK.proxy(it.fp); }catch(e){} off(); blog("video","Arbeitskopie vorbereitet",{name:it.name}); }
   PREP.run=false; msg(L("Alle Arbeitskopien sind fertig.","All working copies are ready.")); }
 /* Schwarzes Bild (z. B. HDR-Aufnahmen vom iPhone): Helligkeit der Arbeitskopie prüfen; ist sie schwarz, das Original aber nicht, das Original nutzen */
