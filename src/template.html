@@ -444,7 +444,7 @@ body.xh-on #xhair{display:block}
 #synOv .synmain{background:#2F6FE0;border-color:#2F6FE0}#synOv .cmpt{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);font-size:.9rem}
 .synadj{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.6);border-radius:10px;padding:4px 8px;font-size:.85rem;white-space:nowrap}.synadj button{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;border-radius:6px;padding:3px 9px;font-weight:700;cursor:pointer}
 .fsadj .fssyn{margin-left:6px}
-.camref{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin:0 0 8px;font-size:.85rem}.camref .seg{flex:1}.fsadj .fssnd{padding:1px 6px}
+.camref{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin:0 0 8px;font-size:.85rem}.camref .seg{flex:1}.fscell>#sMeas{z-index:5}.fscell>#sMeasTip,.fscell>#sMeasCtl,.fscell>#sLupe{z-index:8}.fsadj .fssnd{padding:1px 6px}
 .sndb{position:absolute;right:8px;bottom:8px;z-index:20;border:0;border-radius:999px;width:34px;height:34px;background:rgba(0,0,0,.55);color:#fff;font-size:1rem;cursor:pointer;line-height:1}.sndb.off{opacity:.8}
 .fsmove{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:7;display:flex;gap:4px}.fsmove button{border:0;border-radius:8px;background:rgba(0,0,0,.55);color:#fff;padding:3px 9px;font-size:.8rem;cursor:pointer}.fsmove button:disabled{opacity:.25;cursor:default}
 #sSnd{right:auto;left:62px;bottom:14px}
@@ -3422,7 +3422,7 @@ function wizRender(){
       <button type="button" class="wskip" id="wSkip">${L("Nicht zu sehen – überspringen","Not visible – skip")}</button>`; }
   } else if(st.k==="num"){
     const ta=st.seg?mAt(st.seg.a):null, tb=st.seg?mAt(st.seg.b):null;
-    h+=`<p class="wdesc">${st.x()}</p>${st.meas&&st.meas.req?`<p class="wreq">${st.meas.req()}</p>`:""}${st.meas?`<button type="button" class="wdesct" id="wDescT">${L("Beschreibung einblenden","Show description")}</button><button type="button" class="testbtn wmeasb" id="wMeas">${L("Im Video ausmessen","Measure in the video")}</button><p class="wmeash" id="wMeasH" hidden></p>`:""}
+    h+=`<p class="wdesc">${st.x()}</p>${st.meas&&st.meas.req?`<p class="wreq">${st.meas.req()}</p>`:""}${st.meas?`<button type="button" class="wdesct" id="wDescT">${L("Beschreibung einblenden","Show description")}</button>${measCamHTML()}<button type="button" class="testbtn wmeasb" id="wMeas">${L("Im Video ausmessen","Measure in the video")}</button><p class="wmeash" id="wMeasH" hidden></p>`:""}
       ${st.seg && ta!=null && tb!=null && tb>ta ? `<button type="button" class="testbtn wmeasb" id="wSeg">▶ ${L("Abschnitt in Zeitlupe abspielen","Play this section in slow motion")}</button>` : ""}
       <div class="wnum"><input id="wNum" type="number" inputmode="decimal" step="${st.step||(st.unit==="×"?1:0.1)}" min="0" value="${SA.vals[st.id]??""}" placeholder="0"><span>${st.unit}</span></div>
       <button type="button" class="wbig" id="wTake">${L("Übernehmen","Confirm")}</button><button type="button" class="wskip" id="wSkip">${L("Weiß ich nicht – überspringen","Don't know – skip")}</button>`;
@@ -3440,7 +3440,7 @@ function wizRender(){
   else if(au) au.onclick=async()=>{ au.textContent=L("Suche …","Searching …"); const r=SA.pcm ? await corrSearch(SA.pcm,0,Infinity) : null; if(r){ SA.marks.sig=r.t; SA.sigAuto = r.best>0.35?"found":"est"; sSeekTo(r.t); } spDraw(); wizRender(); };
   const sk=$("wSkip"); if(sk) sk.onclick=()=>{ measEnd(); if(st.k==="time") delete SA.marks[st.id]; else delete SA.vals[st.id]; wizGo(SA.i+1,1); };
   const tk=$("wTake"); if(tk){ const inp=$("wNum"); const take=()=>{ measKeep(st); measEnd(); const x=parseFloat(String(inp.value).replace(",",".")); if(x>=0) SA.vals[st.id]=x; adv(); }; tk.onclick=take; inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); take(); } }; }
-  const ms=$("wMeas"); if(ms) ms.onclick=()=>measStart(st);
+  const ms=$("wMeas"); if(ms) ms.onclick=async()=>{ if(SA.measCam && !FS.on) await fsEnter(); measStart(st); }; measCamBind(st);
   const dt=$("wDescT"); if(dt) dt.onclick=()=>{ c.classList.remove("meascol"); };
   const sg=$("wSeg"); if(sg) sg.onclick=()=>{ const ta=mAt(st.seg.a), tb=mAt(st.seg.b); sVid.pause(); sVid.muted=sndMain(); sSeekTo(ta); SA.playTo=tb; setTimeout(()=>{ SA.curBase=0.5; smoRate(); sVid.play(); },120); };
   // Startsignal-Schritt: nur einmal zur gefundenen Stelle springen, nicht bei jedem Neuzeichnen (sonst springt das Video beim Weiterschalten zurück)
@@ -3479,7 +3479,17 @@ $("wPrev").onclick=()=>wizGo(SA.i-1,-1); $("wNext").onclick=()=>wizGo(SA.i+1,1);
    ihres Fußpunkts zwischen den beiden Marken (lineare Interpolation, Seitenansicht). */
 const MREF=()=>({0:SA.mode!=="train"&&isTurn(EV.cur)?L("die Wendewand","the turning wall"):L("die Beckenkante (Startwand)","the pool edge (start wall)"),5:L("die Linie der Rückenfähnchen (5 m)","the backstroke flag line (5 m)"),10:L("die 10-m-Marke","the 10 m mark"),15:L("die 15-m-Marke","the 15 m mark")});
 function measRefs(M){ const g=M.st.meas; if(g.pairs){ const pr=g.pairs[M.pair||0], R=MREF(); return [[pr[0],R[pr[0]]],[pr[1],R[pr[1]]]]; } return [[g.a[0],g.a[1]()],[g.b[0],g.b[1]()]]; }
-const measZ=()=> FS.on && FS.z ? FS.z : {s:1,x:0,y:0};
+const measZ=()=>{ const S=measSec(); return S ? S.z : FS.on && FS.z ? FS.z : {s:1,x:0,y:0}; };
+// Ausmessen in einem gewählten Video (mehrere Kameras): Messfläche, Hinweise und Lupe wandern in dieses Video
+function measSec(){ const k=SA.measCam||0; if(!k || !FS.on || !SA.trialRef || !SA.trialRef.vids2) return null; const v=SA.trialRef.vids2[k-1]; return FS.secs.find(x=>x.v===v)||null; }
+const measVid=()=>{ const S=measSec(); return S ? S.el : sVid; };
+const MEAS_EL=["sMeas","sMeasTip","sMeasCtl","sLupe"];
+function measPlace(){ const S=measSec(), host=S ? S.cell : $("sBox"); MEAS_EL.forEach(id=>{ const el=$(id); if(el && el.parentNode!==host) host.appendChild(el); }); if(S) fsAct(S); }
+function measHome(){ const bx=$("sBox"), dr=$("sDraw"); MEAS_EL.forEach(id=>{ const el=$(id); if(el && el.parentNode!==bx) bx.insertBefore(el, dr); }); }
+function measCamHTML(){ const n=typeof camN==="function"?camN():1; if(n<2) return ""; const cur=SA.measCam||0;
+  return `<div class="camref"><span>${L("Ausmessen in:","Measure in:")}</span><div class="seg" id="wMCam">${Array.from({length:n},(_,k)=>`<button type="button" data-k="${k}" aria-pressed="${k===cur}" title="${esc(((k?SA.trialRef.vids2[k-1]:SA.trialRef.vid)||{}).name||"")}">${L(`Video ${k+1}`,`Video ${k+1}`)}</button>`).join("")}</div></div>`; }
+function measCamBind(st){ const w=$("wMCam"); if(!w) return; w.querySelectorAll("button").forEach(b=>b.onclick=async()=>{ const k=+b.dataset.k; if(k===(SA.measCam||0)) return; SA.measCam=k; if(k && !FS.on) await fsEnter();
+    w.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); if(SA.meas){ SA.meas.pts=[]; SA.meas.foot=null; measPlace(); measDraw(); measHint(); measCtl(); } else { measPlace(); } }); }
 // Bildschirmpunkt → Lage im (ungezoomten) Video, 0…1
 function measN(e){ const r=$("sMeas").getBoundingClientRect(), z=measZ(); return [((e.clientX-r.left)-z.x)/z.s/r.width, ((e.clientY-r.top)-z.y)/z.s/r.height]; }
 function measGeo(M){ const r=$("sMeas").getBoundingClientRect(), W=r.width, H=r.height, [A,B]=M.pts.map(p=>[p[0]*W,p[1]*H]);
@@ -3487,8 +3497,8 @@ function measGeo(M){ const r=$("sMeas").getBoundingClientRect(), W=r.width, H=r.
 function measDist(M){ const [ra,rb]=measRefs(M); return ra[0]+M.foot*(rb[0]-ra[0]); }
 function measStart(st){
   if(typeof DR!=="undefined" && DR.tool) drSetTool(null); sVid.pause(); SA.measPair=SA.measPair||{};
-  SA.meas={st, pts:[], pair:SA.measPair[st.id]||0, foot:null, dir:1, ang:0};
-  $("sMeas").hidden=false;
+  SA.meas={st, pts:[], pair:SA.measPair[st.id]||0, foot:null, dir:1, ang:0, cam:SA.measCam||0};
+  measPlace(); $("sMeas").hidden=false;
   // Beschreibung einklappen, im Vollbild die Hinweisbox
   $("wCard").classList.add("meascol");
   if(FS.on){ const b=$("fsBox"); SA.measFsMin=!b.classList.contains("min"); b.classList.add("min"); $("fsMin").textContent="+"; }
@@ -3497,7 +3507,7 @@ function measStart(st){
   measDraw(); measHint(); measCtl();
   if(!FS.on) $("spAna").querySelector(".vbox").scrollIntoView({block:"nearest", behavior:"smooth"});
 }
-function measEnd(){ const was=SA.meas; SA.meas=null; if(typeof lupeHide==="function") lupeHide(); const cv=$("sMeas"); if(cv){ cv.hidden=true; } const h=$("wMeasH"); if(h) h.hidden=true; const tp=$("sMeasTip"); if(tp) tp.hidden=true; const ct=$("sMeasCtl"); if(ct) ct.hidden=true;
+function measEnd(){ const was=SA.meas; SA.meas=null; measHome(); if(typeof lupeHide==="function") lupeHide(); const cv=$("sMeas"); if(cv){ cv.hidden=true; } const h=$("wMeasH"); if(h) h.hidden=true; const tp=$("sMeasTip"); if(tp) tp.hidden=true; const ct=$("sMeasCtl"); if(ct) ct.hidden=true;
   const c=$("wCard"); if(c) c.classList.remove("meascol");
   if(was && FS.on && SA.measFsMin){ $("fsBox").classList.remove("min"); $("fsMin").textContent="–"; } SA.measFsMin=false; if(was && FS.on) fsHint(); }
 function measVal(){ const M=SA.meas; if(!M || M.foot==null) return null; const d=measDist(M), inp=$("wNum"); if(inp) inp.value=Math.max(0,Math.round(d*100)/100); return d; }
@@ -3571,7 +3581,7 @@ function measDraw(){ const cv=$("sMeas"), r=cv.getBoundingClientRect(), dpr=devi
   cv.addEventListener("pointermove",e=>{ const M=SA.meas; if(!M||!down) return; const dx=e.clientX-down.x, dy=e.clientY-down.y; if(!down.moved && Math.hypot(dx,dy)<6) return; down.moved=true;
     if(down.rot){ const h=measHandle(M), G=measGeo(M), q=measN(e); if(h){ const M0=Object.assign({},M,{ang:0}), n0=measNorm(h.u,M0), v=[q[0]*G.W-h.F[0], q[1]*G.H-h.F[1]]; M.ang=Math.max(-1.4,Math.min(1.4,Math.atan2(n0[0]*v[1]-n0[1]*v[0], n0[0]*v[0]+n0[1]*v[1]))); const nn=measNorm(h.u,M); M.hl=Math.max(36,Math.min(3000,(v[0]*nn[0]+v[1]*nn[1])*measZ().s)); measDraw(); measHint(); measCtl(); } }
     else if(M.pts.length>=2){ footAt(e); measDraw(); measHint(); measCtl(); }
-    else if(fsPan(dx,dy)){ down.x=e.clientX; down.y=e.clientY; } });
+    else { const S=measSec(); if(S ? (S.z.s>1 && (S.z.x+=dx, S.z.y+=dy, fsSecApply(S), true)) : fsPan(dx,dy)){ down.x=e.clientX; down.y=e.clientY; if(S) measDraw(); } } });
   const up=e=>{ const M=SA.meas, d=down; down=null; if(!M||!d||d.moved||d.rot) return;
     if(M.pts.length<2){ M.pts.push(measN(e)); if(M.pts.length===2){ const G=measGeo(M); if(G.len<10){ M.pts=[]; } else M.foot=0.5; } }
     else footAt(e);
@@ -4390,7 +4400,7 @@ async function fsEnter(){
 }
 // soft: Vollbild der Seite bleibt bestehen (Wechsel zum nächsten Versuch im Vollbild)
 function fsExit(soft){
-  if(!FS.on) return; FS.on=false; if(LUPE.on) lupeToggle(false); fsNoteOpen(false); $("fsSmoPop").hidden=true; drSetTool(null); const h=FS.home; FS.z={s:1,x:0,y:0}; sVid.style.transform=""; $("fsBox").classList.remove("min"); $("fsMin").textContent="–";
+  if(!FS.on) return; measHome(); FS.on=false; if(LUPE.on) lupeToggle(false); fsNoteOpen(false); $("fsSmoPop").hidden=true; drSetTool(null); const h=FS.home; FS.z={s:1,x:0,y:0}; sVid.style.transform=""; $("fsBox").classList.remove("min"); $("fsMin").textContent="–";
   h.box[0].insertBefore($("sBox"),h.box[1]); h.card[0].insertBefore($("wCard"),h.card[1]); h.nav[0].insertBefore($("wnavBar"),h.nav[1]); h.bar[0].insertBefore($("sStepBar"),h.bar[1]); h.wave[0].insertBefore($("sWave"),h.wave[1]);
   FS.secs.forEach(s=>{ try{ s.el.pause(); URL.revokeObjectURL(s.el.src); }catch(e){} }); FS.secs=[]; $("fsGrid").innerHTML=""; document.body.classList.remove("fs-on");
   if(soft) return;
@@ -4427,13 +4437,13 @@ function fsMoveUI(){ const grid=$("fsGrid"); if(!grid) return; const o=fsKeys(),
     if(!m){ m=document.createElement("div"); m.className="fsmove"; m.innerHTML=`<button type="button" data-d="-1" aria-label="${L("Nach vorne","Move forward")}">◀</button><button type="button" data-d="1" aria-label="${L("Nach hinten","Move back")}">▶</button>`; c.appendChild(m); m.querySelectorAll("button").forEach(b=>{ b.onpointerdown=e=>e.stopPropagation(); b.onclick=e=>{ e.stopPropagation(); fsMove(c.dataset.k, +b.dataset.d); }; }); }
     const i=o.indexOf(c.dataset.k); m.children[0].disabled=i<=0; m.children[1].disabled=i>=n-1; }); }
 // Zoom weiterer Kameras: Mausrad bzw. Geste, Ziehen verschiebt, Doppelklick setzt zurück; Knöpfe und + / − / 0 wirken auf die zuletzt benutzte Kamera
-function fsSecApply(S){ const z=S.z; if(z.s<=1.001){ z.s=1; z.x=0; z.y=0; S.el.style.transform=""; } else { const r=S.cell.getBoundingClientRect(); z.x=Math.min(0,Math.max(r.width*(1-z.s),z.x)); z.y=Math.min(0,Math.max(r.height*(1-z.s),z.y)); S.el.style.transformOrigin="0 0"; S.el.style.transform=`translate(${z.x}px,${z.y}px) scale(${z.s})`; }
+function fsSecApply(S){ if(SA.meas && measSec()===S) setTimeout(()=>{ if(SA.meas) measDraw(); },0); const z=S.z; if(z.s<=1.001){ z.s=1; z.x=0; z.y=0; S.el.style.transform=""; } else { const r=S.cell.getBoundingClientRect(); z.x=Math.min(0,Math.max(r.width*(1-z.s),z.x)); z.y=Math.min(0,Math.max(r.height*(1-z.s),z.y)); S.el.style.transformOrigin="0 0"; S.el.style.transform=`translate(${z.x}px,${z.y}px) scale(${z.s})`; }
   if(FS.act===S){ const zl=$("fsZl"); if(zl) zl.textContent=Math.round(z.s*100)+" %"; } }
 function fsSecZoom(S,f,cx,cy){ const r=S.cell.getBoundingClientRect(), z=S.z, px=(cx??r.left+r.width/2)-r.left, py=(cy??r.top+r.height/2)-r.top, ns=Math.min(8,Math.max(1,z.s*f)); z.x=px-(px-z.x)*ns/z.s; z.y=py-(py-z.y)*ns/z.s; z.s=ns; fsSecApply(S); }
 function fsAct(S){ FS.act=S||null; document.querySelectorAll("#fsGrid .fscell").forEach(c=>c.classList.toggle("act", S ? c===S.cell : c.dataset.k==="main")); const zl=$("fsZl"); if(zl) zl.textContent=Math.round((S?S.z:FS.z||{s:1}).s*100)+" %"; }
 function fsCellBind(S){ const c=S.cell; let pd=null;
   c.addEventListener("wheel",e=>{ e.preventDefault(); fsAct(S); fsSecZoom(S, Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0015)), e.clientX, e.clientY); },{passive:false});
-  c.addEventListener("pointerdown",e=>{ if(e.target.closest("button")) return; fsAct(S); if(S.z.s>1){ pd={x:e.clientX,y:e.clientY}; c.setPointerCapture(e.pointerId); c.classList.add("pan"); } });
+  c.addEventListener("pointerdown",e=>{ if(e.target.closest("button") || e.target.closest("#sMeas,#sMeasTip,#sMeasCtl")) return; fsAct(S); if(S.z.s>1){ pd={x:e.clientX,y:e.clientY}; c.setPointerCapture(e.pointerId); c.classList.add("pan"); } });
   c.addEventListener("pointermove",e=>{ if(!pd) return; S.z.x+=e.clientX-pd.x; S.z.y+=e.clientY-pd.y; pd={x:e.clientX,y:e.clientY}; fsSecApply(S); });
   const up=()=>{ pd=null; c.classList.remove("pan"); }; c.addEventListener("pointerup",up); c.addEventListener("pointercancel",up);
   c.addEventListener("dblclick",e=>{ if(e.target.closest("button")) return; S.z={s:1,x:0,y:0}; fsSecApply(S); }); }
@@ -5658,17 +5668,17 @@ function qkCloseAna(soft){ SA.sess=(SA.sess||0)+1; if(FS.on) fsExit(soft); measE
 
 /* --- Lupe beim Ausmessen: vergrößerter Ausschnitt um das Fadenkreuz, dünnes Fadenkreuz --- */
 function lupeAt(q, cx, cy, touch){
-  const lp=$("sLupe"), M=SA.meas; if(!lp) return; if(M) M.hover = q && cx!=null ? [cx,cy] : M.hover; if(!M || !sVid.videoWidth || q==null || M.pts.length>=2){ lp.hidden=true; if(M) measDraw(); return; }
+  const lp=$("sLupe"), M=SA.meas, MV=measVid(); if(!lp) return; if(M) M.hover = q && cx!=null ? [cx,cy] : M.hover; if(!M || !MV.videoWidth || q==null || M.pts.length>=2){ lp.hidden=true; if(M) measDraw(); return; }
   measDraw();
-  const cv=$("sMeas"), W=cv.clientWidth, H=cv.clientHeight, vw=sVid.videoWidth, vh=sVid.videoHeight, z=measZ();
-  const ew=sVid.offsetWidth||W, eh=sVid.offsetHeight||H, s0=Math.min(ew/vw, eh/vh), ox=sVid.offsetLeft+(ew-vw*s0)/2, oy=sVid.offsetTop+(eh-vh*s0)/2;
+  const cv=$("sMeas"), W=cv.clientWidth, H=cv.clientHeight, vw=MV.videoWidth, vh=MV.videoHeight, z=measZ();
+  const ew=MV.offsetWidth||W, eh=MV.offsetHeight||H, s0=Math.min(ew/vw, eh/vh), ox=MV.offsetLeft+(ew-vw*s0)/2, oy=MV.offsetTop+(eh-vh*s0)/2;
   const vx=(q[0]*W-ox)/s0, vy=(q[1]*H-oy)/s0;
   const S=W<500?84:112, mag=4, dpr=devicePixelRatio||1, D=Math.round(S*dpr); if(lp.width!==D){ lp.width=D; lp.height=D; } lp.style.width=lp.style.height=S+"px";
   const g=lp.getContext("2d"), sw=S/(mag*s0*z.s), x0=vx-sw/2, y0=vy-sw/2, k=D/sw;
   g.fillStyle="#000"; g.fillRect(0,0,D,D); g.imageSmoothingEnabled=true;
   // nur den Teil innerhalb des Videos zeichnen
   const sx=Math.max(0,x0), sy=Math.max(0,y0), ex=Math.min(vw,x0+sw), ey=Math.min(vh,y0+sw);
-  if(ex>sx && ey>sy){ try{ g.drawImage(sVid, sx, sy, ex-sx, ey-sy, (sx-x0)*k, (sy-y0)*k, (ex-sx)*k, (ey-sy)*k); }catch(e){} }
+  if(ex>sx && ey>sy){ try{ g.drawImage(MV, sx, sy, ex-sx, ey-sy, (sx-x0)*k, (sy-y0)*k, (ex-sx)*k, (ey-sy)*k); }catch(e){} }
   // gesetzte Punkte und Bezugslinie in der Lupe
   const L2=p=>{ const px=(p[0]*W-ox)/s0, py=(p[1]*H-oy)/s0; return [(px-x0)*k, (py-y0)*k]; };
   const pts=M.pts.map(L2); if(pts.length>=2){ g.strokeStyle="rgba(255,210,74,.9)"; g.lineWidth=dpr; g.setLineDash([4*dpr,3*dpr]); g.beginPath(); g.moveTo(pts[0][0],pts[0][1]); g.lineTo(pts[1][0],pts[1][1]); g.stroke(); g.setLineDash([]); }
@@ -7086,7 +7096,7 @@ function kinoEvents(C){ const M=SA.marks||{}, o=C.o||{}, cat=C.p?METCAT(C.p):[],
     if(!s.sig){ const tg=noteTarget(s), x=cat.find(c=>c.k===tg.k), v=o[tg.k]; if(x && v!=null && isFinite(v)){ lab=x.l; val=x.u==="n"?String(v):evFmt(v,x.u); } else val=after(t); }
     const ns=(SA.notes||[]).filter(n=>n.step===s.id); out.push({t, step:s.t(), lab, val, notes:ns.filter(n=>!n.pos).map(n=>n.txt), pn:ns.filter(n=>n.pos), geo:[], sub:[]}); });
   // ausgemessene Weiten: Bezugslinie, Senkrechte, Distanz und Zeit
-  Object.entries(SA.mgeo||{}).forEach(([id,G])=>{ const st=(SA.steps||[]).find(s=>s.id===id), v=SA.vals&&SA.vals[id]; if(!st || v==null || !G || !G.pts || G.pts.length<2) return;
+  Object.entries(SA.mgeo||{}).forEach(([id,G])=>{ const st=(SA.steps||[]).find(s=>s.id===id), v=SA.vals&&SA.vals[id]; if(!st || v==null || !G || !G.pts || G.pts.length<2 || G.cam) return;
     const tl=after(G.tv), dv=n2(Math.max(0,v),spUnitD()), lab=`${st.t()}: ${dv}`+(tl?` · ${tl}`:""); let e=out.find(x=>near(x.t,G.tv));
     if(!e){ e={t:G.tv, step:st.t(), lab:st.t(), val:dv, notes:[], pn:[], geo:[], sub:tl?[tl]:[]}; out.push(e); } else e.sub.push(`${st.t()}: ${dv}`); e.geo.push({G,lab}); });
   // Zeichnungen: Halt in jedem Bild, in dem gezeichnet wurde
@@ -7374,7 +7384,7 @@ sVid.addEventListener("seeked",()=>{ const go=()=>{ if(!SA.active || !DR.rec || 
 /* ---------- Ausmessen: Bezugslinie und Senkrechte merken (für das Ergebnisvideo) ---------- */
 function measKeep(st){ const M=SA.meas; if(!M || M.foot==null || M.pts.length<2) return; const cv=$("sMeas"), bw=cv.clientWidth, bh=cv.clientHeight, r=resCrop(), [ra,rb]=measRefs(M);
   const cn=p=>[Math.round(((p[0]*bw)-r.x)/r.w*1e5)/1e5, Math.round(((p[1]*bh)-r.y)/r.h*1e5)/1e5];
-  (SA.mgeo=SA.mgeo||{})[st.id]={tv:Math.round(sCurT()*1e5)/1e5, pts:M.pts.map(cn), foot:M.foot, dir:M.dir, ang:M.ang||0, ra:ra[0], rb:rb[0]}; }
+  (SA.mgeo=SA.mgeo||{})[st.id]={cam:M.cam||0, tv:Math.round(sCurT()*1e5)/1e5, pts:M.pts.map(cn), foot:M.foot, dir:M.dir, ang:M.ang||0, ra:ra[0], rb:rb[0]}; }
 function kinoGeo(g, G, W, H, lab){ const s=Math.min(W,H)/520, A=[G.pts[0][0]*W,G.pts[0][1]*H], B=[G.pts[1][0]*W,G.pts[1][1]*H], ab=[B[0]-A[0],B[1]-A[1]], len=Math.hypot(ab[0],ab[1])||1, u=[ab[0]/len,ab[1]/len], diag=Math.hypot(W,H)*2;
   g.save(); g.lineCap="round"; g.strokeStyle="rgba(255,210,74,.45)"; g.lineWidth=2*s; g.setLineDash([6*s,6*s]); g.beginPath(); g.moveTo(A[0]-u[0]*diag,A[1]-u[1]*diag); g.lineTo(B[0]+u[0]*diag,B[1]+u[1]*diag); g.stroke();
   g.strokeStyle="#FFD24A"; g.lineWidth=3*s; g.setLineDash([10*s,6*s]); g.beginPath(); g.moveTo(A[0],A[1]); g.lineTo(B[0],B[1]); g.stroke(); g.setLineDash([]);
