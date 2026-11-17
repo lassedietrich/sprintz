@@ -1,0 +1,19 @@
+[
+["Magnifier on: move the mouse over the video, the mouse wheel changes the magnification. L turns it off.","Büyüteç açık: fareyi videonun üzerinde gezdir, fare tekerleği büyütmeyi değiştirir. L ile kapanır.","Лупа включена: веди мышью по видео, колесо мыши меняет увеличение. L выключает её.","Loep aan: beweeg de muis over de video, het muiswiel verandert de vergroting. L zet hem uit."],
+["Magnifier (key L): enlarges the spot under the pointer, the mouse wheel changes the magnification","Büyüteç (L tuşu): imlecin altındaki yeri büyütür, fare tekerleği büyütmeyi değiştirir","Лупа (клавиша L): увеличивает место под указателем, колесо мыши меняет увеличение","Loep (toets L): vergroot de plek onder de aanwijzer, het muiswiel verandert de vergroting"],
+["Magnifier","Büyüteç","Лупа","Loep"],
+["Joined: {0} · {1} athletes received","Katılındı: {0} · {1} sporcu alındı","Вступление выполнено: {0} · получено спортсменов: {1}","Lid geworden: {0} · {1} atleten ontvangen"],
+["That didn't work.","Bu işe yaramadı.","Не получилось.","Dat is niet gelukt."],
+["To see and manage all clubs with their club codes here, run this command once in the Supabase dashboard under “SQL Editor” (paste, “Run”). Only the developer accounts may run the two functions.","Tüm kulüpleri kulüp kodlarıyla burada görmek ve yönetmek için bu komutu Supabase panelinde “SQL Editor” altında bir kez çalıştır (yapıştır, “Run”). İki fonksiyonu yalnızca geliştirici hesapları çalıştırabilir.","Чтобы видеть здесь все клубы с их кодами и управлять ими, один раз выполни эту команду в панели Supabase в разделе «SQL Editor» (вставить, «Run»). Обе функции могут выполнять только аккаунты разработчиков.","Om hier alle clubs met hun clubcodes te zien en te beheren, voer je deze opdracht één keer uit in het Supabase-dashboard onder „SQL Editor” (plakken, „Run”). Alleen de ontwikkelaarsaccounts mogen de twee functies uitvoeren."],
+["Hide","Gizle","Скрыть","Verbergen"],
+["Analyses","Analizler","Анализы","Analyses"],
+["You're a member","Üyesin","Ты участник","Je bent lid"],
+["Generate new club code","Yeni kulüp kodu oluştur","Создать новый код клуба","Nieuwe clubcode aanmaken"],
+["Delete club","Kulübü sil","Удалить клуб","Club verwijderen"],
+["No clubs yet.","Henüz kulüp yok.","Пока нет клубов.","Nog geen clubs."],
+["Club code copied.","Kulüp kodu kopyalandı.","Код клуба скопирован.","Clubcode gekopieerd."],
+["Really delete? All athletes and results of the club are deleted.","Gerçekten silinsin mi? Kulübün tüm sporcuları ve sonuçları silinir.","Действительно удалить? Все спортсмены и результаты клуба будут удалены.","Echt verwijderen? Alle atleten en resultaten van de club worden verwijderd."],
+["Really? The old code stops working.","Emin misin? Eski kod artık çalışmaz.","Точно? Старый код перестанет действовать.","Echt? De oude code werkt dan niet meer."],
+["Joined.","Katılındı.","Вступление выполнено.","Lid geworden."],
+["– none –","– yok –","– нет –","– geen –"]
+]

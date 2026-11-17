@@ -1,0 +1,16 @@
+[
+["You don't belong to a club yet. Join above with the club code or create a club, then you can assign it here.","Henüz bir kulübe ait değilsin. Yukarıda kulüp koduyla katıl veya bir kulüp oluştur, sonra burada atayabilirsin.","Ты пока не состоишь ни в одном клубе. Вступи выше по коду клуба или создай клуб, затем сможешь назначить его здесь.","Je hoort nog bij geen club. Word hierboven lid met de clubcode of maak een club aan, dan kun je hier toewijzen."],
+["Club head","Kulüp başkanı","Руководитель клуба","Clubhoofd"],
+["Club head (sees the club code)","Kulüp başkanı (kulüp kodunu görür)","Руководитель клуба (видит код клуба)","Clubhoofd (ziet de clubcode)"],
+["– automatic: first person –","– otomatik: ilk kişi –","– автоматически: первый человек –","– automatisch: eerste persoon –"],
+["Role in club","Kulüpteki rol","Роль в клубе","Rol in de club"],
+["May delete club","Kulübü silebilir","Может удалить клуб","Mag club verwijderen"],
+["No people yet.","Henüz kimse yok.","Пока никого нет.","Nog geen personen."],
+["Add person","Kişi ekle","Добавить человека","Persoon toevoegen"],
+["Name of the club / organisation","Kulüp / kuruluş adı","Название клуба / организации","Naam van de club / organisatie"],
+["The earlier list still has {0} organisations without a real club ({1}). Taking them over creates them as clubs and adds the assigned accounts as people.","Önceki listede gerçek kulübü olmayan {0} kuruluş var ({1}). Devralmak bunları kulüp olarak oluşturur ve atanmış hesapları kişi olarak ekler.","В прежнем списке ещё есть организации без настоящего клуба: {0} ({1}). При переносе они создаются как клубы, а назначенные аккаунты добавляются как участники.","De eerdere lijst bevat nog {0} organisaties zonder echte club ({1}). Overnemen maakt ze aan als clubs en voegt de toegewezen accounts als personen toe."],
+["Take over as clubs","Kulüp olarak devral","Перенести как клубы","Als clubs overnemen"],
+["Taken over.","Devralındı.","Перенесено.","Overgenomen."],
+["Create clubs below first","Önce aşağıda kulüp oluştur","Сначала создай клубы ниже","Maak eerst hieronder clubs aan"],
+["Clubs / organisations","Kulüpler / kuruluşlar","Клубы / организации","Clubs / organisaties"]
+]

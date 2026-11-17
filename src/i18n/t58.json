@@ -1,0 +1,17 @@
+[
+["Magnifier on: move the mouse over the video, the mouse wheel changes the magnification, a click places the magnifier as a marking. L turns it off.","Büyüteç açık: fareyi videonun üzerinde gezdir, fare tekerleği büyütmeyi değiştirir, tıklama büyüteci işaret olarak yerleştirir. L ile kapanır.","Лупа включена: веди мышью по видео, колесо мыши меняет увеличение, щелчок ставит лупу как отметку. L выключает её.","Loep aan: beweeg de muis over de video, het muiswiel verandert de vergroting, een klik plaatst de loep als markering. L zet hem uit."],
+["Select, move and animate","Seç, taşı ve canlandır","Выбрать, переместить и анимировать","Selecteren, verplaatsen en animeren"],
+["Tap a drawing or magnifier to move it, resize it or animate it.","Taşımak, boyutunu değiştirmek veya canlandırmak için bir çizime ya da büyütece dokun.","Нажми на рисунок или лупу, чтобы переместить, изменить размер или анимировать.","Tik op een tekening of loep om die te verplaatsen, te vergroten of te animeren."],
+["Result video: animated marking (¼ speed)","Sonuç videosu: canlandırılmış işaret (¼ hız)","Видео результата: анимированная отметка (¼ скорости)","Resultaatvideo: geanimeerde markering (¼ snelheid)"],
+["Animation on: step one frame forward with → and move the marking. Every frame becomes part of the animation.","Animasyon açık: → ile bir kare ilerle ve işareti taşı. Her kare animasyonun parçası olur.","Анимация включена: перейди клавишей → на один кадр вперёд и перемести отметку. Каждый кадр становится частью анимации.","Animatie aan: ga met → één beeld verder en verplaats de markering. Elk beeld wordt deel van de animatie."],
+["Angle","Açı","Угол","Hoek"],
+["Magnification","Büyütme","Увеличение","Vergroting"],
+["Size","Boyut","Размер","Grootte"],
+["Animate over several frames","Birkaç kare boyunca canlandır","Анимировать на нескольких кадрах","Over meerdere beelden animeren"],
+["{0} frames. Step one frame forward with →, then move the marking (and its text). In the result video this section plays at ¼ speed.","{0} kare. → ile bir kare ilerle, sonra işareti (ve metnini) taşı. Sonuç videosunda bu bölüm ¼ hızda oynar.","Кадров: {0}. Перейди клавишей → на один кадр вперёд, затем перемести отметку (и её текст). В видео результата этот отрезок идёт на ¼ скорости.","{0} beelden. Ga met → één beeld verder en verplaats dan de markering (en de tekst). In de resultaatvideo speelt dit stuk op ¼ snelheid."],
+["● Recording on","● Kayıt açık","● Запись включена","● Opname aan"],
+["○ Recording off","○ Kayıt kapalı","○ Запись выключена","○ Opname uit"],
+["Edit text","Metni düzenle","Изменить текст","Tekst bewerken"],
+["+ Text","+ Metin","+ Текст","+ Tekst"],
+["Text for the marking","İşaret için metin","Текст к отметке","Tekst bij de markering"]
+]
