@@ -438,7 +438,8 @@ body.xh-on #xhair{display:block}
 #sBox.lupeon{cursor:crosshair}
 .cmppick{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.cmppick select{flex:1;min-width:180px}
 #synOv{position:fixed;inset:0;z-index:90;background:#05121a;color:#fff;display:flex;flex-direction:column;gap:8px;padding:10px;overflow:auto}#synOv[hidden]{display:none}
-.synhint{margin:0;color:rgba(255,255,255,.75);font-size:.9rem}.syngrid{min-height:200px}.synwave{width:100%;height:70px;background:rgba(255,255,255,.06);border-radius:8px;cursor:pointer;flex:none}
+.synhint{margin:0;color:rgba(255,255,255,.75);font-size:.9rem}.syngrid{min-height:200px}.synwbox{position:relative;flex:none}.synwz{position:absolute;right:6px;top:6px;display:flex;gap:4px}.synwz button{border:1px solid rgba(255,255,255,.25);background:rgba(5,18,26,.75);color:#fff;border-radius:6px;padding:1px 9px;font:700 .95rem system-ui;cursor:pointer}.synwz button.on{background:#2F6FE0;border-color:#2F6FE0}
+.synwave{display:block;touch-action:none;width:100%;height:70px;background:rgba(255,255,255,.06);border-radius:8px;cursor:pointer;flex:none}
 #synOv .cmphead #synX{margin-left:auto;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;padding:6px 10px;font:600 .9rem system-ui;cursor:pointer}
 #synOv .synmain{background:#2F6FE0;border-color:#2F6FE0}#synOv .cmpt{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);font-size:.9rem}
 .synadj{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.6);border-radius:10px;padding:4px 8px;font-size:.85rem;white-space:nowrap}.synadj button{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;border-radius:6px;padding:3px 9px;font-weight:700;cursor:pointer}
@@ -4451,7 +4452,7 @@ async function synOpen(){ const tr=SA.trialRef; if(!tr || !(tr.vids2||[]).length
         try{ const r=await DSK.proxy(fp); if(r && r.url) x.url=r.url; }catch(e){} off(); if(SY.tok!==tok) return; } } } }
   catch(e){ blog("warn","synOpen: "+(e.message||e)); if(SY.tok!==tok) return; d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Die Videos konnten nicht geladen werden: ","The videos could not be loaded: ")}${esc(e.message||String(e))}</p>`; $("synX").onclick=synClose; return; }
   const miss=vids.filter(x=>!x.blob); if(miss.length){ d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Nicht auf diesem Gerät: ","Not on this device: ")}${miss.map(x=>esc(x.v.name||"?")).join(", ")}</p>`; $("synX").onclick=synClose; return; }
-  const s0 = SA.marks.sig ?? (tr.sync&&tr.sync.main) ?? null;
+  let s0 = SA.marks.sig ?? (tr.sync&&tr.sync.main) ?? null; if(s0!=null && s0<0.02) s0=null;
   SY.tr=tr; SY.i=0; SY.items=vids.map((x,k)=>({v:x.v, blob:x.blob, url:x.url||URL.createObjectURL(x.blob), own:!x.url, main:!!x.main, sig: k===0 ? s0 : (x.v.sig ?? (x.v.off!=null && s0!=null ? s0+x.v.off : null)), cand:null, wave:null}));
   blog("klick","Kameras abgleichen",{n:vids.length}); synStep(); }
 function synClose(){ const d=$("synOv"); if(d){ d.querySelectorAll("video").forEach(v=>{ try{ v.pause(); }catch(e){} }); d.hidden=true; d.innerHTML=""; } (SY.items||[]).forEach(x=>{ try{ if(x.own) URL.revokeObjectURL(x.url); }catch(e){} }); SY.items=null; SY.on=false; SY.tok=(SY.tok||0)+1; document.removeEventListener("keydown",synKey,true); synBtn(); }
@@ -4462,27 +4463,28 @@ async function synStep(){ const d=$("synOv"), it=SY.items, x=it[SY.i], n=it.leng
   d.innerHTML=`<div class="cmphead"><b>${L(`Startsignal in Video ${SY.i+1} von ${n}`,`Start signal in video ${SY.i+1} of ${n}`)}</b><span class="cmpl ${SY.i?"B":"A"}">${esc(x.v.name||"")}</span><button type="button" id="synX">${L("Später","Later")}</button></div>
     <p class="synhint">${L("Such das Bild bzw. den Ausschlag in der Tonspur, an dem das Startsignal zu hören ist, und setze es. Danach kommt das nächste Video.","Find the frame or the peak in the audio track where the start signal is heard and set it. Then the next video follows.")}</p>
     <div class="cmpgrid syngrid" style="grid-template-columns:1fr"><div class="cmpv"><video id="synV" playsinline preload="auto" src="${x.url}"></video><i class="${SY.i?"B":"A"}">${SY.i+1}</i></div></div>
-    <canvas id="synW" class="synwave" height="70"></canvas>${synStepBar()}
+    <div class="synwbox"><canvas id="synW" class="synwave" height="70"></canvas><div class="synwz"><button type="button" id="synZo" title="${L("Herauszoomen","Zoom out")}">−</button><button type="button" id="synZf" title="${L("Ganze Tonspur","Whole audio track")}">⤢</button><button type="button" id="synZi" title="${L("Hineinzoomen","Zoom in")}">+</button></div></div>${synStepBar()}
     <div class="cmpbar"><button type="button" id="synAuto">${L("Automatisch finden","Find automatically")}</button><button type="button" id="synSet" class="synmain">${L("Startsignal hier setzen","Set start signal here")}</button><span id="synVal" class="cmpt"></span>
       <span style="margin-left:auto;display:flex;gap:6px">${SY.i?`<button type="button" id="synBack">‹ ${L("Zurück","Back")}</button>`:""}<button type="button" id="synNext" class="synmain">${SY.i<n-1?L("Weiter","Next")+" ›":L("Abgleich prüfen","Check sync")+" ›"}</button></span></div>`;
   const v=$("synV"); SY.el=v; SY.els=[v];
   $("synX").onclick=synClose; $("synSet").onclick=()=>{ x.sig=v.currentTime; synUI(); };
   $("synNext").onclick=()=>{ if(x.sig==null){ x.sig=v.currentTime; } if(SY.i<n-1){ SY.i++; synStep(); } else synCheck(); };
   if($("synBack")) $("synBack").onclick=()=>{ SY.i--; synStep(); };
-  $("synAuto").onclick=async()=>{ await synFind(x, true); if(x.cand&&x.cand.length){ x.sig=x.cand[0].t; v.currentTime=x.sig; } else toast(L("Kein Startsignal gefunden. Setze es von Hand.","No start signal found. Set it by hand."),3000); synUI(); };
+  $("synAuto").onclick=async()=>{ await synFind(x, true); if(x.cand&&x.cand.length){ x.sig=x.cand[0].t; v.currentTime=x.sig; synFocus(x); } else toast(L("Kein Startsignal gefunden. Setze es von Hand.","No start signal found. Set it by hand."),3000); synUI(); };
   synBind(); v.addEventListener("loadedmetadata",()=>{ v.currentTime = x.sig ?? 0; synUI(); },{once:true});
   // Tonspur lesen und Kandidaten zeigen; ohne gesetztes Signal den wahrscheinlichsten vorschlagen
   try{ await synFind(x, false); }catch(e){} if(!SY.on || SY.phase!=="sig" || SY.items!==it || it[SY.i]!==x) return;
-  if(x.sig==null && x.cand && x.cand.length){ x.sig=x.cand[0].t; if(v.readyState>0) v.currentTime=x.sig; } synUI(); }
+  if(x.sig==null && x.cand && x.cand.length){ x.sig=x.cand[0].t; if(v.readyState>0) v.currentTime=x.sig; } if(x.sig!=null && !x.zf){ x.zf=1; synFocus(x); } synUI(); }
+function synFocus(x){ const D=SY.el&&SY.el.duration||x.dur||1, sp=Math.min(D,6); x.zv={a:Math.max(0,Math.min(D-sp,x.sig-sp/2)), b:0}; x.zv.b=x.zv.a+sp; synWave(x); }
 async function synFind(x, force){ if(x.wave && !force) return;
-  try{ const buf=await readAudio(x.blob), rr=Math.min(24000,buf.sampleRate), raw=ds(buf,rr); { const ch=buf.getChannelData(0), n=Math.max(1,Math.round(buf.duration*400)), w=new Float32Array(n), st=ch.length/n; for(let i=0;i<n;i++){ let m=0; const a=Math.floor(i*st), z=Math.min(ch.length,Math.floor((i+1)*st)); for(let j=a;j<z;j+=4) m=Math.max(m,Math.abs(ch[j])); w[i]=m; } x.wave=w; } x.dur=buf.duration;
+  try{ const buf=await readAudio(x.blob), rr=Math.min(24000,buf.sampleRate), raw=ds(buf,rr); { const ch=buf.getChannelData(0), n=Math.max(1,Math.round(buf.duration*1000)), w=new Float32Array(n), st=ch.length/n; for(let i=0;i<n;i++){ let m=0; const a=Math.floor(i*st), z=Math.min(ch.length,Math.floor((i+1)*st)); for(let j=a;j<z;j+=4) m=Math.max(m,Math.abs(ch[j])); w[i]=m; } x.wave=w; } x.dur=buf.duration;
     const it=SY.items, m=it[0], exp = !x.main && m.sig!=null && m.v.t && x.v.t ? m.sig+(m.v.t-x.v.t)/1000 : null;
     let c=[]; for(const ty of [SA.sigType&&SA.sigType!=="app"?SA.sigType:"whistle","tone","clap"]){ try{ c=sigDetect(raw,rr,ty); }catch(e){ c=[]; } if(c.length) break; }
     if(exp!=null) c.sort((a,b)=>Math.abs(a.t-exp)-Math.abs(b.t-exp)); x.cand=c.slice(0,6); }catch(e){ x.cand=[]; } }
 function synBind(){ const d=$("synOv");
   d.querySelectorAll("[data-sf]").forEach(b=>b.onclick=()=>synSeek(+b.dataset.sf/synFps(), true));
   $("synPlay").onclick=synToggle; const r=$("synR"); r.oninput=()=>{ const v=SY.el; if(v.duration>0){ synPause(); synTo(r.value/1000*v.duration); } };
-  const w=$("synW"); if(w) w.onclick=e=>{ const v=SY.el, b=w.getBoundingClientRect(); if(v.duration>0){ synPause(); synTo((e.clientX-b.left)/b.width*v.duration); } };
+  const w=$("synW"); if(w) synWaveBind(w);
   SY.els.forEach(v=>v.addEventListener("timeupdate",synUI)); SY.el.addEventListener("seeked",synUI); }
 function synTo(t){ const v=SY.el; v.currentTime=Math.max(0,Math.min(v.duration||t,t)); if(SY.phase==="check") synFollow(true); }
 function synSeek(dt){ synPause(); synTo(SY.el.currentTime+dt); }
@@ -4497,11 +4499,27 @@ function synUI(){ if(!SY.on || !SY.el) return; const v=SY.el, it=SY.items, f=syn
     $("synVal").textContent = x.sig!=null ? L(`Gesetzt bei ${ms(x.sig)}`,`Set at ${ms(x.sig)}`) : L("Noch nicht gesetzt","Not set yet"); synWave(x); }
   else { $("synT").textContent=it[0].sig!=null ? L("zum Startsignal","to start signal")+" "+sg(v.currentTime-it[0].sig) : ms(v.currentTime);
     it.slice(1).forEach((x,j)=>{ const o=$("synO"+(j+1)); if(o) { const fr=Math.round((x.fine||0)*f); o.textContent=L("Versatz","Offset")+" "+sg(synOff(j+1))+(fr?" ("+(fr>0?"+":"−")+Math.abs(fr)+" "+(Math.abs(fr)===1?L("Bild","frame"):L("Bilder","frames"))+")":""); } }); } }
-function synWave(x){ const c=$("synW"); if(!c) return; const W=c.width=c.clientWidth*(devicePixelRatio||1), H=c.height=70*(devicePixelRatio||1), g=c.getContext("2d"); g.clearRect(0,0,W,H); const v=SY.el, D=v.duration||x.dur||1;
-  if(x.wave){ const a=x.wave, n=a.length; let mx=1e-6; for(let i=0;i<n;i++) mx=Math.max(mx,Math.abs(a[i])); g.fillStyle="rgba(255,255,255,.55)"; for(let px=0;px<W;px++){ const i0=Math.floor(px/W*n), i1=Math.max(i0+1,Math.floor((px+1)/W*n)); let m=0; for(let i=i0;i<i1&&i<n;i++) m=Math.max(m,Math.abs(a[i])); const h=m/mx*(H-6); g.fillRect(px,(H-h)/2,1,Math.max(1,h)); } }
-  else { g.fillStyle="rgba(255,255,255,.4)"; g.font=`${12*(devicePixelRatio||1)}px system-ui`; g.fillText(L("Tonspur wird gelesen …","Reading audio …"),8,H/2); }
-  (x.cand||[]).forEach(cd=>{ g.fillStyle="rgba(255,193,7,.75)"; g.fillRect(cd.t/D*W-1,0,3,H); });
-  if(x.sig!=null){ g.fillStyle="#E53935"; g.fillRect(x.sig/D*W-1.5,0,3,H); } g.fillStyle="#fff"; g.fillRect(v.currentTime/D*W-1,0,2,H); }
+// Tonspur zoomen: Mausrad bzw. Zwei-Finger-Geste, Knöpfe − ⤢ +; Ziehen verschiebt den Ausschnitt; Tippen springt an die Stelle
+function synView(x){ const D=SY.el&&SY.el.duration||x.dur||1; let z=x.zv; if(!z){ z=x.zv={a:0,b:D}; } z.b=Math.min(D,Math.max(z.b,z.a+0.05)); z.a=Math.max(0,Math.min(z.a,z.b-0.05)); return z; }
+function synZoom(x, f, at){ const D=SY.el&&SY.el.duration||x.dur||1, z=synView(x), c=at??(x.sig!=null&&x.sig>=z.a&&x.sig<=z.b?x.sig:SY.el.currentTime), span=Math.min(D,Math.max(0.1,(z.b-z.a)*f)); const r=(c-z.a)/((z.b-z.a)||1);
+  z.a=Math.max(0,Math.min(D-span,c-r*span)); z.b=z.a+span; synWave(x); }
+function synWaveBind(w){ const x=()=>SY.items&&SY.items[SY.i]; let pd=null;
+  const tAt=e=>{ const b=w.getBoundingClientRect(), z=synView(x()); return z.a+(e.clientX-b.left)/b.width*(z.b-z.a); };
+  w.addEventListener("wheel",e=>{ if(!x()) return; e.preventDefault(); if(Math.abs(e.deltaX)>Math.abs(e.deltaY) && !e.ctrlKey){ const z=synView(x()), sp=z.b-z.a, D=SY.el.duration||sp, d=e.deltaX/w.clientWidth*sp; z.a=Math.max(0,Math.min(D-sp,z.a+d)); z.b=z.a+sp; synWave(x()); return; } synZoom(x(), Math.exp(e.deltaY*(e.ctrlKey?0.01:0.002)), tAt(e)); },{passive:false});
+  w.addEventListener("pointerdown",e=>{ pd={x0:e.clientX, x:e.clientX, mv:false}; w.setPointerCapture(e.pointerId); });
+  w.addEventListener("pointermove",e=>{ if(!pd||!x()) return; if(Math.abs(e.clientX-pd.x0)>4) pd.mv=true; if(!pd.mv) return; const z=synView(x()), sp=z.b-z.a, D=SY.el.duration||sp, d=-(e.clientX-pd.x)/w.clientWidth*sp; pd.x=e.clientX; z.a=Math.max(0,Math.min(D-sp,z.a+d)); z.b=z.a+sp; synWave(x()); });
+  w.addEventListener("pointerup",e=>{ const m=pd&&pd.mv; pd=null; if(m||!x()) return; const v=SY.el; if(v.duration>0){ synPause(); synTo(tAt(e)); } });
+  $("synZi").onclick=()=>x()&&synZoom(x(),0.5); $("synZo").onclick=()=>x()&&synZoom(x(),2); $("synZf").onclick=()=>{ const it=x(); if(!it) return; it.zv=null; synWave(it); }; }
+function synWave(x){ const c=$("synW"); if(!c) return; const dpr=devicePixelRatio||1, W=c.width=c.clientWidth*dpr, H=c.height=70*dpr, g=c.getContext("2d"); g.clearRect(0,0,W,H); const v=SY.el, D=v.duration||x.dur||1, z=synView(x), sp=(z.b-z.a)||1, X=t=>(t-z.a)/sp*W;
+  if(x.wave){ const a=x.wave, n=a.length, r=n/(x.dur||D); if(!x.wmx){ let mx=1e-6; for(let i=0;i<n;i++) mx=Math.max(mx,a[i]); x.wmx=mx; } g.fillStyle="rgba(255,255,255,.55)";
+    for(let px=0;px<W;px++){ const i0=Math.floor((z.a+px/W*sp)*r), i1=Math.max(i0+1,Math.floor((z.a+(px+1)/W*sp)*r)); let m=0; for(let i=Math.max(0,i0);i<i1&&i<n;i++) m=Math.max(m,a[i]); const h=m/x.wmx*(H-6); g.fillRect(px,(H-h)/2,1,Math.max(1,h)); } }
+  else { g.fillStyle="rgba(255,255,255,.4)"; g.font=`${12*dpr}px system-ui`; g.fillText(L("Tonspur wird gelesen …","Reading audio …"),8,H/2); }
+  // Zeitachse im Zoom: Striche je Bild, sobald genug Platz ist
+  const f=synFps(); if(sp*f<W/(6*dpr)){ g.fillStyle="rgba(255,255,255,.18)"; for(let k=Math.ceil(z.a*f);k<=z.b*f;k++) g.fillRect(X(k/f),H-6*dpr,1,6*dpr); }
+  (x.cand||[]).forEach(cd=>{ g.fillStyle="rgba(255,193,7,.75)"; g.fillRect(X(cd.t)-1,0,3,H); });
+  if(x.sig!=null){ g.fillStyle="#E53935"; g.fillRect(X(x.sig)-1.5,0,3,H); } g.fillStyle="#fff"; g.fillRect(X(v.currentTime)-1,0,2,H);
+  const zl=$("synZf"); if(zl) zl.classList.toggle("on", sp<D-0.01);
+  if(sp<D-0.01){ g.fillStyle="rgba(255,255,255,.7)"; g.font=`${11*dpr}px system-ui`; g.fillText((sp<2?Math.round(sp*1000)+" ms":sp.toFixed(1).replace(".",",")+" s"),6*dpr,13*dpr); } }
 function synCheck(){ const d=$("synOv"), it=SY.items; SY.phase="check";
   d.innerHTML=`<div class="cmphead"><b>${L("Abgleich prüfen","Check sync")}</b><span class="synhint" style="margin:0">${L("Alle Videos laufen über die Startsignale zeitgleich. Prüf es an einem gut sichtbaren Moment (z. B. Abflug oder Eintauchen) und verschieb bei Bedarf bildweise.","All videos run in sync via the start signals. Check at a clearly visible moment (e.g. take-off or entry) and shift frame by frame if needed.")}</span></div>
     <div class="cmpgrid syngrid" style="grid-template-columns:repeat(${Math.min(it.length,3)},1fr)">${it.map((x,k)=>`<div class="cmpv"><video id="synC${k}" playsinline muted preload="auto" src="${x.url}"></video><i class="${k?"B":"A"}">${k+1}</i>${k?`<div class="synadj"><button type="button" data-fo="${k}" data-d="-1">−1</button><span id="synO${k}"></span><button type="button" data-fo="${k}" data-d="1">+1</button></div>`:""}</div>`).join("")}</div>
