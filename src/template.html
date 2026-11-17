@@ -443,7 +443,12 @@ body.xh-on #xhair{display:block}
 #synOv .cmphead #synX{margin-left:auto;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;padding:6px 10px;font:600 .9rem system-ui;cursor:pointer}
 #synOv .synmain{background:#2F6FE0;border-color:#2F6FE0}#synOv .cmpt{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);font-size:.9rem}
 .synadj{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.6);border-radius:10px;padding:4px 8px;font-size:.85rem;white-space:nowrap}.synadj button{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;border-radius:6px;padding:3px 9px;font-weight:700;cursor:pointer}
-.fsadj .fssyn{margin-left:6px}
+.fsadj .fssyn{margin-left:6px}.fsadj .fssnd{padding:1px 6px}
+.sndb{position:absolute;right:8px;bottom:8px;z-index:20;border:0;border-radius:999px;width:34px;height:34px;background:rgba(0,0,0,.55);color:#fff;font-size:1rem;cursor:pointer;line-height:1}.sndb.off{opacity:.8}
+.fsmove{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:7;display:flex;gap:4px}.fsmove button{border:0;border-radius:8px;background:rgba(0,0,0,.55);color:#fff;padding:3px 9px;font-size:.8rem;cursor:pointer}.fsmove button:disabled{opacity:.25;cursor:default}
+#sSnd{right:auto;left:62px;bottom:14px}
+#fsGrid .fscell.act{box-shadow:inset 0 0 0 2px #2F6FE0}.fscell.pan{cursor:grabbing}
+.fslay{border:0;border-radius:9px;height:40px;padding:0 12px;background:#16242d;color:#fff;font:inherit;font-weight:600;cursor:pointer;flex:none;white-space:nowrap}
 #cmpOv{position:fixed;inset:0;z-index:80;background:#05121a;color:#fff;display:flex;flex-direction:column;gap:8px;padding:10px;overflow:auto}#cmpOv[hidden]{display:none}
 .cmphead{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.cmphead b{font-size:1.1rem;margin-right:6px}.cmphead #cmpX{margin-left:auto}
 .cmpl{padding:3px 10px;border-radius:999px;font-size:.85rem;font-weight:600}.cmpl.A,.cmpv i.A{background:#2F8FD8}.cmpl.B,.cmpv i.B{background:#E8590C}
@@ -986,12 +991,12 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
 <section id="evPage" hidden><div id="evTop"></div><div id="evFinishSlot" hidden></div><div id="evBottom"></div></section>
 <div id="fsOv" hidden><div id="fsMain"><div id="fsGrid"></div><div id="fsVm" hidden><canvas id="fsVmC"></canvas></div></div>
   <div id="fsSmoPop" hidden></div><div id="fsTools" role="toolbar" aria-label="Zeichnen"></div><div id="fsBox"><div class="fsboxhd"><span class="fshl"><button type="button" id="fsMin" aria-label="Hinweisbox ein- oder ausklappen">–</button><button type="button" id="fsNoteB" aria-haspopup="true" aria-expanded="false"></button></span><span class="fslangw"><button type="button" id="fsLang" aria-haspopup="true" aria-expanded="false" aria-label="Sprache / Language">DE</button><span id="fsLangPop" hidden><button type="button" data-v="de" lang="de">DE</button><button type="button" data-v="en" lang="en">EN</button><button type="button" data-v="tr" lang="tr">TR</button><button type="button" data-v="ru" lang="ru">RU</button><button type="button" data-v="nl" lang="nl">NL</button></span></span><button type="button" id="fsClose">Vollbild beenden</button></div><div id="fsStep" hidden></div><div id="fsNotePop" hidden><textarea id="fsNoteT" class="note-in" rows="2" maxlength="300"></textarea><div class="fsnrow"><small id="fsNoteTg"></small><button type="button" class="testbtn small" id="fsNoteAdd"></button></div><div id="fsNoteList"></div></div><div id="fsCardSlot"></div><div id="fsKeys"></div></div>
-  <div id="fsBar"><span class="fsplay"><button type="button" id="fsSpd" aria-label="Abspielgeschwindigkeit">¼×</button><button type="button" id="fsSmoB" aria-haspopup="true"></button></span><span class="fszoom" id="fsZoom"><button type="button" id="fsZo" aria-label="Verkleinern">−</button><button type="button" id="fsZl" aria-label="Zoom zurücksetzen">100 %</button><button type="button" id="fsZi" aria-label="Vergrößern">+</button></span></div></div>
+  <div id="fsBar"><span class="fsplay"><button type="button" id="fsSpd" aria-label="Abspielgeschwindigkeit">¼×</button><button type="button" id="fsSmoB" aria-haspopup="true"></button></span><button type="button" id="fsLay" class="fslay" hidden></button><span class="fszoom" id="fsZoom"><button type="button" id="fsZo" aria-label="Verkleinern">−</button><button type="button" id="fsZl" aria-label="Zoom zurücksetzen">100 %</button><button type="button" id="fsZi" aria-label="Vergrößern">+</button></span></div></div>
 <section id="spAna" hidden>
   <div id="evAnaHead" hidden></div>
   <h2>Auswertung</h2>
   <div class="vhead"><span id="sFps"></span><span id="sCur"></span><span id="sCheck" hidden></span><button type="button" class="testbtn small" id="sSpd" title="Abspielgeschwindigkeit">¼×</button><button type="button" class="testbtn small" id="sSync" hidden></button><button type="button" class="testbtn small" id="sFull">⛶ Vollbild</button></div>
-  <div class="vbox" id="sBox"><video id="sVid" playsinline muted preload="auto"></video><canvas id="sMeas" hidden></canvas><canvas id="sDraw" aria-hidden="true"></canvas><canvas id="sLupe" hidden aria-hidden="true"></canvas><div id="sMeasTip" hidden></div><div id="sProx" hidden></div><div id="sMeasCtl" hidden></div></div>
+  <div class="vbox" id="sBox"><video id="sVid" playsinline muted preload="auto"></video><button type="button" class="sndb" id="sSnd" hidden></button><canvas id="sMeas" hidden></canvas><canvas id="sDraw" aria-hidden="true"></canvas><canvas id="sLupe" hidden aria-hidden="true"></canvas><div id="sMeasTip" hidden></div><div id="sProx" hidden></div><div id="sMeasCtl" hidden></div></div>
   <canvas id="sWave" aria-label="Tonspur"></canvas>
   <div class="stepbar" id="sStepBar">
     <button type="button" data-sstep="-10">−10</button><button type="button" data-sstep="-1">−1</button>
@@ -3260,7 +3265,7 @@ document.addEventListener("keydown",e=>{
   if((e.key==="n"||e.key==="N") && sa){ const b=$("wNoteB"); if(b){ e.preventDefault(); const bx=$("wNoteBox"); if(FS.on && $("fsBox").classList.contains("min")){ $("fsBox").classList.remove("min"); $("fsMin").textContent="–"; } if(bx.hidden) b.click(); else $("wNoteT").focus(); } return; }
   if(e.key==="Enter" && sa){ const st=SA.steps[SA.i]; if(!st) return; const b = st.k==="time" ? $("wMark") : st.k==="sum" ? null : $("wTake"); if(b){ e.preventDefault(); b.click(); } }
 });
-$("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.muted=false; SA.curBase=SA.playBase||0.25; smoRate(); sVid.play(); } else sVid.pause(); };
+$("sPlay").onclick=()=>{ SA.playTo=null; if(sVid.paused){ sVid.muted=sndMain(); SA.curBase=SA.playBase||0.25; smoRate(); sVid.play(); } else sVid.pause(); };
 const SPD=[1,0.75,0.5,0.25];
 $("sSpd").onclick=()=>{ const i=SPD.indexOf(SA.playBase||0.25); SA.playBase=SPD[(i+1)%SPD.length]; try{ localStorage.setItem("sprintz-spd",String(SA.playBase)); }catch(e){} spdLabel(); if(!sVid.paused){ SA.curBase=SA.playBase; smoRate(); } };
 try{ const v=parseFloat(localStorage.getItem("sprintz-spd")); if(SPD.includes(v)) SA.playBase=v; }catch(e){} spdLabel();
@@ -3434,7 +3439,7 @@ function wizRender(){
   const tk=$("wTake"); if(tk){ const inp=$("wNum"); const take=()=>{ measKeep(st); measEnd(); const x=parseFloat(String(inp.value).replace(",",".")); if(x>=0) SA.vals[st.id]=x; adv(); }; tk.onclick=take; inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); take(); } }; }
   const ms=$("wMeas"); if(ms) ms.onclick=()=>measStart(st);
   const dt=$("wDescT"); if(dt) dt.onclick=()=>{ c.classList.remove("meascol"); };
-  const sg=$("wSeg"); if(sg) sg.onclick=()=>{ const ta=mAt(st.seg.a), tb=mAt(st.seg.b); sVid.pause(); sVid.muted=false; sSeekTo(ta); SA.playTo=tb; setTimeout(()=>{ SA.curBase=0.5; smoRate(); sVid.play(); },120); };
+  const sg=$("wSeg"); if(sg) sg.onclick=()=>{ const ta=mAt(st.seg.a), tb=mAt(st.seg.b); sVid.pause(); sVid.muted=sndMain(); sSeekTo(ta); SA.playTo=tb; setTimeout(()=>{ SA.curBase=0.5; smoRate(); sVid.play(); },120); };
   // Startsignal-Schritt: nur einmal zur gefundenen Stelle springen, nicht bei jedem Neuzeichnen (sonst springt das Video beim Weiterschalten zurück)
   if(st.k==="time" && st.sig && SA.marks[st.id]!=null && SA.sigJump!==(SA.sess||0) && VG.cmdT<=VG.loadT){ SA.sigJump=SA.sess||0; if(Math.abs(sVid.currentTime-SA.marks[st.id])>0.001) sSeekTo(SA.marks[st.id]); }
   const sr=$("sRate"); if(sr) sr.querySelectorAll("button").forEach(b=>b.onclick=()=>{ SA.rate = SA.rate===+b.dataset.v ? null : +b.dataset.v; sr.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(+x.dataset.v===SA.rate))); });
@@ -4362,20 +4367,20 @@ async function fsEnter(){
   if(FS.on) return; FS.on=true; const ov=$("fsOv"), grid=$("fsGrid"); ov.hidden=false; document.body.classList.add("fs-on");
   FS.home={box:[$("sBox").parentNode,$("sBox").nextSibling], card:[$("wCard").parentNode,$("wCard").nextSibling], nav:[$("wnavBar").parentNode,$("wnavBar").nextSibling], bar:[$("sStepBar").parentNode,$("sStepBar").nextSibling], wave:[$("sWave").parentNode,$("sWave").nextSibling]};
   $("fsMain").insertBefore($("sWave"), $("fsVm")); FS.z={s:1,x:0,y:0};
-  const c0=document.createElement("div"); c0.className="fscell"; c0.appendChild($("sBox")); grid.appendChild(c0);
+  const c0=document.createElement("div"); c0.className="fscell"; c0.dataset.k="main"; c0.appendChild($("sBox")); grid.appendChild(c0); FS.act=null;
   $("fsCardSlot").appendChild($("wnavBar")); $("fsCardSlot").appendChild($("wCard")); $("fsBar").prepend($("sStepBar"));
   // weitere Kameras
   FS.secs=[]; const tr=SA.trialRef;
   for(const v of (tr&&tr.vids2)||[]){ const b=await evBlobOf(v); if(!b) continue; const cell=document.createElement("div"); cell.className="fscell";
-    const el=document.createElement("video"); el.muted=true; el.playsInline=true; el.preload="auto"; el.src=URL.createObjectURL(b); cell.appendChild(el);
+    const el=document.createElement("video"); el.muted=v.mute!==false; el.playsInline=true; el.preload="auto"; el.src=URL.createObjectURL(b); cell.appendChild(el); cell.dataset.k=v.key;
     const lab=document.createElement("span"); lab.className="fslab"; lab.textContent=v.name||L("Video 2","Video 2"); cell.appendChild(lab);
-    const adj=document.createElement("div"); adj.className="fsadj"; adj.innerHTML=`<button type="button" data-o="-1">−1</button><span>${L("Versatz","offset")}</span><button type="button" data-o="1">+1</button><button type="button" class="fssyn">⇆ ${L("Abgleichen","Sync")}</button>`; cell.appendChild(adj);
-    grid.appendChild(cell); const S2={v, el, cell, blob:b}; FS.secs.push(S2);
-    adj.querySelector(".fssyn").onclick=()=>synOpen(); adj.querySelectorAll("button[data-o]").forEach(x=>x.onclick=()=>{ v.off=(v.off||0)+(+x.dataset.o)/sFps(); v.offAuto=false; evSave(); fsSync(true); });
+    const adj=document.createElement("div"); adj.className="fsadj"; adj.innerHTML=`<button type="button" data-o="-1">−1</button><span>${L("Versatz","offset")}</span><button type="button" data-o="1">+1</button><button type="button" class="fssyn">⇆ ${L("Abgleichen","Sync")}</button><button type="button" class="fssnd"></button>`; cell.appendChild(adj);
+    grid.appendChild(cell); const S2={v, el, cell, blob:b, z:{s:1,x:0,y:0}}; FS.secs.push(S2); fsCellBind(S2);
+    adj.querySelector(".fssyn").onclick=()=>synOpen(); { const sb=adj.querySelector(".fssnd"); sndBtn(sb, el.muted); sb.onclick=()=>{ v.mute = !el.muted ? true : false; el.muted=v.mute; sndBtn(sb, el.muted); sndSave(); }; } adj.querySelectorAll("button[data-o]").forEach(x=>x.onclick=()=>{ v.off=(v.off||0)+(+x.dataset.o)/sFps(); v.offAuto=false; evSave(); fsSync(true); });
     el.addEventListener("loadedmetadata",()=>{ fsLayout(); fsSync(true); });
     if(v.off==null) fsAlign(S2); }
   $("fsVm").hidden=!(tr&&tr.vm); if(!(document.fullscreenElement||document.webkitFullscreenElement)){ try{ if(ov.requestFullscreen) await ov.requestFullscreen(); else if(ov.webkitRequestFullscreen) ov.webkitRequestFullscreen(); }catch(e){} }
-  fsLayout(); fsSync(true); fsHint(); fsSmoBar(); drToolbar(); fsZoomApply(); setTimeout(anaCheck,400); setTimeout(()=>{ try{ if(localStorage.getItem("sprintz-fsbox")) $("fsBox").dataset.user="1"; }catch(e){} fsLayout(); spDraw(); },60);
+  fsMoveUI(); fsLayout(); fsSync(true); fsHint(); fsSmoBar(); drToolbar(); fsZoomApply(); setTimeout(anaCheck,400); setTimeout(()=>{ try{ if(localStorage.getItem("sprintz-fsbox")) $("fsBox").dataset.user="1"; }catch(e){} fsLayout(); spDraw(); },60);
 }
 // soft: Vollbild der Seite bleibt bestehen (Wechsel zum nächsten Versuch im Vollbild)
 function fsExit(soft){
@@ -4394,7 +4399,12 @@ function fsLayout(){
   const W=grid.clientWidth, H=grid.clientHeight, vids=[sVid, ...FS.secs.map(s=>s.el)], ar=vids.map(v=>v.videoWidth&&v.videoHeight ? v.videoWidth/v.videoHeight : 16/9), n=vids.length;
   const fit=(a,w,h)=>{ const ww=Math.min(w,h*a); return ww*(ww/a); };
   const row=ar.reduce((s,a)=>s+fit(a,W/n,H),0), col=ar.reduce((s,a)=>s+fit(a,W,H/n),0);
-  grid.style.gridTemplateColumns = n>1 && row>=col ? `repeat(${n},1fr)` : "1fr"; grid.style.gridTemplateRows = n>1 && row<col ? `repeat(${n},1fr)` : "1fr";
+  const lay=fsLay(); let side = lay==="row" ? true : lay==="col" ? false : row>=col;
+  if(lay==="grid" && n>2){ const c=Math.ceil(Math.sqrt(n)); grid.style.gridTemplateColumns=`repeat(${c},1fr)`; grid.style.gridTemplateRows=`repeat(${Math.ceil(n/c)},1fr)`; }
+  else { grid.style.gridTemplateColumns = n>1 && side ? `repeat(${n},1fr)` : "1fr"; grid.style.gridTemplateRows = n>1 && !side ? `repeat(${n},1fr)` : "1fr"; }
+  // Reihenfolge der Kameras (je Lauf gemerkt)
+  const ord=(SA.trialRef&&SA.trialRef.fsOrder)||[]; [...grid.children].forEach(c=>{ const i=ord.indexOf(c.dataset.k); c.style.order = i<0 ? (c.dataset.k==="main"?0:50) : i; });
+  const lb=$("fsLay"); if(lb){ lb.hidden=n<2; lb.textContent={auto:"▦ "+L("Auto","Auto"), row:"⫴ "+L("Nebeneinander","Side by side"), col:"☰ "+L("Untereinander","Stacked"), grid:"▦ "+L("Raster","Grid")}[lay]; }
   if(SA.meas) setTimeout(measDraw,30); vmDraw($("fsVmC"));
   // Hinweisbox nicht über Tonspur und Kurve legen
   const ovR=$("fsOv").getBoundingClientRect(), gB=grid.getBoundingClientRect().bottom-ovR.top, bx=$("fsBox");
@@ -4402,17 +4412,36 @@ function fsLayout(){
   else if(innerWidth<=700){ bx.style.bottom=Math.round(ovR.height-gB+8)+"px"; bx.style.maxHeight=bx.style.height=Math.round(Math.max(150,gB*0.55))+"px"; } else { bx.style.bottom=""; bx.style.height=""; bx.style.maxHeight=Math.round(Math.max(200,gB-24))+"px"; }
   fsClampZ(); fsZoomApply(); spDraw();
 }
+// Anordnung im Vollbild: automatisch, nebeneinander, untereinander, Raster; Reihenfolge mit ◀ ▶ an jeder Kamera
+function fsLay(){ try{ return localStorage.getItem("sprintz-fslay")||"auto"; }catch(e){ return "auto"; } }
+$("fsLay").onclick=()=>{ const L4=["auto","row","col","grid"], n=L4[(L4.indexOf(fsLay())+1)%L4.length]; try{ localStorage.setItem("sprintz-fslay",n); }catch(e){} fsLayout(); setTimeout(()=>{ fsClampZ(); fsZoomApply(); FS.secs.forEach(fsSecApply); },60); };
+function fsKeys(){ const tr=SA.trialRef; const all=["main", ...FS.secs.map(s=>s.v.key)]; const o=(tr&&tr.fsOrder||[]).filter(k=>all.includes(k)); all.forEach(k=>{ if(!o.includes(k)) o.push(k); }); return o; }
+function fsMove(k,d){ const tr=SA.trialRef; if(!tr) return; const o=fsKeys(), i=o.indexOf(k), j=i+d; if(i<0||j<0||j>=o.length) return; [o[i],o[j]]=[o[j],o[i]]; tr.fsOrder=o; sndSave(); fsLayout(); fsMoveUI(); setTimeout(()=>{ fsClampZ(); fsZoomApply(); FS.secs.forEach(fsSecApply); },60); }
+function fsMoveUI(){ const grid=$("fsGrid"); if(!grid) return; const o=fsKeys(), n=o.length; [...grid.children].forEach(c=>{ let m=c.querySelector(".fsmove"); if(n<2){ if(m) m.remove(); return; }
+    if(!m){ m=document.createElement("div"); m.className="fsmove"; m.innerHTML=`<button type="button" data-d="-1" aria-label="${L("Nach vorne","Move forward")}">◀</button><button type="button" data-d="1" aria-label="${L("Nach hinten","Move back")}">▶</button>`; c.appendChild(m); m.querySelectorAll("button").forEach(b=>{ b.onpointerdown=e=>e.stopPropagation(); b.onclick=e=>{ e.stopPropagation(); fsMove(c.dataset.k, +b.dataset.d); }; }); }
+    const i=o.indexOf(c.dataset.k); m.children[0].disabled=i<=0; m.children[1].disabled=i>=n-1; }); }
+// Zoom weiterer Kameras: Mausrad bzw. Geste, Ziehen verschiebt, Doppelklick setzt zurück; Knöpfe und + / − / 0 wirken auf die zuletzt benutzte Kamera
+function fsSecApply(S){ const z=S.z; if(z.s<=1.001){ z.s=1; z.x=0; z.y=0; S.el.style.transform=""; } else { const r=S.cell.getBoundingClientRect(); z.x=Math.min(0,Math.max(r.width*(1-z.s),z.x)); z.y=Math.min(0,Math.max(r.height*(1-z.s),z.y)); S.el.style.transformOrigin="0 0"; S.el.style.transform=`translate(${z.x}px,${z.y}px) scale(${z.s})`; }
+  if(FS.act===S){ const zl=$("fsZl"); if(zl) zl.textContent=Math.round(z.s*100)+" %"; } }
+function fsSecZoom(S,f,cx,cy){ const r=S.cell.getBoundingClientRect(), z=S.z, px=(cx??r.left+r.width/2)-r.left, py=(cy??r.top+r.height/2)-r.top, ns=Math.min(8,Math.max(1,z.s*f)); z.x=px-(px-z.x)*ns/z.s; z.y=py-(py-z.y)*ns/z.s; z.s=ns; fsSecApply(S); }
+function fsAct(S){ FS.act=S||null; document.querySelectorAll("#fsGrid .fscell").forEach(c=>c.classList.toggle("act", S ? c===S.cell : c.dataset.k==="main")); const zl=$("fsZl"); if(zl) zl.textContent=Math.round((S?S.z:FS.z||{s:1}).s*100)+" %"; }
+function fsCellBind(S){ const c=S.cell; let pd=null;
+  c.addEventListener("wheel",e=>{ e.preventDefault(); fsAct(S); fsSecZoom(S, Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0015)), e.clientX, e.clientY); },{passive:false});
+  c.addEventListener("pointerdown",e=>{ if(e.target.closest("button")) return; fsAct(S); if(S.z.s>1){ pd={x:e.clientX,y:e.clientY}; c.setPointerCapture(e.pointerId); c.classList.add("pan"); } });
+  c.addEventListener("pointermove",e=>{ if(!pd) return; S.z.x+=e.clientX-pd.x; S.z.y+=e.clientY-pd.y; pd={x:e.clientX,y:e.clientY}; fsSecApply(S); });
+  const up=()=>{ pd=null; c.classList.remove("pan"); }; c.addEventListener("pointerup",up); c.addEventListener("pointercancel",up);
+  c.addEventListener("dblclick",e=>{ if(e.target.closest("button")) return; S.z={s:1,x:0,y:0}; fsSecApply(S); }); }
 /* Zoom im Vollbild: Mausrad, + / − / 0, Schaltflächen; Verschieben durch Ziehen */
 function fsZoomApply(){ const z=FS.z||(FS.z={s:1,x:0,y:0}); if(!FS.on || z.s<=1.001){ z.s=1; z.x=0; z.y=0; sVid.style.transform=""; } else sVid.style.transform=`translate(${z.x}px,${z.y}px) scale(${z.s})`;
-  const zl=$("fsZl"); if(zl) zl.textContent=Math.round(z.s*100)+" %"; if(SA.meas) measDraw(); if(typeof drRender==="function") drRender(); }
+  const zl=$("fsZl"); if(zl && !FS.act) zl.textContent=Math.round(z.s*100)+" %"; if(SA.meas) measDraw(); if(typeof drRender==="function") drRender(); }
 function fsClampZ(){ const z=FS.z; if(!z) return; const r=$("sBox").getBoundingClientRect(); z.x=Math.min(0,Math.max(r.width*(1-z.s),z.x)); z.y=Math.min(0,Math.max(r.height*(1-z.s),z.y)); }
-function fsZoomAt(f,cx,cy){ if(!FS.on) return; const r=$("sBox").getBoundingClientRect(), z=FS.z; const px=(cx??r.left+r.width/2)-r.left, py=(cy??r.top+r.height/2)-r.top, ns=Math.min(8,Math.max(1,z.s*f));
+function fsZoomAt(f,cx,cy){ if(!FS.on) return; if(FS.act && FS.secs.includes(FS.act)){ fsSecZoom(FS.act,f,cx,cy); return; } const r=$("sBox").getBoundingClientRect(), z=FS.z; const px=(cx??r.left+r.width/2)-r.left, py=(cy??r.top+r.height/2)-r.top, ns=Math.min(8,Math.max(1,z.s*f));
   z.x=px-(px-z.x)*ns/z.s; z.y=py-(py-z.y)*ns/z.s; z.s=ns; fsClampZ(); fsZoomApply(); }
-function fsZoomReset(){ FS.z={s:1,x:0,y:0}; fsZoomApply(); }
+function fsZoomReset(){ if(FS.act && FS.secs.includes(FS.act)){ FS.act.z={s:1,x:0,y:0}; fsSecApply(FS.act); return; } FS.z={s:1,x:0,y:0}; fsZoomApply(); }
 function fsPan(dx,dy){ const z=FS.z; if(!FS.on||!z||z.s<=1) return false; z.x+=dx; z.y+=dy; fsClampZ(); fsZoomApply(); return true; }
-$("sBox").addEventListener("wheel",e=>{ if(!FS.on) return; e.preventDefault(); fsZoomAt(Math.exp(-e.deltaY*0.0015), e.clientX, e.clientY); },{passive:false});
+$("sBox").addEventListener("wheel",e=>{ if(!FS.on) return; e.preventDefault(); if(FS.act) fsAct(null); fsZoomAt(Math.exp(-e.deltaY*0.0015), e.clientX, e.clientY); },{passive:false});
 { let pd=null; const bx=$("sBox");
-  bx.addEventListener("pointerdown",e=>{ if(!FS.on || SA.meas || e.target.closest("#sMeasTip,#sMeasCtl") || !(FS.z&&FS.z.s>1)) return; pd={x:e.clientX,y:e.clientY}; bx.setPointerCapture(e.pointerId); bx.classList.add("pan"); });
+  bx.addEventListener("pointerdown",e=>{ if(FS.on && FS.act) fsAct(null); if(!FS.on || SA.meas || e.target.closest("#sMeasTip,#sMeasCtl") || !(FS.z&&FS.z.s>1)) return; pd={x:e.clientX,y:e.clientY}; bx.setPointerCapture(e.pointerId); bx.classList.add("pan"); });
   bx.addEventListener("pointermove",e=>{ if(!pd) return; fsPan(e.clientX-pd.x, e.clientY-pd.y); pd={x:e.clientX,y:e.clientY}; });
   const up=()=>{ pd=null; bx.classList.remove("pan"); }; bx.addEventListener("pointerup",up); bx.addEventListener("pointercancel",up); }
 $("fsZi").onclick=()=>fsZoomAt(1.25); $("fsZo").onclick=()=>fsZoomAt(1/1.25); $("fsZl").onclick=fsZoomReset;
@@ -4437,9 +4466,17 @@ async function fsAlign(S2){
   else { v.off=0; v.offAuto=false; }
   evSave(); fsSync(true); fsHint();
 }
+/* --- Ton je Video: Hauptvideo an, weitere Kameras aus; per Knopf umschalten (wird je Video gemerkt) --- */
+const SND_ON="🔊", SND_OFF="🔇";
+function sndMain(){ const v=SA.trialRef&&SA.trialRef.vid; return !!(v && v.mute); }
+function sndSave(){ try{ if(SA.mode==="quick") qkSave(); else if(SA.mode==="eval") evSave(); }catch(e){} }
+function sndBtn(b, muted){ b.textContent=muted?SND_OFF:SND_ON; b.title=muted?L("Ton einschalten","Turn sound on"):L("Ton ausschalten","Turn sound off"); b.classList.toggle("off",muted); }
+function sndUI(){ const b=$("sSnd"); if(!b) return; b.hidden=!SA.active; if(!SA.active) return; const m=sndMain(); sndBtn(b,m); if(!sVid.paused) sVid.muted=m; }
+$("sSnd").onclick=e=>{ e.stopPropagation(); const v=SA.trialRef&&SA.trialRef.vid; if(v){ v.mute=!v.mute; sndSave(); } else SA.muteX=!SA.muteX; sVid.muted=sndMain(); sndUI(); };
+$("sSnd").addEventListener("pointerdown",e=>e.stopPropagation());
 /* --- Kameras abgleichen: Startsignal nacheinander in jedem Video setzen, danach alle Videos gemeinsam prüfen und fein verschieben --- */
 const SY={on:false};
-function synBtn(){ const b=$("sSync"); if(!b) return; const n=((SA.trialRef&&SA.trialRef.vids2)||[]).length; b.hidden=!SA.active || !n; if(n) b.textContent="⇆ "+L(`Kameras abgleichen (${n+1})`,`Sync cameras (${n+1})`); }
+function synBtn(){ sndUI(); const b=$("sSync"); if(!b) return; const n=((SA.trialRef&&SA.trialRef.vids2)||[]).length; b.hidden=!SA.active || !n; if(n) b.textContent="⇆ "+L(`Kameras abgleichen (${n+1})`,`Sync cameras (${n+1})`); }
 function synAutoOpen(){ const tr=SA.trialRef, ss=SA.sess; if(!tr || !(tr.vids2||[]).length || (tr.sync&&tr.sync.done)) return; setTimeout(()=>{ if(SA.sess===ss && SA.active && !SY.on) synOpen(); },700); }
 async function synOpen(){ const tr=SA.trialRef; if(!tr || !(tr.vids2||[]).length || SY.on) return; if(!sVid.paused) sVid.pause();
   let d=$("synOv"); if(!d){ d=document.createElement("div"); d.id="synOv"; } (FS.on?$("fsOv"):document.body).appendChild(d); d.hidden=false; SY.on=true; SY.items=null; const tok=(SY.tok=(SY.tok||0)+1);
@@ -4522,10 +4559,11 @@ function synWave(x){ const c=$("synW"); if(!c) return; const dpr=devicePixelRati
   if(sp<D-0.01){ g.fillStyle="rgba(255,255,255,.7)"; g.font=`${11*dpr}px system-ui`; g.fillText((sp<2?Math.round(sp*1000)+" ms":sp.toFixed(1).replace(".",",")+" s"),6*dpr,13*dpr); } }
 function synCheck(){ const d=$("synOv"), it=SY.items; SY.phase="check";
   d.innerHTML=`<div class="cmphead"><b>${L("Abgleich prüfen","Check sync")}</b><span class="synhint" style="margin:0">${L("Alle Videos laufen über die Startsignale zeitgleich. Prüf es an einem gut sichtbaren Moment (z. B. Abflug oder Eintauchen) und verschieb bei Bedarf bildweise.","All videos run in sync via the start signals. Check at a clearly visible moment (e.g. take-off or entry) and shift frame by frame if needed.")}</span></div>
-    <div class="cmpgrid syngrid" style="grid-template-columns:repeat(${Math.min(it.length,3)},1fr)">${it.map((x,k)=>`<div class="cmpv"><video id="synC${k}" playsinline muted preload="auto" src="${x.url}"></video><i class="${k?"B":"A"}">${k+1}</i>${k?`<div class="synadj"><button type="button" data-fo="${k}" data-d="-1">−1</button><span id="synO${k}"></span><button type="button" data-fo="${k}" data-d="1">+1</button></div>`:""}</div>`).join("")}</div>
+    <div class="cmpgrid syngrid" style="grid-template-columns:repeat(${Math.min(it.length,3)},1fr)">${it.map((x,k)=>`<div class="cmpv"><video id="synC${k}" playsinline muted preload="auto" src="${x.url}"></video><i class="${k?"B":"A"}">${k+1}</i><button type="button" class="sndb${k?" off":""}" data-snd="${k}">${k?SND_OFF:SND_ON}</button>${k?`<div class="synadj"><button type="button" data-fo="${k}" data-d="-1">−1</button><span id="synO${k}"></span><button type="button" data-fo="${k}" data-d="1">+1</button></div>`:""}</div>`).join("")}</div>
     ${synStepBar()}
     <div class="cmpbar"><button type="button" id="synToSig">${L("Zum Startsignal","To start signal")}</button><button type="button" id="synBack">‹ ${L("Startsignale ändern","Change start signals")}</button><span style="margin-left:auto;display:flex;gap:6px"><button type="button" id="synX">${L("Abbrechen","Cancel")}</button><button type="button" id="synOk" class="synmain">✓ ${L("Übernehmen","Apply")}</button></span></div>`;
   SY.els=it.map((x,k)=>$("synC"+k)); SY.el=SY.els[0]; SY.els[0].muted=false; synBind();
+  d.querySelectorAll("[data-snd]").forEach(b=>b.onclick=()=>{ const e=SY.els[+b.dataset.snd]; e.muted=!e.muted; sndBtn(b,e.muted); });
   d.querySelectorAll("[data-fo]").forEach(b=>b.onclick=()=>{ const x=it[+b.dataset.fo]; x.fine=(x.fine||0)+(+b.dataset.d)/synFps(); synPause(); synFollow(true); synUI(); });
   $("synToSig").onclick=()=>{ synPause(); synTo(it[0].sig); }; $("synBack").onclick=()=>{ synPause(); SY.i=it.length-1; synStep(); }; $("synX").onclick=synClose;
   $("synOk").onclick=()=>{ const tr=SY.tr; tr.vids2.forEach((v,j)=>{ const x=it[j+1]; v.sig=x.sig+(x.fine||0); v.off=synOff(j+1); v.offAuto="sig"; }); tr.sync={main:it[0].sig, done:true};
