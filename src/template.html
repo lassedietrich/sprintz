@@ -4441,14 +4441,20 @@ const SY={on:false};
 function synBtn(){ const b=$("sSync"); if(!b) return; const n=((SA.trialRef&&SA.trialRef.vids2)||[]).length; b.hidden=!SA.active || !n; if(n) b.textContent="⇆ "+L(`Kameras abgleichen (${n+1})`,`Sync cameras (${n+1})`); }
 function synAutoOpen(){ const tr=SA.trialRef, ss=SA.sess; if(!tr || !(tr.vids2||[]).length || (tr.sync&&tr.sync.done)) return; setTimeout(()=>{ if(SA.sess===ss && SA.active && !SY.on) synOpen(); },700); }
 async function synOpen(){ const tr=SA.trialRef; if(!tr || !(tr.vids2||[]).length || SY.on) return; if(!sVid.paused) sVid.pause();
-  let d=$("synOv"); if(!d){ d=document.createElement("div"); d.id="synOv"; } (FS.on?$("fsOv"):document.body).appendChild(d); d.hidden=false; SY.on=true; d.innerHTML=`<div class="cmphead"><b>${L("Kameras werden geladen …","Loading cameras …")}</b></div>`;
+  let d=$("synOv"); if(!d){ d=document.createElement("div"); d.id="synOv"; } (FS.on?$("fsOv"):document.body).appendChild(d); d.hidden=false; SY.on=true; SY.items=null; const tok=(SY.tok=(SY.tok||0)+1);
+  d.innerHTML=`<div class="cmphead"><b>${L("Kameras werden geladen …","Loading cameras …")}</b><button type="button" id="synX">${L("Abbrechen","Cancel")}</button></div><p class="synhint" id="synLd"></p>`; $("synX").onclick=synClose; document.addEventListener("keydown",synKey,true);
   const vids=[{v:tr.vid, blob:null, main:true}, ...tr.vids2.map(v=>({v, blob:null}))];
-  for(const x of vids){ x.blob = x.main ? await (await fetch(SA.url)).blob() : await evBlobOf(x.v); }
+  try{ for(const x of vids){ x.blob=await evBlobOf(x.v); if(SY.tok!==tok) return;
+      // Desktop-Programm: bildgenaue Arbeitskopie nutzen (große 4K/HEVC-Dateien spielt der Browser sonst nicht flüssig oder gar nicht)
+      if(x.blob && DSK && DSK.proxy){ let fp=null; try{ fp=DSK.pathFor(x.blob); }catch(e){} if(fp){ const ld=$("synLd"); if(ld) ld.textContent=L(`Arbeitskopie für ${x.v.name||"Video"} …`,`Working copy for ${x.v.name||"video"} …`);
+        const off=DSK.onProgress(p=>{ if(p.file===fp && $("synLd")) $("synLd").textContent=L(`Arbeitskopie für ${x.v.name||"Video"}: ${Math.round(p.p*100)} %`,`Working copy for ${x.v.name||"video"}: ${Math.round(p.p*100)} %`); });
+        try{ const r=await DSK.proxy(fp); if(r && r.url) x.url=r.url; }catch(e){} off(); if(SY.tok!==tok) return; } } } }
+  catch(e){ blog("warn","synOpen: "+(e.message||e)); if(SY.tok!==tok) return; d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Die Videos konnten nicht geladen werden: ","The videos could not be loaded: ")}${esc(e.message||String(e))}</p>`; $("synX").onclick=synClose; return; }
   const miss=vids.filter(x=>!x.blob); if(miss.length){ d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Nicht auf diesem Gerät: ","Not on this device: ")}${miss.map(x=>esc(x.v.name||"?")).join(", ")}</p>`; $("synX").onclick=synClose; return; }
   const s0 = SA.marks.sig ?? (tr.sync&&tr.sync.main) ?? null;
-  SY.tr=tr; SY.i=0; SY.items=vids.map((x,k)=>({v:x.v, blob:x.blob, url:URL.createObjectURL(x.blob), main:!!x.main, sig: k===0 ? s0 : (x.v.sig ?? (x.v.off!=null && s0!=null ? s0+x.v.off : null)), cand:null, wave:null}));
-  document.addEventListener("keydown",synKey,true); blog("klick","Kameras abgleichen",{n:vids.length}); synStep(); }
-function synClose(){ const d=$("synOv"); if(d){ d.querySelectorAll("video").forEach(v=>{ try{ v.pause(); }catch(e){} }); d.hidden=true; d.innerHTML=""; } (SY.items||[]).forEach(x=>{ try{ URL.revokeObjectURL(x.url); }catch(e){} }); SY.items=null; SY.on=false; document.removeEventListener("keydown",synKey,true); synBtn(); }
+  SY.tr=tr; SY.i=0; SY.items=vids.map((x,k)=>({v:x.v, blob:x.blob, url:x.url||URL.createObjectURL(x.blob), own:!x.url, main:!!x.main, sig: k===0 ? s0 : (x.v.sig ?? (x.v.off!=null && s0!=null ? s0+x.v.off : null)), cand:null, wave:null}));
+  blog("klick","Kameras abgleichen",{n:vids.length}); synStep(); }
+function synClose(){ const d=$("synOv"); if(d){ d.querySelectorAll("video").forEach(v=>{ try{ v.pause(); }catch(e){} }); d.hidden=true; d.innerHTML=""; } (SY.items||[]).forEach(x=>{ try{ if(x.own) URL.revokeObjectURL(x.url); }catch(e){} }); SY.items=null; SY.on=false; SY.tok=(SY.tok||0)+1; document.removeEventListener("keydown",synKey,true); synBtn(); }
 const synFps=()=>sFps();
 function synStepBar(){ return `<div class="cmpbar"><button type="button" data-sf="-10">−10</button><button type="button" data-sf="-1">−1</button><button type="button" id="synPlay">▶</button><button type="button" data-sf="1">+1</button><button type="button" data-sf="10">+10</button><input type="range" id="synR" min="0" max="1000" value="0" style="flex:1;min-width:120px"><span id="synT" class="cmpt"></span></div>`; }
 // Schritt 1 … n: Startsignal in einem Video
@@ -4466,7 +4472,7 @@ async function synStep(){ const d=$("synOv"), it=SY.items, x=it[SY.i], n=it.leng
   $("synAuto").onclick=async()=>{ await synFind(x, true); if(x.cand&&x.cand.length){ x.sig=x.cand[0].t; v.currentTime=x.sig; } else toast(L("Kein Startsignal gefunden. Setze es von Hand.","No start signal found. Set it by hand."),3000); synUI(); };
   synBind(); v.addEventListener("loadedmetadata",()=>{ v.currentTime = x.sig ?? 0; synUI(); },{once:true});
   // Tonspur lesen und Kandidaten zeigen; ohne gesetztes Signal den wahrscheinlichsten vorschlagen
-  await synFind(x, false); if(SY.phase!=="sig" || SY.items!==it || it[SY.i]!==x) return;
+  try{ await synFind(x, false); }catch(e){} if(!SY.on || SY.phase!=="sig" || SY.items!==it || it[SY.i]!==x) return;
   if(x.sig==null && x.cand && x.cand.length){ x.sig=x.cand[0].t; if(v.readyState>0) v.currentTime=x.sig; } synUI(); }
 async function synFind(x, force){ if(x.wave && !force) return;
   try{ const buf=await readAudio(x.blob), rr=Math.min(24000,buf.sampleRate), raw=ds(buf,rr); { const ch=buf.getChannelData(0), n=Math.max(1,Math.round(buf.duration*400)), w=new Float32Array(n), st=ch.length/n; for(let i=0;i<n;i++){ let m=0; const a=Math.floor(i*st), z=Math.min(ch.length,Math.floor((i+1)*st)); for(let j=a;j<z;j+=4) m=Math.max(m,Math.abs(ch[j])); w[i]=m; } x.wave=w; } x.dur=buf.duration;
@@ -8043,12 +8049,19 @@ create or replace function public.sprintz_setup_status() returns text[] language
     select distinct p.proname::text n from pg_proc p join pg_namespace s on s.oid=p.pronamespace where s.nspname='public' and p.proname like 'sprintz\\_%'
     union select c.relname::text from pg_class c join pg_namespace s on s.oid=c.relnamespace where s.nspname='public' and c.relkind='r') x $$;
 revoke all on function public.sprintz_setup_status() from public, anon;
-grant execute on function public.sprintz_setup_status() to authenticated;`;
+grant execute on function public.sprintz_setup_status() to authenticated;
+-- Tabellenrechte für angemeldete Konten (neuere Supabase-Projekte vergeben sie nicht mehr von selbst; welche Zeilen jemand sieht, regeln weiter die Richtlinien)
+grant select, insert, update, delete on public.club_athletes, public.club_results to authenticated;
+grant select, delete on public.club_members to authenticated;
+grant select on public.account_roles to authenticated;`;
 const SETUP_FN=[["sprintz_my_clubs",{}],["sprintz_my_codes",{}],["sprintz_club_search",{q:"zz"}],["sprintz_my_requests",{}],["sprintz_club_requests",{}],["sprintz_dev_clubs",{}],["sprintz_dev_roles",{}]];
 const SETUP_FN2=["sprintz_create_club","sprintz_join_club","sprintz_register","sprintz_request_join","sprintz_answer_request","sprintz_dev_member","sprintz_dev_create_club","sprintz_dev_set_role","sprintz_dev_athlete"];
 async function setupCheck(){ const out=[]; try{ await sbReady(); }catch(e){ return null; }
   // zuverlässig: die Datenbank selbst fragen; nur wenn die Prüffunktion noch fehlt, einzeln abtasten
-  try{ const have=new Set(await sbFetch("/rest/v1/rpc/sprintz_setup_status",{method:"POST", body:{}})||[]); return [...SETUP_FN.map(x=>x[0]), ...SETUP_FN2, "club_requests","bug_reports","account_roles"].map(n=>[n, have.has(n)]); }catch(e){}
+  try{ const have=new Set(await sbFetch("/rest/v1/rpc/sprintz_setup_status",{method:"POST", body:{}})||[]); const r=[...SETUP_FN.map(x=>x[0]), ...SETUP_FN2, "club_requests","bug_reports","account_roles"].map(n=>[n, have.has(n)]);
+    // Leserechte auf den Tabellen (fehlen sie, meldet Supabase „permission denied“)
+    for(const t of ["club_athletes","club_results","club_members","account_roles"]){ try{ await sbFetch(`/rest/v1/${t}?select=*&limit=0`); r.push([L("Rechte: ","Rights: ")+t,true]); }catch(e){ r.push([L("Rechte: ","Rights: ")+t, !(e.code==="42501" || /permission denied/i.test(e.message||""))]); } }
+    return r; }catch(e){}
   // fehlt die Funktion ganz, meldet Supabase PGRST202 ohne Hinweis auf sie; mit falschen Angaben kommt ein Hinweis auf die vorhandene Funktion
   const probe=async(name,body)=>{ try{ await sbFetch("/rest/v1/rpc/"+name,{method:"POST", body}); return true; }catch(e){ if(e.code==="PGRST202"||e.status===404) return !!(e.hint && e.hint.includes(name+"(")); return true; } };
   for(const [n,b] of SETUP_FN) out.push([n, await probe(n,b)]);

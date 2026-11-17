@@ -169,7 +169,7 @@ ipcMain.handle('proxy', async (e, file) => {
       p.stderr.on('data', d => {
         const s = d.toString(), m = s.match(/Duration: (\d+):(\d+):([\d.]+)/); if (m) dur.v = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]);
         const t = [...s.matchAll(/time=(\d+):(\d+):([\d.]+)/g)].pop();
-        if (t && dur.v) { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]); e.sender.send('proxy-progress', { file, p: Math.min(1, sec / dur.v) }); }
+        if (t && dur.v) { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]); if (!e.sender.isDestroyed()) e.sender.send('proxy-progress', { file, p: Math.min(1, sec / dur.v) }); }
       });
       p.on('close', code => res(code === 0)); p.on('error', () => res(false));
     });
