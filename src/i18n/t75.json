@@ -1,0 +1,140 @@
+[
+[
+"Sync",
+"Eşitle",
+"Синхронизировать",
+"Synchroniseren"
+],
+[
+"Sync cameras ({0})",
+"Kameraları eşitle ({0})",
+"Синхронизировать камеры ({0})",
+"Camera's synchroniseren ({0})"
+],
+[
+"Loading cameras …",
+"Kameralar yükleniyor …",
+"Камеры загружаются …",
+"Camera's worden geladen …"
+],
+[
+"Sync cameras",
+"Kameraları eşitle",
+"Синхронизировать камеры",
+"Camera's synchroniseren"
+],
+[
+"Not on this device: ",
+"Bu cihazda yok: ",
+"Нет на этом устройстве: ",
+"Niet op dit apparaat: "
+],
+[
+"Start signal in video {0} of {1}",
+"Video {0} / {1} içinde başlama sinyali",
+"Стартовый сигнал в видео {0} из {1}",
+"Startsignaal in video {0} van {1}"
+],
+[
+"Find the frame or the peak in the audio track where the start signal is heard and set it. Then the next video follows.",
+"Başlama sinyalinin duyulduğu kareyi veya ses izindeki tepeyi bul ve işaretle. Ardından sonraki video gelir.",
+"Найди кадр или пик на звуковой дорожке, где слышен стартовый сигнал, и отметь его. Затем последует следующее видео.",
+"Zoek het beeld of de piek in het geluidsspoor waar het startsignaal te horen is en zet het. Daarna volgt de volgende video."
+],
+[
+"Set start signal here",
+"Başlama sinyalini buraya koy",
+"Поставить стартовый сигнал здесь",
+"Startsignaal hier zetten"
+],
+[
+"Check sync",
+"Eşitlemeyi kontrol et",
+"Проверить синхронизацию",
+"Synchronisatie controleren"
+],
+[
+"No start signal found. Set it by hand.",
+"Başlama sinyali bulunamadı. Elle işaretle.",
+"Стартовый сигнал не найден. Отметь его вручную.",
+"Geen startsignaal gevonden. Zet het met de hand."
+],
+[
+"to signal",
+"sinyale göre",
+"до сигнала",
+"tot signaal"
+],
+[
+"Set at {0}",
+"{0} konumunda işaretlendi",
+"Отмечено на {0}",
+"Gezet op {0}"
+],
+[
+"Not set yet",
+"Henüz işaretlenmedi",
+"Ещё не отмечено",
+"Nog niet gezet"
+],
+[
+"to start signal",
+"başlama sinyaline göre",
+"до стартового сигнала",
+"tot startsignaal"
+],
+[
+"Offset",
+"Kayma",
+"Смещение",
+"Verschuiving"
+],
+[
+"frames",
+"kare",
+"кадров",
+"beelden"
+],
+[
+"All videos run in sync via the start signals. Check at a clearly visible moment (e.g. take-off or entry) and shift frame by frame if needed.",
+"Tüm videolar başlama sinyalleri üzerinden eşzamanlı oynar. İyi görünen bir anda (ör. kalkış veya suya giriş) kontrol et ve gerekirse kare kare kaydır.",
+"Все видео идут синхронно по стартовым сигналам. Проверь в хорошо видимый момент (например, отрыв или вход в воду) и при необходимости сдвинь покадрово.",
+"Alle video's lopen gelijk via de startsignalen. Controleer het op een goed zichtbaar moment (bijv. afzet of intreden) en verschuif zo nodig beeld voor beeld."
+],
+[
+"To start signal",
+"Başlama sinyaline git",
+"К стартовому сигналу",
+"Naar startsignaal"
+],
+[
+"Change start signals",
+"Başlama sinyallerini değiştir",
+"Изменить стартовые сигналы",
+"Startsignalen wijzigen"
+],
+[
+"Apply",
+"Uygula",
+"Применить",
+"Toepassen"
+],
+[
+"Cameras synced. In full screen they now run side by side in sync.",
+"Kameralar eşitlendi. Tam ekranda artık yan yana eşzamanlı oynuyorlar.",
+"Камеры синхронизированы. В полноэкранном режиме они теперь идут рядом синхронно.",
+"Camera's gesynchroniseerd. Op volledig scherm lopen ze nu naast elkaar gelijk."
+],
+[
+"Video {0}: synced via the set start signals",
+"Video {0}: işaretlenen başlama sinyalleriyle eşitlendi",
+"Видео {0}: синхронизировано по отмеченным стартовым сигналам",
+"Video {0}: gesynchroniseerd via de gezette startsignalen"
+],
+[
+"frame",
+"kare",
+"кадр",
+"beeld"
+]
+]
