@@ -1,0 +1,8 @@
+[
+["Kicks ({0})","Bacak vuruşları ({0})","Удары ногами ({0})","Beenslagen ({0})"],
+["Breaths ({0})","Nefesler ({0})","Вдохи ({0})","Ademhalingen ({0})"],
+["Velocity","Hız","Скорость","Snelheid"],
+["Stroke rate (cycles/min, scale inside right)","Kulaç frekansı (döngü/dk, ölçek sağ içte)","Темп (циклов/мин, шкала справа внутри)","Slagfrequentie (cycli/min, schaal rechts binnen)"],
+["Number of strokes (cycles)","Kulaç sayısı (döngü)","Количество гребков (циклов)","Aantal slagen (cycli)"],
+["Number of breaths","Nefes sayısı","Количество вдохов","Aantal ademhalingen"]
+]
