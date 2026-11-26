@@ -22,7 +22,8 @@
   "src": "Arellano, Domínguez-Castells & Pérez-Infantes (2010), Biomechanics and Medicine in Swimming XI; Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-abschlag",
@@ -46,7 +47,10 @@
   "src": "Schnitzler, Seifert, Ernwein & Chollet (2008), Int J Sports Med 29, 480–487; Arellano, Domínguez-Castells & Pérez-Infantes (2010), Biomechanics and Medicine in Swimming XI",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "board"
+  ]
  },
  {
   "id": "r-seitlage-wechsel",
@@ -74,7 +78,11 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "fins",
+   "snork"
+  ]
  },
  {
   "id": "r-vert-delfin",
@@ -100,7 +108,10 @@
   "prog": "Arme an der Brust → Arme in Streamline über Wasser → Zusatzgewicht mit gestreckten Armen über Wasser. Dauer und Frequenz steigern. Direkt danach 15 m Delfin in Streamline zur Übertragung.",
   "src": "Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton; Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "other"
+  ]
  },
  {
   "id": "r-vert-kraul",
@@ -125,7 +136,10 @@
   "prog": "Arme helfen mit → Arme an der Brust → Streamline → mit Zusatzgewicht. Abschnitte verlängern. Danach Kraulbeine in Streamline zur Übertragung.",
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "other"
+  ]
  },
  {
   "id": "r-delfin-seite",
@@ -151,7 +165,10 @@
   "src": "Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton; Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
  },
  {
   "id": "r-kraul-seite",
@@ -178,7 +195,11 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "fins",
+   "snork"
+  ]
  },
  {
   "id": "r-rueckenbeine-sl",
@@ -203,7 +224,10 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
  },
  {
   "id": "r-kraulbeine-sl",
@@ -229,7 +253,11 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "snork",
+   "fins"
+  ]
  },
  {
   "id": "r-social-kick",
@@ -253,7 +281,8 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-delfin-ruecken",
@@ -280,7 +309,11 @@
   "prog": "An der Oberfläche → unter Wasser → bis zur 15-m-Marke. Mit Flossen → ohne. Lagewechsel-Kicken (Bauch – Seite – Rücken).",
   "src": "Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton; Technische Ausdifferenzierung Rückenstart (L. Dietrich)",
   "sport": "swim",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "fins",
+   "other"
+  ]
  },
  {
   "id": "r-wende-abstand",
@@ -304,7 +337,8 @@
   "src": "David et al. (2022), Frontiers in Sports and Active Living 4: 936695",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-wende-flach",
@@ -326,7 +360,8 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-sterne",
@@ -350,13 +385,15 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-faust",
   "name": "Faustschwimmen (Kraul)",
   "cat": [
    "free",
+   "feel",
    "pull",
    "var"
   ],
@@ -375,13 +412,15 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-badewanne-torpedo",
   "name": "Badewanne / Torpedo",
   "cat": [
    "pull",
+   "feel",
    "coord",
    "body"
   ],
@@ -399,13 +438,15 @@
   "src": "Grundfiguren des Synchronschwimmens (Bitte prüfen: so habe ich die Übung verstanden)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-sculling",
   "name": "Sculling (Skullen)",
   "cat": [
    "pull",
+   "feel",
    "coord"
   ],
   "level": [
@@ -424,7 +465,10 @@
   "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "buoy"
+  ]
  },
  {
   "id": "r-blockjump",
@@ -437,6 +481,7 @@
    "adv"
   ],
   "equip": [
+   "none",
    "blocks"
   ],
   "desc": "Du stehst auf dem Block oder am Beckenrand, die Füße hüftbreit, die Zehen über der Kante. Du machst 2–3 Kniebeugen mit Armschwung, um Schwung zu holen, und springst dann mit voll gestrecktem Körper fußwärts ins Wasser. Varianten: Arme an der Seite, Arme in Streamline, oder Streamline-Sprung mit anschließenden Delfinkicks vom Beckenboden.",
@@ -446,7 +491,10 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "blocks"
+  ]
  },
  {
   "id": "r-hands-head",
@@ -468,7 +516,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-single-leg",
@@ -490,7 +539,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-pullbuoy-dive",
@@ -514,7 +564,10 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "board"
+  ]
  },
  {
   "id": "r-weight-slides",
@@ -535,7 +588,8 @@
   "prog": "Leichtes Gewicht → höheres Gewicht. Danach direkt normale Starts mit demselben Armgefühl.",
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-eddie",
@@ -557,7 +611,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-arm-motion",
@@ -578,7 +633,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-flyover-stand",
@@ -600,7 +656,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-donkey",
@@ -622,7 +679,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-mule-kick",
@@ -644,7 +702,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-abkipp",
@@ -667,7 +726,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-target",
@@ -690,7 +750,8 @@
   "prog": "Nudel nah und niedrig → weiter und höher. Reifen größer → kleiner.",
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-standing-jumps",
@@ -712,7 +773,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-hip-lift",
@@ -734,7 +796,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-dive-glide",
@@ -750,6 +813,7 @@
    "exp"
   ],
   "equip": [
+   "none",
    "blocks"
   ],
   "desc": "Du machst einen vollen Wettkampfstart (oder stößt dich von der Wand ab) und hältst danach die perfekte, starre Streamline: Hände fest übereinander, Kopf zwischen den Oberarmen, Rumpf angespannt, Zehen gestreckt. Keine Beinschläge, keine Armzüge – du gleitest, bis du fast stehst oder Luft brauchst. Gemessen wird die Gleitweite.",
@@ -759,7 +823,10 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "blocks"
+  ]
  },
  {
   "id": "r-delfin-zughilfe",
@@ -781,7 +848,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-delfin-widerstand",
@@ -805,7 +873,10 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "chute"
+  ]
  },
  {
   "id": "r-delfin-variation",
@@ -831,7 +902,10 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
  },
  {
   "id": "r-delfin-zahl",
@@ -856,7 +930,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-delfin-einarm",
@@ -881,7 +956,10 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
  },
  {
   "id": "r-delfin-kopf",
@@ -907,7 +985,8 @@
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
   "sport": "swim",
   "equipOther": "",
-  "link": ""
+  "link": "",
+  "equipOpt": []
  },
  {
   "id": "r-delfin-tiefe",
@@ -933,6 +1012,662 @@
   "prog": "Abstoß von der Wand → nach Startsprung. Mit Unterwasservideo kontrollieren (Sprintz).",
   "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
   "sport": "swim",
-  "link": ""
+  "link": "",
+  "equipOpt": [
+   "other"
+  ]
+ },
+ {
+  "id": "r-brust-delfin",
+  "name": "Brust mit Delfinbeinschlag",
+  "cat": [
+   "breast",
+   "coord",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du schwimmst Brustarmzug, aber statt des Brustbeinschlags machst du einen Delfinbeinschlag. Der Kick kommt in dem Moment, in dem die Hände nach dem Zug wieder nach vorne schießen und du dich in die Streckung legst. Der Kopf geht zum Atmen hoch und taucht mit dem Vorschieben der Arme wieder ab, sodass eine Welle durch den Körper läuft.",
+  "goal": "Gefühl für die wellenförmige Bewegung im modernen Brustschwimmen: Hüfte hoch, Oberkörper taucht nach vorne-unten ein, und der Schwung wird in die Gleitphase mitgenommen. Gleichzeitig wird das Timing geschult, denn der Antrieb der Beine muss genau in die Streckung fallen.",
+  "errors": "Der Kick kommt während des Armzugs statt beim Vorschieben der Arme. – Die Welle ist zu groß, man taucht zu tief ab. – Die Arme machen keine Pause in der Streckung. – Die Knie werden stark angezogen (eher Brust- als Delfinbewegung).",
+  "prog": "Mit Flossen → ohne. Im Wechsel: 2 Züge mit Delfinkick, 2 Züge normal Brust. Danach ganze Lage und bewusst dieselbe Welle beibehalten.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de; Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": [
+   "fins"
+  ]
+ },
+ {
+  "id": "r-kraul-delfin",
+  "name": "Kraul mit Delfinbeinschlag",
+  "cat": [
+   "free",
+   "coord",
+   "body",
+   "kick"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Die Arme schwimmen normal Kraul, die Beine machen Delfinbeinschlag statt Kraulbeinschlag. Pro Armzug ein Delfinkick, also zwei Kicks pro Armzyklus. Der Kick kommt jeweils, wenn eine Hand vorne ins Wasser eintaucht.",
+  "goal": "Rhythmusgefühl zwischen Armen und Beinen, Rumpfspannung und Kraftausdauer. Der Wechsel der Beinarbeit zwingt dazu, Arm- und Beinbewegung bewusst aufeinander abzustimmen.",
+  "errors": "Kicks und Armzüge laufen unabhängig voneinander. – Die Delfinwelle wird so groß, dass der Körper auf und ab schaukelt. – Die Drehung um die Längsachse geht verloren, weil der Körper flach bleibt. – Atmung mit angehobenem Kopf.",
+  "prog": "Mit Flossen → ohne. Abschnitte im Wechsel mit Kraulbeinschlag. Sprintabschnitte über 12,5 m.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
+ },
+ {
+  "id": "r-ruecken-delfin",
+  "name": "Rücken mit Delfinbeinschlag",
+  "cat": [
+   "back",
+   "coord",
+   "body",
+   "kick"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Die Arme schwimmen normal Rücken, die Beine machen Delfinbeinschlag. Pro Armzug ein Delfinkick, der Kick kommt beim Eintauchen der Hand. Die Hüfte bleibt hoch, der Kopf ruhig.",
+  "goal": "Rumpfspannung und Wasserlage in Rückenlage, Abstimmung von Armzug und Beinantrieb und eine kräftige Hüftbewegung – nützlich auch für den Übergang nach Start und Wende.",
+  "errors": "Die Hüfte sackt ab, man „sitzt“ im Wasser. – Die Knie brechen durch die Oberfläche. – Der Kopf nickt mit jedem Kick. – Die Rotation um die Längsachse geht verloren.",
+  "prog": "Mit Flossen → ohne. Im Wechsel mit Rückenbeinschlag. Am Ende einer Bahn ohne Rhythmusbruch in Kraulbeinschlag wechseln.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
+ },
+ {
+  "id": "r-brust-ueberkreuz",
+  "name": "Überkreuz-Brustschwimmen",
+  "cat": [
+   "breast",
+   "coord"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Arme und Beine arbeiten über Kreuz: Der rechte Arm macht einen halben Brustarmzug, gleichzeitig führt das linke Bein einen halben Brustbeinschlag aus. Danach wechseln: linker Arm mit rechtem Bein. Arm und Bein, die gerade nicht arbeiten, bleiben ruhig gestreckt.",
+  "goal": "Feines Gefühl für die Koordination von Arm- und Beinarbeit. Weil jeweils nur eine Hälfte arbeitet, merkst du direkt, ob die Bewegung Vortrieb bringt.",
+  "errors": "Der ruhende Arm oder das ruhende Bein ist nicht gestreckt, dadurch geht die Rückmeldung verloren. – Arm und Bein arbeiten nacheinander statt im richtigen Ablauf. – Der Körper dreht sich zur Seite.",
+  "prog": "Langsam mit Gleitphase → flüssig. Erschwert: Der ruhende Arm greift hinter dem Rücken das angewinkelte ruhende Bein.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-kraul-ueberkreuz",
+  "name": "Überkreuz-Kraulschwimmen",
+  "cat": [
+   "free",
+   "coord",
+   "kick"
+  ],
+  "level": [
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du schwimmst einarmig Kraul, und nur das gegenüberliegende Bein schlägt: rechter Arm mit linkem Bein, dann wechseln. Das andere Bein liegt ruhig gestreckt, der Pausenarm liegt vorne. (Bitte prüfen, ob du diese Variante meinst.)",
+  "goal": "Bewusstsein für die diagonale Verbindung von Arm und Bein über den Rumpf und für eine stabile Wasserlage, obwohl nur zwei Gliedmaßen arbeiten.",
+  "errors": "Das ruhende Bein sinkt ab oder schlägt doch mit. – Der Körper verdreht sich, weil der Rumpf nicht stabil ist. – Der Beinschlag wird zur breiten Schere.",
+  "prog": "Mit Flossen → ohne. Seiten nach 12,5 m wechseln. Danach ganze Lage mit Blick auf die diagonale Spannung.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
+ },
+ {
+  "id": "r-kraul-einbein",
+  "name": "Kraulbeine einbeinig",
+  "cat": [
+   "free",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "board",
+   "fins"
+  ],
+  "desc": "Beim Kraulbeinschlag kickt nur ein Bein, das andere liegt ruhig gestreckt. Schwerer: Das ruhende Bein wird im Knie angewinkelt, sodass der Unterschenkel senkrecht nach oben zeigt. Das erzeugt mehr Widerstand, und das arbeitende Bein muss mehr leisten. Als Steigerung baust du das in die ganze Lage ein: Kraul schwimmen, aber nur ein Bein kickt.",
+  "goal": "Jedes Bein einzeln stärken und Seitenunterschiede erkennen. Das schwächere Bein lässt sich so gezielt trainieren. In der ganzen Lage wird zusätzlich die Rumpfstabilität gefordert.",
+  "errors": "Der Kick kommt aus dem Knie statt aus der Hüfte. – Das ruhende Bein schlägt heimlich mit. – Die Hüfte kippt zur Seite des angewinkelten Beins. – Bei der ganzen Lage geht der Rhythmus der Arme verloren.",
+  "prog": "Mit Brett und Flossen → ohne Flossen → ruhendes Bein angewinkelt → in Streamline → in der ganzen Lage.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": [
+   "board",
+   "fins"
+  ]
+ },
+ {
+  "id": "r-brust-beine-ruecken",
+  "name": "Brustbeine mit Armen hinter dem Rücken",
+  "cat": [
+   "breast",
+   "kick",
+   "breath",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Die Hände liegen auf dem Gesäß, die Arme sind gestreckt. Du schwimmst nur mit dem Brustbeinschlag. Zum Atmen hebst du den Kopf genau dann, wenn der Beinschlag dich nach vorne schiebt. Beim Anziehen der Beine sollen die Fersen die Fingerspitzen kurz berühren.",
+  "goal": "Wirkung und Timing des Beinschlags verbessern: Der Schub der Beine wird zum Atmen genutzt. Außerdem lernst du, die Fersen nah zum Gesäß zu führen, ohne die Knie unter den Bauch zu ziehen, und die Wasserlage stabil zu halten.",
+  "errors": "Die Knie werden unter den Bauch gezogen, die Hüfte sinkt. – Die Fersen erreichen die Finger nicht. – Atmung zur falschen Zeit, dadurch Stillstand. – Die Füße sind beim Ausschlagen nicht nach außen gedreht.",
+  "prog": "Mit Atmung bei jedem Beinschlag → nur jeden zweiten → Streamline vorne statt Armen hinten.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-brust-ueber-unter",
+  "name": "Brust Über-/Unterwasser-Kombination",
+  "cat": [
+   "breast",
+   "uw",
+   "coord"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst abwechselnd einen normalen Brustzug und einen kompletten Tauchzug unter Wasser (langer Armzug bis zu den Oberschenkeln, ein Delfinkick, Arme vorschieben, Brustbeinschlag). Varianten: 2 Züge oben, 2 Tauchzüge.",
+  "goal": "Wechsel zwischen Überwasser-Rhythmus und Tauchzug, besseres Gleiten und Streamline-Gefühl. Der Tauchzug wird nebenbei für Start und Wende geübt.",
+  "errors": "Der Tauchzug wird zu flach oder zu tief. – Kopf hebt sich im Tauchzug. – Die zweite Gleitphase an den Oberschenkeln wird ausgelassen. – Beim Auftauchen fehlt der Schwung für den nächsten Zug.",
+  "prog": "1:1 → 2:2 → mehrere Tauchzüge am Stück. Mit Zugzahl und Zeit pro Bahn.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-indianer",
+  "name": "3er-Wechsel Kraul/Rücken („Indianerschwimmen“)",
+  "cat": [
+   "free",
+   "back",
+   "body",
+   "coord",
+   "im"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du schwimmst 3 Züge Kraul, drehst dich dann um die Längsachse auf den Rücken und schwimmst 3 Züge Rücken, dann wieder auf den Bauch – immer abwechselnd. Die Drehung entsteht aus dem Armzug heraus, die Beine kicken ohne Pause weiter.",
+  "goal": "Rotation um die Längsachse, Orientierung im Wasser und eine stabile Wasserlage in beiden Lagen. Der Wechsel bringt Abwechslung und schult die Koordination.",
+  "errors": "Die Drehung wird mit einer Pause gemacht, der Beinschlag bleibt stehen. – Der Kopf geht beim Drehen hoch. – Die Hüfte dreht nicht mit, nur die Schultern. – In Rückenlage sackt die Hüfte ab.",
+  "prog": "Mit Flossen → ohne. 3er-Wechsel → 2er-Wechsel → 1er-Wechsel (jeder Zug eine Drehung).",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": [
+   "fins"
+  ]
+ },
+ {
+  "id": "r-brust-zugbreite",
+  "name": "Brust: Wechsel der Zugbreite",
+  "cat": [
+   "breast",
+   "pull",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Im normalen Rhythmus wechselst du zwischen einem sehr breiten und einem sehr engen Armzug. Dazwischen auch mal deinen normalen Zug schwimmen und vergleichen.",
+  "goal": "Durch den Unterschied zwischen breit und eng spürst du, welche Zugbreite für dich den meisten Vortrieb bringt. Das schärft das Gefühl für den eigenen Armzug (Differenzerfahrung).",
+  "errors": "Breit und eng unterscheiden sich kaum. – Der breite Zug geht nach hinten über die Schultern hinaus. – Der Rhythmus von Arm und Bein geht verloren.",
+  "prog": "Abwechselnd → in Abschnitten von 4 Zügen. Mit Zugzahl und Zeit über 25 m vergleichen.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de; Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-brust-beinwechsel",
+  "name": "Brustarmzug mit wechselnder Beinarbeit",
+  "cat": [
+   "breast",
+   "coord",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "buoy"
+  ],
+  "desc": "Die Arme schwimmen Brust, die Beine wechseln: mal Brustbeinschlag, mal Kraulbeinschlag, mal Delfinbeinschlag, mal gar nichts (mit Pullbuoy). Teilweise mit langer Gleitphase.",
+  "goal": "Feingefühl für die Abstimmung von Armen und Beinen: Durch die wechselnden Beine merkst du, wann im Brustzyklus der Beinantrieb kommen muss.",
+  "errors": "Die Beine laufen unabhängig von den Armen. – Die Gleitphase fehlt. – Der Kopf bleibt zu lange oben.",
+  "prog": "Je 25 m eine Variante → innerhalb einer Bahn wechseln → zurück zur normalen Brustlage.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de; Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": [
+   "buoy"
+  ]
+ },
+ {
+  "id": "r-brust-beine-rueckenlage",
+  "name": "Brustbeinschlag in Rückenlage",
+  "cat": [
+   "breast",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "board"
+  ],
+  "desc": "Du liegst auf dem Rücken, die Arme gestreckt über dem Kopf oder ein Brett auf der Brust. Du machst Brustbeinschläge so, dass die Knie die Wasseroberfläche nicht durchbrechen: Die Fersen sinken nach unten, die Hüfte bleibt gestreckt, und der Schlag kommt als kräftiger Kick nach hinten.",
+  "goal": "Ein kräftigerer, wirksamerer Beinschlag mit stabiler Hüfte. Weil du die Knie sehen kannst, merkst du sofort, wenn du sie zu stark anziehst.",
+  "errors": "Die Knie kommen aus dem Wasser (Hüfte wird gebeugt). – Die Füße sind beim Ausschlagen nicht nach außen gedreht. – Die Beine schließen sich am Ende nicht. – Die Hüfte sackt ab.",
+  "prog": "Mit Brett auf der Brust → Arme an der Seite → Arme gestreckt über dem Kopf.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": [
+   "board"
+  ]
+ },
+ {
+  "id": "r-zeitlupe",
+  "name": "Zeitlupenkraul",
+  "cat": [
+   "free",
+   "coord",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "buoy",
+   "snork"
+  ],
+  "desc": "Du schwimmst Kraul extrem langsam, über und unter Wasser – jede Phase so langsam, wie es geht, ohne die Wasserlage zu verlieren. Die Beine schlagen ruhig weiter.",
+  "goal": "Je langsamer die Bewegung, desto schwerer ist es, Technik und Wasserlage zu halten. Dadurch werden technische Schwächen sichtbar und du lernst jede Phase des Armzugs genau kennen.",
+  "errors": "Die Hüfte sinkt ab, sobald das Tempo fällt. – Langsam heißt nicht ungenau: Die Hand rutscht durch oder der Ellbogen fällt. – Kopf hebt sich zur Atmung.",
+  "prog": "Mit Pullbuoy oder Schnorchel → ohne. Langsam → normal → schnell im Wechsel bei gleicher Technik.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": [
+   "buoy",
+   "snork"
+  ]
+ },
+ {
+  "id": "r-stopp-kraul",
+  "name": "Stopp-Kraul",
+  "cat": [
+   "free",
+   "coord",
+   "pull",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du schwimmst Kraul und hältst den Arm an festen Punkten kurz an (z. B. „21-22“): nach dem Eintauchen in der Streckung, beim Fassen mit hohem Ellbogen, unter der Schulter und an der Hüfte. Variante „Liegenlassen“: nach 3 Zügen einen Arm vorne und einen hinten gestreckt liegen lassen, bis 23 zählen, dann weiter. Die Beine kicken immer weiter. (Bitte prüfen, ob du diese Variante meinst.)",
+  "goal": "Jede Position des Armzugs bewusst einnehmen und kontrollieren. Die Pausen schulen außerdem eine stabile Wasserlage, wenn kein Arm Vortrieb liefert.",
+  "errors": "In der Pause sinken Hüfte und Beine ab. – Die Positionen werden ungenau eingenommen. – Der Beinschlag stoppt mit.",
+  "prog": "Mit Flossen → ohne. Ein Stopp-Punkt → mehrere. Danach ganze Lage ohne Stopp mit denselben Positionen.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": [
+   "fins"
+  ]
+ },
+ {
+  "id": "r-fussschlinge",
+  "name": "Kraul mit Fußschlinge",
+  "cat": [
+   "free",
+   "pull",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "strap"
+  ],
+  "desc": "Die Fußgelenke werden mit einer Schlinge zusammengebunden, ohne Pullbuoy. Du schwimmst nur mit den Armen, kurze Strecken bis höchstens 25 m. Versuche, die Füße trotzdem nahe an die Oberfläche zu bringen.",
+  "goal": "Kraft in den Armen und vor allem Rumpfstabilität: Ohne Pullbuoy sinken die Beine, wenn die Spannung fehlt. Eine Grundlage für schnelles Schwimmen und gute Technik.",
+  "errors": "Die Beine hängen tief, man schwimmt „bergauf“. – Hohlkreuz statt fester Rumpf. – Die Frequenz wird hektisch, um nicht zu sinken.",
+  "prog": "12,5 m → 25 m. Mit Pullbuoy beginnen, wenn nötig. Schwerer mit Paddles.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-tischtennis",
+  "name": "Kraul mit Tischtennisball",
+  "cat": [
+   "free",
+   "feel",
+   "pull",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "other"
+  ],
+  "equipOther": "Tischtennisbälle",
+  "desc": "Du hältst in jeder Hand einen Tischtennisball fest und schwimmst Kraul. Dadurch ist die Handfläche kleiner, und du musst mehr mit dem Unterarm ziehen. Der Ball soll möglichst lange in der Hand bleiben. Ähnlich wie Faustschwimmen; als Gruppenübung ein lustiger Wettbewerb.",
+  "goal": "Den Unterarm als wichtige Antriebsfläche spüren und in den Zug einbauen. Wer den Ball danach weglegt, merkt den Unterschied deutlich (Kontrast).",
+  "errors": "Der Ellbogen fällt nach unten. – Die Hand verkrampft so stark, dass die Schulter fest wird. – Die Frequenz steigt, ohne mehr Vortrieb.",
+  "prog": "25 m mit Ball / 25 m ohne Ball im Wechsel. Weiter mit Faustschwimmen oder Unterarm-Paddles.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOpt": []
+ },
+ {
+  "id": "r-kraul-rueckwaerts",
+  "name": "Kraul rückwärts",
+  "cat": [
+   "free",
+   "feel",
+   "back",
+   "coord",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du liegst auf dem Rücken und schwimmst die Kraul-Armbewegung, aber rückwärts: Die Arme kommen über Wasser von hinten nach vorne zum Kopf, und der Zug geht unter Wasser mit Handrücken und Unterarm. Die Beine kicken in Rückenlage weiter. Die stabile Wasserlage ist das Wichtigste.",
+  "goal": "Ein Klassiker für Fortgeschrittene: neue Bewegungsrichtung, Wassergefühl an Handrücken und Unterarm und eine stabile Wasserlage unter ungewohnten Bedingungen.",
+  "errors": "Die Hüfte sackt ab. – Der Kopf hebt sich, um zu schauen. – Die Arme schlagen hektisch statt gezielt zu drücken. – Nicht aufgeben, wenn es am Anfang nicht klappt.",
+  "prog": "Kurze Strecken mit Flossen → ohne. Langsam → flüssig.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-var-ellbogen",
+  "name": "Kraul-Armzug mit variierter Ellbogenbeugung",
+  "cat": [
+   "free",
+   "feel",
+   "pull",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "buoy"
+  ],
+  "desc": "Du schwimmst Kraul und veränderst bewusst, wie stark du den Ellbogen beim Zug unter Wasser beugst: ein Stück mit ganz gestrecktem Arm (wie „Bodenkratzen“), ein Stück mit maximal angewinkeltem Arm (Hand dicht unter dem Körper), ein Stück leicht angewinkelt. Zum Beispiel je 4 Züge, dann wechseln, oder je 25 m.",
+  "goal": "Differenzerfahrung: Indem du deutlich andere Varianten ausprobierst, spürst du selbst, welche Beugung dir den meisten Vortrieb bringt, und findest deine eigene Lösung, statt nur ein Idealbild nachzumachen.",
+  "errors": "Die Varianten werden zu vorsichtig ausgeführt, der Unterschied ist kaum spürbar. – Es wird nur eine Variante lang geschwommen. – Hinweis: Die Übung soll die Bewegung variieren, nicht die „falschen“ Varianten einschleifen.",
+  "prog": "Mit Pullbuoy → ohne. Feste Reihenfolge → zufällige Reihenfolge auf Zuruf. Zugzahl und Zeit pro Variante vergleichen.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de (Bodenkratzen als Kontrastübung); Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": [
+   "buoy"
+  ]
+ },
+ {
+  "id": "r-var-hand",
+  "name": "Kraul mit variierter Handstellung",
+  "cat": [
+   "free",
+   "feel",
+   "pull",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst Kraul und veränderst die Hand: Finger leicht gespreizt, Finger fest geschlossen, Hand zur Faust, Handgelenk gebeugt, Handgelenk gestreckt, Daumen abgespreizt. Je ein paar Züge oder eine halbe Bahn pro Variante.",
+  "goal": "Gefühl dafür, wie die Hand das Wasser fasst und wie viel Druck welche Stellung aufbaut. Die Unterschiede schärfen das Wassergefühl.",
+  "errors": "Varianten zu ähnlich. – Andere Teile der Technik ändern sich unbemerkt mit.",
+  "prog": "Zwei Varianten im Wechsel → viele Varianten → zufällig auf Zuruf.",
+  "src": "Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-var-beinrhythmus",
+  "name": "Kraul mit wechselndem Beinschlagrhythmus",
+  "cat": [
+   "free",
+   "kick",
+   "coord",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst Kraul und änderst, wie viele Beinschläge auf einen Armzyklus kommen: 2er-, 4er- und 6er-Beinschlag im Wechsel, z. B. je 25 m.",
+  "goal": "Bewusstsein für die Abstimmung zwischen Armen und Beinen und für den eigenen Rhythmus. Sprinter*innen schwimmen meist mit 6er-Beinschlag, auf längeren Strecken ist der 2er-Beinschlag häufig.",
+  "errors": "Der Rhythmus der Arme passt sich nicht an. – Der 2er-Beinschlag wird zum Nachziehen der Beine. – Die Wasserlage verändert sich stark.",
+  "prog": "Getrennte Bahnen → Wechsel innerhalb einer Bahn → auf Zuruf.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics; Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-var-kopf-kraul",
+  "name": "Kraul mit variierter Kopfhaltung",
+  "cat": [
+   "free",
+   "body",
+   "breath",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst Kraul und veränderst die Kopfhaltung: Blick senkrecht nach unten, Blick schräg nach vorne, Kinn zur Brust, Kopf ganz hoch (Wasserballkraul). Je ein Stück, dann wechseln.",
+  "goal": "Spüren, wie stark die Kopfhaltung die Lage der Hüfte und Beine beeinflusst, und die eigene beste Position finden.",
+  "errors": "Die Unterschiede sind zu klein. – Die extreme Variante wird zu lang geschwommen.",
+  "prog": "Zwei Varianten → mehrere. Zum Schluss immer die eigene beste Haltung.",
+  "src": "Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "sport": "swim",
+  "equipOther": "",
+  "link": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-kraul-paddeltechnik",
+  "name": "Kraul „Paddel-Technik“",
+  "cat": [
+   "free",
+   "coord",
+   "pull"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Wie beim Kanufahren: Eine Hand taucht vorne ein, während die andere hinten aus dem Wasser kommt. Die Arme stehen sich also immer ungefähr gegenüber.",
+  "goal": "Gleichmäßiger Vortrieb ohne Lücken zwischen den Armzügen – das Gegenteil des Abschlagschwimmens und eher die Koordination, die im Sprint gebraucht wird.",
+  "errors": "Die Arme rutschen doch in einen Abschlag-Rhythmus. – Die Rotation wird hektisch und unsauber.",
+  "prog": "Langsam → Wettkampftempo.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-kraul-arme-beine",
+  "name": "Kraul Arme-/Beine-Wechsel",
+  "cat": [
+   "free",
+   "pull",
+   "kick"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "board"
+  ],
+  "desc": "25 m Kraulbeine mit Brett, dann das Brett zwischen die Beine klemmen (statt Pullbuoy) und 25 m Kraularme im Sprint. Mehrfach wiederholen.",
+  "goal": "Arme und Beine einzeln gezielt belasten, damit jeder Antrieb für sich wirksamer wird.",
+  "errors": "Die Beine treten bei den Armen heimlich mit. – Kopf hoch bei den Beinen, dadurch schlechte Lage.",
+  "prog": "Mehr Wiederholungen. Abschnitte im Sprint.",
+  "src": "Lüning, H. (2015/2023): 8 Technikübungen für das Kraulschwimmen. swim.de",
+  "link": "https://swim.de/training/8-technikuebungen-fuer-das-kraulschwimmen-59545/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
+ },
+ {
+  "id": "r-brust-gleiten",
+  "name": "Brust mit langer Gleitphase (Golf-Score)",
+  "cat": [
+   "breast",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst Brust mit extrem langer Gleitphase. Auf einigen 50-m-Abschnitten werden Zeit und Zugzahl gemessen. Zugzahl plus Zeit in Sekunden ergibt den „Golf-Score“, den du über die Wochen senken willst.",
+  "goal": "Eine möglichst stromlinienförmige, widerstandsarme Position festigen und mit dem Score eine einfache Rückmeldung bekommen.",
+  "errors": "Gleiten bis zum Stillstand. – In der Gleitphase hebt sich der Kopf.",
+  "prog": "Score messen → senken → bei höherem Tempo halten.",
+  "src": "Lüning, H. (2016/2023): Technikübungen Brust. swim.de",
+  "link": "https://swim.de/training/technikuebungen-brust/",
+  "sport": "swim",
+  "equipOther": "",
+  "equipOpt": []
  }
 ]
