@@ -149,29 +149,42 @@ const running = new Map();
 // Läuft mit niedriger Priorität und lässt Rechenkerne frei, damit der Rechner bedienbar bleibt; auf dem Mac dekodiert die Grafikeinheit (VideoToolbox).
 // Arbeitskopie: höchstens 2560 Bildpunkte an der langen Seite (für Zoom und Zeichnungen ausreichend, deutlich leichter abzuspielen als 4K).
 // Vorschau (weitere Kameras, Abgleich): 960 Bildpunkte, sehr schnell erstellt und flüssig abspielbar.
-const KINDS = { proxy: { tag: 'v2|2560', max: 2560, crf: 16, ab: '192k' }, preview: { tag: 'pv|960', max: 960, crf: 24, ab: '96k' } };
+// Schnell (Beckenrand): 1280 Bildpunkte, auf dem Mac mit dem Hardware-Encoder; wahlweise nur ein Zeitabschnitt (z. B. 2 s vor dem Startsignal bis 30 s danach).
+// Im Abschnitt bleiben die Zeitstempel des Originals erhalten (davor nur das erste Bild), damit alle Marken unverändert stimmen.
+const KINDS = { proxy: { tag: 'v2|2560', max: 2560, crf: 16, ab: '192k' }, fast: { tag: 'f1|1280', max: 1280, crf: 21, ab: '128k', vt: true } };
+// immer nur eine Umwandlung gleichzeitig (die angefragte zuerst fertig, der Rechner bleibt frei)
+let chain = Promise.resolve();
+const serial = fn => { const r = chain.then(fn, fn); chain = r.catch(() => {}); return r; };
 const KIDS = new Set(); // laufende FFmpeg-Umwandlungen, werden beim Beenden gestoppt
 const THREADS = String(Math.max(2, os.cpus().length - 2));
-function transcode(e, file, kind) {
-  const K = KINDS[kind], st = fs.statSync(file), key = crypto.createHash('sha1').update(K.tag + '|sdr709tm|' + file + '|' + st.size + '|' + st.mtimeMs).digest('hex').slice(0, 20);
-  const out = path.join(proxyDir(), (kind === 'preview' ? 'pv-' : '') + key + '.mp4');
-  if (fs.existsSync(out) && fs.statSync(out).size > 1000) { fs.utimesSync(out, new Date(), new Date()); return Promise.resolve({ url: pathToFileURL(out).href, cached: true }); }
+function transcode(e, file, kind, o) {
+  o = o || {}; const K = KINDS[kind], st = fs.statSync(file);
+  const win = o.a != null && o.b > o.a ? { a: Math.max(0, Math.floor(o.a * 10) / 10), b: Math.ceil(o.b * 10) / 10 } : null;
+  const key = crypto.createHash('sha1').update(K.tag + '|sdr709tm|' + file + '|' + st.size + '|' + st.mtimeMs + (win ? '|' + win.a + '-' + win.b : '')).digest('hex').slice(0, 20);
+  const out = path.join(proxyDir(), (kind === 'fast' ? (win ? 'fw-' : 'f-') : '') + key + '.mp4');
+  if (fs.existsSync(out) && fs.statSync(out).size > 1000) { fs.utimesSync(out, new Date(), new Date()); return Promise.resolve({ url: pathToFileURL(out).href, cached: true, win }); }
+  if (o.cachedOnly) return Promise.resolve(null);
   if (running.has(out)) return running.get(out);
-  const job = new Promise(async (resolve) => {
+  const job = serial(() => new Promise(async (resolve) => {
     const tmp = out + '.part.mp4', dur = { v: null };
     const info = await probeFile(file), w = info ? info.width || 0 : 0, h = info ? info.height || 0 : 0, big = Math.max(w, h) > K.max;
     const px = (big ? K.max * K.max * 0.75 : w * h) * ((info && info.fps) || 30);
-    const preset = kind === 'preview' ? 'ultrafast' : px > 2560 * 1440 * 60 ? 'superfast' : 'veryfast';
+    const preset = kind === 'fast' ? 'ultrafast' : px > 2560 * 1440 * 60 ? 'superfast' : 'veryfast';
+    // Abschnitt: nur Bilder darin (und das erste Bild als Platzhalter), Zeitstempel wie im Original
+    const SEL = win ? `select='eq(n\\,0)+between(t\\,${win.a}\\,${win.b})',` : '';
     // zuerst verkleinern (spart Rechenzeit bei allen weiteren Schritten), gerade Maße für H.264
     const SC = big ? (w >= h ? `scale=${K.max}:-2:flags=bicubic,` : `scale=-2:${K.max}:flags=bicubic,`) : '';
     // immer SDR nach BT.709: iPhone-Videos sind oft HDR (HLG/PQ, BT.2020). Als 8-Bit-Kopie mit HDR-Kennzeichnung zeigt macOS teils ein schwarzes
     // oder ein stark überbelichtetes Bild. HDR wird deshalb per Tone-Mapping (Hable) auf SDR gebracht; klappt das nicht, einfache Umrechnung.
-    const TM = SC + 'zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p';
-    const PLAIN = SC + 'scale=out_color_matrix=bt709:out_range=tv,format=yuv420p';
-    const run = (vf, hw) => new Promise(res => {
-      const args = ['-y', '-hide_banner', ...(hw ? ['-hwaccel', 'videotoolbox'] : []), '-i', file, '-map', '0:v:0', '-map', '0:a:0?',
+    const TM = SEL + SC + 'zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p';
+    const PLAIN = SEL + SC + 'scale=out_color_matrix=bt709:out_range=tv,format=yuv420p';
+    const run = (vf, hw, venc) => new Promise(res => {
+      const outW = big ? K.max : Math.max(w, h) || K.max, rate = Math.round(outW * outW * 0.75 * ((info && info.fps) || 30) * 0.5 / 1e6); // Bitrate für Hardware-Encoder (nur Schlüsselbilder)
+      const V = venc === 'vt' ? ['-c:v', 'h264_videotoolbox', '-allow_sw', '1', '-realtime', '0', '-b:v', Math.max(8, Math.min(120, rate)) + 'M', '-g', '1', '-bf', '0', '-profile:v', 'high']
+        : ['-c:v', 'libx264', '-preset', preset, '-crf', String(K.crf), '-g', '1', '-bf', '0', '-profile:v', 'high', '-level:v', '5.1', '-threads', THREADS];
+      const args = ['-y', '-hide_banner', ...(hw ? ['-hwaccel', 'videotoolbox'] : []), ...(win ? ['-t', String(win.b + 0.5)] : []), '-i', file, '-map', '0:v:0', '-map', '0:a:0?',
         '-vf', vf, '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv',
-        '-c:v', 'libx264', '-preset', preset, '-crf', String(K.crf), '-g', '1', '-bf', '0', '-profile:v', 'high', '-level:v', '5.1', '-threads', THREADS,
+        ...V,
         '-fps_mode', 'passthrough',
         '-c:a', 'aac', '-b:a', K.ab, '-movflags', '+faststart', tmp];
       const p = spawn(FFMPEG, args); KIDS.add(p); p.on('exit', () => KIDS.delete(p));
@@ -179,21 +192,23 @@ function transcode(e, file, kind) {
       p.stderr.on('data', d => {
         const s = d.toString(), m = s.match(/Duration: (\d+):(\d+):([\d.]+)/); if (m) dur.v = (+m[1]) * 3600 + (+m[2]) * 60 + (+m[3]);
         const t = [...s.matchAll(/time=(\d+):(\d+):([\d.]+)/g)].pop();
-        if (t && dur.v && kind === 'proxy') { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]); if (!e.sender.isDestroyed()) e.sender.send('proxy-progress', { file, p: Math.min(1, sec / dur.v) }); }
+        if (t && dur.v) { const sec = (+t[1]) * 3600 + (+t[2]) * 60 + (+t[3]), tot = win ? win.b + 0.5 : dur.v; if (!e.sender.isDestroyed()) e.sender.send('proxy-progress', { file, kind, p: Math.min(1, sec / tot) }); }
       });
       p.on('close', code => res(code === 0)); p.on('error', () => res(false));
     });
-    const hw = process.platform === 'darwin';
-    let ok = await run(info && info.hdr ? TM : PLAIN, hw);
-    if (!ok && hw) { try { fs.unlinkSync(tmp); } catch (x) {} ok = await run(info && info.hdr ? TM : PLAIN, false); }
-    if (!ok && info && info.hdr) { try { fs.unlinkSync(tmp); } catch (x) {} ok = await run(PLAIN, false); }
+    const hw = process.platform === 'darwin', VF = info && info.hdr ? TM : PLAIN, del = () => { try { fs.unlinkSync(tmp); } catch (x) {} };
+    let ok = K.vt && hw ? await run(VF, true, 'vt') : false;
+    if (!ok) { del(); ok = await run(VF, hw, 'x264'); }
+    if (!ok && hw) { del(); ok = await run(VF, false, 'x264'); }
+    if (!ok && info && info.hdr) { del(); ok = await run(PLAIN, false, 'x264'); }
     running.delete(out);
-    if (ok) { fs.renameSync(tmp, out); resolve({ url: pathToFileURL(out).href }); } else { try { fs.unlinkSync(tmp); } catch (x) {} resolve(null); }
-  });
+    if (ok) { fs.renameSync(tmp, out); resolve({ url: pathToFileURL(out).href, win }); } else { try { fs.unlinkSync(tmp); } catch (x) {} resolve(null); }
+  }));
   running.set(out, job); return job;
 }
 ipcMain.handle('proxy', async (e, file) => transcode(e, file, 'proxy'));
-ipcMain.handle('preview', async (e, file) => transcode(e, file, 'preview'));
+ipcMain.handle('fast', async (e, file, o) => transcode(e, file, 'fast', o));
+ipcMain.handle('preview', async (e, file) => transcode(e, file, 'fast'));
 
 // Alte Arbeitskopien aufräumen (älter als 14 Tage oder mehr als 8 GB)
 function cleanup() {

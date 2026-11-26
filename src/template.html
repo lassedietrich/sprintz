@@ -444,7 +444,7 @@ body.xh-on #xhair{display:block}
 #synOv .synmain{background:#2F6FE0;border-color:#2F6FE0}#synOv .cmpt{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);font-size:.9rem}
 .synadj{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.6);border-radius:10px;padding:4px 8px;font-size:.85rem;white-space:nowrap}.synadj button{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);color:#fff;border-radius:6px;padding:3px 9px;font-weight:700;cursor:pointer}
 .fsadj .fssyn{margin-left:6px}
-.camref{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin:0 0 8px;font-size:.85rem}.camref .seg{flex:1}.fscell>#sMeas{z-index:5}.fscell>#sMeasTip,.fscell>#sMeasCtl,.fscell>#sLupe{z-index:8}.fsadj .fssnd{padding:1px 6px}
+.camref{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin:0 0 8px;font-size:.85rem}.camref .seg{flex:1}.rectip{display:inline-block;margin-top:4px;color:var(--muted);font-size:.85rem}.fscell>#sMeas{z-index:5}.fscell>#sMeasTip,.fscell>#sMeasCtl,.fscell>#sLupe{z-index:8}.fsadj .fssnd{padding:1px 6px}
 .sndb{position:absolute;right:8px;bottom:8px;z-index:20;border:0;border-radius:999px;width:34px;height:34px;background:rgba(0,0,0,.55);color:#fff;font-size:1rem;cursor:pointer;line-height:1}.sndb.off{opacity:.8}
 .fsmove{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:7;display:flex;gap:4px}.fsmove button{border:0;border-radius:8px;background:rgba(0,0,0,.55);color:#fff;padding:3px 9px;font-size:.8rem;cursor:pointer}.fsmove button:disabled{opacity:.25;cursor:default}
 #sSnd{right:auto;left:62px;bottom:14px}
@@ -996,7 +996,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
 <section id="spAna" hidden>
   <div id="evAnaHead" hidden></div>
   <h2>Auswertung</h2>
-  <div class="vhead"><span id="sFps"></span><span id="sCur"></span><span id="sCheck" hidden></span><button type="button" class="testbtn small" id="sSpd" title="Abspielgeschwindigkeit">¼×</button><button type="button" class="testbtn small" id="sSync" hidden></button><button type="button" class="testbtn small" id="sFull">⛶ Vollbild</button></div>
+  <div class="vhead"><span id="sFps"></span><span id="sCur"></span><span id="sCheck" hidden></span><button type="button" class="testbtn small" id="sSpd" title="Abspielgeschwindigkeit">¼×</button><button type="button" class="testbtn small" id="sQual" hidden></button><button type="button" class="testbtn small" id="sSync" hidden></button><button type="button" class="testbtn small" id="sFull">⛶ Vollbild</button></div>
   <div class="vbox" id="sBox"><video id="sVid" playsinline muted preload="auto"></video><button type="button" class="sndb" id="sSnd" hidden></button><canvas id="sMeas" hidden></canvas><canvas id="sDraw" aria-hidden="true"></canvas><canvas id="sLupe" hidden aria-hidden="true"></canvas><div id="sMeasTip" hidden></div><div id="sProx" hidden></div><div id="sMeasCtl" hidden></div></div>
   <canvas id="sWave" aria-label="Tonspur"></canvas>
   <div class="stepbar" id="sStepBar">
@@ -4009,6 +4009,10 @@ async function evPlay(i, btn){
   const stop=()=>{ tm.forEach(clearTimeout); try{ live.forEach(x=>{ try{x.stop();}catch(e){} }); }catch(e){} keepAlive(false); EV.play=null; btn.textContent="▶ "+L("Startablauf","Start sequence"); };
   tm.push(setTimeout(stop, Math.max(0,(endT-base)*1000))); EV.play={stop};
 }
+/* --- Aufnahme-Tipp: 4K kostet viel Zeit, bringt für Zeitmarken nichts; entscheidend ist die Bildrate (Genauigkeit ±1 Bild) --- */
+function recTip(files, el){ if(!el) return; const big=files.filter(f=>{ const k="up-"+f.name+"-"+f.size, c=(EV.files[k]||{}).cam||"", m=c.match(/\|(\d+)x(\d+)/); return m && +m[1]>=3000; }).length; if(!big) return;
+  const p=document.createElement("span"); p.className="rectip"; p.textContent=(big===1?L("Tipp: Ein Video ist in 4K.","Tip: one video is 4K."):L(`Tipp: ${big} Videos sind in 4K.`,`Tip: ${big} videos are 4K.`))+" "+L("Für Start, Wende und Zeitmarken lieber in 1080p mit 120 fps (sonst 60 fps) filmen, beim iPhone mit „Maximale Kompatibilität“ (H.264): Die Zeiten werden genauer (±8 ms statt ±17–33 ms je Bild) und die Auswertung startet viel schneller.","For starts, turns and time marks, rather film in 1080p at 120 fps (otherwise 60 fps), on iPhone with “Most Compatible” (H.264): times get more precise (±8 ms instead of ±17–33 ms per frame) and the analysis starts much faster.");
+  const old=document.getElementById(el.id+"Tip"); if(old) old.remove(); p.id=el.id+"Tip"; p.style.display="block"; el.parentNode.insertBefore(p, el.nextSibling); }
 /* --- Hochladen: Zuordnung über den Aufnahmezeitpunkt im Video --- */
 // Kamera-Kennung: Gerät aus den Metadaten (iPhone-Modell, GoPro, DJI …) oder Namensanfang der Datei, dazu die Bildgröße
 function vidCam(name, b){ let dev="", wh="";
@@ -4035,7 +4039,7 @@ function vidGroupRuns(list){
   for(const k of keys.slice(1)){ const S=cams[k].sort((a,b)=>a.s-b.s), cand=new Set([0]);
     S.forEach(v=>groups.forEach(g=>{ cand.add(g.s-v.s); cand.add(g.e-v.e); cand.add((g.s+g.e)/2-(v.s+v.e)/2); }));
     let best={d:0, ...match(S,0)};
-    cand.forEach(d=>{ if(d===0) return; const r=match(S,d); if(r.m.length>best.m.length || (r.m.length===best.m.length && best.d!==0 && (r.sum>best.sum+1e-6 || (Math.abs(r.sum-best.sum)<1e-6 && Math.abs(d)<Math.abs(best.d))))) best={d, ...r}; });
+    cand.forEach(d=>{ if(d===0) return; if(Math.abs(d)>26*3600e3) return; const r=match(S,d); if(Math.abs(d)>120e3 && r.m.length<2) return; if(r.m.length>best.m.length || (r.m.length===best.m.length && best.d!==0 && (r.sum>best.sum+1e-6 || (Math.abs(r.sum-best.sum)<1e-6 && Math.abs(d)<Math.abs(best.d))))) best={d, ...r}; });
     const used=new Set(); best.m.forEach(([i,j])=>{ groups[j].items.push(S[i]); used.add(i); });
     S.forEach((v,i)=>{ if(!used.has(i)) groups.push({s:v.s+best.d, e:v.e+best.d, items:[v]}); });
     if(best.d) blog("video","Kamera-Uhrversatz", {cam:k, s:Math.round(best.d/1000), paare:best.m.length}); }
@@ -4083,7 +4087,7 @@ async function evUpload(files){
     runs.forEach((g,k)=>{ const t=target[k]; if(!t) return; evSetVid(p,t,g[0].key); evSetVids2(p,t,g.slice(1).map(x=>x.key)); });
     evSave(); evPlanView();
     $("evUpMsg").textContent = L(`Nach Aufnahmezeit zugeordnet: ${runs.length} Läufe.`,`Assigned by recording time: ${runs.length} runs.`)+(multi?" "+L(`Bei ${multi} Läufen gibt es mehrere gleichzeitige Aufnahmen. Sie werden im Vollbild nebeneinander gezeigt und über das Startsignal abgeglichen.`,`${multi} runs have several simultaneous recordings. They are shown side by side in full screen and synced via the start signal.`):"")+" "
-      +L("Prüf die Zuordnung und ändere sie notfalls im Auswahlfeld des Versuchs.","Check the assignment and change it in the attempt's selection box if needed.");
+      +L("Prüf die Zuordnung und ändere sie notfalls im Auswahlfeld des Versuchs.","Check the assignment and change it in the attempt's selection box if needed."); recTip(files, $("evUpMsg"));
   }
 }
 function evSetVid(p,t,key){ const f=EV.files[key]; if(!f){ t.vid=null; if(t.status!=="done") t.status="open"; return; }
@@ -4387,7 +4391,7 @@ async function fsEnter(){
   FS.secs=[]; const tr=SA.trialRef;
   for(const v of (tr&&tr.vids2)||[]){ const b=await evBlobOf(v); if(!b) continue; const cell=document.createElement("div"); cell.className="fscell";
     const el=document.createElement("video"); el.muted=v.mute!==false; el.playsInline=true; el.preload="auto"; el.src=URL.createObjectURL(b); cell.appendChild(el); cell.dataset.k=v.key;
-    if(DSK && DSK.preview) deskPreview(b).then(u=>{ if(!u || !FS.on || !cell.isConnected) return; const t=el.currentTime, own=el.src; el.src=u; el.addEventListener("loadedmetadata",()=>{ try{ URL.revokeObjectURL(own); }catch(e){} el.currentTime=t; fsSync(true); },{once:true}); });
+    if(fastOn()) deskFastUrl(b, SA.win && v.off!=null ? {a:Math.max(0,SA.win.a+v.off), b:SA.win.b+v.off} : {}).then(u=>{ if(!u || !FS.on || !cell.isConnected) return; const t=el.currentTime, own=el.src; el.src=u; el.addEventListener("loadedmetadata",()=>{ try{ URL.revokeObjectURL(own); }catch(e){} el.currentTime=t; fsSync(true); },{once:true}); });
     deskFps(b).then(f=>{ if(f>0) S2fps.set(v.key,f); });
     const lab=document.createElement("span"); lab.className="fslab"; lab.textContent=v.name||L("Video 2","Video 2"); cell.appendChild(lab);
     const adj=document.createElement("div"); adj.className="fsadj"; adj.innerHTML=`<button type="button" data-o="-1">−1</button><span>${L("Versatz","offset")}</span><button type="button" data-o="1">+1</button><button type="button" class="fssyn">⇆ ${L("Abgleichen","Sync")}</button><button type="button" class="fssnd"></button>`; cell.appendChild(adj);
@@ -4496,8 +4500,21 @@ function camMarkT(){ const S=camRefSec(); return S ? Math.max(0, S.el.currentTim
 // Desktop-Programm: Arbeitskopie, falls sie schon fertig ist bzw. gleich fertig wird (sonst null, dann bleibt das Original)
 const S2fps=new Map();
 // kleine Vorschau-Kopie (neues Desktop-Programm): leicht abzuspielen, sofort springbar; wird bei Bedarf schnell erstellt
-async function deskPreview(blob, wait){ if(!DSK || !DSK.preview || !blob) return null; let fp=null; try{ fp=DSK.pathFor(blob); }catch(e){} if(!fp) return null;
-  const p=DSK.preview(fp).then(r=>r&&r.url||null).catch(()=>null); if(wait==null) return p; return await Promise.race([p, new Promise(r=>setTimeout(()=>r(null), wait))]); }
+// Schnellkopie (Desktop ab 1.4): 1280 px, nur Schlüsselbilder; o = {a,b} für einen Abschnitt, {cachedOnly:true} nur wenn schon vorhanden
+async function deskFastUrl(blob, o){ if(!DSK || !DSK.fast || !blob) return null; let fp=null; try{ fp=DSK.pathFor(blob); }catch(e){} if(!fp) return null;
+  try{ const r=await DSK.fast(fp, o||{}); return r&&r.url||null; }catch(e){ return null; } }
+// Qualität der Auswertung: „Schnell“ (Beckenrand, Standard) oder „Volle Qualität“ (große Arbeitskopie)
+const QUAL={ get(){ try{ return localStorage.getItem("sprintz-qual")||"fast"; }catch(e){ return "fast"; } }, set(v){ try{ localStorage.setItem("sprintz-qual",v); }catch(e){} } };
+const fastOn=()=>!!(typeof DSK!=="undefined" && DSK && DSK.fast) && QUAL.get()!=="full";
+function qualBtn(){ const b=$("sQual"); if(!b) return; b.hidden=!(SA.active && typeof DSK!=="undefined" && DSK && DSK.fast); const f=QUAL.get()!=="full";
+  b.textContent=f?"⚡ "+L("Schnell","Fast"):"◆ "+L("Volle Qualität","Full quality"); b.title=f?L("Schnellansicht (1280 px, nur der relevante Abschnitt). Tippen für volle Qualität.","Fast view (1280 px, relevant section only). Tap for full quality."):L("Volle Qualität (große Arbeitskopie, ganzes Video). Tippen für die Schnellansicht.","Full quality (large working copy, whole video). Tap for the fast view."); }
+$("sQual").onclick=()=>{ QUAL.set(QUAL.get()==="full"?"fast":"full"); qualBtn(); if(SA.deskBlob) deskAttach(SA.deskBlob, SA.deskOnFps||(()=>{})); };
+// Abschnitt für die Schnellansicht: Start 2,5 s vor dem Startsignal bis 30 s danach (Start, 15 m, erste Wende auf der 25-m-Bahn); Wende um die gesetzte Stelle
+async function anaWin(tok){ const tr=SA.trialRef; const k = SA.mode==="quick" ? (tr&&tr.kind) : SA.mode==="eval" ? (EV.cur && isTurn(EV.cur) ? "turn" : "start") : null;
+  if(tr && tr.seek!=null && k==="turn") return {a:Math.max(0,tr.seek-6), b:tr.seek+20};
+  if(k!=="start") return null;
+  for(let i=0;i<60 && SA.marks.sig==null && tok===SA.deskTok;i++) await new Promise(r=>setTimeout(r,200));
+  const sg=SA.marks.sig; return sg==null ? null : {a:Math.max(0,sg-2.5), b:sg+30}; }
 async function deskFps(blob){ if(!DSK || !DSK.probe || !blob) return 0; try{ const fp=DSK.pathFor(blob); if(!fp) return 0; const i=await DSK.probe(fp); return (i&&i.fps)||0; }catch(e){ return 0; } }
 /* --- Ton je Video: Hauptvideo an, weitere Kameras aus; per Knopf umschalten (wird je Video gemerkt) --- */
 const SND_ON="🔊", SND_OFF="🔇";
@@ -4509,7 +4526,7 @@ $("sSnd").onclick=e=>{ e.stopPropagation(); const v=SA.trialRef&&SA.trialRef.vid
 $("sSnd").addEventListener("pointerdown",e=>e.stopPropagation());
 /* --- Kameras abgleichen: Startsignal nacheinander in jedem Video setzen, danach alle Videos gemeinsam prüfen und fein verschieben --- */
 const SY={on:false};
-function synBtn(){ sndUI(); const b=$("sSync"); if(!b) return; const n=((SA.trialRef&&SA.trialRef.vids2)||[]).length; b.hidden=!SA.active || !n; if(n) b.textContent="⇆ "+L(`Kameras abgleichen (${n+1})`,`Sync cameras (${n+1})`); }
+function synBtn(){ sndUI(); qualBtn(); const b=$("sSync"); if(!b) return; const n=((SA.trialRef&&SA.trialRef.vids2)||[]).length; b.hidden=!SA.active || !n; if(n) b.textContent="⇆ "+L(`Kameras abgleichen (${n+1})`,`Sync cameras (${n+1})`); }
 // nach dem Abgleich: Startsignal des Hauptvideos gilt als bestätigt (Schritt wird übersprungen, Videos beginnen 2 s davor)
 function synApply(live){ const tr=SA.trialRef; if(!tr || !(tr.sync&&tr.sync.done) || tr.sync.ev==="other" || tr.sync.main==null || !(SA.steps||[]).some(s=>s.sig)) return;
   if(SA.marks.sig==null) SA.marks.sig=tr.sync.main; SA.sigOk=true; SA.sigAuto="manual";
@@ -4522,7 +4539,7 @@ async function synOpen(){ const tr=SA.trialRef; if(!tr || !(tr.vids2||[]).length
   const vids=[{v:tr.vid, blob:null, main:true}, ...tr.vids2.map(v=>({v, blob:null}))];
   try{ for(const x of vids){ x.blob=await evBlobOf(x.v); if(SY.tok!==tok) return;
       // Desktop-Programm: bildgenaue Arbeitskopie nutzen (große 4K/HEVC-Dateien spielt der Browser sonst nicht flüssig oder gar nicht)
-      if(x.blob && DSK && DSK.preview){ const u=await deskPreview(x.blob, 300); if(u) x.url=u; if(SY.tok!==tok) return; } } }
+      if(x.blob && fastOn()){ const u=await deskFastUrl(x.blob, {cachedOnly:true}); if(u) x.url=u; else deskFastUrl(x.blob, {}); if(SY.tok!==tok) return; } } }
   catch(e){ blog("warn","synOpen: "+(e.message||e)); if(SY.tok!==tok) return; d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Die Videos konnten nicht geladen werden: ","The videos could not be loaded: ")}${esc(e.message||String(e))}</p>`; $("synX").onclick=synClose; return; }
   const miss=vids.filter(x=>!x.blob); if(miss.length){ d.innerHTML=`<div class="cmphead"><b>${L("Kameras abgleichen","Sync cameras")}</b><button type="button" id="synX">${L("Schließen","Close")}</button></div><p class="everr">${L("Nicht auf diesem Gerät: ","Not on this device: ")}${miss.map(x=>esc(x.v.name||"?")).join(", ")}</p>`; $("synX").onclick=synClose; return; }
   let s0 = SA.marks.sig ?? (tr.sync&&tr.sync.main) ?? null; if(s0!=null && s0<0.02) s0=null;
@@ -5538,7 +5555,7 @@ async function qkUpload(files){
     p.trials.push(e); neu++; }
   const runs=qkGroup(p);
   await qkSave(); qkList(); deskPrep(files);
-  const m=$("qkMsg"); if(m) m.textContent=[neu?L(`${neu} neue Videos.`,`${neu} new videos.`):"", again?L(`${again} schon bekannte Videos wieder geöffnet.`,`${again} known videos reopened.`):"", runs?L(`${runs} Läufe mit mehreren Kameras erkannt und zusammengefasst.`,`${runs} runs with several cameras detected and combined.`):""].filter(Boolean).join(" ");
+  const m=$("qkMsg"); if(m){ m.textContent=[neu?L(`${neu} neue Videos.`,`${neu} new videos.`):"", again?L(`${again} schon bekannte Videos wieder geöffnet.`,`${again} known videos reopened.`):"", runs?L(`${runs} Läufe mit mehreren Kameras erkannt und zusammengefasst.`,`${runs} runs with several cameras detected and combined.`):""].filter(Boolean).join(" "); recTip(files, m); }
 }
 // noch nicht ausgewertete Einzelvideos mit Aufnahmezeit zu Läufen zusammenfassen; gibt die Zahl der Läufe mit mehreren Kameras zurück
 function qkGroup(p){ const free=p.trials.filter(e=>e.status==="open" && !e.kind && !(e.vids2&&e.vids2.length) && e.vid && e.vid.t && EV.files[e.vid.key] && EV.files[e.vid.key].src==="meta");
@@ -7757,8 +7774,16 @@ const DSK = window.sprintzDesktop || null;
 if(DSK && /Mac/i.test(navigator.platform||navigator.userAgent)) document.documentElement.classList.add("dskmac");
 async function deskAttach(blob, onFps){
   if(!DSK || !blob) return; let fp=null; try{ fp=DSK.pathFor(blob); }catch(e){} if(!fp) return;
-  const tok=(SA.deskTok=(SA.deskTok||0)+1); SA.deskInfo=null;
+  const tok=(SA.deskTok=(SA.deskTok||0)+1); SA.deskInfo=null; SA.deskBlob=blob; SA.deskOnFps=onFps; SA.win=null; SA.winWarn=false;
   DSK.probe(fp).then(info=>{ if(tok!==SA.deskTok || !info) return; SA.deskInfo=info; if(info.fps>0) onFps(info.fps); }).catch(()=>{});
+  if(fastOn()){ const ov=$("sProx"); ov.hidden=false; ov.classList.remove("big"); SA.origBad=false; SA.proxPending=true; SA.proxP=null; SA.proxFast=true; proxText();
+    const off=DSK.onProgress(d=>{ if(d.file===fp && tok===SA.deskTok){ SA.proxP=d.p; proxText(); } });
+    // ganze Schnellkopie schon da (beim Hochladen vorbereitet)? Sonst nur den Abschnitt um das Startsignal
+    let r=null; try{ r=await DSK.fast(fp,{cachedOnly:true}); if(!r){ const w=await anaWin(tok); if(tok!==SA.deskTok){ off(); return; } r=await DSK.fast(fp, w||{}); } }catch(e){}
+    off(); if(tok!==SA.deskTok) return; SA.proxPending=false; SA.proxFast=false; ov.hidden=true;
+    if(!r){ toast(L("Die Schnellansicht ließ sich nicht erstellen. Sprintz nutzt das Original.","The fast view couldn't be created. Sprintz uses the original.")); return; }
+    SA.win=r.win||null; const t=VG.exp!=null?VG.exp:sVid.currentTime; SA.vidUrl=r.url; sVid.src=r.url; sVid.addEventListener("loadedmetadata",()=>{ vgCmd(t); try{ sVid.currentTime=Math.min(t, sVid.duration||t); }catch(e){} spDraw(); },{once:true});
+    blog("video","Schnellansicht",{cached:!!r.cached, win:SA.win}); vidBlackGuard(r.url, tok); return; }
   const ov=$("sProx"); ov.hidden=false; ov.classList.remove("big"); SA.origBad=false; SA.proxPending=true; SA.proxP=null; ov.textContent=L("Arbeitskopie für bildgenaues Arbeiten wird erstellt …","Creating a working copy for frame-accurate analysis …");
   const off=DSK.onProgress(d=>{ if(d.file===fp && tok===SA.deskTok){ SA.proxP=d.p; proxText(); } });
   let r=null; try{ r=await DSK.proxy(fp); }catch(e){} off(); if(tok===SA.deskTok) SA.proxPending=false;
@@ -7769,14 +7794,16 @@ async function deskAttach(blob, onFps){
 }
 /* Hinweis während der Arbeitskopie; kann das Programm das Original nicht abspielen (z. B. 4K-HEVC vom iPhone: „negative timestamp“), groß und mittig */
 function proxText(){ const ov=$("sProx"); if(!ov||ov.hidden) return; const pc=SA.proxP!=null?` ${Math.round(SA.proxP*100)} %`:"";
+  if(SA.proxFast && !SA.origBad){ ov.textContent=L(`Schnellansicht wird vorbereitet …${pc}`,`Preparing fast view …${pc}`); return; }
   ov.textContent = SA.origBad ? L(`Dieses Video lässt sich erst mit der Arbeitskopie anzeigen. Bitte kurz warten …${pc}`,`This video can only be shown with the working copy. Please wait a moment …${pc}`) : L(`Arbeitskopie wird erstellt …${pc}`,`Creating working copy …${pc}`); }
+sVid.addEventListener("timeupdate",()=>{ if(SA.active && SA.win && !SA.winWarn && sVid.duration>0 && sVid.currentTime>=sVid.duration-0.08){ SA.winWarn=true; toast(L("Ende des Abschnitts der Schnellansicht. Für das ganze Video oben auf „⚡ Schnell“ tippen (volle Qualität).","End of the fast-view section. For the whole video tap “⚡ Fast” at the top (full quality)."),4500); } });
 sVid.addEventListener("error",()=>{ if(DSK && SA.proxPending){ SA.origBad=true; const ov=$("sProx"); ov.hidden=false; ov.classList.add("big"); proxText(); } });
 // Arbeitskopien schon beim Hochladen vorbereiten (nacheinander), damit die Auswertung sofort startklar ist
 const PREP={q:[], run:false};
 async function deskPrep(files){ if(!DSK) return; files.forEach(f=>{ try{ const fp=DSK.pathFor(f); if(fp) PREP.q.push({fp, name:f.name}); }catch(e){} }); if(PREP.run) return; PREP.run=true;
   const msg=t=>{ const m=$("qkMsg"); if(m && !$("qkPage").hidden) m.textContent=t; };
   while(PREP.q.length){ while(SA.active) await new Promise(r=>setTimeout(r,3000)); const it=PREP.q.shift(), left=PREP.q.length; const off=DSK.onProgress(d=>{ if(d.file===it.fp) msg(L(`Arbeitskopie für „${it.name}“ wird vorbereitet … ${Math.round(d.p*100)} %`,`Preparing working copy for “${it.name}” … ${Math.round(d.p*100)} %`)+(left?" "+L(`(danach noch ${left})`,`(${left} more after that)`):"")); });
-    try{ await DSK.proxy(it.fp); }catch(e){} off(); blog("video","Arbeitskopie vorbereitet",{name:it.name}); }
+    try{ if(fastOn()) await DSK.fast(it.fp,{}); else await DSK.proxy(it.fp); }catch(e){} off(); blog("video","Arbeitskopie vorbereitet",{name:it.name, fast:fastOn()}); }
   PREP.run=false; msg(L("Alle Arbeitskopien sind fertig.","All working copies are ready.")); }
 /* Schwarzes Bild (z. B. HDR-Aufnahmen vom iPhone): Helligkeit der Arbeitskopie prüfen; ist sie schwarz, das Original aber nicht, das Original nutzen */
 async function vidLuma(src, ts){ const v=document.createElement("video"); v.muted=true; v.preload="auto"; v.src=src;

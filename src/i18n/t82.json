@@ -1,0 +1,62 @@
+[
+[
+"Fast",
+"Hızlı",
+"Быстро",
+"Snel"
+],
+[
+"Full quality",
+"Tam kalite",
+"Полное качество",
+"Volledige kwaliteit"
+],
+[
+"Fast view (1280 px, relevant section only). Tap for full quality.",
+"Hızlı görünüm (1280 px, yalnızca ilgili bölüm). Tam kalite için dokun.",
+"Быстрый просмотр (1280 px, только нужный отрезок). Нажми для полного качества.",
+"Snelle weergave (1280 px, alleen het relevante deel). Tik voor volledige kwaliteit."
+],
+[
+"Full quality (large working copy, whole video). Tap for the fast view.",
+"Tam kalite (büyük çalışma kopyası, tüm video). Hızlı görünüm için dokun.",
+"Полное качество (большая рабочая копия, всё видео). Нажми для быстрого просмотра.",
+"Volledige kwaliteit (grote werkkopie, hele video). Tik voor de snelle weergave."
+],
+[
+"The fast view couldn't be created. Sprintz uses the original.",
+"Hızlı görünüm oluşturulamadı. Sprintz orijinali kullanıyor.",
+"Не удалось создать быстрый просмотр. Sprintz использует оригинал.",
+"De snelle weergave kon niet worden gemaakt. Sprintz gebruikt het origineel."
+],
+[
+"Preparing fast view …{0}",
+"Hızlı görünüm hazırlanıyor …{0}",
+"Быстрый просмотр готовится …{0}",
+"Snelle weergave wordt voorbereid …{0}"
+],
+[
+"End of the fast-view section. For the whole video tap “⚡ Fast” at the top (full quality).",
+"Hızlı görünüm bölümünün sonu. Tüm video için üstte „⚡ Hızlı“ya dokun (tam kalite).",
+"Конец отрезка быстрого просмотра. Для всего видео нажми вверху „⚡ Быстро“ (полное качество).",
+"Einde van het deel in de snelle weergave. Tik voor de hele video bovenaan op „⚡ Snel“ (volledige kwaliteit)."
+],
+[
+"Tip: one video is 4K.",
+"İpucu: Bir video 4K.",
+"Совет: одно видео в 4K.",
+"Tip: één video is 4K."
+],
+[
+"Tip: {0} videos are 4K.",
+"İpucu: {0} video 4K.",
+"Совет: видео в 4K: {0}.",
+"Tip: {0} video's zijn 4K."
+],
+[
+"For starts, turns and time marks, rather film in 1080p at 120 fps (otherwise 60 fps), on iPhone with “Most Compatible” (H.264): times get more precise (±8 ms instead of ±17–33 ms per frame) and the analysis starts much faster.",
+"Start, dönüş ve zaman işaretleri için 1080p ve 120 fps (yoksa 60 fps) ile çek; iPhone'da „En Uyumlu“ (H.264) seç: Süreler daha hassas olur (kare başına ±17–33 ms yerine ±8 ms) ve analiz çok daha hızlı başlar.",
+"Для стартов, поворотов и отметок времени лучше снимать в 1080p со 120 fps (иначе 60 fps), на iPhone с „Наиболее совместимый“ (H.264): время точнее (±8 мс вместо ±17–33 мс на кадр), а анализ начинается намного быстрее.",
+"Film voor starts, keerpunten en tijdmarkeringen liever in 1080p met 120 fps (anders 60 fps), op de iPhone met „Meest compatibel“ (H.264): de tijden worden nauwkeuriger (±8 ms in plaats van ±17–33 ms per beeld) en de analyse start veel sneller."
+]
+]
