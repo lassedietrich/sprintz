@@ -1,1 +1,938 @@
-[]
+[
+ {
+  "id": "r-einarm-kraul",
+  "name": "Einarmiges Kraul",
+  "cat": [
+   "free",
+   "pull",
+   "breath",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst Kraul nur mit einem Arm, der andere Arm macht Pause. Variante A: Der Pausenarm liegt vorne gestreckt im Wasser. Variante B (schwerer): Der Pausenarm liegt hinten am Oberschenkel. Die Beine schlagen die ganze Zeit gleichmäßig weiter. Bei Variante A atmest du zur Seite des Zugarms, bei Variante B zur Seite des Pausenarms – so musst du auch ohne Stütze vorne sauber zur Seite rollen. Nach 25 m oder nach einigen Zügen wechselst du den Arm.",
+  "goal": "Du kannst dich ganz auf einen Arm konzentrieren: früh mit hohem Ellbogen Wasser fassen, mit Hand und Unterarm bis zur Hüfte nach hinten drücken und den Arm locker nach vorne zurückführen. Gleichzeitig lernst du, den Körper um die Längsachse zu drehen und zu atmen, ohne den Kopf anzuheben.",
+  "errors": "Der Körper knickt zur Seite ein und schlängelt. – Der Kopf wird zum Atmen angehoben statt gedreht. – Der Beinschlag hört auf, sobald der Arm zieht. – Der Zug endet schon unter der Brust statt an der Hüfte. – Der Pausenarm vorne sinkt ab oder kreuzt über die Körpermitte.",
+  "prog": "Mit Flossen beginnen, dann ohne. Danach 3 Züge links – 3 Züge rechts – 3 Züge ganze Lage. Für Fortgeschrittene mit Fingerpaddles. Zum Schluss immer ein Stück ganze Lage mit demselben Fokus, damit das Gelernte in die richtige Bewegung übergeht.",
+  "src": "Arellano, Domínguez-Castells & Pérez-Infantes (2010), Biomechanics and Medicine in Swimming XI; Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-abschlag",
+  "name": "Abschlagschwimmen",
+  "cat": [
+   "free",
+   "coord",
+   "pull"
+  ],
+  "level": [
+   "beg"
+  ],
+  "equip": [
+   "none",
+   "board"
+  ],
+  "desc": "Ein Arm bleibt vorne gestreckt liegen und wartet. Der andere Arm zieht, kommt über Wasser nach vorne zurück und „schlägt ab“ – er berührt kurz die wartende Hand. Erst dann beginnt der wartende Arm zu ziehen. Variante mit Brett: Ein Schwimmbrett wird vorne wie ein Staffelstab von einer Hand an die andere übergeben. Die Beine schlagen durchgehend weiter.",
+  "goal": "Für Einsteiger: lange, gestreckte Lage nach vorne, ein ruhiger Rhythmus und eine saubere Rückführung des Arms. Die Übung trennt die beiden Arme deutlich voneinander, sodass man jeden Zug einzeln spüren kann.",
+  "errors": "Der wartende Arm sinkt ab oder knickt im Handgelenk. – Die Wartezeit wird zum Stillstand, weil die Beine aufhören. – Der Kopf geht beim Atmen nach oben. – Wichtig für Trainer*innen: Im Sprint sollen sich die Arme überlappen (ein Arm zieht schon, bevor der andere fertig ist). Abschlag ist deshalb eine Einsteigerübung und sollte bei schnellen Schwimmer*innen nicht dauerhaft eingeschliffen werden.",
+  "prog": "Abschlag mit Brett → Abschlag ohne Brett → „Dreiviertel-Abschlag“: Der wartende Arm startet schon, wenn die andere Hand am Kopf vorbeikommt → ganze Lage.",
+  "src": "Schnitzler, Seifert, Ernwein & Chollet (2008), Int J Sports Med 29, 480–487; Arellano, Domínguez-Castells & Pérez-Infantes (2010), Biomechanics and Medicine in Swimming XI",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-seitlage-wechsel",
+  "name": "Seitlage-Beinschlag-Wechsel (mit 3er-/5er-Rolle)",
+  "cat": [
+   "free",
+   "body",
+   "kick",
+   "coord",
+   "breath"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins",
+   "snork"
+  ],
+  "desc": "Du liegst auf der Seite: unterer Arm vorne gestreckt, oberer Arm hinten am Oberschenkel, die obere Schulter zeigt zur Decke. Das Gesicht ist im Wasser, zum Atmen drehst du nur den Kopf zur Seite. Du machst 6 Kraulbeinschläge, dann einen Armzug mit dem vorderen Arm und gleichzeitig führt der hintere Arm über Wasser nach vorne – dabei rollst du auf die andere Seite. Dort wieder 6 Beinschläge. Erweiterung 3er-/5er-Rolle: Statt eines Zuges machst du 3 (bzw. 5) Züge ganze Lage und gehst dann wieder in die Seitenlage. Durch die ungerade Zahl landest du automatisch auf der anderen Seite.",
+  "goal": "Eine stabile Seitenlage, eine Drehung, bei der Schultern und Hüfte zusammen rollen, und das Atmen zur Seite ohne Kopfheben. Mit der 3er-/5er-Rolle wird die Seitenlage Schritt für Schritt in die ganze Lage eingebaut.",
+  "errors": "Die Schultern drehen, aber die Hüfte bleibt flach liegen. – Der Kopf wird zum Atmen angehoben. – Der vordere Arm sinkt ab oder zeigt über die Körpermitte. – Der Beinschlag wird breit wie eine Schere. – Beim Wechsel wird die Seitenlage nicht ganz erreicht (man bleibt auf dem Bauch).",
+  "prog": "Mit Flossen → ohne Flossen. 6-1-6 → 3er-Rolle → 5er-Rolle. Weniger Beinschläge pro Seite (6 → 3). Mit Schnorchel, wenn die Atmung noch stört. Am Ende ganze Lage mit Dreier-Atmung.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-vert-delfin",
+  "name": "Vertikaler Delfinbeinschlag",
+  "cat": [
+   "uw",
+   "kick",
+   "fly",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "other"
+  ],
+  "equipOther": "Zusatzgewicht (z. B. Hantelscheibe, Gewichtsweste)",
+  "desc": "Im tiefen Wasser, ohne den Boden zu berühren, hältst du dich aufrecht und machst Delfinbeinschläge. Die Bewegung kommt aus Rumpf und Hüfte, nicht nur aus den Knien. Arme je nach Stufe: an der Brust verschränkt → in Streamline über dem Wasser → mit Gewicht über dem Kopf. Typisch sind kurze Abschnitte, z. B. 10 × 20 Sekunden mit Pause.",
+  "goal": "Höhere Schlagfrequenz, Gefühl für die Körperwelle und mehr Kraft im Vorwärts- und Rückwärtsschlag. Weil man im Stehen kickt, werden beide Schlagrichtungen gleich gefordert – das hilft, den Beinschlag gleichmäßiger zu machen.",
+  "errors": "Nur die Knie arbeiten („Fahrradfahren“). – Der Oberkörper pendelt stark vor und zurück. – Kinn und Kopf gehen nach oben. – Wichtig: Weil man nicht schwimmt, merkt man nicht, wenn eine Bewegung bremst. Deshalb immer mit Delfinbeinschlag in Streamline (Bauch-, Seiten- oder Rückenlage) kombinieren.",
+  "prog": "Arme an der Brust → Arme in Streamline über Wasser → Zusatzgewicht mit gestreckten Armen über Wasser. Dauer und Frequenz steigern. Direkt danach 15 m Delfin in Streamline zur Übertragung.",
+  "src": "Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton; Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-vert-kraul",
+  "name": "Vertikaler Kraulbeinschlag",
+  "cat": [
+   "kick",
+   "free",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "other"
+  ],
+  "equipOther": "Zusatzgewicht",
+  "desc": "Im tiefen Wasser hältst du dich aufrecht und machst Kraulbeinschläge, ohne den Boden zu berühren. Die Beine schlagen aus der Hüfte, die Knie sind nur leicht gebeugt, die Füße locker und gestreckt. Arme je nach Stufe: seitlich leicht paddelnd → an der Brust → in Streamline über dem Wasser.",
+  "goal": "Kräftiger, schneller Beinschlag aus der Hüfte und lockere, gestreckte Fußgelenke. Die Übung zeigt schnell, ob der Beinschlag wirklich Vortrieb erzeugt – sonst sinkt man.",
+  "errors": "Radfahrbewegung mit stark gebeugten Knien. – Füße angezogen statt gestreckt. – Hohlkreuz, Oberkörper kippt nach hinten. – Beinschlag sehr breit und langsam.",
+  "prog": "Arme helfen mit → Arme an der Brust → Streamline → mit Zusatzgewicht. Abschnitte verlängern. Danach Kraulbeine in Streamline zur Übertragung.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-seite",
+  "name": "Delfinbeinschlag in Seitenlage",
+  "cat": [
+   "uw",
+   "kick",
+   "body",
+   "fly"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du liegst auf der Seite, die Arme in Streamline vor dem Kopf, und machst unter Wasser Delfinbeinschläge – die Welle geht also seitwärts statt auf und ab. Nach einer Bahn oder einer festen Zahl an Kicks wechselst du die Seite. Variante „Lagewechsel-Kicken“: Bauchlage – Seite – Rücken – andere Seite, z. B. je 4 Kicks.",
+  "goal": "In Seitenlage hilft oder stört der Auftrieb keine Schlagrichtung. Deshalb lernst du hier, Vorwärts- und Rückwärtsschlag gleich kräftig auszuführen. Außerdem bereitet die Übung den Abstoß nach der Kraulwende vor, der oft in Seitenlage beginnt.",
+  "errors": "Man rollt unbemerkt in die Bauchlage zurück. – Die Welle kommt nur aus den Knien. – Die Streamline öffnet sich, Kopf schaut nach vorne. – Ein Schlag ist deutlich kräftiger als der andere.",
+  "prog": "Mit Flossen → ohne. Erst an der Oberfläche, dann unter Wasser. Lagewechsel-Kicken. Nach der Wende in Seitenlage abstoßen und kicken.",
+  "src": "Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton; Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-kraul-seite",
+  "name": "Kraulbeinschlag in Seitenlage",
+  "cat": [
+   "kick",
+   "body",
+   "free",
+   "breath"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins",
+   "snork"
+  ],
+  "desc": "Du liegst auf der Seite: unterer Arm vorne gestreckt, oberer Arm am Oberschenkel, die obere Schulter zeigt zur Decke. Das Gesicht ist im Wasser, zum Atmen drehst du den Kopf zur Seite. Einsteiger dürfen anfangs mit dem Gesicht nach oben schwimmen. Die Beine machen schmale, schnelle Kraulbeinschläge.",
+  "goal": "Ein schmaler Beinschlag aus der Hüfte, auch wenn der Körper gedreht ist. Eine stabile Seitenlage als Grundlage für den Seitlage-Wechsel und für die Rotation in der ganzen Lage.",
+  "errors": "Die Beine scheren breit auseinander. – Die Hüfte sinkt nach unten. – Der Kopf wird angehoben statt gedreht. – Man rollt in die Bauch- oder Rückenlage.",
+  "prog": "Mit Flossen → ohne. Gesicht oben → Gesicht im Wasser mit Seitatmung. Weiter mit dem Seitlage-Beinschlag-Wechsel.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-rueckenbeine-sl",
+  "name": "Rückenbeine in Streamline",
+  "cat": [
+   "back",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du liegst auf dem Rücken, die Arme in enger Streamline über dem Kopf (Hände übereinander, Oberarme hinter den Ohren). Die Beine machen Kraulbeinschläge in Rückenlage. Die Knie bleiben unter Wasser, die Zehen „kochen“ das Wasser an der Oberfläche. Der Blick geht senkrecht nach oben.",
+  "goal": "Hohe, gestreckte Wasserlage, Rumpfspannung und ein Beinschlag, der beim Hochschlagen kräftig ist. Die Haltung entspricht der Lage nach Rückenstart und Rückenwende.",
+  "errors": "Die Hüfte sackt ab (Sitzhaltung). – Die Knie durchbrechen die Oberfläche (Radfahren). – Die Arme gehen auseinander oder der Kopf hebt sich. – Hohlkreuz.",
+  "prog": "Arme am Körper → eine Hand vorne → Streamline. Mit Flossen → ohne. Tempowechsel (z. B. 12,5 m locker, 12,5 m schnell).",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-kraulbeine-sl",
+  "name": "Kraulbeine in Streamline (ggf. mit Schnorchel)",
+  "cat": [
+   "free",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "snork",
+   "fins"
+  ],
+  "desc": "Bauchlage, Arme in enger Streamline vor dem Kopf, das Gesicht im Wasser. Die Beine machen Kraulbeinschläge. Ohne Schnorchel drehst du zum Atmen den Kopf kurz zur Seite und gehst sofort zurück. Mit Schnorchel bleibt der Kopf ruhig und du kannst dich ganz auf Lage und Beine konzentrieren.",
+  "goal": "Beinschlag in der gleichen gestreckten Lage wie beim echten Schwimmen. So lernt man, mit wenig Widerstand zu kicken, statt wie beim Brett mit erhobenem Kopf.",
+  "errors": "Kopf hebt sich, die Beine sinken. – Knie stark gebeugt. – Arme öffnen sich. – Beim Atmen ohne Schnorchel bricht die Streamline auseinander.",
+  "prog": "Mit Schnorchel → ohne. Mit Flossen → ohne. Tempowechsel und längere Strecken.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-social-kick",
+  "name": "Kraulbeine mit Brett („Social Kick“)",
+  "cat": [
+   "free",
+   "kick"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "board"
+  ],
+  "desc": "Du hältst das Brett vorne mit gestreckten Armen und schwimmst Kraulbeine mit dem Kopf über Wasser. Weil der Kopf oben ist, kann man sich dabei unterhalten – daher „Social Kick“. Gut zum Einschwimmen, Ausschwimmen oder als lockerer Umfang.",
+  "goal": "Beinkondition und Beinschlag-Umfang in lockerer Form. Wichtig zu wissen: Weil der Kopf oben ist, liegt die Hüfte tiefer als beim Schwimmen. Für die Technik der Wasserlage eignen sich die Streamline-Varianten besser.",
+  "errors": "Das Brett wird nach unten gedrückt. – Die Beine hängen stark ab. – Radfahrbewegung mit den Knien. – Es wird nur noch geredet und kaum gekickt.",
+  "prog": "Tempoabschnitte einbauen (z. B. 15 m locker / 10 m schnell). Mit Flossen. Wechsel zu Kraulbeinen in Streamline.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-ruecken",
+  "name": "Delfinbeinschlag in Rückenlage",
+  "cat": [
+   "uw",
+   "kick",
+   "back",
+   "fly"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins",
+   "other"
+  ],
+  "equipOther": "Nasenklammer (optional)",
+  "desc": "Rückenlage, Arme in enger Streamline über dem Kopf. Du machst Delfinbeinschläge – erst an der Oberfläche, später unter Wasser. Unter Wasser atmest du langsam durch die Nase aus, damit kein Wasser eindringt (oder mit Nasenklammer).",
+  "goal": "In Rückenlage ist der Schlag nach oben (zur Oberfläche) der wichtige Schlag. Die Übung macht diesen Schlag kräftiger und schneller und den Beinschlag dadurch gleichmäßiger. Direkte Vorbereitung für Rückenstart und Rückenwende.",
+  "errors": "Wasser in der Nase, weil nicht ausgeatmet wird. – Die Knie brechen durch die Oberfläche. – Kinn auf der Brust. – Die Welle kommt nur aus den Knien.",
+  "prog": "An der Oberfläche → unter Wasser → bis zur 15-m-Marke. Mit Flossen → ohne. Lagewechsel-Kicken (Bauch – Seite – Rücken).",
+  "src": "Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton; Technische Ausdifferenzierung Rückenstart (L. Dietrich)",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-wende-abstand",
+  "name": "Rollwende mit Variation des Anschwimmabstands",
+  "cat": [
+   "turn",
+   "free",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst mehrmals an die Wand und beginnst die Rolle bewusst aus unterschiedlichen Abständen: etwas früher, wie gewohnt und etwas später (z. B. über die Anzahl der Züge nach dem T am Beckenboden steuern). Ein Partner stoppt die Zeit von 5 m vor der Wand bis wieder 5 m nach der Wand (Kopf an der Markierung), oder du filmst und wertest mit Sprintz aus.",
+  "goal": "Den eigenen besten Abstand finden. Ist man zu nah, sind die Knie zu stark gebeugt und man bleibt lange an der Wand. Ist man zu weit weg, sind die Beine zu gestreckt und der Abdruck wird schwach. In einer Studie mit Nationalkaderschwimmer*innen lag das beste Ergebnis meist bei mittlerer Beugung, aber für jede Person etwas anders.",
+  "errors": "Nach der Rolle zu nah an der Wand, sehr kleiner Kniewinkel. – Zu weit weg, Füße treffen die Wand kaum. – Man stößt sich ab, bevor die Streamline geschlossen ist. – Atmung direkt vor der Wende bremst.",
+  "prog": "Mit festen Markierungen in ruhigem Tempo → im Wettkampftempo → Zeitmessung über 5 m hin und zurück → Videoauswertung in Sprintz.",
+  "src": "David et al. (2022), Frontiers in Sports and Active Living 4: 936695",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-wende-flach",
+  "name": "Rollwende mit Platzbegrenzung (flacheres Wasser)",
+  "cat": [
+   "turn",
+   "free"
+  ],
+  "level": [
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du übst Rollwenden in einem flacheren Beckenbereich mit Wand (z. B. Lehrschwimmbecken). Weil nach unten wenig Platz ist, musst du die Rolle eng und schnell ausführen: Kinn zur Brust, Knie nah an den Körper, Füße zügig an die Wand. Danach stößt du flach nach vorne ab, nicht nach unten. Vorher prüfen, dass die Wassertiefe für eine Rolle sicher reicht.",
+  "goal": "Kompakte, schnelle Rolle mit kleinem Drehradius und ein flacher Abstoß in die richtige Richtung.",
+  "errors": "Die Rolle wird weit und langsam, die Beine schleudern über Wasser. – Abstoß nach unten Richtung Boden. – Füße setzen zu hoch oder zu tief an der Wand auf. – Sicherheit: Zu flaches Wasser oder zu viel Schwung nach unten – Kontakt mit dem Boden möglich.",
+  "prog": "Rolle ohne Wand im flachen Wasser → mit Wand langsam → mit Anschwimmen in höherem Tempo → Übertragung ins tiefe Becken.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-sterne",
+  "name": "Sterne greifen (Rücken)",
+  "cat": [
+   "back",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst Rücken. In der Rückholphase hältst du den gestreckten Arm kurz an, wenn er senkrecht über der Schulter steht, und schiebst ihn dann ganz bewusst weiter nach oben Richtung Decke – als wolltest du einen Stern greifen. Dabei hebt sich die Schulter ein Stück aus dem Wasser. Danach führst du den Arm weiter und tauchst ihn mit dem kleinen Finger zuerst in Verlängerung der Schulter ein. Die Beine kicken gleichmäßig weiter.",
+  "goal": "Ein gestreckter, hoher Arm in der Rückholphase und eine aktive Schulter: Das Hochschieben unterstützt die Drehung um die Längsachse und bringt die Schulter aus dem Wasser, sodass sie weniger bremst. Außerdem lernst du, auf Schulterlinie einzutauchen.",
+  "errors": "Der Arm ist in der Rückholphase gebeugt. – Die Pause ist zu lang, die Hüfte sackt ab. – Nur der Arm wird gestreckt, die Schulter bleibt passiv im Wasser. – Die Hand taucht über der Kopfmitte oder weit seitlich ein. – Der Kopf wackelt mit.",
+  "prog": "Lange Pause oben → kurze Pause → ohne Pause. Erst einarmig (anderer Arm am Körper), dann im Wechsel.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-faust",
+  "name": "Faustschwimmen (Kraul)",
+  "cat": [
+   "free",
+   "pull",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du schwimmst Kraul mit geschlossenen Fäusten (Daumen außen). Weil die Handfläche fehlt, musst du das Wasser mit dem Unterarm fassen: Ellbogen hoch, Unterarm früh senkrecht nach unten stellen und dann nach hinten drücken. Beliebte Form: 25 m Faust, 25 m mit offener Hand.",
+  "goal": "Den Unterarm als Teil der Paddelfläche spüren und den hohen Ellbogen lernen. Beim Öffnen der Hand danach merkt man deutlich mehr „Griff“ am Wasser (Kontrast).",
+  "errors": "Der Ellbogen fällt nach unten und zieht voraus. – Die Arme drehen schnell durch, ohne Vortrieb. – Die Fäuste öffnen sich unbemerkt. – Der Zug wird zu kurz.",
+  "prog": "Faust → halb geöffnete Hand → offene Hand im Wechsel. Weiter mit Unterarm-Paddles oder Fingerpaddles.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-badewanne-torpedo",
+  "name": "Badewanne / Torpedo",
+  "cat": [
+   "pull",
+   "coord",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Zwei Skull-Figuren aus dem Synchronschwimmen in Rückenlage. Badewanne: Du liegst auf dem Rücken, ziehst die Knie zur Brust, die Unterschenkel liegen waagerecht an der Oberfläche – du sitzt wie in einer Badewanne. Mit kleinen Skullbewegungen der Hände neben der Hüfte hältst du dich, drehst dich auf der Stelle oder bewegst dich vorwärts. Torpedo: Du liegst gestreckt auf dem Rücken, die Arme liegen in Verlängerung über dem Kopf. Die Hände skullen über dem Kopf und schieben dich mit den Füßen voran durchs Wasser.",
+  "goal": "Gefühl für den Wasserdruck an Händen und Unterarmen. Die Badewanne schult die Hände bei kompakter Körperhaltung, der Torpedo schult Rumpfspannung und Streckung bei ungewohnter Bewegungsrichtung.",
+  "errors": "Badewanne: Knie fallen auseinander, Unterschenkel sinken, Arme schlagen statt zu skullen. – Torpedo: Hüfte knickt ein, Hände machen große Bewegungen statt kleiner Achten, der Kopf hebt sich.",
+  "prog": "Badewanne auf der Stelle → mit Drehung → vorwärts. Torpedo kurze Strecke → längere Strecke → im Wechsel mit Rückenbeinen in Streamline.",
+  "src": "Grundfiguren des Synchronschwimmens (Bitte prüfen: so habe ich die Übung verstanden)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-sculling",
+  "name": "Sculling (Skullen)",
+  "cat": [
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "buoy"
+  ],
+  "desc": "Die Hände machen kleine, liegende Achten bzw. Hin-und-her-Bewegungen im Wasser. Dabei sind die Hände leicht angestellt, sodass sie wie ein Propeller Druck erzeugen. Man skullt in verschiedenen Positionen: vorne (Arme vor dem Kopf, Fingerspitzen leicht nach unten – wie der Anfang des Kraulzugs), in der Mitte (Ellbogen hoch, Hände unter der Brust) und hinten (Hände neben der Hüfte, Fingerspitzen zeigen nach unten). Die Beine bleiben ruhig, ein Pullbuoy hilft.",
+  "goal": "Wassergefühl: spüren, mit welcher Handstellung man am meisten Druck aufbaut. Vorne geschult hilft es beim Fassen des Wassers am Anfang des Armzugs, hinten beim Abdrücken.",
+  "errors": "Die Bewegungen sind zu groß und schnell, der Druck geht verloren. – Die Hände sind flach statt angestellt. – Der Ellbogen fällt nach unten. – Die Beine kicken heimlich mit.",
+  "prog": "Mit Pullbuoy → ohne. Position vorne → Mitte → hinten → Wechsel nach Zeit. Mit Fingerpaddles. Direkt danach ein paar Züge ganze Lage.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-blockjump",
+  "name": "Block Jump Variation (Strecksprünge vom Block)",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Du stehst auf dem Block oder am Beckenrand, die Füße hüftbreit, die Zehen über der Kante. Du machst 2–3 Kniebeugen mit Armschwung, um Schwung zu holen, und springst dann mit voll gestrecktem Körper fußwärts ins Wasser. Varianten: Arme an der Seite, Arme in Streamline, oder Streamline-Sprung mit anschließenden Delfinkicks vom Beckenboden.",
+  "goal": "Explosiver Beinabdruck, das richtige Timing des Abdrucks und die volle Streckung des Körpers – die Basis für jeden Startsprung.",
+  "errors": "Der Körper ist beim Absprung nicht ganz gestreckt. – Arme und Beine arbeiten nicht zusammen. – Man springt mehr nach vorne als nach oben und landet unkontrolliert.",
+  "prog": "Mit Armschwung → Arme an der Seite → Arme in Streamline → Streamline-Sprung + Delfinkicks vom Boden.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-hands-head",
+  "name": "Hands-Over-Head Start",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Du gehst in die normale Schrittstart-Position auf dem Block, legst die Hände aber an den Hinterkopf bzw. Nacken, statt die Kante zu greifen. Auf das Signal springst du nur durch das Strecken von Sprunggelenk, Knie und Hüfte ab. Die Arme schiebst du erst in der Luft nach vorne.",
+  "goal": "Den reinen Beinabdruck spüren, ohne Hilfe der Arme. Gleichzeitig lernst du, auf dem Block mit Keil das Gleichgewicht zu halten. Guter Zeitpunkt, um zu prüfen, welches Bein hinten auf dem Keil stehen sollte (meist das stärkere).",
+  "errors": "Man fällt schon vor dem Signal nach vorne. – Das hintere Bein drückt kaum mit. – Die Arme kommen zu spät nach vorne, sodass man mit offenen Armen eintaucht.",
+  "prog": "Zuerst ohne Signal → mit Startsignal aus Sprintz → Vergleich mit normalem Start (Reaktions- und Blockzeit).",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-single-leg",
+  "name": "Single Leg Dive / Superhero Dive",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Single Leg Dive: Du hebst den hinteren Fuß vom Keil ab und springst nur mit dem vorderen Bein. Superhero Dive (für Fortgeschrittene): Du stehst in einer Standwaage-Haltung – hinteres Bein waagerecht nach hinten gestreckt, ein Arm vorne, ein Arm hinten – und springst dann explosiv mit dem vorderen Bein ab, während die Arme nach vorne ziehen.",
+  "goal": "Das vordere Bein gezielt kräftigen und einbeinig explosiv werden. Außerdem werden Gleichgewicht, Rumpfspannung und die Oberschenkelrückseite gefordert.",
+  "errors": "Der Rumpf knickt ein oder dreht sich zur Seite. – Der Absprung geht nach unten statt nach vorne. – Unsicheres Wackeln vor dem Absprung.",
+  "prog": "Single Leg Dive → Superhero Dive. Beide Beine üben, auch wenn im Wettkampf immer dasselbe vorne steht.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-pullbuoy-dive",
+  "name": "Pull Buoy Dives",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "buoy",
+   "board",
+   "blocks"
+  ],
+  "desc": "Zwei Pullbuoys liegen direkt hinter deinen Händen auf der Blockkante. Beim Absprung schiebst du sie mit einem kräftigen Armzug so weit wie möglich nach hinten weg. Alternative: Ein Partner hält ein Schwimmbrett hinter deine Hände, gegen das du beim Absprung schlägst.",
+  "goal": "Die Arme aktiv in den Absprung einbauen. Sie sollen beim Start nicht nur mitgehen, sondern selbst Kraft erzeugen, indem sie den Körper nach vorne ziehen.",
+  "errors": "Die Arme lösen sich passiv, die Pullbuoys bleiben liegen. – Der Armzug kommt zu früh, bevor die Beine arbeiten. – Der Blick geht nach vorne, der Kopf hebt sich.",
+  "prog": "Ohne Signal → mit Startsignal → normaler Start mit demselben Armgefühl.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-weight-slides",
+  "name": "Weight Slides / Med Ball Throws",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "exp"
+  ],
+  "equip": [
+   "other"
+  ],
+  "equipOther": "Hantelscheiben (z. B. 5 kg) oder Medizinball",
+  "desc": "Du gehst am Beckenrand in die Startposition. Die Hände greifen zwei Hantelscheiben oder einen Medizinball auf dem nassen Boden. Auf das Signal beschleunigst du explosiv und schiebst die Gewichte kräftig über den Rand nach vorne. (Vorher absprechen, dass nichts ins Becken oder auf andere fällt.)",
+  "goal": "Die Arme sollen beim Start als eigener Kraftimpuls arbeiten, nicht passiv mitlaufen. Die Übung korrigiert ein zu weiches Lösen der Hände vom Block.",
+  "errors": "Die Arme schieben nur, die Beine machen kaum mit. – Zu schwere Gewichte, die Bewegung wird langsam. – Rückenhaltung krumm beim Greifen.",
+  "prog": "Leichtes Gewicht → höheres Gewicht. Danach direkt normale Starts mit demselben Armgefühl.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-eddie",
+  "name": "Eddie the Eagle",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Aus der Starthaltung führst du die gestreckten Arme nach hinten, parallel zum Rumpf, die Handflächen zeigen nach oben – wie ein Skispringer. Beim Absprung schwingen die Arme gleichzeitig mit dem Beinabdruck nach vorne in die Streamline.",
+  "goal": "Die Arme als Schwungmasse nutzen, um weiter zu fliegen. Der Armschwung und der Beinabdruck müssen genau zusammenpassen. Hilft auch, die Körperhaltung im Flug zu verbessern.",
+  "errors": "Die Arme schwingen zu spät und sind beim Eintauchen noch offen. – Der Armschwung reißt den Kopf nach oben. – Beine und Arme arbeiten nacheinander statt gleichzeitig.",
+  "prog": "Langsam ohne Signal → mit Signal → Übergang zum normalen Start mit weitem Armschwung (Flyover).",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-arm-motion",
+  "name": "Arm-Motion Start (Flyover-Start)",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Du startest mit leicht nach hinten-oben abgespreizten Armen („Flügel“). Beim Absprung wirfst du die Arme in einem weiten Bogen über die Schultern nach vorne und schließt sie vor dem Eintauchen fest zur engen Streamline.",
+  "goal": "Den kreisförmigen Armschwung („Flyover“) einschleifen und vor allem lernen, die Hände rechtzeitig vor dem Wassereintritt zu schließen. Diese Technik bringt mehr Flugweite, ist aber anspruchsvoll und eher etwas für erfahrene Sprinter*innen mit guter Schulterbeweglichkeit.",
+  "errors": "Die Hände sind beim Eintauchen noch nicht geschlossen. – Der Kopf bleibt zu lange oben. – Der Armschwung bremst den Beinabdruck aus.",
+  "prog": "Flyover im Stand (Trockenübung) → Eddie the Eagle → Arm-Motion Start → normaler Start mit Flyover.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-flyover-stand",
+  "name": "Flyover im Stand (Trockenübung)",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du stehst aufrecht am Beckenrand. Die gestreckten Arme werden nach unten geführt, der Rücken leicht ins Hohlkreuz gestreckt, und dann werfen die Arme in einem weiten Bogen über die Schultern nach oben in die Streamline. Der Kopf geht zwischen die Arme.",
+  "goal": "Den langen Hebel der gestreckten Arme und das Zusammenspiel von Kopf und Armen ohne Wasser und ohne Zeitdruck lernen.",
+  "errors": "Die Arme sind gebeugt. – Die Hände schließen sich nicht oben. – Der Kopf bleibt im Nacken.",
+  "prog": "Langsam → schnell → mit kleinem Strecksprung → Arm-Motion Start.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-donkey",
+  "name": "Donkey Kicks (Handstand-Kicks am Block)",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Du stützt die Hände flach auf die Fläche des Startblocks und springst ab. Die Beine schwingen dynamisch wie beim Handstand nach oben: Das hintere Bein zuerst, das vordere schließt am höchsten Punkt auf.",
+  "goal": "Gegen das Einknicken in der Hüfte im Flug. Du spürst, wie sich die Hüfte aktiv streckt und die Beine hoch bleiben.",
+  "errors": "Die Beine kommen nicht hoch genug. – Die Hüfte bleibt gebeugt. – Die Arme knicken ein (Verletzungsgefahr – auf rutschfeste Fläche achten).",
+  "prog": "Wenig Höhe → mehr Höhe → Mule Kick am Block → Start mit bewusstem Hinterbeinkick.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-mule-kick",
+  "name": "Mule Kick am Startblock (Trockenübung)",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Du stützt die Hände an der Rückseite des Startblocks ab und stellst das vordere Bein auf den Boden. Auf Kommando („1, 2, 3 – Kick!“) trittst du das hintere Bein mit gestreckten Zehen explosiv gerade nach oben-hinten.",
+  "goal": "Den kräftigen Tritt des hinteren Beins lernen. Im Start sorgt er dafür, dass die Beine im Flug hoch bleiben und nicht hängen, und hilft beim sauberen Eintauchen.",
+  "errors": "Das Bein geht zur Seite statt gerade nach hinten. – Zehen angezogen statt gestreckt. – Hohlkreuz statt Kraft aus dem Gesäß.",
+  "prog": "Langsam → explosiv → im Start mit Hinterbeinkick, Beine schließen erst am höchsten Punkt.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-abkipp",
+  "name": "Streamline-Abkipp-Übung (Stream-Line Fall)",
+  "cat": [
+   "start",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du sitzt am Beckenrand oder auf dem Block (Gesäß an der Kante, Füße an der Wand oder in der Rinne) in enger Streamline mit fester Rumpfspannung. Langsam kippst du aus der Hüfte nach vorne ab und tauchst mit den Fingerspitzen zuerst ein – ohne dich mit den Füßen abzudrücken.",
+  "goal": "Eine stabile Streamline-Haltung und ein kontrolliertes Abkippen des Oberkörpers. Der Kopf bleibt dabei zwischen den Armen.",
+  "errors": "Der Kopf geht nach oben, um zu schauen. – Die Streamline öffnet sich beim Eintauchen. – Man drückt sich doch mit den Füßen ab. – Bauchklatscher durch zu flaches Kippen.",
+  "prog": "Sitzend → in der Hocke → im Stand mit leichtem Abdruck → Startsprung.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-target",
+  "name": "Target Practice (Nudel- / Reifenziele)",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "other"
+  ],
+  "equipOther": "Poolnudel, Hula-Hoop-Reifen",
+  "desc": "Ein Partner hält eine Poolnudel oder einen Hula-Hoop-Reifen. Die Nudel ist ein Hindernis, über das du springen musst (für mehr Weite oder Höhe). Der Reifen ist ein Ziel, durch das du eintauchst.",
+  "goal": "Flughöhe und Flugweite gezielt steuern, mit sofortiger sichtbarer Rückmeldung über die eigene Flugkurve.",
+  "errors": "Man zielt so sehr auf die Nudel, dass die Streamline vergessen wird. – Zu hoch gesprungen, steiles „Plumpsen“. – Partner steht zu nah (Sicherheit).",
+  "prog": "Nudel nah und niedrig → weiter und höher. Reifen größer → kleiner.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-standing-jumps",
+  "name": "Standing Jumps ohne Arme (Eintauchen durch ein Loch)",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Du springst vom Startblock ab, die Arme liegen an den Oberschenkeln oder hinter dem Rücken. Du lässt dich nach vorne fallen bzw. springst und richtest den Körper so aus, dass Kopf, Brust, Hüfte und Füße nacheinander durch denselben Punkt eintauchen – als würdest du durch einen gedachten Reifen springen.",
+  "goal": "Sauberes Eintauchen durch ein einziges „Loch“ im Wasser („One-Hole-Entry“). So entsteht wenig Spritzwasser und wenig Bremswirkung.",
+  "errors": "Bauch oder Beine klatschen flach auf. – Die Beine tauchen weit hinter dem Eintauchpunkt ein. – Viel Spritzwasser.",
+  "prog": "Aus geringer Höhe → vom Block → mit Armen in Streamline → mit Target-Reifen als Ziel.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-hip-lift",
+  "name": "Hip Lift im Stand & Run and Dive",
+  "cat": [
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Vorübung: Im Stand mit gestreckten Armen dreimal betont die Hüfte nach oben „werfen“. Run and Dive: 2–3 Schritte Anlauf auf dem Beckenrand, flacher Sprung nach vorne und kurz vor dem Eintauchen die Hüfte bewusst nach oben werfen. (Vorher klären, ob Anlauf im Bad erlaubt ist – Rutschgefahr.)",
+  "goal": "Den aktiven Hüftimpuls kurz vor dem Wassereintritt lernen: Wenn die Hände das Wasser berühren, zieht der Hüfthub Oberschenkel und Füße genau durch das Eintauchloch. So bleibt die hohe Fluggeschwindigkeit erhalten.",
+  "errors": "Der Hüfthub kommt zu früh (in der Luft) oder zu spät (schon im Wasser). – Die Streamline öffnet sich. – Ausrutschen beim Anlauf.",
+  "prog": "Hip Lift im Stand → Run and Dive → Startsprung mit bewusstem Hüfthub.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Blockstart (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-dive-glide",
+  "name": "Start und Gleiten (Dive and Glide)",
+  "cat": [
+   "start",
+   "uw",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks"
+  ],
+  "desc": "Du machst einen vollen Wettkampfstart (oder stößt dich von der Wand ab) und hältst danach die perfekte, starre Streamline: Hände fest übereinander, Kopf zwischen den Oberarmen, Rumpf angespannt, Zehen gestreckt. Keine Beinschläge, keine Armzüge – du gleitest, bis du fast stehst oder Luft brauchst. Gemessen wird die Gleitweite.",
+  "goal": "Prüft, wie widerstandsarm deine Streamline ist und wie gut du den Schwung aus dem Start mitnimmst. Wer hier weit kommt, kann später mit dem ersten Kick länger warten (bei guten Starts oft erst nach etwa 5–6 m).",
+  "errors": "Kopf hebt sich, um nach vorne zu schauen. – Die Hände liegen nicht übereinander. – Zu tief oder zu flach eingetaucht. – Unbewusste kleine Kicks.",
+  "prog": "Abstoß von der Wand → Start vom Block → Gleitweite messen und vergleichen → erst gleiten, dann ab der Marke kicken.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-zughilfe",
+  "name": "Delfinkicks mit Zugunterstützung (Übergeschwindigkeit)",
+  "cat": [
+   "uw",
+   "kick"
+  ],
+  "level": [
+   "exp"
+  ],
+  "equip": [
+   "cord"
+  ],
+  "desc": "Du wirst mit einem Zugseil (Partner oder Gerät) durchs Wasser gezogen und versuchst, mit Delfinbeinschlägen in Streamline noch schneller zu werden.",
+  "goal": "Weil das Wasser schneller anströmt, spürst du jede Bewegung, die bremst, deutlich stärker. Fehler im Bewegungsablauf fallen so schneller auf.",
+  "errors": "Man lässt sich nur ziehen und kickt kaum. – Durch die Hilfe schleichen sich Fehler beim eigenen Vortrieb ein. Deshalb immer im Wechsel mit normalen Streamline-Kicks.",
+  "prog": "Kurze Strecken mit Zug → im Wechsel mit freien Kicks → freie Kicks auf Zeit.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-widerstand",
+  "name": "Delfinkicks mit Zugwiderstand",
+  "cat": [
+   "uw",
+   "kick"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "cord",
+   "chute"
+  ],
+  "desc": "Du kickst Delfin in Streamline, während dich ein Zugseil, Widerstandsgurt oder Bremsschirm nach hinten bremst.",
+  "goal": "Mehr Kraft pro Beinschlag und bessere Ausdauer im Delfinbeinschlag.",
+  "errors": "Die Technik leidet: weniger Hüftbewegung, dafür wackeln Rumpf und Schultern. – Zu viel Widerstand, die Frequenz bricht ein. Deshalb mit freien Kicks abwechseln.",
+  "prog": "Leichter Widerstand → stärkerer Widerstand. Immer direkt danach freie Kicks.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Thompson (2023): Efficacy of training practices to develop underwater fly kick performance. Diss., Univ. Southampton",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-variation",
+  "name": "Variations- und Übertreibungs-Kicks",
+  "cat": [
+   "uw",
+   "kick",
+   "coord",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du veränderst bewusst Frequenz und Größe deiner Delfinbeinschläge: z. B. 4 sehr kleine, schnelle Kicks, dann 4 sehr große, weit ausholende Körperwellen, dann wieder normal. Ein Partner oder die Uhr misst die Zeit über eine feste Strecke.",
+  "goal": "Den eigenen besten Kompromiss aus Schlaghäufigkeit und Schlaggröße finden. Kleine schnelle Kicks bremsen weniger, große erzeugen mehr Kraft pro Schlag – welche Mischung am schnellsten ist, ist individuell.",
+  "errors": "Die Extreme werden nicht wirklich extrem ausgeführt. – Die Streamline geht dabei verloren. – Keine Zeitmessung, daher kein Vergleich.",
+  "prog": "Mit Flossen → ohne. Extreme → feinere Abstufungen → Messung über 10–15 m.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-zahl",
+  "name": "Kick- und Zeitvorgaben unter Wasser (Breakout)",
+  "cat": [
+   "uw",
+   "kick",
+   "start",
+   "turn"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Nach Start oder Wende gibt es eine feste Vorgabe: z. B. genau 4, 6 oder 8 Delfinkicks oder eine feste Strecke bzw. Zeit unter Wasser, bevor du auftauchst. Dann folgt sofort der erste Armzug.",
+  "goal": "Einen gleichbleibenden, schnellen Übergang ins Schwimmen (Breakout) und die Einhaltung der 15-m-Regel. Zusätzlich lernst du, auch mit Luftnot das Tempo zu halten. Beim Kraul gilt: Der erste Armzug nach dem Auftauchen wird ohne Atmung geschwommen.",
+  "errors": "Die Kicks werden gegen Ende langsamer. – Zu steiles Auftauchen. – Direkt nach dem Auftauchen geatmet, was bremst. – Über 15 m getaucht.",
+  "prog": "Wenige Kicks → mehr Kicks. Ohne Zeitdruck → im Wettkampftempo → nach Ermüdung (z. B. am Ende einer Serie).",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-einarm",
+  "name": "Einarmiges Delfinkicken",
+  "cat": [
+   "uw",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "desc": "Du kickst Delfin unter Wasser oder nahe der Oberfläche, ein Arm ist nach vorne in Streamline gestreckt, der andere liegt seitlich am Körper.",
+  "goal": "Rumpf und Schulter getrennt voneinander ansteuern, ohne dass der Körper schief wird. Bereitet den ersten Armzug beim Auftauchen vor.",
+  "errors": "Der Körper kippt zur Seite des angelegten Arms. – Der vordere Arm wandert aus der Mitte. – Die Welle wird unruhig.",
+  "prog": "Mit Flossen → ohne. Seiten wechseln. Am Ende mit Breakout und erstem Armzug.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-kopf",
+  "name": "Kopf-Kontrast-Kicks",
+  "cat": [
+   "uw",
+   "kick",
+   "body",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "desc": "Du kickst abwechselnd ein Stück mit perfekt verriegeltem Kopf zwischen den Oberarmen (Blick nach unten) und ein Stück mit leicht angehobenem Kopf.",
+  "goal": "Selbst spüren, wie stark ein angehobener Kopf bremst. Das macht die richtige Kopfhaltung leichter merkbar.",
+  "errors": "Der Unterschied wird zu klein ausgeführt. – Die schlechte Kopfhaltung bleibt auch danach bestehen. – Immer mit der richtigen Kopfhaltung abschließen.",
+  "prog": "Langsam → schnell. Mit Zeitmessung über eine kurze Strecke zum Vergleich.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-tiefe",
+  "name": "Tiefensteuerung unter Wasser",
+  "cat": [
+   "uw",
+   "kick",
+   "start",
+   "turn"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "other"
+  ],
+  "equipOther": "Markierung, z. B. Leine oder Stange in der gewünschten Tiefe (optional)",
+  "desc": "Nach Start oder Abstoß kickst du gezielt in einer bestimmten Tiefe, etwa einen Meter unter der Oberfläche, und steigst dann flach und kontrolliert zur Oberfläche auf.",
+  "goal": "Direkt unter der Oberfläche entsteht viel Wellenwiderstand. Wer zu tief taucht, hat einen langen Weg nach oben. Ziel ist die richtige Tiefe: nach dem Start bei Kraul, Delfin und Rücken meist etwa 0,9–1,2 m.",
+  "errors": "Zu flach: Man kämpft gegen die Wellen an. – Zu tief: Man muss steil auftauchen und bremst. – Das Auftauchen ist abrupt statt flach.",
+  "prog": "Abstoß von der Wand → nach Startsprung. Mit Unterwasservideo kontrollieren (Sprintz).",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Technische Ausdifferenzierung Unterwasserphase (L. Dietrich)",
+  "sport": "swim",
+  "link": ""
+ }
+]
