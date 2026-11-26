@@ -300,7 +300,8 @@ body.menu-open #drawerBg{opacity:1;pointer-events:auto}
 #modeSoon .card{padding:22px 18px;text-align:center}
 #modeSoon .ic{display:inline-grid;place-items:center;width:64px;height:64px;border-radius:16px;background:var(--soft);color:var(--accent);margin-bottom:10px}
 #modeSoon .ic svg{width:34px;height:34px}
-#modeSoon h2{margin:0 0 6px}
+#modeSoon h2{margin:0 0 6px}#soonAct{margin-top:14px}
+.exbox{max-width:760px;width:100%;max-height:calc(100vh - 32px);overflow:auto}.exitem{border:1px solid var(--line);border-radius:12px;padding:10px 12px 12px;margin:0 0 12px}.exitem legend{font-weight:700;padding:0 6px;display:flex;align-items:center;gap:8px}.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}.exgrid .exwide{grid-column:1/-1}.exdel{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:1rem}.exdel:hover{color:var(--danger)}#exAdd{margin:0 0 12px}.exbox .athf textarea{font:inherit;font-size:.92rem;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg);color:var(--fg);resize:vertical}
 #modeSoon p{margin:0;color:var(--muted);line-height:1.5}
 body.mode-other #tabsNav,body.mode-other #tab-train,body.mode-other #tab-stats,body.mode-other #tab-video,body.mode-other:not(.mode-sprint) #startbar{display:none!important}
 /* Sprinttraining */
@@ -1016,7 +1017,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
   <div class="card" id="sSmoCard" hidden></div>
   <div class="card" id="sSpkCard"></div>
 </section>
-<section id="modeSoon" hidden><button type="button" class="testbtn ghost small" id="devBack" hidden style="margin:0 0 10px">‹ Entwicklermodus</button><div class="card"><div class="ic" id="soonIc"></div><h2 id="soonT"></h2><p id="soonX"></p></div>
+<section id="modeSoon" hidden><button type="button" class="testbtn ghost small" id="devBack" hidden style="margin:0 0 10px">‹ Entwicklermodus</button><div class="card"><div class="ic" id="soonIc"></div><h2 id="soonT"></h2><p id="soonX"></p><div id="soonAct"></div></div>
   <div id="devList" hidden><h3 class="devh">In Entwicklung</h3>
     <button type="button" class="devitem" data-dm="kraft"><span class="ic" id="kraftIc"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 7v10"/><path d="M17.5 7v10"/><path d="M3.5 9.5v5"/><path d="M20.5 9.5v5"/><path d="M6.5 12h11"/><path d="M3.5 12H2"/><path d="M22 12h-1.5"/></svg></span><span><b>Krafttraining</b><small>Training tracken, Hantelgeschwindigkeit</small></span></button>
     <button type="button" class="devitem" data-dm="users"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M9 9v11"/></svg></span><span><b>Nutzende Personen</b><small>Konten, Personen, Organisationen, Nutzung</small></span></button>
@@ -8237,6 +8238,7 @@ function setMode(m){ if(m==="sprint") m="eval"; if(m==="me" && !USER) m="start";
   if(m==="quick"){ if(was==="eval"){ evLeave(); S=freshS(); updaters.forEach(f=>f()); resetDialog(); } $("spPage").hidden=true; qkEnter(); return; }
   if(m==="eval"){ if(was!=="eval"){ $("spPage").hidden=true; } evEnter(); return; }
   if(was==="eval"){ evLeave(); S=freshS(); updaters.forEach(f=>f()); resetDialog(); }
+  { const a=$("soonAct"); if(a){ a.innerHTML = m==="drills" ? `<button type="button" class="testbtn" id="exSugB">+ ${L("Übung vorschlagen","Suggest an exercise")}</button><p class="hint" style="margin:8px 0 0">${L("Du kennst eine gute Übung? Schick sie uns – wir prüfen sie und nehmen sie in den Katalog auf.","Know a good exercise? Send it to us – we'll review it and add it to the catalogue.")}</p>` : ""; const b=$("exSugB"); if(b) b.onclick=()=>exSugOpen(); } }
   if(m==="kraft"||m==="dev"||m==="drills"){ $("soonIc").innerHTML=(m==="kraft"?$("kraftIc"):m==="drills"?$("drillsIc"):$("modeNav").querySelector('[data-m="dev"] .ic')).innerHTML; $("soonT").textContent=MODES[m].t(); $("soonX").textContent=MODES[m].x(); }
   else { openTab("train"); } }
 $("modeNav").querySelectorAll("button[data-m]").forEach(b=>b.onclick=()=>{ setMode(b.dataset.m); setTimeout(()=>openMenu(false),140); });
@@ -8744,6 +8746,68 @@ function camClose(toSetup){
   if(toSetup){ $("setup").hidden=false; openTab("train"); $("fab").hidden=false; $("fabL").hidden=false; resetDialog(); scrollTo(0,0); }
 }
 $("aboutBtn").onclick=()=>{ hideTip(); $("aboutThanks").textContent=L("Ein besonderer Dank gilt Jan Tafreschi (TU Darmstadt) und Ismet Sezgin (SC Wiesbaden 1911 / Hessischer Schwimm-Verband), die die Entwicklung maßgeblich unterstützen. Außerdem danke an alle Athlet*innen des SC Wiesbaden 1911 sowie das Trainerteam.","Special thanks go to Jan Tafreschi (TU Darmstadt) and Ismet Sezgin (SC Wiesbaden 1911 / Hessian Swimming Association), who substantially support the development. Thanks also to all athletes of SC Wiesbaden 1911 and the coaching team."); $("aboutDlg").hidden=false; $("contactForm").hidden=true; $("contactOpen").hidden=false; $("cStatus").textContent=""; $("aboutClose").focus(); };
+/* ---------- Übungskatalog: Vorschläge einreichen (mehrere Übungen je Vorschlag), Versand wie das Kontaktformular ---------- */
+const EXS={key:"sprintz-exsug-draft"};
+const exCats=sp=> sp==="track"
+  ? [["start",L("Start und Startreaktion","Start and start reaction")],["acc",L("Beschleunigung","Acceleration")],["vmax",L("Maximale Laufgeschwindigkeit","Maximum running speed")],["abc",L("Lauf-ABC und Lauftechnik","Running drills and technique")],["power",L("Sprung- und Schnellkraft","Jumping and explosive strength")],["coord",L("Koordination","Coordination")],["other",L("Sonstiges","Other")]]
+  : [["start",L("Start","Start")],["turn",L("Wende","Turn")],["finish",L("Anschlag","Finish")],["uw",L("Unterwasserphase und Delfinbeinschlag","Underwater phase and dolphin kick")],["free",L("Kraul","Freestyle")],["back",L("Rücken","Backstroke")],["breast",L("Brust","Breaststroke")],["fly",L("Schmetterling","Butterfly")],["kick",L("Beinarbeit","Kick")],["pull",L("Armzug","Arm pull")],["breath",L("Atmung","Breathing")],["body",L("Wasserlage und Rumpfstabilität","Body position and core stability")],["coord",L("Koordination und Rhythmus","Coordination and rhythm")],["other",L("Sonstiges","Other")]];
+const exLevels=()=>[["beg",L("Einsteiger*innen / Nachwuchs","Beginners / youth")],["adv",L("Fortgeschrittene","Advanced")],["elite",L("Leistungssport","Elite")],["all",L("Alle Stufen","All levels")]];
+const exNew=()=>({name:"", sport:sport, cat:"", goal:"", desc:"", cues:"", errors:"", equip:"", level:"", dose:"", prog:"", src:"", link:""});
+function exDraftGet(){ try{ const d=JSON.parse(localStorage.getItem(EXS.key)||"null"); if(d && Array.isArray(d.items) && d.items.length) return d; }catch(e){} return {who:{name:"", mail:"", club:""}, items:[exNew()], cons:false, credit:true}; }
+function exDraftSet(d){ try{ localStorage.setItem(EXS.key, JSON.stringify(d)); }catch(e){} }
+function exSugOpen(){ let dlg=$("exDlg"); if(!dlg){ dlg=document.createElement("div"); dlg.id="exDlg"; dlg.className="dlg"; document.body.appendChild(dlg); dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.hidden=true; }); }
+  EXS.d=exDraftGet(); dlg.hidden=false; exRender(); }
+function exItemHTML(x,i,n){ const f=(k,lab,ph,opt,area)=>`<label class="athf${area?" exwide":""}"><span>${lab}${opt?"":" *"}</span>${area?`<textarea rows="3" data-ex="${i}|${k}" maxlength="2000" placeholder="${esc(ph||"")}">${esc(x[k]||"")}</textarea>`:`<input type="text" data-ex="${i}|${k}" maxlength="200" value="${esc(x[k]||"")}" placeholder="${esc(ph||"")}">`}</label>`;
+  const sel=(k,lab,opts,opt)=>`<label class="athf"><span>${lab}${opt?"":" *"}</span><select class="evsel" data-ex="${i}|${k}"><option value="">–</option>${opts.map(([v,l])=>`<option value="${v}"${x[k]===v?" selected":""}>${esc(l)}</option>`).join("")}</select></label>`;
+  return `<fieldset class="exitem"><legend>${L(`Übung ${i+1}`,`Exercise ${i+1}`)}${n>1?` <button type="button" class="exdel" data-exdel="${i}" aria-label="${L("Übung entfernen","Remove exercise")}">✕</button>`:""}</legend><div class="exgrid">
+    ${f("name",L("Name der Übung","Name of the exercise"),L("z. B. Abschlag mit Pause","e.g. catch-up with pause"))}
+    <label class="athf"><span>${L("Sportart","Sport")} *</span><select class="evsel" data-ex="${i}|sport"><option value="swim"${x.sport!=="track"?" selected":""}>${L("Schwimmen","Swimming")}</option><option value="track"${x.sport==="track"?" selected":""}>${L("Leichtathletik","Athletics")}</option></select></label>
+    ${sel("cat",L("Bereich","Area"),exCats(x.sport))}${sel("level",L("Leistungsstufe","Level"),exLevels(),true)}
+    ${f("goal",L("Ziel: Welches Technikmerkmal bzw. welche Fähigkeit soll verbessert werden?","Goal: which technical feature or ability should be improved?"),L("z. B. früher hoher Ellbogen im Unterwasserzug","e.g. early vertical forearm in the pull"),false,true)}
+    ${f("desc",L("Ablauf: Wie wird die Übung ausgeführt?","Procedure: how is the exercise performed?"),L("Ausgangsstellung, Bewegungsablauf, Strecke bzw. Wiederholung","Starting position, movement sequence, distance or repetition"),false,true)}
+    ${f("cues",L("Ausführungshinweise (worauf achten?)","Coaching cues (what to watch for?)"),"",true,true)}
+    ${f("errors",L("Typische Fehler und Korrekturen","Typical errors and corrections"),"",true,true)}
+    ${f("equip",L("Hilfsmittel","Equipment"),L("z. B. Flossen, Pullbuoy, Schnorchel, keine","e.g. fins, pull buoy, snorkel, none"),true)}
+    ${f("dose",L("Umfang und Belastung","Volume and load"),L("z. B. 8 × 25 m, ruhig, 20 s Pause","e.g. 8 × 25 m, easy, 20 s rest"),true)}
+    ${f("prog",L("Varianten und Steigerung","Variations and progression"),"",true,true)}
+    ${f("src",L("Quelle (Fachliteratur, Verband) – falls vorhanden","Source (literature, federation) – if available"),"",true)}
+    ${f("link",L("Link zu einem Beispielvideo (optional)","Link to an example video (optional)"),"https://…",true)}
+  </div></fieldset>`; }
+function exRender(){ const d=EXS.d, dlg=$("exDlg"), n=d.items.length, w=d.who;
+  dlg.innerHTML=`<form class="dlgbox exbox" novalidate><div class="cmhead"><h3 style="margin:0">${L("Übung vorschlagen","Suggest an exercise")}</h3><button type="button" class="dclose" id="exX" aria-label="${L("Schließen","Close")}">×</button></div>
+    <p class="hint" style="margin:0 0 8px">${L("Pflichtfelder sind mit * markiert. Dein Entwurf bleibt auf diesem Gerät gespeichert, bis du ihn sendest.","Required fields are marked with *. Your draft stays saved on this device until you send it.")}</p>
+    ${d.items.map((x,i)=>exItemHTML(x,i,n)).join("")}
+    <button type="button" class="testbtn ghost" id="exAdd">+ ${L("Weitere Übung hinzufügen","Add another exercise")}</button>
+    <fieldset class="exitem"><legend>${L("Von dir","From you")}</legend><div class="exgrid">
+      <label class="athf"><span>${L("Name","Name")} *</span><input type="text" data-who="name" maxlength="80" value="${esc(w.name||"")}" autocomplete="name"></label>
+      <label class="athf"><span>${L("E-Mail für Rückfragen","Email for questions")} *</span><input type="email" data-who="mail" maxlength="120" value="${esc(w.mail||"")}" autocomplete="email"></label>
+      <label class="athf"><span>${L("Verein / Funktion (optional)","Club / role (optional)")}</span><input type="text" data-who="club" maxlength="120" value="${esc(w.club||"")}"></label></div>
+      <label class="athcons"><input type="checkbox" id="exCons"${d.cons?" checked":""}> <span>${L("Ich bin einverstanden, dass Sprintz meinen Vorschlag prüft, bei Bedarf bearbeitet und im Übungskatalog veröffentlicht. *","I agree that Sprintz reviews my suggestion, edits it if necessary and publishes it in the exercise catalogue. *")}</span></label>
+      <label class="athcons"><input type="checkbox" id="exCredit"${d.credit?" checked":""}> <span>${L("Mein Name darf als Quelle genannt werden.","My name may be credited as the source.")}</span></label></fieldset>
+    <p class="everr" id="exErr" hidden></p>
+    <div class="bugact"><button type="submit" class="testbtn" id="exSend">${n>1?L(`${n} Übungen senden`,`Send ${n} exercises`):L("Vorschlag senden","Send suggestion")}</button><button type="button" class="testbtn ghost" id="exCancel">${L("Abbrechen","Cancel")}</button></div></form>`;
+  const save=()=>exDraftSet(d);
+  dlg.querySelectorAll("[data-ex]").forEach(el=>{ el.addEventListener("keydown",e=>e.stopPropagation()); el.oninput=el.onchange=()=>{ const [i,k]=el.dataset.ex.split("|"); d.items[+i][k]=el.value; save(); if(k==="sport") exRender(); }; });
+  dlg.querySelectorAll("[data-who]").forEach(el=>{ el.addEventListener("keydown",e=>e.stopPropagation()); el.oninput=()=>{ d.who[el.dataset.who]=el.value.trim(); save(); }; });
+  $("exCons").onchange=e=>{ d.cons=e.target.checked; save(); }; $("exCredit").onchange=e=>{ d.credit=e.target.checked; save(); };
+  dlg.querySelectorAll("[data-exdel]").forEach(b=>b.onclick=()=>{ d.items.splice(+b.dataset.exdel,1); save(); exRender(); });
+  $("exAdd").onclick=()=>{ const last=d.items[d.items.length-1]||{}; const x=exNew(); x.sport=last.sport||sport; d.items.push(x); save(); exRender(); setTimeout(()=>{ const f=dlg.querySelectorAll(".exitem"); f[f.length-2]&&f[f.length-2].scrollIntoView({behavior:"smooth",block:"start"}); },30); };
+  $("exX").onclick=$("exCancel").onclick=()=>{ dlg.hidden=true; };
+  dlg.querySelector("form").onsubmit=e=>{ e.preventDefault(); exSend(); }; }
+function exText(d){ const cat=(x)=>(exCats(x.sport).find(c=>c[0]===x.cat)||[0,x.cat])[1], lv=(x)=>(exLevels().find(c=>c[0]===x.level)||[0,""])[1];
+  const row=(k,v)=>v?`${k}: ${v}`:""; const out=[`Übungsvorschlag für den Sprintz-Übungskatalog (${d.items.length} ${d.items.length===1?"Übung":"Übungen"})`,"",`Von: ${d.who.name} <${d.who.mail}>${d.who.club?" · "+d.who.club:""}`,`Konto: ${USER||"–"}`,`Veröffentlichung: einverstanden${d.credit?", Name darf genannt werden":", ohne Namensnennung"}`,""];
+  d.items.forEach((x,i)=>{ out.push(...[`===== Übung ${i+1}: ${x.name} =====`, row("Sportart", x.sport==="track"?"Leichtathletik":"Schwimmen"), row("Bereich", cat(x)), row("Leistungsstufe", lv(x)), row("Ziel", x.goal), row("Ablauf", x.desc), row("Ausführungshinweise", x.cues), row("Typische Fehler und Korrekturen", x.errors), row("Hilfsmittel", x.equip), row("Umfang und Belastung", x.dose), row("Varianten und Steigerung", x.prog), row("Quelle", x.src), row("Video", x.link)].filter(Boolean), ""); });
+  return out.filter((l,i,a)=>l!==""||a[i-1]!=="").join("\n"); }
+async function exSend(){ const d=EXS.d, err=$("exErr"), bad=t=>{ err.textContent=t; err.hidden=false; err.scrollIntoView({block:"nearest"}); };
+  err.hidden=true; for(let i=0;i<d.items.length;i++){ const x=d.items[i]; if(!x.name.trim()||!x.cat||!x.goal.trim()||!x.desc.trim()) return bad(L(`Bei Übung ${i+1} fehlen Pflichtangaben: Name, Bereich, Ziel und Ablauf.`,`Exercise ${i+1} is missing required details: name, area, goal and procedure.`)); }
+  if(!d.who.name) return bad(L("Bitte gib deinen Namen an.","Please enter your name.")); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.who.mail||"")) return bad(L("Bitte gib eine gültige E-Mail-Adresse für Rückfragen an.","Please enter a valid email address for questions."));
+  if(!d.cons) return bad(L("Bitte bestätige, dass dein Vorschlag geprüft und veröffentlicht werden darf.","Please confirm that your suggestion may be reviewed and published."));
+  const b=$("exSend"); b.disabled=true; b.textContent=L("Wird gesendet …","Sending …");
+  try{ const r=await fetch(CONTACT_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify({access_key:CONTACT_KEY, subject:`Sprintz: Übungsvorschlag – ${d.items.map(x=>x.name.trim()).join(", ").slice(0,120)}`, from_name:"Sprintz Übungskatalog", email:d.who.mail, replyto:d.who.mail, message:exText(d)})});
+    if(!r.ok) throw new Error(r.status); try{ localStorage.removeItem(EXS.key); }catch(e){} blog("klick","Übungsvorschlag gesendet",{n:d.items.length});
+    $("exDlg").querySelector(".dlgbox").innerHTML=`<div class="cmhead"><h3 style="margin:0">${L("Danke!","Thank you!")}</h3><button type="button" class="dclose" id="exX" aria-label="${L("Schließen","Close")}">×</button></div><p>${L("Dein Vorschlag wurde gesendet. Wir melden uns, falls es Rückfragen gibt.","Your suggestion has been sent. We'll get back to you if we have questions.")}</p><div class="bugact"><button type="button" class="testbtn" id="exOk">${L("Schließen","Close")}</button></div>`;
+    $("exX").onclick=$("exOk").onclick=()=>{ $("exDlg").hidden=true; }; }
+  catch(e){ b.disabled=false; b.textContent=L("Vorschlag senden","Send suggestion"); bad(L("Das Senden hat nicht geklappt. Prüfe deine Internetverbindung und versuche es noch einmal; dein Entwurf bleibt gespeichert.","Sending failed. Check your internet connection and try again; your draft stays saved.")); } }
 // Kontakt: Nachrichten gehen über einen Formular-Dienst an die hinterlegte Adresse.
 // CONTACT_ENDPOINT wird nach dem Umzug auf eine eigene Webadresse eingetragen (z. B. Web3Forms oder Formspree).
 const CONTACT_ENDPOINT="https://api.web3forms.com/submit", CONTACT_KEY="7052fa0d-e455-4188-ba7b-9a7bffa28a1f";
