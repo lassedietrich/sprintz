@@ -2394,5 +2394,903 @@
   "sport": "swim",
   "equipOther": "",
   "link": ""
+ },
+ {
+  "id": "r-superman-kicks",
+  "name": "Superman-Kicks",
+  "cat": [
+   "free",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Bauchlage, die Arme schulterbreit gestreckt nach vorne (nicht in Streamline), Handflächen nach unten, das Gesicht im Wasser, Blick zum Boden. Du machst Kraulbeine. Zum Atmen hebst du den Kopf kurz nach vorne oder drehst ihn zur Seite und gehst gleich wieder zurück.",
+  "goal": "Richtige Kopfhaltung: Der Kopf liegt ruhig zwischen den Armen, der Blick geht nach unten. So bleiben Hüfte und Beine oben. Die offene Armhaltung entspricht der Position vor dem Fassen des Wassers.",
+  "errors": "Blick nach vorne, dadurch sinken die Beine. – Die Arme sinken tief ab oder gehen zu weit auseinander. – Der Beinschlag kommt aus den Knien. – Beim Atmen bricht die Lage zusammen.",
+  "prog": "Mit Flossen → ohne. Kurze Abschnitte ohne Atmung → mit Seitatmung. Danach ganze Lage mit derselben Kopfhaltung.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis)",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-pullbuoy-knoechel",
+  "name": "Kraul mit Pullbuoy zwischen den Knöcheln",
+  "cat": [
+   "free",
+   "pull",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "buoy"
+  ],
+  "equipOpt": [],
+  "desc": "Du klemmst den Pullbuoy zwischen die Knöchel statt zwischen die Oberschenkel und schwimmst Kraul nur mit den Armen, ohne Beinschlag.",
+  "goal": "Der Pullbuoy hebt die Beine weniger als sonst, deshalb musst du die Wasserlage aus der Rumpfspannung halten. Gute Vorstufe zum Schwimmen mit Fußschlinge.",
+  "errors": "Die Hüfte sackt ab, man schwimmt „bergauf“. – Die Beine pendeln seitlich mit. – Hohlkreuz statt fester Rumpf. – Die Frequenz wird hektisch.",
+  "prog": "Pullbuoy an den Oberschenkeln → an den Knien → an den Knöcheln → Fußschlinge ohne Pullbuoy.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis)",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-rollkick",
+  "name": "Rollkick (Arme am Körper)",
+  "cat": [
+   "free",
+   "body",
+   "kick",
+   "breath"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Bauchlage, beide Arme liegen locker am Körper, das Gesicht im Wasser, Blick zum Boden. Du kickst gleichmäßig Kraulbeine und rollst dabei immer wieder über die Längsachse von einer Seitenlage in die andere – Schulter und Hüfte drehen gemeinsam. In der Seitenlage hältst du kurz, zum Atmen drehst du den Kopf mit der Rolle zur Seite. Variante: dasselbe in Rückenlage, dann ohne Atemdrehung.",
+  "goal": "Drehung um die Längsachse aus dem ganzen Körper und ein gleichmäßiger Beinschlag, der auch während der Rotation nicht aussetzt. Ohne Armbewegung kannst du dich ganz auf Rotation, Kopf und Beine konzentrieren.",
+  "errors": "Nur die Schultern drehen, die Hüfte bleibt flach. – Der Kopf dreht mit, auch wenn nicht geatmet wird. – Der Beinschlag wird bei der Drehung breit oder stoppt. – Man schlängelt seitlich.",
+  "prog": "Mit Flossen → ohne. Bauchlage → Rückenlage. Längere Haltephasen → flüssiges Rollen. Danach Seitlage-Wechsel mit Armzug.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis); Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21) (Torpedo)",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-hundepaddeln",
+  "name": "Hundepaddeln (Doggy Paddle)",
+  "cat": [
+   "free",
+   "pull",
+   "feel"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du schwimmst Kraul, aber die Arme bleiben ganz unter Wasser: Jeder Arm fasst vor dem Kopf das Wasser, zieht kurz bis etwa unter die Brust und wird dann unter Wasser wieder nach vorne geschoben. Abwechselnd links und rechts, Gesicht im Wasser, Beine kicken weiter.",
+  "goal": "Den Anfang des Zugs bewusst spüren: früh mit hohem Ellbogen und senkrechtem Unterarm fassen, statt das Wasser nach unten zu drücken. Weil die Rückführung wegfällt, bleibt die ganze Aufmerksamkeit beim Fassen.",
+  "errors": "Die Hand drückt nach unten statt nach hinten. – Der Ellbogen fällt beim Fassen ab. – Die Hände kreuzen vor dem Kopf. – Der Kopf hebt sich.",
+  "prog": "Mit Flossen → ohne. Danach Long Dog → ganze Lage mit demselben Fassen.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis)",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-long-dog",
+  "name": "Long Dog",
+  "cat": [
+   "free",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Wie Hundepaddeln, aber jeder Zug geht ganz durch bis zur Hüfte. Danach wird der Arm unter Wasser nah am Körper wieder nach vorne geschoben. Die Rotation um die Längsachse ist wie beim normalen Kraul.",
+  "goal": "Vollständige Zuglänge und ein gleichmäßiger Rhythmus der Arme unter Wasser, ohne dass die Rückführung über Wasser stört.",
+  "errors": "Der Zug endet zu früh unter der Brust. – Beim Vorschieben wird viel Widerstand erzeugt, weil der Arm weit vom Körper ist. – Keine Rotation.",
+  "prog": "Mit Flossen → ohne. Im Wechsel mit ganzer Lage.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis)",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-5-zuege-stopp",
+  "name": "5 Züge & Stopp",
+  "cat": [
+   "free",
+   "pull",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst 5 Züge Kraul und bleibst dann in der Endposition liegen: ein Arm vorne gestreckt, der andere hinten an der Hüfte, Körper in Seitenlage. Kurz halten (z. B. bis 3 zählen), dann die nächsten 5 Züge.",
+  "goal": "Den Zug wirklich bis zur Hüfte durchdrücken und prüfen, ob die Endposition stimmt: gestreckter Körper, ruhige Seitenlage, Hand hinten am Oberschenkel.",
+  "errors": "Der hintere Arm endet schon an der Brust. – In der Pause sinken die Beine. – Der Körper liegt flach statt seitlich.",
+  "prog": "5 Züge → 3 Züge → nur noch kurzes Halten → ganze Lage mit vollem Durchdrücken.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis)",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-achsel-pause",
+  "name": "Achsel-Pause (Armpit Pause)",
+  "cat": [
+   "free",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "In der Rückführung ziehst du die Hand nah am Körper nach oben, bis der Daumen kurz an der Achsel anhält. Dann führst du den Arm locker nach vorne und tauchst vor der Schulter ein.",
+  "goal": "Hoher Ellbogen und kurzer Hebel in der Rückführung, entspannte Schulter und ein kontrolliertes Eintauchen vor der Schulter.",
+  "errors": "Der Arm schwingt gestreckt und weit seitlich. – Die Pause wird so lang, dass die Beine absinken. – Die Hand taucht über die Körpermitte ein.",
+  "prog": "Einarmig → beidarmig → ohne Pause mit gleicher Armführung. Verwandt mit Schulter-Tippen und Zipper.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis)",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-front-quadrant",
+  "name": "Front Quadrant (Fast-Abschlag)",
+  "cat": [
+   "free",
+   "coord",
+   "pull"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Kraul und beginnst mit dem Zug des vorderen Arms erst, wenn die andere Hand fast vorne angekommen ist, also etwa am Kopf vorbei. Es ist immer eine Hand vor dem Kopf.",
+  "goal": "Lange Streckung nach vorne und Zuglänge, ohne die Pause des Abschlagschwimmens. Brücke zwischen Abschlag und der stärker überlappenden Sprintkoordination.",
+  "errors": "Der vordere Arm wartet doch bis zum Abschlag. – Der vordere Arm sinkt beim Warten ab. – Im Sprint wird die Koordination nicht wieder geöffnet.",
+  "prog": "Abschlag → Front Quadrant → Paddel-Technik → ganze Lage im Wettkampftempo.",
+  "src": "Outpace Swimming (NZ): Swim Drill Library (Videos; Ablauf nach gängiger Praxis); Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21) (Near Catch-Up); Tredict: Swimming Technique Workouts",
+  "link": "https://outpaceswimming.co.nz/swim-drill-videos/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-black-line",
+  "name": "Black-Line-Drill (Geradeaus schwimmen)",
+  "cat": [
+   "free",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst genau über der schwarzen Linie am Beckenboden, die Wirbelsäule liegt über der Linie. Die Hände tauchen schulterbreit ein und ziehen bewusst gerade nach hinten. Variante: ein paar Züge mit geschlossenen Augen, dann prüfen, ob du noch über der Linie bist.",
+  "goal": "Geradlinig schwimmen und das Wasser gerade nach hinten drücken, statt zu schlängeln – wichtig fürs Freiwasser, wo es keine Linie gibt.",
+  "errors": "Die Hände kreuzen über die Körpermitte. – Zu breite oder große S-förmige Zugbahn. – Mit geschlossenen Augen zieht man zu einer Seite.",
+  "prog": "Mit offenen Augen → einzelne Züge mit geschlossenen Augen → längere Abschnitte.",
+  "src": "Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-atemrhythmus-357",
+  "name": "Kraul mit wechselndem Atemrhythmus (3/5/7)",
+  "cat": [
+   "free",
+   "breath",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Kraul und atmest jeden 3., 5. oder 7. Zug, abwechselnd zu beiden Seiten. Varianten: pro Bahn ein Rhythmus, oder innerhalb einer Bahn wechseln (z. B. 3-5-7-5-3).",
+  "goal": "Zu beiden Seiten atmen können, einen symmetrischen Zug entwickeln und die Atmung an Tempo und Belastung anpassen. Seltenes Atmen schult zusätzlich ruhiges Ausatmen unter Wasser.",
+  "errors": "Auf der ungewohnten Seite wird der Kopf gehoben. – Die Luft wird angehalten statt unter Wasser auszuatmen. – Der Zug wird bei langen Abschnitten ohne Atmung hektisch.",
+  "prog": "3er → 5er → 7er. Wechsel innerhalb einer Bahn. Im Freiwasser auch einseitig oder alle 2 Züge.",
+  "src": "Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21); Pushing Limits: Swim Drills Library; Tredict: Swimming Technique Workouts",
+  "link": "https://pushinglimits.club/en/knowledge/swim-drills-library",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-rotationskick-ruecken",
+  "name": "Rotationskick in Rückenlage (Schulter zum Kinn)",
+  "cat": [
+   "back",
+   "body",
+   "kick"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du liegst auf dem Rücken, die Arme am Körper, und kickst Rückenbeine. Der Kopf bleibt ruhig. Du drehst eine Schulter so weit nach oben, dass sie fast das Kinn berührt, und lässt die Hüfte mitdrehen. 6 Kicks halten, 3 Kicks flach auf dem Rücken, dann die andere Schulter zum Kinn.",
+  "goal": "Rotation um die Längsachse über die ganze Bahn, mit ruhigem Kopf und Hüfte, die mitdreht. Grundlage für das Rückenschwimmen und für das Kraul.",
+  "errors": "Der Kopf dreht mit. – Nur die Schulter dreht, die Hüfte bleibt flach. – Der Beinschlag setzt bei der Drehung aus.",
+  "prog": "Mit Flossen → ohne. 6-3-6 → flüssiges Rollen. Danach Rücken: Schulter zum Kinn mit Armzug.",
+  "src": "Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-wassertreten-arme",
+  "name": "Wassertreten nur mit den Armen",
+  "cat": [
+   "pull",
+   "feel"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "buoy"
+  ],
+  "equipOpt": [
+   "buoy"
+  ],
+  "desc": "Im tiefen Wasser hältst du dich aufrecht über Wasser, ohne die Beine zu benutzen. Die Ellbogen bleiben seitlich am Körper, die Unterarme waagerecht, die Hände skullen gleichmäßig nach außen und innen und erzeugen Auftrieb. Ein Pullbuoy zwischen den Beinen hilft, sie ruhig zu halten.",
+  "goal": "Wassergefühl: Druck mit Hand und Unterarm aufbauen und halten. Die Bewegung soll aus dem Ellbogen kommen, nicht aus dem Handgelenk.",
+  "errors": "Die Handgelenke knicken ab. – Die Bewegung wird ruckartig statt gleichmäßig. – Die Beine helfen heimlich mit.",
+  "prog": "Kurze Zeitabschnitte → länger. Mit Pullbuoy → ohne. Hände halb aus dem Wasser (schwerer).",
+  "src": "Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-vertikal-skullen",
+  "name": "Vertikales Skullen vorwärts und rückwärts",
+  "cat": [
+   "pull",
+   "feel"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du bist aufrecht im tiefen Wasser, Kopf über Wasser, Füße zeigen zum Boden, keine Beinarbeit. Die Hände sind vor dem Körper. Zeigen die Fingerspitzen nach unten, schiebt dich das Skullen vorwärts; zeigen sie nach oben, bewegst du dich rückwärts.",
+  "goal": "Feines Gefühl dafür, wie die Stellung von Hand und Unterarm die Richtung des Drucks bestimmt.",
+  "errors": "Die Beine paddeln mit. – Die Bewegung wird zum Brustarmzug. – Die Hände sind flach statt angestellt.",
+  "prog": "Vorwärts → rückwärts → im Wechsel auf Zuruf.",
+  "src": "Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-stuhl-skullen",
+  "name": "Stuhl-Skullen",
+  "cat": [
+   "pull",
+   "feel",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Kopf über Wasser, die Knie zur Brust gezogen wie im Sitzen, die Arme vor dem Körper, Fingerspitzen nach unten. Mit kräftigem Skullen bewegst du dich vorwärts. Die Finger bleiben geschlossen.",
+  "goal": "Kräftiges Skullen in Verbindung mit Bauchmuskelarbeit. Zu weit gespreizte Finger oder falsche Handstellung merkt man hier sofort.",
+  "errors": "Das Skullen wird zum Brustarmzug. – Die Finger sind gespreizt. – Die Knie sinken nach unten.",
+  "prog": "Auf der Stelle → vorwärts → kurze Sprintabschnitte.",
+  "src": "Bullock, D.: Swimming Drills – Improve your speed and efficiency (10k Training Guide, S. 11–21)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-ausatmen",
+  "name": "Ausatmen unter Wasser (Blubbern)",
+  "cat": [
+   "breath"
+  ],
+  "level": [
+   "beg"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du atmest unter Wasser gleichmäßig durch Mund oder Nase aus, sodass Blasen aufsteigen, und hebst bzw. drehst den Kopf nur kurz zum Einatmen. Für Einsteiger zuerst im Stand am Beckenrand oder in Bauchlage am Rand bzw. auf einer Matte, dann beim Kraulschwimmen über eine Bahn.",
+  "goal": "Ruhiges, gleichmäßiges Ausatmen unter Wasser, damit beim Kopfdrehen nur noch eingeatmet werden muss. Nimmt Hektik und Luftnot aus dem Schwimmen.",
+  "errors": "Luft anhalten und alles auf einmal ausstoßen. – Ausatmen erst über Wasser. – Kopf zum Atmen weit anheben.",
+  "prog": "Im Stand → in Bauchlage am Rand → Kraulbeine mit Seitatmung → ganze Lage.",
+  "src": "Pushing Limits: Swim Drills Library; AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis)",
+  "link": "https://pushinglimits.club/en/knowledge/swim-drills-library",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-tarzan",
+  "name": "Tarzan-Kraul (Wasserballkraul)",
+  "cat": [
+   "free",
+   "pull",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Kraul mit dem Kopf über Wasser und Blick nach vorne, wie beim Wasserball. Kräftiger Beinschlag und eine höhere Frequenz halten die Lage.",
+  "goal": "Kraft und kräftiger Beinschlag, frühes Fassen vor dem Kopf, Orientierung nach vorne (Freiwasser). Im Kontrast zur normalen Kopfhaltung spürt man deutlich, wie viel ein gesenkter Kopf bringt.",
+  "errors": "Die Beine sinken stark ab. – Die Hände drücken nach unten, um den Kopf zu halten. – Zu lange Strecken, die Schulter wird überlastet.",
+  "prog": "Kurze Abschnitte (10–15 m) → im Wechsel mit normaler Lage. Siehe auch Kraul mit variierter Kopfhaltung.",
+  "src": "Tredict: Swimming Technique Workouts; Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Heads Up Freestyle)",
+  "link": "https://workouts.tredict.com/en/swimming/technique/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-zugzahl",
+  "name": "Zugzahl-Training (Strecke pro Zug)",
+  "cat": [
+   "free",
+   "coord",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "tempo"
+  ],
+  "equipOpt": [
+   "tempo"
+  ],
+  "desc": "Du zählst bei jeder Bahn deine Züge. Ziel: bei gleicher Zeit weniger Züge oder bei gleicher Zugzahl schneller. Als „Golf-Score“: Züge plus Sekunden einer Bahn zusammenzählen und senken.",
+  "goal": "Effizienz: Wie weit trägt dich jeder Zug? Eine einfache, messbare Rückmeldung für das Techniktraining.",
+  "errors": "Zugzahl wird nur über Gleiten gesenkt, das Tempo bricht ein. – Abstoß unterschiedlich lang, dadurch kein Vergleich. – Zählen wird vergessen, sobald es anstrengend wird.",
+  "prog": "Locker → mittleres Tempo → Wettkampftempo. Mit Taktgeber eine feste Frequenz vorgeben.",
+  "src": "Tredict: Swimming Technique Workouts",
+  "link": "https://workouts.tredict.com/en/swimming/technique/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-laenge-frequenz",
+  "name": "Kontrast Zuglänge – Zugfrequenz",
+  "cat": [
+   "free",
+   "coord",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "tempo"
+  ],
+  "equipOpt": [
+   "tempo"
+  ],
+  "desc": "Du schwimmst im Wechsel Abschnitte mit sehr langen Zügen und niedriger Frequenz und Abschnitte mit kurzen Zügen und hoher Frequenz, z. B. je 25 m. Danach suchst du die Mischung, mit der du bei gleichem Aufwand am schnellsten bist.",
+  "goal": "Gefühl für das Zusammenspiel von Zuglänge und Zugfrequenz und das Finden des eigenen besten Verhältnisses (Differenzerfahrung). Gerade im Sprint wichtig.",
+  "errors": "Die Extreme sind nicht deutlich genug. – Bei hoher Frequenz rutscht die Hand durch. – Bei langen Zügen wird geglitten bis zum Stillstand.",
+  "prog": "Getrennte Bahnen → Wechsel innerhalb einer Bahn → mit Taktgeber feste Frequenzen vorgeben.",
+  "src": "Tredict: Swimming Technique Workouts; Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "link": "https://workouts.tredict.com/en/swimming/technique/",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-qualle",
+  "name": "Qualle (Mushroom Float)",
+  "cat": [
+   "body",
+   "breath"
+  ],
+  "level": [
+   "beg"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Im stehtiefen Wasser atmest du ein, ziehst die Knie zur Brust, umfasst sie mit den Armen und lässt dich mit dem Gesicht nach unten treiben. Der Rücken schwimmt wie ein Pilz an der Oberfläche. Ein paar Sekunden halten, dann wieder hinstellen.",
+  "goal": "Erfahren, dass das Wasser trägt, und den eigenen Auftrieb spüren. Gute Wassergewöhnung und Vorbereitung auf das Gleiten.",
+  "errors": "Ausatmen gleich am Anfang, dadurch sinkt man ab. – Hektisches Aufstehen. – Kopf nicht ins Wasser.",
+  "prog": "Kurz → länger halten → aus der Qualle in den Seestern strecken.",
+  "src": "AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis)",
+  "link": "https://www.analysisswim.com/swim/article/freestyle-drills-finder",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-seestern",
+  "name": "Seestern (Floating Star)",
+  "cat": [
+   "body",
+   "breath"
+  ],
+  "level": [
+   "beg"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du liegst mit gestreckten, weit gespreizten Armen und Beinen in Bauchlage an der Oberfläche, das Gesicht im Wasser, und hältst die Luft an. Variante in Rückenlage mit Blick nach oben.",
+  "goal": "Ruhige, waagerechte Lage auf dem Wasser und Körperspannung. Grundlage für Gleiten und alle Schwimmlagen.",
+  "errors": "Kopf hebt sich, die Beine sinken. – Körper ist schlaff. – In Rückenlage wird die Hüfte gebeugt.",
+  "prog": "Bauchlage → Rückenlage → Wechsel durch Drehen → in die Streamline schließen.",
+  "src": "AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis)",
+  "link": "https://www.analysisswim.com/swim/article/freestyle-drills-finder",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-pfeilgleiten",
+  "name": "Pfeilgleiten (Streamline Float)",
+  "cat": [
+   "body",
+   "uw"
+  ],
+  "level": [
+   "beg"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du stößt dich mit beiden Füßen von der Wand ab und gleitest in Bauchlage in enger Streamline: Hände übereinander, Arme an den Ohren, Kopf zwischen den Armen, Beine geschlossen und gestreckt. So weit gleiten, wie es geht.",
+  "goal": "Die widerstandsärmste Körperhaltung kennenlernen – die Grundlage für Abstoß, Start und Wende in allen Lagen.",
+  "errors": "Kopf hebt sich zum Schauen. – Hände liegen nebeneinander statt übereinander. – Beine gehen auseinander. – Abstoß nach unten oder oben.",
+  "prog": "Gleitweite messen → in Rücken- und Seitenlage → mit Kraulbeinen aus dem Gleiten.",
+  "src": "AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis)",
+  "link": "https://www.analysisswim.com/swim/article/freestyle-drills-finder",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-kraulbeine-rand",
+  "name": "Kraulbeine am Beckenrand",
+  "cat": [
+   "free",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "beg"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du hältst dich mit gestreckten Armen am Beckenrand oder an der Überlaufrinne fest und liegst in Bauchlage, das Gesicht im Wasser. Die Beine machen Kraulbeinschlag aus der Hüfte, die Füße locker und gestreckt. Zum Atmen den Kopf zur Seite drehen.",
+  "goal": "Den Beinschlag ohne Sorge um die Fortbewegung lernen: schmal, aus der Hüfte, mit lockeren Fußgelenken.",
+  "errors": "Radfahrbewegung aus den Knien. – Füße angezogen. – Kopf aus dem Wasser, die Beine sinken.",
+  "prog": "Kurze Abschnitte → mit Seitatmung → Kraulbeine mit Brett → Kraulbeine in Streamline.",
+  "src": "AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis)",
+  "link": "https://www.analysisswim.com/swim/article/freestyle-drills-finder",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-kraulbeine-sitz",
+  "name": "Kraulbeine im Sitzen am Beckenrand",
+  "cat": [
+   "free",
+   "kick"
+  ],
+  "level": [
+   "beg"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du sitzt am Beckenrand, die Beine im Wasser, und machst Kraulbeinschläge mit fast gestreckten Knien und gestreckten, lockeren Füßen. Die Zehen „kochen“ das Wasser knapp unter der Oberfläche.",
+  "goal": "Für Einsteiger: die richtige Bein- und Fußhaltung sehen und spüren, bevor man liegt.",
+  "errors": "Starke Kniebeugung. – Füße angezogen. – Die Beine schlagen weit aus dem Wasser.",
+  "prog": "Langsam → schneller → Kraulbeine am Beckenrand in Bauchlage.",
+  "src": "AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis)",
+  "link": "https://www.analysisswim.com/swim/article/freestyle-drills-finder",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-hoher-ellbogen-trocken",
+  "name": "Hoher Ellbogen am Beckenrand (Trockenübung)",
+  "cat": [
+   "free",
+   "pull"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du liegst bäuchlings auf dem Beckenrand, ein Arm hängt über die Kante ins Wasser. Du übst langsam das Fassen: Der Ellbogen bleibt oben, der Unterarm klappt nach unten, bis er senkrecht steht, dann drückst du das Wasser nach hinten. Auch an Land vor dem Spiegel möglich.",
+  "goal": "Die Armhaltung beim Fassen (hoher Ellbogen, senkrechter Unterarm) in Ruhe sehen und spüren, bevor sie im Schwimmen umgesetzt wird.",
+  "errors": "Der Ellbogen fällt nach unten und zieht voraus. – Der Arm ist ganz gestreckt. – Das Handgelenk knickt ab.",
+  "prog": "Langsam → mit Partner, der die Ellbogenhöhe prüft → Hundepaddeln → ganze Lage.",
+  "src": "AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis)",
+  "link": "https://www.analysisswim.com/swim/article/freestyle-drills-finder",
+  "sport": "swim",
+  "equipOther": ""
+ },
+ {
+  "id": "r-downhill-float",
+  "name": "Bergab-Lage (Downhill Float)",
+  "cat": [
+   "free",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du treibst in Bauchlage, die Arme am Körper, ohne dich fortzubewegen. Meist sinken die Beine. Dann senkst du das Kinn, bis du zum Boden schaust, spannst den Bauch an und machst den Rücken gerade. Zum Schluss verlagerst du das Gewicht nach vorne auf die Brust, bis Hüfte und Beine steigen. Danach dasselbe mit gestreckten Armen über dem Kopf.",
+  "goal": "Die günstige „Bergab“-Lage lernen: Kopf unten, Rumpf fest, Gewicht auf der Brust. Dann liegen Hüfte und Beine hoch.",
+  "errors": "Blick nach vorne. – Hohlkreuz statt geradem Rücken. – Die Beine sinken trotzdem: Gerade dann ist die Rumpfspannung besonders wichtig.",
+  "prog": "Arme am Körper → Arme über dem Kopf → Rollen (Log Roll) → Kraulbeine in derselben Lage.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (Drill 1)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-log-roll",
+  "name": "Log Roll (Rollen um die Längsachse)",
+  "cat": [
+   "body",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Bauchlage in Bergab-Lage, die Arme am Körper, Blick zum Boden. Du drehst Hüfte und Schulter eine Vierteldrehung auf die rechte Seite und hältst 5 Sekunden, dann auf den Rücken (5 Sekunden), dann auf die linke Seite, dann wieder auf den Bauch. Danach in die andere Richtung. Auf dem Rücken kannst du atmen.",
+  "goal": "Die Körperachse beim Drehen gerade halten und die Drehung aus dem Rumpf steuern, nicht aus dem Kopf.",
+  "errors": "Die Drehung kommt nur aus der Schulter, die Hüfte bleibt liegen. – Der Kopf dreht vor dem Körper. – Die Beine sinken (dann leichter Beinschlag erlaubt).",
+  "prog": "Mit Pausen → flüssig → 360°-Rollen mit Beinschlag → Rollkick.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (Drill 2); AnalysisSwim: Freestyle Drills Finder (nur Übungsname; Ablauf nach gängiger Praxis) (360 Roll)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-fussstellung-kraul",
+  "name": "Fußstellung beim Kraulbeinschlag",
+  "cat": [
+   "free",
+   "kick",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "board"
+  ],
+  "equipOpt": [
+   "board"
+  ],
+  "desc": "Bauchlage, Arme gestreckt, Kraulbeine. Je 30 Sekunden mit unterschiedlicher Fußstellung: 1. Zehen gestreckt, 2. Füße angezogen (rechter Winkel wie im Stand), 3. Zehen gestreckt und Füße leicht nach innen gedreht, sodass sich die großen Zehen fast berühren. Variante: Fußgelenke ganz locker „flattern“ lassen.",
+  "goal": "Selbst spüren, wie stark die Fußstellung den Vortrieb bestimmt: Mit angezogenen Füßen kommt man kaum vorwärts, mit gestreckten und leicht einwärts gedrehten Füßen am besten.",
+  "errors": "Die Knie werden stark gebeugt und bringen Luft ins Wasser. – Krampf im Fußgewölbe: Zehen lockerer lassen, nur den Fuß strecken. – Die Unterschiede werden nicht bewusst wahrgenommen.",
+  "prog": "Mit Brett → ohne. Danach Kraulbeine in Streamline mit gestreckten, leicht einwärts gedrehten Füßen.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (Drill 4 Toe Point, Drill 5 Floppy Foot)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-faust-ruecken",
+  "name": "Faustschwimmen Rücken",
+  "cat": [
+   "back",
+   "pull",
+   "feel",
+   "var"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Rücken mit geschlossenen Fäusten. Ohne Handfläche musst du mit dem Unterarm ziehen: Ellbogen beugen, Unterarm gegen das Wasser stellen und bis zur Hüfte drücken. Im Wechsel: 25 m Faust, 25 m offene Hand.",
+  "goal": "Den Unterarm als Antriebsfläche im Rückenschwimmen spüren und den gebeugten Ellbogen im Zug lernen. Beim Öffnen der Hand merkt man den Unterschied deutlich.",
+  "errors": "Der Arm zieht gestreckt und tief. – Die Arme drehen schnell durch ohne Vortrieb. – Die Rotation geht verloren.",
+  "prog": "Faust → offene Hand im Wechsel → einarmig mit Faust.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Fist Backstroke)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-ruecken-atemrhythmus",
+  "name": "Rücken mit festem Atemrhythmus",
+  "cat": [
+   "back",
+   "breath",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Rücken und koppelst die Atmung an die Arme: Einatmen, während ein Arm über Wasser zurückkommt, ausatmen beim anderen Arm. Immer derselbe Rhythmus.",
+  "goal": "Gleichmäßige Atmung im Rückenschwimmen statt Luftanhalten, und ein ruhiger Rhythmus, der zur Armbewegung passt.",
+  "errors": "Unregelmäßiges Atmen oder Luftanhalten. – Durch die Nase wird nicht ausgeatmet, dadurch kommt Wasser in die Nase. – Der Kopf bewegt sich mit dem Atmen.",
+  "prog": "Langsam → Wettkampftempo → nach Wende und Unterwasserphase sofort in den Rhythmus finden.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Rhythmic Breathing Sequence)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-brustbeine-vertikal",
+  "name": "Vertikaler Brustbeinschlag",
+  "cat": [
+   "breast",
+   "kick"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Im tiefen Wasser aufrecht, die Arme vor der Brust verschränkt oder über dem Kopf. Du hältst dich nur mit Brustbeinschlägen über Wasser: Fersen zum Gesäß, Füße nach außen drehen, kräftig nach unten und hinten schlagen, die Beine schließen.",
+  "goal": "Kraft und Wirksamkeit des Brustbeinschlags. Man merkt sofort, ob der Schlag mit der Innenseite von Fuß und Unterschenkel Wasser fasst.",
+  "errors": "Die Füße sind nicht nach außen gedreht und rutschen durch. – Die Beine schließen sich am Ende nicht. – Nur kleine, schnelle Bewegungen statt voller Schläge.",
+  "prog": "Arme helfen mit → Arme vor der Brust → Arme über dem Kopf → Hände aus dem Wasser.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Vertical Breaststroke Kick)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-brustbeine-kopf-hoch",
+  "name": "Brustbeine mit Kopf über Wasser",
+  "cat": [
+   "breast",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "board"
+  ],
+  "equipOpt": [
+   "board"
+  ],
+  "desc": "Du schwimmst Brustbeine, die Arme gestreckt vorne (mit oder ohne Brett), der Kopf bleibt dauerhaft über Wasser mit Blick nach vorne.",
+  "goal": "Kraftvoller Beinschlag, der auch in ungünstiger Lage Vortrieb erzeugt. Gleichzeitig gut zu sehen und zu korrigieren, weil der Kopf oben ist.",
+  "errors": "Die Knie werden unter den Bauch gezogen. – Die Hüfte sinkt stark ab. – Die Füße drehen nicht nach außen.",
+  "prog": "Mit Brett → ohne → im Wechsel mit Brustbeinen in Streamline.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Heads up Breaststroke Kick)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-brust-faust",
+  "name": "Brust mit Fäusten",
+  "cat": [
+   "breast",
+   "pull",
+   "feel",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Brust mit geschlossenen Fäusten. Der Armzug muss jetzt über die Unterarme kommen: Ellbogen hoch halten und die Unterarme beim Einwärtszug gegen das Wasser stellen. Im Wechsel mit offener Hand.",
+  "goal": "Den Unterarm als Teil der Zugfläche spüren und einen Armzug mit hohem Ellbogen statt nur mit den Händen.",
+  "errors": "Der Zug wird breit und flach. – Die Ellbogen fallen nach hinten. – Der Rhythmus von Armen und Beinen geht verloren.",
+  "prog": "Faust → offene Hand im Wechsel → Brust: Wechsel der Zugbreite.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Breaststroke with Fists)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-brust-tennisball",
+  "name": "Brust mit Tennisball unter dem Kinn",
+  "cat": [
+   "breast",
+   "body",
+   "breath"
+  ],
+  "level": [
+   "adv"
+  ],
+  "equip": [
+   "other"
+  ],
+  "equipOpt": [],
+  "equipOther": "Tennisball",
+  "desc": "Du klemmst einen Tennisball zwischen Kinn und Brust und schwimmst Brust, ohne dass der Ball herausfällt.",
+  "goal": "Der Kopf bleibt beim Atmen in Verlängerung der Wirbelsäule und wird nicht in den Nacken genommen. Die Atmung kommt aus dem Heben des Oberkörpers, nicht aus dem Kopf.",
+  "errors": "Kopf geht in den Nacken, der Ball fällt heraus. – Das Kinn wird so fest angepresst, dass der Oberkörper verkrampft. – Der Rhythmus wird unruhig.",
+  "prog": "Langsam mit Gleitphase → normales Tempo → ohne Ball mit derselben Kopfhaltung.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Tennis Ball Drill)",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-ohne-beine",
+  "name": "Schmetterling ohne Beinschlag",
+  "cat": [
+   "fly",
+   "pull",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "buoy"
+  ],
+  "equipOpt": [
+   "buoy"
+  ],
+  "desc": "Du schwimmst Schmetterling nur mit den Armen, die Beine bleiben geschlossen und ruhig (gegebenenfalls Pullbuoy). Die Welle soll trotzdem aus Brust und Hüfte entstehen.",
+  "goal": "Armzug und Oberkörperwelle ohne Hilfe der Beine. Zeigt, ob der Armzug wirklich Vortrieb liefert und die Rückführung flach über Wasser geht.",
+  "errors": "Die Beine kicken heimlich mit. – Der Oberkörper bleibt steif, keine Welle. – Die Arme werden über Wasser gebeugt nach vorne gezogen.",
+  "prog": "Kurze Abschnitte mit Pullbuoy → ohne → im Wechsel mit ganzer Lage.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (No Kick Butterfly)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-leiser-delfin",
+  "name": "Leiser Schmetterling",
+  "cat": [
+   "fly",
+   "coord",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du schwimmst Schmetterling so leise wie möglich: kein Klatschen beim Eintauchen der Hände, kein Spritzen der Beine. Hände tauchen schulterbreit mit den Fingerspitzen zuerst ein.",
+  "goal": "Ein ruhiger, flüssiger Schmetterling mit wenig Widerstand. Wer leise schwimmt, schwimmt meist mit gutem Timing und lockeren Bewegungen.",
+  "errors": "Die Hände klatschen flach aufs Wasser. – Der Kopf taucht zu tief ein. – Leise wird mit langsam verwechselt, die Welle verschwindet.",
+  "prog": "Mit Flossen → ohne. Wenige Züge → halbe Bahn → ganze Bahn.",
+  "src": "Lucero, B. (2011): The 100 Best Swimming Drills. Meyer & Meyer Sport (nur Übungsname aus dem Inhaltsverzeichnis; Ablauf nach gängiger Praxis) (Quiet Butterfly)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
  }
 ]
