@@ -1,23 +1,21 @@
 # Sprintz – Arbeitsregeln für Claude
 
-Sprintz ist eine Web-App (und ein Desktop-Programm für Mac und Windows) für Start- und Reaktionstraining sowie Technikauswertung in Schwimmen und Leichtathletik. Eigentümer: Lasse Dietrich (Konto `host289`). Mitentwickler: `freaky200`.
+Sprintz ist eine Web-App (und ein Desktop-Programm für Mac und Windows) für Start- und Reaktionstraining sowie Technikauswertung in Schwimmen und Leichtathletik. Eigentümer: Lasse Dietrich (Konto `host289`). `freaky200` (Jan Tafreschi) entwickelt seit 11/2026 nicht mehr mit, behält aber Entwicklermodus und Zugriff auf die Testversion.
 
 ## Wer darf was
 
 - **Nur Lasse (`host289`) veröffentlicht.** Der Zweig `main` ist die veröffentlichte Fassung (GitHub Pages und Desktop-Programm). Auf `main` wird nie direkt gepusht und nie gemergt, außer Lasse sagt es ausdrücklich in seiner eigenen Sitzung.
-- Jede Person arbeitet in **ihrem eigenen Test-Zweig**:
-  - `host289` → `test-host289`
-  - `freaky200` → `test-freaky200`
-- Arbeite nur im Test-Zweig der Person, mit der du sprichst. Frag zu Beginn nach dem Sprintz-Konto, wenn es nicht klar ist. Fremde Test-Zweige nicht ändern.
+- Es gibt **einen Test-Zweig**: `test-host289`. Dort wird gearbeitet. (`test-freaky200` wurde 11/2026 geschlossen.)
 - Vor jeder Arbeit: `git fetch origin` und den eigenen Test-Zweig auf den Stand von `origin/main` bringen (`git merge origin/main`), damit keine veröffentlichten Änderungen verloren gehen.
 - Fertige Änderungen landen über einen **Pull Request vom eigenen Test-Zweig nach `main`**. Lasse prüft und übernimmt.
 
 ## Testen im Desktop-Programm
 
 Im Desktop-Programm (ab Version 1.3.0, angemeldet als `host289` oder `freaky200`) gibt es oben das Menü **Entwicklung**:
-- „Testversion von host289: Zweig test-host289“
-- „Testversion von freaky200: Zweig test-freaky200“
+- „Testversion (aktueller Stand, Zweig test-host289)“ – ab Desktop 1.5.0 für beide Entwicklerkonten
 - „Normale Fassung (GitHub Pages)“
+
+Ab Desktop 1.5.0 aktualisiert sich das Programm selbst („Hilfe → Nach Updates suchen“ bzw. Hinweis beim Start): Mac tauscht Sprintz.app aus, Windows startet den Installer. Die Web-App lädt ohnehin bei jedem Start den aktuellen Stand.
 
 Nach jedem Push in den Test-Zweig: im Programm Cmd+R (Windows: Strg+R). Ein oranges Schild „TESTVERSION“ zeigt, welcher Stand läuft. Ein neuer Installer ist nur bei Änderungen im Ordner `desktop/` nötig; die baut GitHub erst, wenn sie auf `main` landen.
 

@@ -39,7 +39,8 @@ async function resolvePage(ch) {
   }
   if (ch === 'test' || ch.startsWith('test:')) {
     // jede entwickelnde Person hat ihren eigenen Test-Zweig: test-<Konto> (z. B. test-host289, test-freaky200)
-    const who = ch === 'test' ? (SET.user || 'host289') : ch.slice(5), ref = 'test-' + who, fn = 'test-' + who.replace(/[^a-z0-9_-]/gi, '') + '.html';
+    // seit 11/2026 gibt es nur noch einen Test-Zweig (test-host289); alle Entwicklerkonten sehen diesen aktuellen Stand
+    const who = 'host289', ref = 'test-' + who, fn = 'test-' + who + '.html';
     const t = await fetchText(`https://api.github.com/repos/${REPO}/contents/index.html?ref=${encodeURIComponent(ref)}&t=${Date.now()}`, { Accept: 'application/vnd.github.raw' }, 15000);
     if (validHtml(t)) { const f = path.join(webDir(), fn); fs.writeFileSync(f, t); return { file: f, channel: 'test', note: `Zweig ${ref}, geladen ` + new Date().toLocaleString('de-DE') }; }
     const old = path.join(webDir(), fn);
@@ -88,9 +89,9 @@ function menu() {
   else t.push({ label: 'Datei', submenu: [{ role: 'quit', label: 'Beenden' }] });
   t.push({ role: 'editMenu', label: 'Bearbeiten' }, view);
   if (SET.dev) {
-    const r = (id, label) => ({ label, type: 'radio', checked: SET.channel === id || (SET.channel === 'test' && id === 'test:' + (SET.user || 'host289')), click: () => setChannel(id) });
+    const r = (id, label) => ({ label, type: 'radio', checked: SET.channel === id || (id === 'test' && /^test/.test(SET.channel || '')), click: () => setChannel(id) });
     t.push({ label: 'Entwicklung', submenu: [
-      r('stable', 'Normale Fassung (GitHub Pages)'), ...DEVS.map(u => r('test:' + u, `Testversion von ${u}${u === SET.user ? ' (meine)' : ''}: Zweig test-${u}`)), r('local', 'Testversion: Ordner Sprintz-Test'), r('bundled', 'Fassung aus dem Installer'),
+      r('stable', 'Normale Fassung (GitHub Pages)'), r('test', 'Testversion (aktueller Stand, Zweig test-host289)'), r('local', 'Testversion: Ordner Sprintz-Test'), r('bundled', 'Fassung aus dem Installer'),
       { type: 'separator' },
       { label: 'Ordner Sprintz-Test öffnen', click: () => { fs.mkdirSync(TEST_DIR(), { recursive: true }); shell.openPath(TEST_DIR()); } },
       { label: 'Entwicklerwerkzeuge', accelerator: isMac ? 'Alt+Cmd+I' : 'Ctrl+Shift+I', click: () => win && win.webContents.toggleDevTools() },
@@ -98,6 +99,7 @@ function menu() {
       { label: 'Aktuell: ' + ({ stable: 'normale Fassung', test: 'Testversion GitHub', local: 'Testversion Ordner', bundled: 'Fassung aus dem Installer' }[loaded.channel] || loaded.channel), enabled: false }] });
   }
   t.push({ role: 'windowMenu', label: 'Fenster' });
+  t.push({ label: 'Hilfe', submenu: [{ label: 'Nach Updates suchen …', click: () => checkUpdate(true) }, { label: 'Version ' + app.getVersion(), enabled: false }] });
   Menu.setApplicationMenu(Menu.buildFromTemplate(t));
 }
 ipcMain.handle('set-dev', (e, on, user) => { let ch = false; if (on && !SET.dev) { SET.dev = true; ch = true; } if (user && SET.user !== user) { SET.user = String(user); ch = true; } if (ch) { saveSet(); menu(); } return SET.dev; });
@@ -230,16 +232,56 @@ ipcMain.handle('save-file', async (e, name, data) => {
 ipcMain.handle('version', () => app.getVersion());
 ipcMain.handle('open-external', (e, url) => { if (/^https:\/\//.test(url)) shell.openExternal(url); });
 
-// Neue Version? Hinweis mit Link zur Download-Seite
-async function checkUpdate() {
+// --- Programm-Update im Programm ---
+// Die Web-App (Auswertung, Texte, Funktionen) lädt das Programm bei jedem Start selbst neu von GitHub; ein Update des Programms ist nur
+// nötig, wenn sich der Programmrahmen (Ordner desktop/) ändert. Dann lädt Sprintz die neue Version selbst herunter und tauscht sie aus:
+// Mac: DMG einbinden, Sprintz.app nach dem Beenden ersetzen und neu starten; Windows: Installer starten. Klappt etwas nicht, öffnet sich die Datei bzw. die Download-Seite.
+const newerV = (a, b) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) > (y[i] || 0)) return true; if ((x[i] || 0) < (y[i] || 0)) return false; } return false; };
+function assetFor(j) { const a = j.assets || [], arch = process.arch === 'arm64' ? 'arm64' : 'x64';
+  if (process.platform === 'darwin') return a.find(x => new RegExp(`mac-${arch}\\.dmg$`).test(x.name)); if (process.platform === 'win32') return a.find(x => /win-x64\.exe$/.test(x.name)); return null; }
+async function download(url, dest, onP) {
+  const r = await net.fetch(url, { headers: { 'User-Agent': 'Sprintz-Desktop' } }); if (!r.ok || !r.body) throw new Error('HTTP ' + r.status);
+  const total = +r.headers.get('content-length') || 0, out = fs.createWriteStream(dest), rd = r.body.getReader(); let n = 0;
+  for (;;) { const { done, value } = await rd.read(); if (done) break; n += value.length; if (!out.write(Buffer.from(value))) await new Promise(res => out.once('drain', res)); if (total && onP) onP(n / total); }
+  await new Promise((res, rej) => { out.end(); out.on('finish', res); out.on('error', rej); }); return dest;
+}
+function appBundle() { const m = process.execPath.match(/^(.*?\.app)\/Contents\/MacOS\//); return m ? m[1] : null; }
+async function installUpdate(j) {
+  const as = assetFor(j); if (!as) { shell.openExternal(j.html_url); return; }
+  const dir = path.join(app.getPath('temp'), 'sprintz-update'); fs.mkdirSync(dir, { recursive: true }); const file = path.join(dir, as.name);
+  try {
+    if (win && !win.isDestroyed()) win.setProgressBar(0.01);
+    await download(as.browser_download_url, file, p => { if (win && !win.isDestroyed()) win.setProgressBar(p); });
+    if (win && !win.isDestroyed()) win.setProgressBar(-1);
+    if (process.platform === 'win32') { spawn(file, [], { detached: true, stdio: 'ignore' }).unref(); app.quit(); return; }
+    const target = appBundle();
+    if (process.platform === 'darwin' && target) {
+      // nach dem Beenden: einbinden, ersetzen, aushängen, neu starten (eigenes kleines Skript, läuft unabhängig weiter)
+      const mnt = path.join(dir, 'mnt'), sh = path.join(dir, 'update.sh'), q = x => "'" + String(x).replace(/'/g, "'\\''") + "'";
+      fs.writeFileSync(sh, `#!/bin/sh
+while kill -0 ${process.pid} 2>/dev/null; do sleep 0.5; done
+mkdir -p ${q(mnt)}
+hdiutil attach -nobrowse -noautoopen -mountpoint ${q(mnt)} ${q(file)} || { open ${q(file)}; exit 1; }
+APP=$(ls -d ${q(mnt)}/*.app | head -1)
+if [ -n "$APP" ] && rm -rf ${q(target + '.alt')} && mv ${q(target)} ${q(target + '.alt')} && ditto "$APP" ${q(target)}; then rm -rf ${q(target + '.alt')}
+else if [ -d ${q(target + '.alt')} ]; then rm -rf ${q(target)}; mv ${q(target + '.alt')} ${q(target)}; fi; hdiutil detach ${q(mnt)} -quiet; open ${q(file)}; exit 1; fi
+hdiutil detach ${q(mnt)} -quiet
+open ${q(target)}
+`, { mode: 0o755 });
+      spawn('/bin/sh', [sh], { detached: true, stdio: 'ignore' }).unref(); app.quit(); return;
+    }
+    shell.openPath(file);
+  } catch (e) { if (win && !win.isDestroyed()) win.setProgressBar(-1); dialog.showMessageBox(win, { type: 'warning', message: 'Update nicht möglich', detail: 'Die neue Version ließ sich nicht automatisch laden. Die Download-Seite wird geöffnet.' }); shell.openExternal(j.html_url); }
+}
+async function checkUpdate(manual) {
   try {
     const r = await net.fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers: { 'User-Agent': 'Sprintz-Desktop' } });
-    if (!r.ok) return; const j = await r.json(), latest = String(j.tag_name || '').replace(/^v/, '');
-    const newer = (a, b) => { const x = a.split('.').map(Number), y = b.split('.').map(Number); for (let i = 0; i < 3; i++) { if ((x[i] || 0) > (y[i] || 0)) return true; if ((x[i] || 0) < (y[i] || 0)) return false; } return false; };
-    if (latest && newer(latest, app.getVersion())) {
-      const c = await dialog.showMessageBox(win, { type: 'info', buttons: ['Herunterladen', 'Später'], defaultId: 0, message: `Sprintz ${latest} ist verfügbar`, detail: `Du nutzt Version ${app.getVersion()}. Die neue Version kannst du jetzt herunterladen und installieren.` });
-      if (c.response === 0) shell.openExternal(j.html_url);
-    }
+    if (!r.ok) { if (manual) dialog.showMessageBox(win, { type: 'info', message: 'GitHub ist gerade nicht erreichbar', detail: 'Bitte später noch einmal versuchen.' }); return; }
+    const j = await r.json(), latest = String(j.tag_name || '').replace(/^v/, '');
+    if (!(latest && newerV(latest, app.getVersion()))) { if (manual) dialog.showMessageBox(win, { type: 'info', message: 'Sprintz ist aktuell', detail: `Version ${app.getVersion()}. Die Auswertung selbst aktualisiert sich bei jedem Start von allein.` }); return; }
+    if (!manual && SET.skip === latest) return;
+    const c = await dialog.showMessageBox(win, { type: 'info', buttons: ['Jetzt aktualisieren', 'Später', 'Diese Version überspringen'], defaultId: 0, cancelId: 1, message: `Sprintz ${latest} ist verfügbar`, detail: `Du nutzt Version ${app.getVersion()}. Sprintz lädt die neue Version herunter, startet neu und ist danach aktualisiert – ohne neue Installation von Hand.` });
+    if (c.response === 0) installUpdate(j); else if (c.response === 2) { SET.skip = latest; saveSet(); }
   } catch (e) {}
 }
 

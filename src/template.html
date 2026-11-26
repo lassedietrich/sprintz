@@ -48,7 +48,7 @@ body:has(#run:not([hidden])) #fabL,body:has(#cam:not([hidden])) #fabL{top:calc(1
 .dlgbox.about h3{margin:6px 0 0;font:600 .9rem var(--display);letter-spacing:-.01em;text-transform:none;color:var(--accent)}
 .dlgbox.about p{margin:0;line-height:1.5;font-size:.95rem}
 .dlgbox.about p+p{margin-top:8px}
-.dlgbox.about .copyright{margin:2px 0 4px;color:var(--muted);font-size:.9rem}
+.dlgbox.about .copyright{margin:2px 0 4px;color:var(--muted);font-size:.9rem}.dlgbox.about .thanks{margin:0 0 10px;color:var(--muted);font-size:.85rem;line-height:1.45}
 .only-de,.only-en,.only-tr,.only-ru,.only-nl{display:none}
 html[lang="de"] .only-de,html[lang="en"] .only-en,html[lang="tr"] .only-tr,html[lang="ru"] .only-ru,html[lang="nl"] .only-nl{display:block}
 .dlgbox.about details.src{margin-top:8px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:8px 12px}
@@ -427,6 +427,7 @@ body.xh-on #xhair{display:block}
 #spAna .vbox{position:relative}#sLupe{position:absolute;z-index:5;pointer-events:none;border-radius:50%;border:2px solid #fff;box-shadow:0 3px 14px rgba(0,0,0,.55);background:#000}
 .dcoach{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:var(--muted);margin:0 0 10px;line-height:1.35;cursor:pointer}.dcoach input{margin-top:2px}.qkask{transition:transform .32s cubic-bezier(.4,0,.6,1),opacity .32s;}.qkask.swl{transform:translateX(-120%);opacity:0}.qkask.swr{transform:translateX(120%);opacity:0}.qkcard{overflow:hidden;position:relative}
 .qkcard .evdel{position:absolute;top:6px;right:4px;padding:6px 10px}.qkcard .qkname{display:inline-block;max-width:calc(100% - 64px);overflow-wrap:anywhere;vertical-align:top}.qkcard .qkmain>small{padding-right:28px}
+@keyframes qkflash{0%,100%{box-shadow:0 0 0 0 transparent}30%{box-shadow:0 0 0 3px var(--accent)}}.qkcard.flash{animation:qkflash 1.3s ease 2}
 .qkcard .qktimes{margin:2px 0 2px}.qkcard .qkkd{margin:2px 0 4px}.qkcard .qkqt{margin:6px 0 2px}.qkcard .qkseg{margin:2px 0}
 .qkcard .qkbtns{display:grid;grid-template-columns:1fr;gap:8px;margin-top:6px}.qkcard .qkbtns .testbtn{width:100%;margin:0;justify-content:center;text-align:center}
 .qkcard .qkpsel{margin:6px 0 4px}.qkcard .qkpsel .pkbtn{flex:1}.qkask{margin:8px 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent)}.qkask .qt{margin:0 0 4px;font-weight:600}.qkseg{display:flex;flex-wrap:wrap;margin:4px 0}.qkseg button{flex:1 1 auto;padding:7px 10px}.qksw{margin:6px 0}.qkkd{margin:6px 0 8px;font-size:.85rem}.qkkd summary{cursor:pointer;color:var(--accent)}.qkpers{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 10px}.qkpsel{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);margin:0 0 8px}
@@ -1330,6 +1331,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
   <div class="dlgbox about">
     <h2 id="aboutTitle">Über Sprintz</h2>
     <p class="copyright">© Lasse Dietrich</p>
+    <p class="thanks" id="aboutThanks"></p>
 
     <h3>Kontakt</h3>
     <button type="button" class="testbtn" id="contactOpen" style="flex:none">Kontaktieren</button>
@@ -3618,7 +3620,7 @@ function spRenderList(){
 const STORE={
   key:()=> "sprintz-projects-"+(USER||"gast"),
   _all(){ try{ return JSON.parse(localStorage.getItem(this.key())||"[]"); }catch(e){ return []; } },
-  _set(a){ try{ localStorage.setItem(this.key(), JSON.stringify(a)); return true; }catch(e){ return false; } },
+  _set(a){ try{ localStorage.setItem(this.key(), JSON.stringify(a)); return true; }catch(e){ try{ blog("error","Speichern lokal fehlgeschlagen: "+(e&&e.name||e)); toast(L("Achtung: Der Speicher auf diesem Gerät ist voll, die Auswertung konnte hier nicht gesichert werden. Bitte melde das als Fehler.","Warning: storage on this device is full, the analysis could not be saved here. Please report this as a problem."),8000); }catch(x){} return false; } },
   _upd(p){ const a=this._all(); const i=a.findIndex(x=>x.id===p.id); if(i<0) a.push(p); else a[i]=p; this._set(a); },
   online:()=> !!(SESS && !SESS.offline),
   // Online-Liste laden und mit der lokalen Kopie abgleichen (neuere Fassung gewinnt)
@@ -5675,7 +5677,7 @@ function qkSaveCur(){ const e=qkE(QK.cur); if(!e) return; const o=qkMetrics();
 async function qkGo(save){ const e=qkE(QK.cur); if(save) qkSaveCur(); const nx=qkNextE(e), keep=FS.on && !!nx, det=QK.det;
   qkCloseAna(keep);
   if(nx){ await qkAnalyze(nx, det); if(keep && SA.active) await fsEnter(); else if(keep){ $("fsOv").hidden=true; try{ document.exitFullscreen&&document.fullscreenElement&&document.exitFullscreen(); }catch(x){} } }
-  else qkList(); }
+  else { if(save && e){ QK.doneOpen=true; } qkList(); if(save && e) setTimeout(()=>{ const c=document.querySelector(`.qkcard[data-id="${e.id}"]`); if(c){ c.scrollIntoView({block:"center", behavior:"smooth"}); c.classList.add("flash"); setTimeout(()=>c.classList.remove("flash"),2600); } toast(L("Gespeichert. Die Auswertung steht unter „Abgeschlossen“.","Saved. The analysis is listed under “Completed”."),3500); },80); } }
 function qkBind(){ const s=$("qSave"); if(s) s.onclick=()=>qkGo(true);
   const k=$("qSkip"); if(k) k.onclick=()=>qkGo(false);
   const b=$("qBack"); if(b) b.onclick=()=>{ qkCloseAna(); qkList(); };
@@ -7161,7 +7163,7 @@ async function kinoExport(){
       g.font=F1; g.fillStyle="#fff"; bl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.7); y+=fs*1.45; }); y+=fs*0.05;
       g.font=F3; g.fillStyle="#3FD07A"; sl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; });
       g.font=`italic ${F2}`; g.fillStyle="#E8D49A"; nl.forEach(l=>{ g.fillText(l,pad*1.8,y+fs*0.4); y+=fs*1.05; }); } }
-    { const tg=(SA.tags||[]).filter(x=>Math.abs(x.t-sVid.currentTime)<=2.5/f); if(tg.length){ g.font=`700 ${Math.round(fs*0.8)}px system-ui,sans-serif`; const tt=tg.map(x=>tagLab(x.k)).join(" · "), w=g.measureText(tt).width; g.fillStyle="rgba(232,89,12,.88)"; g.fillRect(W-w-pad*2.2,H-fs*2.6,w+pad*1.4,fs*1.3); g.fillStyle="#fff"; g.fillText(tt,W-w-pad*1.5,H-fs*1.95); } }
+    { const tg=(SA.tags||[]).filter(x=>!TAG_COUNT.includes(x.k) && Math.abs(x.t-sVid.currentTime)<=2.5/f); if(tg.length){ g.font=`700 ${Math.round(fs*0.8)}px system-ui,sans-serif`; const tt=tg.map(x=>tagLab(x.k)).join(" · "), w=g.measureText(tt).width; g.fillStyle="rgba(232,89,12,.88)"; g.fillRect(W-w-pad*2.2,H-fs*2.6,w+pad*1.4,fs*1.3); g.fillStyle="#fff"; g.fillText(tt,W-w-pad*1.5,H-fs*1.95); } }
     g.font=`600 ${Math.round(fs*0.55)}px system-ui,sans-serif`; g.fillStyle="rgba(255,255,255,.75)"; g.fillText("Sprintz",pad,H-pad*0.6); };
   const vs=c.captureStream(ofps), stream=new MediaStream([...vs.getVideoTracks(), ...(dst?dst.stream.getAudioTracks():[])]);
   const rec=new MediaRecorder(stream,{mimeType:mime, videoBitsPerSecond:vbr, audioBitsPerSecond:256000}), chunks=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
@@ -7298,14 +7300,19 @@ if(typeof sVid.requestVideoFrameCallback==="function"){ const f=()=>{ if(SA.acti
 const TAGS={open:false};
 function tagTypes(){ let own=[]; try{ own=JSON.parse(localStorage.getItem("sprintz-tagtypes-"+(USER||""))||"[]"); }catch(e){}
   const base = sport==="track" ? [["step",L("Schritt (Bodenkontakt)","Step (ground contact)")],["arm",L("Armschwung","Arm swing")],["err",L("Fehler","Error")]]
-    : [["stroke",L("Armzug (Handeintritt, gleiche Hand)","Arm stroke (hand entry, same hand)")],["kick",L("Beinschlag","Kick")],["breath",L("Atmung","Breath")],["glide",L("Gleiten / Pause","Glide / pause")],["err",L("Fehler","Error")]];
+    : [["stroke",L("Armzug (Handeintritt, gleiche Hand)","Arm stroke (hand entry, same hand)")],["kick",L("Beinschlag","Kick")],["breath",L("Atmung","Breath")],["glide",L("Gleiten / Pause","Glide / pause")],["cyc",L("Zyklusbeginn (begonnener Armzug nach Start oder Wende)","Cycle start (first arm pull after start or turn)")],["err",L("Fehler","Error")]];
   return base.concat(own.map(o=>["c:"+o, o])); }
 const tagLab=k=>(tagTypes().find(x=>x[0]===k)||[k,k.replace(/^c:/,"")])[1];
-function tagFreq(k){ const T=(SA.tags||[]).filter(x=>x.k===k).map(x=>RT(x.t)).sort((a,b)=>a-b); if(T.length<2) return null; return (T.length-1)/(T[T.length-1]-T[0])*60; }
+// Zyklen zählen: Intervalle über eine Wende hinweg zählen nicht; ein „Zyklusbeginn“ startet nach Start oder Wende eine neue Folge (Intervall davor zählt nicht, das danach schon)
+const TAG_COUNT=["stroke","cyc","kick","step","arm","breath","glide"];
+function tagBreaks(){ const M=SA.marks||{}; return Object.entries(M).filter(([k,v])=>v!=null && (/^w_/.test(k) || ["rot","feetOn","touch","ftouch","wall"].includes(k))).map(x=>x[1]); }
+function tagCycles(k, lo, hi){ const ev=(SA.tags||[]).filter(x=>(x.k===k || (k==="stroke" && x.k==="cyc")) && (lo==null||x.t>=lo-1e-6) && (hi==null||x.t<=hi+1e-6)).sort((a,b)=>a.t-b.t), B=tagBreaks(); let n=0, dt=0;
+  for(let i=1;i<ev.length;i++){ const a=ev[i-1], b=ev[i]; if(b.k==="cyc") continue; if(B.some(t=>t>a.t && t<b.t)) continue; n++; dt+=RT(b.t)-RT(a.t); } return {n, dt}; }
+function tagFreq(k){ const c=tagCycles(k); return c.n>0 && c.dt>0 ? c.n/c.dt*60 : null; }
 function tagRows(){ const o=[], PH=L("Markierte Ereignisse","Marked events"); const ks=[...new Set((SA.tags||[]).map(x=>x.k))];
   ks.forEach(k=>{ const n=(SA.tags||[]).filter(x=>x.k===k).length, f=tagFreq(k); o.push({ph:PH, k:"tag_"+k, l:tagLab(k), v:String(n)+(f!=null && ["stroke","kick","step"].includes(k)?` · ${Math.round(f*10)/10} ${k==="stroke"?L("Zyklen/min","cycles/min"):L("pro min","per min")}`:"")}); });
   const st=(SA.tags||[]).filter(x=>x.k==="stroke").map(x=>x.t).sort((a,b)=>a-b), M=SA.marks||{}, D=[[5,M.p5],[10,M.p10],[15,M.p15]].concat(xdList().map(d=>[d,M[xdId(d)]])).filter(x=>x[1]!=null).sort((a,b)=>a[0]-b[0]);
-  if(st.length>=3 && D.length>=2){ const a=D[0], b=D[D.length-1], inn=st.filter(t=>t>=a[1] && t<=b[1]); if(inn.length>=2){ const cyc=(inn.length-1), dt=RT(inn[inn.length-1])-RT(inn[0]), v=(b[0]-a[0])/(RT(b[1])-RT(a[1])), f=cyc/dt; if(f>0 && v>0) o.push({ph:PH, k:"tag_sl", l:L(`Zuglänge ${xdFmt(a[0])}–${xdFmt(b[0])} m`,`Stroke length ${xdFmt(a[0])}–${xdFmt(b[0])} m`), v:`${(Math.round(v/f*100)/100).toFixed(2).replace(".",LANG==="en"?".":",")} m`}); } }
+  if(st.length>=3 && D.length>=2){ const a=D[0], b=D[D.length-1], cc=tagCycles("stroke", a[1], b[1]); if(cc.n>=1 && cc.dt>0){ const v=(b[0]-a[0])/(RT(b[1])-RT(a[1])), f=cc.n/cc.dt; if(f>0 && v>0) o.push({ph:PH, k:"tag_sl", l:L(`Zuglänge ${xdFmt(a[0])}–${xdFmt(b[0])} m`,`Stroke length ${xdFmt(a[0])}–${xdFmt(b[0])} m`), v:`${(Math.round(v/f*100)/100).toFixed(2).replace(".",LANG==="en"?".":",")} m`}); } }
   return o; }
 function tagSumHTML(){ const rows=tagRows(); if(!rows.length) return ""; return `<div class="velsum"><h4>${L("Markierte Ereignisse","Marked events")}</h4><table class="veltab"><tbody>${rows.map(r=>`<tr><td>${esc(r.l)}</td><td class="n"><b>${esc(r.v)}</b></td></tr>`).join("")}</tbody></table></div>`; }
 function tagAdd(k){ const t=Math.round(sCurT()*1e5)/1e5; SA.tags=SA.tags||[]; if(SA.tags.some(x=>x.k===k && Math.abs(x.t-t)<0.5/sFps())){ toast(L("Hier ist dieses Ereignis schon markiert.","This event is already marked here."),1800); return; }
@@ -7320,7 +7327,7 @@ function tagPanel(){ tagEnsure(); const p=$("tagPop"), b=$("tagPlus"); if(!p) re
     ${T.map(([k,l],i)=>`<button type="button" class="tagbtn" data-tk="${esc(k)}"><kbd>${i<9?i+1:""}</kbd><span>${esc(l)}</span><small>${cnt(k)||""}</small></button>`).join("")}
     <div class="tagnew"><input type="text" id="tagNew" maxlength="40" placeholder="${L("eigenes Ereignis","own event")}"><button type="button" id="tagNewB">+</button></div>
     ${near.length?`<div class="tagnear">${near.map(x=>`<span>${esc(tagLab(x.k))} <button type="button" data-tdel="${x.k}|${x.t}" aria-label="${L("Entfernen","Remove")}">✕</button></span>`).join("")}</div>`:""}
-    <p class="taghint">${L("Spring zum Bild und tippe das Ereignis an. Für die Zugfrequenz jeden Handeintritt derselben Hand markieren.","Go to the frame and tap the event. For stroke rate, mark every hand entry of the same hand.")}</p>`;
+    <p class="taghint">${L("Spring zum Bild und tippe das Ereignis an. Für die Zugfrequenz jeden Handeintritt derselben Hand markieren. Nach Start oder Wende den Beginn des ersten Armzugs als „Zyklusbeginn“ markieren; Abschnitte über eine Wende hinweg zählen nicht mit.","Go to the frame and tap the event. For stroke rate, mark every hand entry of the same hand. After a start or turn, mark the beginning of the first arm pull as “Cycle start”; sections across a turn are not counted.")}</p>`;
   p.querySelector("[data-tx]").onclick=()=>{ TAGS.open=false; tagPanel(); };
   p.querySelectorAll("[data-tk]").forEach(x=>x.onclick=()=>tagAdd(x.dataset.tk));
   p.querySelectorAll("[data-tdel]").forEach(x=>x.onclick=()=>{ const [k,t]=x.dataset.tdel.split("|"); SA.tags=(SA.tags||[]).filter(y=>!(y.k===k && String(y.t)===t)); tagPanel(); });
@@ -7489,7 +7496,7 @@ function nlRender(){ if(NL.drag) return; const box=$("sBox"); if(!box) return; l
   const tn=sCurT(); ns.forEach((n,i)=>{ const pp=nlPos(n,tn), p=pp||{x:0.03, y:Math.max(0.05,0.62-i*0.12), w:0.42, fs:0.034}, el=document.createElement("div");
     el.className="nbox"+(n.pos?"":" unplaced"); el.dataset.i=String(SA.notes.indexOf(n));
     el.style.left=((r.x+p.x*r.w)*z.s+z.x)+"px"; el.style.top=((r.y+p.y*r.h)*z.s+z.y)+"px"; el.style.width=(p.w*r.w*z.s)+"px"; el.style.fontSize=Math.max(9,p.fs*r.h*z.s)+"px";
-    el.title=L("Ziehen zum Verschieben, Ecke unten rechts zum Vergrößern","Drag to move, bottom-right corner to resize");
+    el.title=L("Antippen zum Ändern, ziehen zum Verschieben, Ecke unten rechts zum Vergrößern","Tap to edit, drag to move, bottom-right corner to resize");
     el.innerHTML=`<span class="ntx">${esc(n.txt)}</span><i class="nres" aria-hidden="true"></i>`; lay.appendChild(el); }); }
 { const start=(e)=>{ const el=e.target.closest&&e.target.closest(".nbox"); if(!el) return; const n=SA.notes[+el.dataset.i]; if(!n) return;
     e.preventDefault(); e.stopPropagation(); const r=resCrop(), z=measZ(), p=Object.assign({x:0.03,y:0.62,w:0.42,fs:0.034}, nlPos(n,sCurT())||{});
@@ -7499,8 +7506,16 @@ function nlRender(){ if(NL.drag) return; const box=$("sBox"); if(!box) return; l
     if(d.res){ const w=Math.max(0.12,Math.min(1,d.p.w+dx/d.r.w)), k=w/d.p.w; d.q={x:d.p.x,y:d.p.y,w,fs:Math.max(0.015,Math.min(0.12,d.p.fs*k))}; }
     else d.q={x:Math.max(0,Math.min(0.97,d.p.x+dx/d.r.w)), y:Math.max(0,Math.min(0.97,d.p.y+dy/d.r.h)), w:d.p.w, fs:d.p.fs};
     const q=d.q, r=d.r, z=d.z; d.el.style.left=((r.x+q.x*r.w)*z.s+z.x)+"px"; d.el.style.top=((r.y+q.y*r.h)*z.s+z.y)+"px"; d.el.style.width=(q.w*r.w*z.s)+"px"; d.el.style.fontSize=Math.max(9,q.fs*r.h*z.s)+"px"; };
-  const end=()=>{ const d=NL.drag; if(!d) return; NL.drag=null; if(d.moved && d.q){ const R=v=>Math.round(v*1e4)/1e4, np={x:R(d.q.x),y:R(d.q.y),w:R(d.q.w),fs:R(d.q.fs)}, S=nlShape(d.n); if(S && S.kf){ drKfAt(S,sCurT()).np=np; if(!d.n.pos) d.n.pos=np; } else d.n.pos=np; blog("klick","Notiz verschoben"); } nlRender(); };
+  const end=()=>{ const d=NL.drag; if(!d) return; NL.drag=null; if(!d.moved && !d.res){ d.el.classList.remove("drag"); noteEditAny(d.n); return; } if(d.moved && d.q){ const R=v=>Math.round(v*1e4)/1e4, np={x:R(d.q.x),y:R(d.q.y),w:R(d.q.w),fs:R(d.q.fs)}, S=nlShape(d.n); if(S && S.kf){ drKfAt(S,sCurT()).np=np; if(!d.n.pos) d.n.pos=np; } else d.n.pos=np; blog("klick","Notiz verschoben"); } nlRender(); };
   document.addEventListener("pointerdown",start,true); document.addEventListener("pointermove",move,true); document.addEventListener("pointerup",end,true); document.addEventListener("pointercancel",end,true); }
+// Notiz ändern oder löschen (Tippen auf die Notiz im Video)
+function noteEditAny(n){ let bx=$("drNote"); if(!bx){ bx=document.createElement("div"); bx.id="drNote"; bx.className="drnote"; $("sBox").appendChild(bx); ["pointerdown","click"].forEach(ev=>bx.addEventListener(ev,e=>e.stopPropagation())); }
+  bx.hidden=false; bx.dataset.fk="";
+  bx.innerHTML=`<b>${L("Notiz ändern","Edit note")}</b><textarea id="drNoteT" rows="3" maxlength="500"></textarea><div class="drnrow"><button type="button" class="testbtn small" id="drNoteOk">${L("Speichern","Save")}</button><button type="button" class="testbtn ghost small" id="drNoteDel">${L("Löschen","Delete")}</button><button type="button" class="testbtn ghost small" id="drNoteNo">${L("Abbrechen","Cancel")}</button></div>`;
+  const ta=$("drNoteT"); ta.value=n.txt||""; setTimeout(()=>{ ta.focus(); ta.select(); },30);
+  const ok=()=>{ const t=ta.value.trim(); bx.hidden=true; if(t) n.txt=t; else SA.notes=(SA.notes||[]).filter(x=>x!==n); nlRender(); if(typeof wizRender==="function") wizRender(); blog("klick","Notiz geändert"); };
+  $("drNoteOk").onclick=ok; $("drNoteNo").onclick=()=>{ bx.hidden=true; }; $("drNoteDel").onclick=()=>{ bx.hidden=true; SA.notes=(SA.notes||[]).filter(x=>x!==n); nlRender(); if(typeof wizRender==="function") wizRender(); };
+  ta.onkeydown=e=>{ e.stopPropagation(); if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); ok(); } if(e.key==="Escape") bx.hidden=true; }; }
 // im Ergebnisvideo: Notiz an ihrer Stelle zeichnen
 function kinoNote(g, n, W, H){ const p=n.pos, fpx=Math.max(10,p.fs*H), pad=fpx*0.45, w=p.w*W; g.save(); g.font=`italic 500 ${Math.round(fpx)}px system-ui,sans-serif`;
   const lines=kinoWrap(g, n.txt, w-pad*2), h=lines.length*fpx*1.25+pad*1.4, x=Math.min(W-w, p.x*W), y=Math.min(H-h, p.y*H);
@@ -8672,7 +8687,7 @@ function camClose(toSetup){
   $("cam").hidden=true; $("camErr").hidden=true; $("run").hidden=true; $("run").classList.remove("camrun");
   if(toSetup){ $("setup").hidden=false; openTab("train"); $("fab").hidden=false; $("fabL").hidden=false; resetDialog(); scrollTo(0,0); }
 }
-$("aboutBtn").onclick=()=>{ hideTip(); $("aboutDlg").hidden=false; $("contactForm").hidden=true; $("contactOpen").hidden=false; $("cStatus").textContent=""; $("aboutClose").focus(); };
+$("aboutBtn").onclick=()=>{ hideTip(); $("aboutThanks").textContent=L("Ein besonderer Dank gilt Jan Tafreschi (TU Darmstadt) und Ismet Sezgin (SC Wiesbaden 1911 / Hessischer Schwimm-Verband), die die Entwicklung maßgeblich unterstützt haben. Außerdem danke an alle Athlet*innen des SC Wiesbaden 1911 sowie das Trainerteam.","Special thanks go to Jan Tafreschi (TU Darmstadt) and Ismet Sezgin (SC Wiesbaden 1911 / Hessian Swimming Association), who supported the development substantially. Thanks also to all athletes of SC Wiesbaden 1911 and the coaching team."); $("aboutDlg").hidden=false; $("contactForm").hidden=true; $("contactOpen").hidden=false; $("cStatus").textContent=""; $("aboutClose").focus(); };
 // Kontakt: Nachrichten gehen über einen Formular-Dienst an die hinterlegte Adresse.
 // CONTACT_ENDPOINT wird nach dem Umzug auf eine eigene Webadresse eingetragen (z. B. Web3Forms oder Formspree).
 const CONTACT_ENDPOINT="https://api.web3forms.com/submit", CONTACT_KEY="7052fa0d-e455-4188-ba7b-9a7bffa28a1f";
