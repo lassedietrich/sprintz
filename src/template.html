@@ -302,6 +302,8 @@ body.menu-open #drawerBg{opacity:1;pointer-events:auto}
 #modeSoon .ic svg{width:34px;height:34px}
 #modeSoon h2{margin:0 0 6px}#soonAct{margin-top:14px}
 .exbox{max-width:760px;width:100%;max-height:calc(100vh - 32px);overflow:auto}.exitem{border:1px solid var(--line);border-radius:12px;padding:10px 12px 12px;margin:0 0 12px}.exitem legend{font-weight:700;padding:0 6px;display:flex;align-items:center;gap:8px}.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}.exgrid .exwide{grid-column:1/-1}.excats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px 14px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg)}.excg{display:flex;flex-direction:column;gap:2px}.excg b{font-size:.78rem;color:var(--fg);margin:2px 0}.excb{display:flex;gap:6px;align-items:center;font-size:.88rem;color:var(--fg);cursor:pointer}.excb input{margin:0}
+.exmulti{font-weight:400;color:var(--muted)}.exrow{display:flex;flex-wrap:wrap;gap:4px 14px;padding:6px 0}.exdd{border:1px solid var(--line);border-radius:10px;background:var(--bg)}.exdd summary{padding:8px 10px;cursor:pointer;color:var(--fg);font-size:.9rem;list-style:none}.exdd summary::after{content:" ▾";color:var(--muted)}.exddp{display:flex;flex-direction:column;gap:2px;padding:4px 10px 8px;border-top:1px solid var(--line)}
+.exmedia{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}.exm{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px 6px 3px 10px;font-size:.85rem;color:var(--fg)}.exm small{color:var(--muted)}.exm button{border:0;background:transparent;color:var(--muted);cursor:pointer}.exadd{cursor:pointer;margin:0}
 .exdel{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:1rem}.exdel:hover{color:var(--danger)}#exAdd{margin:0 0 12px}.exbox .athf textarea{font:inherit;font-size:.92rem;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg);color:var(--fg);resize:vertical}
 #modeSoon p{margin:0;color:var(--muted);line-height:1.5}
 body.mode-other #tabsNav,body.mode-other #tab-train,body.mode-other #tab-stats,body.mode-other #tab-video,body.mode-other:not(.mode-sprint) #startbar{display:none!important}
@@ -8258,7 +8260,13 @@ grant execute on function public.sprintz_setup_status() to authenticated;
 -- Tabellenrechte für angemeldete Konten (neuere Supabase-Projekte vergeben sie nicht mehr von selbst; welche Zeilen jemand sieht, regeln weiter die Richtlinien)
 grant select, insert, update, delete on public.club_athletes, public.club_results to authenticated;
 grant select, delete on public.club_members to authenticated;
-grant select on public.account_roles to authenticated;`;
+grant select on public.account_roles to authenticated;
+-- Bilder und Videos zu Übungsvorschlägen (privat; Link per Mail an das Sprintz-Team)
+insert into storage.buckets (id, name, public, file_size_limit) values ('exercise-media', 'exercise-media', false, 52428800) on conflict (id) do nothing;
+drop policy if exists "Übungsvorschläge hochladen" on storage.objects;
+create policy "Übungsvorschläge hochladen" on storage.objects for insert to authenticated with check (bucket_id = 'exercise-media' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists "Übungsvorschläge lesen" on storage.objects;
+create policy "Übungsvorschläge lesen" on storage.objects for select to authenticated using (bucket_id = 'exercise-media' and ((storage.foldername(name))[1] = auth.uid()::text or public.sprintz_is_dev()));`;
 const SETUP_FN=[["sprintz_my_clubs",{}],["sprintz_my_codes",{}],["sprintz_club_search",{q:"zz"}],["sprintz_my_requests",{}],["sprintz_club_requests",{}],["sprintz_dev_clubs",{}],["sprintz_dev_roles",{}]];
 const SETUP_FN2=["sprintz_create_club","sprintz_join_club","sprintz_register","sprintz_request_join","sprintz_answer_request","sprintz_dev_member","sprintz_dev_create_club","sprintz_dev_set_role","sprintz_dev_athlete"];
 async function setupCheck(){ const out=[]; try{ await sbReady(); }catch(e){ return null; }
@@ -8761,28 +8769,36 @@ const exGroups=sp=> sp==="track"
      [L("Sonstiges","Other"),[["other",L("Sonstiges","Other")]]]];
 const exCats=sp=>exGroups(sp).flatMap(g=>g[1]);
 const exCatArr=x=>Array.isArray(x.cat)?x.cat:(x.cat?[x.cat]:[]);
-const exLevels=()=>[["beg",L("Einsteiger*innen / Nachwuchs","Beginners / youth")],["adv",L("Fortgeschrittene","Advanced")],["elite",L("Leistungssport","Elite")],["all",L("Alle Stufen","All levels")]];
-const exNew=()=>({name:"", sport:sport, cat:[], goal:"", desc:"", cues:"", errors:"", equip:"", level:"", dose:"", prog:"", src:"", link:""});
-function exDraftGet(){ try{ const d=JSON.parse(localStorage.getItem(EXS.key)||"null"); if(d && Array.isArray(d.items) && d.items.length) return d; }catch(e){} return {who:{name:"", mail:"", club:""}, items:[exNew()], cons:false, credit:true}; }
+const exLevels=()=>[["beg",L("Anfänger*innen","Beginners")],["adv",L("Fortgeschrittene","Advanced")],["exp",L("Expert*innen","Experts")]];
+const exEquip=sp=> sp==="track"
+  ? [["none",L("Keine","None")],["hurdle",L("Hürden","Hurdles")],["ladder",L("Koordinationsleiter","Agility ladder")],["cone",L("Hütchen / Markierungen","Cones / markers")],["blocks",L("Startblock","Starting blocks")],["sled",L("Schlitten","Sled")],["band",L("Widerstandsband / Zuggurt","Resistance band / harness")],["med",L("Medizinball","Medicine ball")],["box",L("Kasten / Bank","Box / bench")],["other",L("Sonstiges","Other")]]
+  : [["none",L("Keine","None")],["fins",L("Flossen","Fins")],["sfins",L("Kurzflossen","Short fins")],["mono",L("Monoflosse","Monofin")],["buoy",L("Pullbuoy","Pull buoy")],["board",L("Schwimmbrett","Kickboard")],["paddles",L("Paddles","Paddles")],["snork",L("Frontschnorchel","Centre snorkel")],["cord",L("Zugseil / Widerstandsgurt","Tether / resistance belt")],["chute",L("Bremsschirm","Drag parachute")],["tempo",L("Taktgeber (Tempo Trainer)","Tempo trainer")],["other",L("Sonstiges","Other")]];
+const exArr=v=>Array.isArray(v)?v:(v?[v]:[]);
+const exNew=()=>({name:"", sport:sport, cat:[], desc:"", goal:"", errors:"", equip:[], equipOther:"", level:[], prog:"", src:"", link:"", media:[]});
+function exDraftGet(){ try{ const d=JSON.parse(localStorage.getItem(EXS.key)||"null"); if(d && Array.isArray(d.items) && d.items.length) return d; }catch(e){} return {who:{name:"", mail:"", club:""}, items:[exNew()], cons:true, credit:false}; }
 function exDraftSet(d){ try{ localStorage.setItem(EXS.key, JSON.stringify(d)); }catch(e){} }
 function exSugOpen(){ let dlg=$("exDlg"); if(!dlg){ dlg=document.createElement("div"); dlg.id="exDlg"; dlg.className="dlg"; document.body.appendChild(dlg); dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.hidden=true; }); }
   EXS.d=exDraftGet(); dlg.hidden=false; exRender(); }
-function exItemHTML(x,i,n){ const f=(k,lab,ph,opt,area)=>`<label class="athf${area?" exwide":""}"><span>${lab}${opt?"":" *"}</span>${area?`<textarea rows="3" data-ex="${i}|${k}" maxlength="2000" placeholder="${esc(ph||"")}">${esc(x[k]||"")}</textarea>`:`<input type="text" data-ex="${i}|${k}" maxlength="200" value="${esc(x[k]||"")}" placeholder="${esc(ph||"")}">`}</label>`;
-  const sel=(k,lab,opts,opt)=>`<label class="athf"><span>${lab}${opt?"":" *"}</span><select class="evsel" data-ex="${i}|${k}"><option value="">–</option>${opts.map(([v,l])=>`<option value="${v}"${x[k]===v?" selected":""}>${esc(l)}</option>`).join("")}</select></label>`;
+const MULTI=()=>`<small class="exmulti">(${L("Mehrfachauswahl möglich","multiple selection possible")})</small>`;
+function exItemHTML(x,i,n){ x.sport=sport; const f=(k,lab,ph,opt,area)=>`<label class="athf${area?" exwide":""}"><span>${lab}${opt?"":" *"}</span>${area?`<textarea rows="3" data-ex="${i}|${k}" maxlength="2000" placeholder="${esc(ph||"")}">${esc(x[k]||"")}</textarea>`:`<input type="text" data-ex="${i}|${k}" maxlength="300" value="${esc(x[k]||"")}" placeholder="${esc(ph||"")}">`}</label>`;
+  const box=(key,v,l,on)=>`<label class="excb"><input type="checkbox" data-exm="${i}|${key}|${v}"${on?" checked":""}> <span>${esc(l)}</span></label>`;
+  const eq=exArr(x.equip), eqL=exEquip(sport).filter(e=>eq.includes(e[0])).map(e=>e[1]);
   return `<fieldset class="exitem"><legend>${L(`Übung ${i+1}`,`Exercise ${i+1}`)}${n>1?` <button type="button" class="exdel" data-exdel="${i}" aria-label="${L("Übung entfernen","Remove exercise")}">✕</button>`:""}</legend><div class="exgrid">
     ${f("name",L("Name der Übung","Name of the exercise"),L("z. B. Abschlag mit Pause","e.g. catch-up with pause"))}
-    <label class="athf"><span>${L("Sportart","Sport")} *</span><select class="evsel" data-ex="${i}|sport"><option value="swim"${x.sport!=="track"?" selected":""}>${L("Schwimmen","Swimming")}</option><option value="track"${x.sport==="track"?" selected":""}>${L("Leichtathletik","Athletics")}</option></select></label>
-    ${sel("level",L("Leistungsstufe","Level"),exLevels(),true)}
-    <div class="athf exwide"><span>${L("Bereiche (mehrere möglich)","Areas (several possible)")} *</span><div class="excats">${exGroups(x.sport).map(([g,list])=>`<div class="excg"><b>${esc(g)}</b>${list.map(([v,l])=>`<label class="excb"><input type="checkbox" data-excat="${i}|${v}"${exCatArr(x).includes(v)?" checked":""}> <span>${esc(l)}</span></label>`).join("")}</div>`).join("")}</div></div>
-    ${f("goal",L("Ziel: Welches Technikmerkmal bzw. welche Fähigkeit soll verbessert werden?","Goal: which technical feature or ability should be improved?"),L("z. B. früher hoher Ellbogen im Unterwasserzug","e.g. early vertical forearm in the pull"),false,true)}
+    <div class="athf"><span>${L("Leistungsstufe","Level")} ${MULTI()}</span><div class="exrow">${exLevels().map(([v,l])=>box("level",v,l,exArr(x.level).includes(v))).join("")}</div></div>
+    <div class="athf exwide"><span>${L("Bereiche","Areas")} * ${MULTI()}</span><div class="excats">${exGroups(sport).map(([g,list])=>`<div class="excg"><b>${esc(g)}</b>${list.map(([v,l])=>box("cat",v,l,exCatArr(x).includes(v))).join("")}</div>`).join("")}</div></div>
     ${f("desc",L("Ablauf: Wie wird die Übung ausgeführt?","Procedure: how is the exercise performed?"),L("Ausgangsstellung, Bewegungsablauf, Strecke bzw. Wiederholung","Starting position, movement sequence, distance or repetition"),false,true)}
-    ${f("cues",L("Ausführungshinweise (worauf achten?)","Coaching cues (what to watch for?)"),"",true,true)}
+    ${f("goal",L("Ziel: Welches Technikmerkmal bzw. welche Fähigkeit soll verbessert werden?","Goal: which technical feature or ability should be improved?"),L("z. B. früher hoher Ellbogen im Unterwasserzug","e.g. early vertical forearm in the pull"),false,true)}
     ${f("errors",L("Typische Fehler und Korrekturen","Typical errors and corrections"),"",true,true)}
-    ${f("equip",L("Hilfsmittel","Equipment"),L("z. B. Flossen, Pullbuoy, Schnorchel, keine","e.g. fins, pull buoy, snorkel, none"),true)}
-    ${f("dose",L("Umfang und Belastung","Volume and load"),L("z. B. 8 × 25 m, ruhig, 20 s Pause","e.g. 8 × 25 m, easy, 20 s rest"),true)}
+    <div class="athf"><span>${L("Hilfsmittel","Equipment")} ${MULTI()}</span><details class="exdd"><summary>${eqL.length?esc(eqL.join(", ")):L("– bitte wählen –","– please choose –")}</summary><div class="exddp">${exEquip(sport).map(([v,l])=>box("equip",v,l,eq.includes(v))).join("")}</div></details>
+      ${eq.includes("other")?`<input type="text" data-ex="${i}|equipOther" maxlength="200" value="${esc(x.equipOther||"")}" placeholder="${L("Welche?","Which?")}" style="margin-top:6px">`:""}</div>
     ${f("prog",L("Varianten und Steigerung","Variations and progression"),"",true,true)}
-    ${f("src",L("Quelle (Fachliteratur, Verband) – falls vorhanden","Source (literature, federation) – if available"),"",true)}
+    ${f("src",L("Quelle – falls vorhanden","Source – if available"),L("z. B. Fachbuch, Verband, Studie","e.g. textbook, federation, study"),true)}
     ${f("link",L("Link zu einem Beispielvideo (optional)","Link to an example video (optional)"),"https://…",true)}
+    <div class="athf exwide"><span>${L("Bilder oder kurze Videos (optional)","Pictures or short videos (optional)")}</span>
+      <div class="exmedia">${exArr(x.media).map((m,j)=>`<span class="exm">${m.type==="video"?"🎬":"🖼"} ${esc(m.name)} <small>${Math.max(0.1,Math.round(m.size/1e5)/10).toString().replace(".",",")} MB</small><button type="button" data-exmd="${i}|${j}" aria-label="${L("Entfernen","Remove")}">✕</button></span>`).join("")}
+        <label class="testbtn ghost small exadd">+ ${L("Datei hinzufügen","Add file")}<input type="file" data-exf="${i}" accept="image/*,video/*" multiple hidden></label></div>
+      <small class="hint">${L("Bis zu 5 Dateien, Videos höchstens 50 MB. Die Dateien gehen nur an das Sprintz-Team zur Prüfung des Vorschlags.","Up to 5 files, videos at most 50 MB. The files only go to the Sprintz team to review the suggestion.")}</small></div>
   </div></fieldset>`; }
 function exRender(){ const d=EXS.d, dlg=$("exDlg"), n=d.items.length, w=d.who;
   dlg.innerHTML=`<form class="dlgbox exbox" novalidate><div class="cmhead"><h3 style="margin:0">${L("Übung vorschlagen","Suggest an exercise")}</h3><button type="button" class="dclose" id="exX" aria-label="${L("Schließen","Close")}">×</button></div>
@@ -8798,24 +8814,40 @@ function exRender(){ const d=EXS.d, dlg=$("exDlg"), n=d.items.length, w=d.who;
     <p class="everr" id="exErr" hidden></p>
     <div class="bugact"><button type="submit" class="testbtn" id="exSend">${n>1?L(`${n} Übungen senden`,`Send ${n} exercises`):L("Vorschlag senden","Send suggestion")}</button><button type="button" class="testbtn ghost" id="exCancel">${L("Abbrechen","Cancel")}</button></div></form>`;
   const save=()=>exDraftSet(d);
-  dlg.querySelectorAll("[data-ex]").forEach(el=>{ el.addEventListener("keydown",e=>e.stopPropagation()); el.oninput=el.onchange=()=>{ const [i,k]=el.dataset.ex.split("|"); d.items[+i][k]=el.value; save(); if(k==="sport"){ const ok=exCats(el.value).map(c=>c[0]); d.items[+i].cat=exCatArr(d.items[+i]).filter(c=>ok.includes(c)); save(); exRender(); } }; });
-  dlg.querySelectorAll("[data-excat]").forEach(el=>el.onchange=()=>{ const [i,v]=el.dataset.excat.split("|"), x=d.items[+i], a=exCatArr(x).filter(c=>c!==v); if(el.checked) a.push(v); const ord=exCats(x.sport).map(c=>c[0]); x.cat=a.sort((p,q)=>ord.indexOf(p)-ord.indexOf(q)); save(); });
+  dlg.querySelectorAll("[data-ex]").forEach(el=>{ el.addEventListener("keydown",e=>e.stopPropagation()); el.oninput=el.onchange=()=>{ const [i,k]=el.dataset.ex.split("|"); d.items[+i][k]=el.value; save(); }; });
+  dlg.querySelectorAll("[data-exm]").forEach(el=>el.onchange=()=>{ const [i,key,v]=el.dataset.exm.split("|"), x=d.items[+i], a=exArr(x[key]).filter(c=>c!==v); if(el.checked) a.push(v);
+    const ord=(key==="cat"?exCats(sport):key==="equip"?exEquip(sport):exLevels()).map(c=>c[0]); x[key]=a.sort((p,q)=>ord.indexOf(p)-ord.indexOf(q)); save(); if(key==="equip"){ const dd=el.closest(".exdd"), open=dd&&dd.open; exRender(); if(open){ const n=$("exDlg").querySelectorAll(".exitem")[+i]; const d2=n&&n.querySelector(".exdd"); if(d2) d2.open=true; } } });
+  dlg.querySelectorAll("[data-exf]").forEach(inp=>inp.onchange=()=>{ const i=+inp.dataset.exf, x=d.items[i]; x.media=exArr(x.media); const err=$("exErr");
+    for(const f of [...inp.files]){ const vid=/^video\//.test(f.type); if(x.media.length>=5){ err.textContent=L("Höchstens 5 Dateien je Übung.","At most 5 files per exercise."); err.hidden=false; break; } if(vid && f.size>50*1024*1024){ err.textContent=L(`„${f.name}“ ist größer als 50 MB.`,`“${f.name}” is larger than 50 MB.`); err.hidden=false; continue; }
+      const id=evId(); EXS.files=EXS.files||{}; EXS.files[id]=f; x.media.push({id, name:f.name, size:f.size, type:vid?"video":"image"}); }
+    save(); exRender(); });
+  dlg.querySelectorAll("[data-exmd]").forEach(b=>b.onclick=()=>{ const [i,j]=b.dataset.exmd.split("|").map(Number); d.items[i].media.splice(j,1); save(); exRender(); });
   dlg.querySelectorAll("[data-who]").forEach(el=>{ el.addEventListener("keydown",e=>e.stopPropagation()); el.oninput=()=>{ d.who[el.dataset.who]=el.value.trim(); save(); }; });
   $("exCons").onchange=e=>{ d.cons=e.target.checked; save(); }; $("exCredit").onchange=e=>{ d.credit=e.target.checked; save(); };
   dlg.querySelectorAll("[data-exdel]").forEach(b=>b.onclick=()=>{ d.items.splice(+b.dataset.exdel,1); save(); exRender(); });
   $("exAdd").onclick=()=>{ const last=d.items[d.items.length-1]||{}; const x=exNew(); x.sport=last.sport||sport; d.items.push(x); save(); exRender(); setTimeout(()=>{ const f=dlg.querySelectorAll(".exitem"); f[f.length-2]&&f[f.length-2].scrollIntoView({behavior:"smooth",block:"start"}); },30); };
   $("exX").onclick=$("exCancel").onclick=()=>{ dlg.hidden=true; };
   dlg.querySelector("form").onsubmit=e=>{ e.preventDefault(); exSend(); }; }
-function exText(d){ const cat=(x)=>exGroups(x.sport).map(([g,list])=>{ const sel=list.filter(c=>exCatArr(x).includes(c[0])).map(c=>c[1]); return sel.length?`${g}: ${sel.join(", ")}`:""; }).filter(Boolean).join(" · "), lv=(x)=>(exLevels().find(c=>c[0]===x.level)||[0,""])[1];
+function exText(d, links){ const cat=(x)=>exGroups(x.sport).map(([g,list])=>{ const sel=list.filter(c=>exCatArr(x).includes(c[0])).map(c=>c[1]); return sel.length?`${g}: ${sel.join(", ")}`:""; }).filter(Boolean).join(" · "), lv=(x)=>exLevels().filter(c=>exArr(x.level).includes(c[0])).map(c=>c[1]).join(", "), eqT=(x)=>exEquip(x.sport).filter(c=>exArr(x.equip).includes(c[0])).map(c=>c[0]==="other"&&x.equipOther?`${c[1]} (${x.equipOther})`:c[1]).join(", ");
   const row=(k,v)=>v?`${k}: ${v}`:""; const out=[`Übungsvorschlag für den Sprintz-Übungskatalog (${d.items.length} ${d.items.length===1?"Übung":"Übungen"})`,"",`Von: ${d.who.name} <${d.who.mail}>${d.who.club?" · "+d.who.club:""}`,`Konto: ${USER||"–"}`,`Veröffentlichung: einverstanden${d.credit?", Name darf genannt werden":", ohne Namensnennung"}`,""];
-  d.items.forEach((x,i)=>{ out.push(...[`===== Übung ${i+1}: ${x.name} =====`, row("Sportart", x.sport==="track"?"Leichtathletik":"Schwimmen"), row("Bereiche", cat(x)), row("Leistungsstufe", lv(x)), row("Ziel", x.goal), row("Ablauf", x.desc), row("Ausführungshinweise", x.cues), row("Typische Fehler und Korrekturen", x.errors), row("Hilfsmittel", x.equip), row("Umfang und Belastung", x.dose), row("Varianten und Steigerung", x.prog), row("Quelle", x.src), row("Video", x.link)].filter(Boolean), ""); });
+  d.items.forEach((x,i)=>{ out.push(...[`===== Übung ${i+1}: ${x.name} =====`, row("Sportart", x.sport==="track"?"Leichtathletik":"Schwimmen"), row("Bereiche", cat(x)), row("Leistungsstufe", lv(x)), row("Ablauf", x.desc), row("Ziel", x.goal), row("Typische Fehler und Korrekturen", x.errors), row("Hilfsmittel", eqT(x)), row("Varianten und Steigerung", x.prog), row("Quelle", x.src), row("Video-Link", x.link), ...((links&&links[i])||[]).map(m=>`Datei: ${m.name} – ${m.url||"(Hochladen fehlgeschlagen)"}`)].filter(Boolean), ""); });
   return out.filter((l,i,a)=>l!==""||a[i-1]!=="").join("\n"); }
 async function exSend(){ const d=EXS.d, err=$("exErr"), bad=t=>{ err.textContent=t; err.hidden=false; err.scrollIntoView({block:"nearest"}); };
   err.hidden=true; for(let i=0;i<d.items.length;i++){ const x=d.items[i]; if(!x.name.trim()||!exCatArr(x).length||!x.goal.trim()||!x.desc.trim()) return bad(L(`Bei Übung ${i+1} fehlen Pflichtangaben: Name, Bereich, Ziel und Ablauf.`,`Exercise ${i+1} is missing required details: name, area, goal and procedure.`)); }
   if(!d.who.name) return bad(L("Bitte gib deinen Namen an.","Please enter your name.")); if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.who.mail||"")) return bad(L("Bitte gib eine gültige E-Mail-Adresse für Rückfragen an.","Please enter a valid email address for questions."));
   if(!d.cons) return bad(L("Bitte bestätige, dass dein Vorschlag geprüft und veröffentlicht werden darf.","Please confirm that your suggestion may be reviewed and published."));
   const b=$("exSend"); b.disabled=true; b.textContent=L("Wird gesendet …","Sending …");
-  try{ const r=await fetch(CONTACT_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify({access_key:CONTACT_KEY, subject:`Sprintz: Übungsvorschlag – ${d.items.map(x=>x.name.trim()).join(", ").slice(0,120)}`, from_name:"Sprintz Übungskatalog", email:d.who.mail, replyto:d.who.mail, message:exText(d)})});
+  // Dateien: nur mit Anmeldung, im eigenen Speicherbereich für Vorschläge; in die Mail kommt ein ein Jahr gültiger Link
+  const media=d.items.flatMap(x=>exArr(x.media)); let links=null;
+  if(media.length){ const miss=media.filter(m=>!(EXS.files&&EXS.files[m.id])); if(miss.length){ b.disabled=false; b.textContent=L("Vorschlag senden","Send suggestion"); return bad(L(`Diese Dateien bitte noch einmal auswählen: ${miss.map(m=>m.name).join(", ")}`,`Please choose these files again: ${miss.map(m=>m.name).join(", ")}`)); }
+    if(!STORE.online()){ b.disabled=false; b.textContent=L("Vorschlag senden","Send suggestion"); return bad(L("Zum Mitschicken von Dateien musst du online angemeldet sein.","You need to be signed in online to attach files.")); }
+    links=[]; try{ await sbReady(); }catch(e){}
+    for(let i=0;i<d.items.length;i++){ links[i]=[]; for(const m of exArr(d.items[i].media)){ const f=EXS.files[m.id], path=`${SESS.uid||"x"}/${Date.now().toString(36)}-${m.id}-${m.name.replace(/[^\w.\-]+/g,"_").slice(-60)}`; let url=null;
+      b.textContent=L(`Datei wird hochgeladen: ${m.name}`,`Uploading file: ${m.name}`);
+      try{ await sbRaw(`/storage/v1/object/exercise-media/${path}`,{method:"POST", headers:{"Content-Type":f.type||"application/octet-stream","x-upsert":"true"}, body:f}); const sg=await sbFetch(`/storage/v1/object/sign/exercise-media/${path}`,{method:"POST", body:{expiresIn:31536000}}); if(sg&&(sg.signedURL||sg.signedUrl)) url=SB.url+"/storage/v1"+(sg.signedURL||sg.signedUrl); }catch(e){ blog("warn","exUpload: "+(e.message||e)); }
+      links[i].push({name:m.name, url}); } }
+    if(links.flat().some(l=>!l.url)){ b.disabled=false; b.textContent=L("Vorschlag senden","Send suggestion"); return bad(L("Mindestens eine Datei ließ sich nicht hochladen. Prüf die Verbindung oder entferne die Datei und versuche es noch einmal.","At least one file could not be uploaded. Check the connection or remove the file and try again.")); } }
+  try{ const r=await fetch(CONTACT_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify({access_key:CONTACT_KEY, subject:`Sprintz: Übungsvorschlag – ${d.items.map(x=>x.name.trim()).join(", ").slice(0,120)}`, from_name:"Sprintz Übungskatalog", email:d.who.mail, replyto:d.who.mail, message:exText(d, links)})});
     if(!r.ok) throw new Error(r.status); try{ localStorage.removeItem(EXS.key); }catch(e){} blog("klick","Übungsvorschlag gesendet",{n:d.items.length});
     $("exDlg").querySelector(".dlgbox").innerHTML=`<div class="cmhead"><h3 style="margin:0">${L("Danke!","Thank you!")}</h3><button type="button" class="dclose" id="exX" aria-label="${L("Schließen","Close")}">×</button></div><p>${L("Dein Vorschlag wurde gesendet. Wir melden uns, falls es Rückfragen gibt.","Your suggestion has been sent. We'll get back to you if we have questions.")}</p><div class="bugact"><button type="button" class="testbtn" id="exOk">${L("Schließen","Close")}</button></div>`;
     $("exX").onclick=$("exOk").onclick=()=>{ $("exDlg").hidden=true; }; }
