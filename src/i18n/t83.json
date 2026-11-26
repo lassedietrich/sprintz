@@ -1,9 +1,44 @@
 [
-["Warning: storage on this device is full, the analysis could not be saved here. Please report this as a problem.","Dikkat: Bu cihazdaki depolama dolu, analiz burada kaydedilemedi. Lütfen bunu hata olarak bildir.","Внимание: память на этом устройстве заполнена, анализ не удалось сохранить здесь. Пожалуйста, сообщи об этом как об ошибке.","Let op: de opslag op dit apparaat is vol, de analyse kon hier niet worden opgeslagen. Meld dit alsjeblieft als fout."],
-["Saved. The analysis is listed under “Completed”.","Kaydedildi. Analiz „Tamamlandı“ altında.","Сохранено. Анализ находится в разделе „Завершено“.","Opgeslagen. De analyse staat onder „Afgerond“."],
-["Cycle start (first arm pull after start or turn)","Döngü başlangıcı (start veya dönüşten sonraki ilk kulaç)","Начало цикла (первый гребок после старта или поворота)","Cyclusbegin (eerste armslag na start of keerpunt)"],
-["Go to the frame and tap the event. For stroke rate, mark every hand entry of the same hand. After a start or turn, mark the beginning of the first arm pull as “Cycle start”; sections across a turn are not counted.","Kareye git ve olaya dokun. Kulaç frekansı için aynı elin her suya girişini işaretle. Start veya dönüşten sonra ilk kulacın başlangıcını „Döngü başlangıcı“ olarak işaretle; dönüş üzerinden geçen bölümler sayılmaz.","Перейди к кадру и нажми на событие. Для темпа отмечай каждый вход в воду одной и той же руки. После старта или поворота отметь начало первого гребка как „Начало цикла“; отрезки через поворот не учитываются.","Ga naar het beeld en tik op de gebeurtenis. Markeer voor de slagfrequentie elke handinsteek van dezelfde hand. Markeer na een start of keerpunt het begin van de eerste armslag als „Cyclusbegin“; delen over een keerpunt heen tellen niet mee."],
-["Tap to edit, drag to move, bottom-right corner to resize","Düzenlemek için dokun, taşımak için sürükle, boyut için sağ alt köşe","Нажми, чтобы изменить, перетащи, чтобы переместить, правый нижний угол — размер","Tik om te bewerken, sleep om te verplaatsen, hoek rechtsonder om te vergroten"],
-["Edit note","Notu düzenle","Изменить заметку","Notitie bewerken"],
-["Special thanks go to Jan Tafreschi (TU Darmstadt) and Ismet Sezgin (SC Wiesbaden 1911 / Hessian Swimming Association), who supported the development substantially. Thanks also to all athletes of SC Wiesbaden 1911 and the coaching team.","Geliştirmeye önemli ölçüde destek veren Jan Tafreschi'ye (TU Darmstadt) ve Ismet Sezgin'e (SC Wiesbaden 1911 / Hessen Yüzme Federasyonu) özel teşekkürler. Ayrıca SC Wiesbaden 1911'in tüm sporcularına ve antrenör ekibine teşekkürler.","Особая благодарность Яну Тафрешти (TU Darmstadt) и Исмету Сезгину (SC Wiesbaden 1911 / Гессенская федерация плавания), которые существенно поддержали разработку. Спасибо также всем спортсменам SC Wiesbaden 1911 и тренерскому составу.","Bijzondere dank gaat uit naar Jan Tafreschi (TU Darmstadt) en Ismet Sezgin (SC Wiesbaden 1911 / Hessische Zwembond), die de ontwikkeling wezenlijk hebben ondersteund. Ook dank aan alle atleten van SC Wiesbaden 1911 en het trainersteam."]
+[
+"Warning: storage on this device is full, the analysis could not be saved here. Please report this as a problem.",
+"Dikkat: Bu cihazdaki depolama dolu, analiz burada kaydedilemedi. Lütfen bunu hata olarak bildir.",
+"Внимание: память на этом устройстве заполнена, анализ не удалось сохранить здесь. Пожалуйста, сообщи об этом как об ошибке.",
+"Let op: de opslag op dit apparaat is vol, de analyse kon hier niet worden opgeslagen. Meld dit alsjeblieft als fout."
+],
+[
+"Saved. The analysis is listed under “Completed”.",
+"Kaydedildi. Analiz „Tamamlandı“ altında.",
+"Сохранено. Анализ находится в разделе „Завершено“.",
+"Opgeslagen. De analyse staat onder „Afgerond“."
+],
+[
+"Cycle start (first arm pull after start or turn)",
+"Döngü başlangıcı (start veya dönüşten sonraki ilk kulaç)",
+"Начало цикла (первый гребок после старта или поворота)",
+"Cyclusbegin (eerste armslag na start of keerpunt)"
+],
+[
+"Go to the frame and tap the event. For stroke rate, mark every hand entry of the same hand. After a start or turn, mark the beginning of the first arm pull as “Cycle start”; sections across a turn are not counted.",
+"Kareye git ve olaya dokun. Kulaç frekansı için aynı elin her suya girişini işaretle. Start veya dönüşten sonra ilk kulacın başlangıcını „Döngü başlangıcı“ olarak işaretle; dönüş üzerinden geçen bölümler sayılmaz.",
+"Перейди к кадру и нажми на событие. Для темпа отмечай каждый вход в воду одной и той же руки. После старта или поворота отметь начало первого гребка как „Начало цикла“; отрезки через поворот не учитываются.",
+"Ga naar het beeld en tik op de gebeurtenis. Markeer voor de slagfrequentie elke handinsteek van dezelfde hand. Markeer na een start of keerpunt het begin van de eerste armslag als „Cyclusbegin“; delen over een keerpunt heen tellen niet mee."
+],
+[
+"Tap to edit, drag to move, bottom-right corner to resize",
+"Düzenlemek için dokun, taşımak için sürükle, boyut için sağ alt köşe",
+"Нажми, чтобы изменить, перетащи, чтобы переместить, правый нижний угол — размер",
+"Tik om te bewerken, sleep om te verplaatsen, hoek rechtsonder om te vergroten"
+],
+[
+"Edit note",
+"Notu düzenle",
+"Изменить заметку",
+"Notitie bewerken"
+],
+[
+"Special thanks go to Jan Tafreschi (TU Darmstadt) and Ismet Sezgin (SC Wiesbaden 1911 / Hessian Swimming Association), who substantially support the development. Thanks also to all athletes of SC Wiesbaden 1911 and the coaching team.",
+"Geliştirmeyi önemli ölçüde destekleyen Jan Tafreschi'ye (TU Darmstadt) ve Ismet Sezgin'e (SC Wiesbaden 1911 / Hessen Yüzme Federasyonu) özel teşekkürler. Ayrıca SC Wiesbaden 1911'in tüm sporcularına ve antrenör ekibine teşekkürler.",
+"Особая благодарность Яну Тафрешти (TU Darmstadt) и Исмету Сезгину (SC Wiesbaden 1911 / Гессенская федерация плавания), которые существенно поддерживают разработку. Спасибо также всем спортсменам SC Wiesbaden 1911 и тренерскому составу.",
+"Bijzondere dank gaat uit naar Jan Tafreschi (TU Darmstadt) en Ismet Sezgin (SC Wiesbaden 1911 / Hessische Zwembond), die de ontwikkeling wezenlijk ondersteunen. Ook dank aan alle atleten van SC Wiesbaden 1911 en het trainersteam."
+]
 ]
