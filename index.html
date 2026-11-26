@@ -8775,7 +8775,8 @@ const exEquip=sp=> sp==="track"
   : [["none",L("Keine","None")],["fins",L("Flossen","Fins")],["sfins",L("Kurzflossen","Short fins")],["mono",L("Monoflosse","Monofin")],["buoy",L("Pullbuoy","Pull buoy")],["board",L("Schwimmbrett","Kickboard")],["paddles",L("Paddles","Paddles")],["snork",L("Frontschnorchel","Centre snorkel")],["cord",L("Zugseil / Widerstandsgurt","Tether / resistance belt")],["chute",L("Bremsschirm","Drag parachute")],["tempo",L("Taktgeber (Tempo Trainer)","Tempo trainer")],["other",L("Sonstiges","Other")]];
 const exArr=v=>Array.isArray(v)?v:(v?[v]:[]);
 const exNew=()=>({name:"", sport:sport, cat:[], desc:"", goal:"", errors:"", equip:[], equipOther:"", level:[], prog:"", src:"", link:"", media:[]});
-function exDraftGet(){ try{ const d=JSON.parse(localStorage.getItem(EXS.key)||"null"); if(d && Array.isArray(d.items) && d.items.length) return d; }catch(e){} return {who:{name:"", mail:"", club:""}, items:[exNew()], cons:true, credit:false}; }
+// Entwurf; ältere Entwürfe (vor v2) bekommen die neuen Voreinstellungen: Einwilligung an, Namensnennung aus
+function exDraftGet(){ try{ const d=JSON.parse(localStorage.getItem(EXS.key)||"null"); if(d && Array.isArray(d.items) && d.items.length){ if(d.v!==2){ d.v=2; d.cons=true; d.credit=false; d.items.forEach(x=>{ delete x.cues; delete x.dose; if(!Array.isArray(x.equip)) x.equip=[]; if(!Array.isArray(x.level)) x.level=[]; }); } return d; } }catch(e){} return {v:2, who:{name:"", mail:"", club:""}, items:[exNew()], cons:true, credit:false}; }
 function exDraftSet(d){ try{ localStorage.setItem(EXS.key, JSON.stringify(d)); }catch(e){} }
 function exSugOpen(){ let dlg=$("exDlg"); if(!dlg){ dlg=document.createElement("div"); dlg.id="exDlg"; dlg.className="dlg"; document.body.appendChild(dlg); dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.hidden=true; }); }
   EXS.d=exDraftGet(); dlg.hidden=false; exRender(); }
