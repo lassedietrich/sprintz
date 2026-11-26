@@ -304,6 +304,10 @@ body.menu-open #drawerBg{opacity:1;pointer-events:auto}
 .exbox{max-width:760px;width:100%;max-height:calc(100vh - 32px);overflow:auto}.exitem{border:1px solid var(--line);border-radius:12px;padding:10px 12px 12px;margin:0 0 12px}.exitem legend{font-weight:700;padding:0 6px;display:flex;align-items:center;gap:8px}.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}.exgrid .exwide{grid-column:1/-1}.excats{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px 14px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg)}.excg{display:flex;flex-direction:column;gap:2px}.excg b{font-size:.78rem;color:var(--fg);margin:2px 0}.excb{display:flex;gap:6px;align-items:center;font-size:.88rem;color:var(--fg);cursor:pointer}.excb input{margin:0}
 .exmulti{font-weight:400;color:var(--muted)}.exrow{display:flex;flex-wrap:wrap;gap:4px 14px;padding:6px 0}.exdd{border:1px solid var(--line);border-radius:10px;background:var(--bg)}.exdd summary{padding:8px 10px;cursor:pointer;color:var(--fg);font-size:.9rem;list-style:none}.exdd summary::after{content:" ▾";color:var(--muted)}.exddp{display:flex;flex-direction:column;gap:2px;padding:4px 10px 8px;border-top:1px solid var(--line)}
 .exmedia{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0}.exm{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px 6px 3px 10px;font-size:.85rem;color:var(--fg)}.exm small{color:var(--muted)}.exm button{border:0;background:transparent;color:var(--muted);cursor:pointer}.exadd{cursor:pointer;margin:0}
+#drillPage{margin-top:6px}.drlbar{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;margin:6px 0 4px}.drlq{flex:1 1 260px;margin:0}.drlf{position:relative;flex:none}.drlf summary{white-space:nowrap}.drlf .exddp{position:absolute;z-index:20;left:0;top:calc(100% + 4px);min-width:240px;max-height:60vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.drln{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--accent);color:#fff;font-size:.72rem;text-align:center}.drlg{font-size:.78rem;margin:6px 0 2px}.drlinfo{margin:2px 0 8px}.drlact{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}.drlact .testbtn{margin:0}
+.drlletter{margin:16px 0 6px;font-size:1.1rem;color:var(--accent);border-bottom:1px solid var(--line);padding-bottom:2px}.drlgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}@media (max-width:760px){.drlgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:480px){.drlgrid{grid-template-columns:1fr}}
+.drlcard{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px;cursor:pointer;font:inherit;color:var(--fg);border:1px solid var(--line);margin:0}.drlcard:hover{border-color:var(--accent)}.drlcard b{font-size:1rem}.drlcard small{color:var(--muted);font-size:.8rem}.drlchips{display:flex;flex-wrap:wrap;gap:4px}.drlchips i{font-style:normal;font-size:.72rem;background:var(--soft);color:var(--accent);border-radius:999px;padding:1px 8px}.drltxt{white-space:pre-wrap;margin:0 0 8px}.drlempty{padding:18px;text-align:center}
 .exdel{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:1rem}.exdel:hover{color:var(--danger)}#exAdd{margin:0 0 12px}.exbox .athf textarea{font:inherit;font-size:.92rem;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg);color:var(--fg);resize:vertical}
 #modeSoon p{margin:0;color:var(--muted);line-height:1.5}
 body.mode-other #tabsNav,body.mode-other #tab-train,body.mode-other #tab-stats,body.mode-other #tab-video,body.mode-other:not(.mode-sprint) #startbar{display:none!important}
@@ -1020,6 +1024,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
   <div class="card" id="sSmoCard" hidden></div>
   <div class="card" id="sSpkCard"></div>
 </section>
+<section id="drillPage" hidden></section>
 <section id="modeSoon" hidden><button type="button" class="testbtn ghost small" id="devBack" hidden style="margin:0 0 10px">‹ Entwicklermodus</button><div class="card"><div class="ic" id="soonIc"></div><h2 id="soonT"></h2><p id="soonX"></p><div id="soonAct"></div></div>
   <div id="devList" hidden><h3 class="devh">In Entwicklung</h3>
     <button type="button" class="devitem" data-dm="kraft"><span class="ic" id="kraftIc"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 7v10"/><path d="M17.5 7v10"/><path d="M3.5 9.5v5"/><path d="M20.5 9.5v5"/><path d="M6.5 12h11"/><path d="M3.5 12H2"/><path d="M22 12h-1.5"/></svg></span><span><b>Krafttraining</b><small>Training tracken, Hantelgeschwindigkeit</small></span></button>
@@ -1343,7 +1348,7 @@ button:active,.testbtn:active,.evbig:active,.devitem:active{transform:scale(.98)
     <p class="copyright">© Lasse Dietrich</p>
     <p class="thanks" id="aboutThanks"></p>
 
-    <h3>Kontakt</h3>
+    <h3 id="aboutContactH">Kontakt / Feedback</h3>
     <button type="button" class="testbtn" id="contactOpen" style="flex:none">Kontaktieren</button>
     <form id="contactForm" class="contact" hidden novalidate>
       <label for="cMail">Deine E-Mail-Adresse</label>
@@ -8235,6 +8240,7 @@ function setMode(m){ if(m==="sprint") m="eval"; if(m==="me" && !USER) m="start";
   const other=m!=="start"; document.body.classList.toggle("mode-other",other); $("modeSoon").hidden = !(m==="kraft"||m==="dev"||m==="drills"); $("devList").hidden = m!=="dev"; $("devBack").hidden = m!=="kraft";
   document.body.classList.toggle("mode-sprint", m==="eval"); document.body.classList.toggle("mode-eval", m==="eval");
   if(was==="quick" && m!=="quick") qkLeave();
+  $("drillPage").hidden=m!=="drills"; if(m==="drills"){ if(was==="eval"){ evLeave(); S=freshS(); updaters.forEach(f=>f()); resetDialog(); } $("spPage").hidden=true; $("modeSoon").hidden=true; drillEnter(); return; }
   $("athPage").hidden=m!=="ath"; $("usersPage").hidden=m!=="users"; $("mePage").hidden=m!=="me";
   if(m==="me"){ if(was==="eval"){ evLeave(); S=freshS(); updaters.forEach(f=>f()); resetDialog(); } $("spPage").hidden=true; meEnter(); return; }
   if(m==="ath"||m==="users"){ if(was==="eval"){ evLeave(); S=freshS(); updaters.forEach(f=>f()); resetDialog(); } $("spPage").hidden=true; if(m==="ath") athEnter(); else usersEnter(); return; }
@@ -8261,6 +8267,15 @@ grant execute on function public.sprintz_setup_status() to authenticated;
 grant select, insert, update, delete on public.club_athletes, public.club_results to authenticated;
 grant select, delete on public.club_members to authenticated;
 grant select on public.account_roles to authenticated;
+-- Übungskatalog: alle dürfen lesen (auch ohne Anmeldung), nur Entwicklerkonten schreiben
+create table if not exists public.exercises(id uuid primary key default gen_random_uuid(), sport text not null default 'swim', name text not null, data jsonb not null default '{}'::jsonb, created_by text, created_at timestamptz not null default now(), updated_at timestamptz not null default now());
+alter table public.exercises enable row level security;
+drop policy if exists "Übungen lesen" on public.exercises;
+create policy "Übungen lesen" on public.exercises for select to anon, authenticated using (true);
+drop policy if exists "Übungen schreiben" on public.exercises;
+create policy "Übungen schreiben" on public.exercises for all to authenticated using (public.sprintz_is_dev()) with check (public.sprintz_is_dev());
+grant select on public.exercises to anon, authenticated;
+grant insert, update, delete on public.exercises to authenticated;
 -- Bilder und Videos zu Übungsvorschlägen (privat; Link per Mail an das Sprintz-Team)
 insert into storage.buckets (id, name, public, file_size_limit) values ('exercise-media', 'exercise-media', false, 52428800) on conflict (id) do nothing;
 drop policy if exists "Übungsvorschläge hochladen" on storage.objects;
@@ -8754,7 +8769,68 @@ function camClose(toSetup){
   $("cam").hidden=true; $("camErr").hidden=true; $("run").hidden=true; $("run").classList.remove("camrun");
   if(toSetup){ $("setup").hidden=false; openTab("train"); $("fab").hidden=false; $("fabL").hidden=false; resetDialog(); scrollTo(0,0); }
 }
-$("aboutBtn").onclick=()=>{ hideTip(); $("aboutThanks").textContent=L("Ein besonderer Dank gilt Jan Tafreschi (TU Darmstadt) und Ismet Sezgin (SC Wiesbaden 1911 / Hessischer Schwimm-Verband), die die Entwicklung maßgeblich unterstützen. Außerdem danke an alle Athlet*innen des SC Wiesbaden 1911 sowie das Trainerteam.","Special thanks go to Jan Tafreschi (TU Darmstadt) and Ismet Sezgin (SC Wiesbaden 1911 / Hessian Swimming Association), who substantially support the development. Thanks also to all athletes of SC Wiesbaden 1911 and the coaching team."); $("aboutDlg").hidden=false; $("contactForm").hidden=true; $("contactOpen").hidden=false; $("cStatus").textContent=""; $("aboutClose").focus(); };
+$("aboutBtn").onclick=()=>{ hideTip(); $("aboutContactH").textContent=L("Kontakt / Feedback","Contact / feedback"); $("aboutThanks").textContent=L("Ein besonderer Dank gilt Jan Tafreschi (TU Darmstadt) und Ismet Sezgin (SC Wiesbaden 1911 / Hessischer Schwimm-Verband), die die Entwicklung maßgeblich unterstützen. Außerdem danke an alle Athlet*innen des SC Wiesbaden 1911 sowie das Trainerteam.","Special thanks go to Jan Tafreschi (TU Darmstadt) and Ismet Sezgin (SC Wiesbaden 1911 / Hessian Swimming Association), who substantially support the development. Thanks also to all athletes of SC Wiesbaden 1911 and the coaching team."); $("aboutDlg").hidden=false; $("contactForm").hidden=true; $("contactOpen").hidden=false; $("cStatus").textContent=""; $("aboutClose").focus(); };
+/* ---------- Übungskatalog: Übersicht (alphabetisch, drei Spalten), Suche, Filter nach Bereichen, Leistungsstufe und Hilfsmitteln (mit / ohne) ---------- */
+const DRL={list:null, q:"", cat:[], lvl:[], eqIn:[], eqOut:[], err:null};
+const drlKey=()=>"sprintz-exercises-"+sport;
+async function drlLoad(){ try{ const c=JSON.parse(localStorage.getItem(drlKey())||"null"); if(Array.isArray(c)) DRL.list=c; }catch(e){}
+  try{ const r=await sbFetch(`/rest/v1/exercises?select=id,sport,name,data,updated_at&sport=eq.${sport}&order=name`,{noAuth:!SESS||!SESS.access_token}); DRL.list=(r||[]).map(x=>Object.assign({id:x.id, name:x.name, sport:x.sport}, x.data||{})); DRL.err=null; try{ localStorage.setItem(drlKey(), JSON.stringify(DRL.list)); }catch(e){} }
+  catch(e){ DRL.err=clubMissing(e)?"setup":"net"; if(!DRL.list) DRL.list=[]; } }
+async function drillEnter(){ DRL.cat=[]; DRL.lvl=[]; DRL.eqIn=[]; DRL.eqOut=[]; drillRender(); await drlLoad(); if(appMode==="drills") drillRender(); }
+function drlMatch(x){ const q=DRL.q.trim().toLowerCase(), eq=exArr(x.equip), cat=exCatArr(x), lv=exArr(x.level);
+  if(q){ const hay=[x.name,x.desc,x.goal,x.errors,x.prog,x.equipOther,...exCats(x.sport||sport).filter(c=>cat.includes(c[0])).map(c=>c[1])].join(" ").toLowerCase(); if(!q.split(/\s+/).every(w=>hay.includes(w))) return false; }
+  if(DRL.cat.length && !DRL.cat.some(c=>cat.includes(c))) return false;
+  if(DRL.lvl.length && !DRL.lvl.some(c=>lv.includes(c))) return false;
+  if(DRL.eqIn.length && !DRL.eqIn.some(c=>eq.includes(c))) return false;
+  if(DRL.eqOut.length && DRL.eqOut.some(c=>eq.includes(c))) return false; return true; }
+function drlDrop(id, title, groups, sel){ const n=sel.length;
+  return `<details class="exdd drlf" id="${id}"><summary>${esc(title)}${n?` <b class="drln">${n}</b>`:""}</summary><div class="exddp">${groups.map(([g,list])=>`${g?`<b class="drlg">${esc(g)}</b>`:""}${list.map(([v,l])=>`<label class="excb"><input type="checkbox" data-df="${id}|${v}"${sel.includes(v)?" checked":""}> <span>${esc(l)}</span></label>`).join("")}`).join("")}</div></details>`; }
+function drillRender(){ const pg=$("drillPage"); if(!pg) return; const all=(DRL.list||[]).slice().sort((a,b)=>a.name.localeCompare(b.name, LANG, {sensitivity:"base"})), list=all.filter(drlMatch), dev=isDev();
+  const eqG=[["",exEquip(sport).filter(e=>e[0]!=="none")]], open=[...pg.querySelectorAll("details[open]")].map(d=>d.id), active=DRL.cat.length+DRL.lvl.length+DRL.eqIn.length+DRL.eqOut.length;
+  const letters={}; list.forEach(x=>{ const c=(x.name.trim()[0]||"#").toLocaleUpperCase(LANG); (letters[c]=letters[c]||[]).push(x); });
+  const card=x=>{ const cats=exCats(x.sport||sport).filter(c=>exCatArr(x).includes(c[0])).map(c=>c[1]), lv=exLevels().filter(c=>exArr(x.level).includes(c[0])).map(c=>c[1]), eq=exEquip(x.sport||sport).filter(c=>exArr(x.equip).includes(c[0])&&c[0]!=="other").map(c=>c[1]).concat(x.equipOther?[x.equipOther]:[]);
+    return `<button type="button" class="card drlcard" data-dx="${x.id}"><b>${esc(x.name)}</b><span class="drlchips">${cats.map(c=>`<i>${esc(c)}</i>`).join("")}</span>${lv.length?`<small>${esc(lv.join(" · "))}</small>`:""}${eq.length?`<small>🧰 ${esc(eq.join(", "))}</small>`:""}</button>`; };
+  pg.innerHTML=`<h2 class="big">${L("Übungskatalog","Exercise catalogue")}</h2>
+    <div class="drlbar"><div class="athsearch drlq"><span aria-hidden="true">🔍</span><input type="search" id="drlQ" placeholder="${L("Übungen suchen (Name, Ziel, Ablauf …)","Search exercises (name, goal, procedure …)")}" value="${esc(DRL.q)}" autocomplete="off"></div>
+      ${drlDrop("dfCat",L("Bereiche","Areas"),exGroups(sport),DRL.cat)}${drlDrop("dfLvl",L("Leistungsstufe","Level"),[["",exLevels()]],DRL.lvl)}${drlDrop("dfIn",L("Mit Hilfsmittel","With equipment"),eqG,DRL.eqIn)}${drlDrop("dfOut",L("Ohne Hilfsmittel","Without equipment"),eqG,DRL.eqOut)}
+      ${active?`<button type="button" class="testbtn ghost small" id="drlReset">${L("Filter zurücksetzen","Reset filters")}</button>`:""}</div>
+    <p class="hint drlinfo">${L(`${list.length} von ${all.length} Übungen`,`${list.length} of ${all.length} exercises`)} · <small>${L("Filter: Mehrfachauswahl möglich","Filters: multiple selection possible")}</small></p>
+    <div class="drlact"><button type="button" class="testbtn" id="exSugB">+ ${L("Übung vorschlagen","Suggest an exercise")}</button>${dev?`<button type="button" class="testbtn ghost" id="drlNew">+ ${L("Übung anlegen","Add exercise")}</button>`:""}</div>
+    ${DRL.err==="setup"&&dev?`<p class="everr">${L("Der Übungskatalog ist in Supabase noch nicht eingerichtet: Entwicklermodus → Supabase-Einrichtung.","The exercise catalogue isn't set up in Supabase yet: developer mode → Supabase setup.")}</p>`:DRL.err==="net"?`<p class="hint">${L("Offline: Es wird der zuletzt geladene Stand gezeigt.","Offline: showing the last loaded state.")}</p>`:""}
+    ${DRL.list==null?`<p class="hint">${L("Wird geladen …","Loading …")}</p>`:!all.length?`<div class="card drlempty"><p>${L("Der Katalog wird gerade aufgebaut. Du kennst eine gute Übung? Schlag sie vor!","The catalogue is being built. Know a good exercise? Suggest it!")}</p></div>`:!list.length?`<p class="hint">${L("Keine Übung passt zu Suche und Filter.","No exercise matches the search and filters.")}</p>`:
+      Object.keys(letters).sort((a,b)=>a.localeCompare(b,LANG)).map(c=>`<h3 class="drlletter">${esc(c)}</h3><div class="drlgrid">${letters[c].map(card).join("")}</div>`).join("")}`;
+  open.forEach(id=>{ const d=$(id); if(d) d.open=true; });
+  const q=$("drlQ"); q.oninput=()=>{ DRL.q=q.value; const pos=q.selectionStart; drillRender(); const q2=$("drlQ"); q2.focus(); try{ q2.setSelectionRange(pos,pos); }catch(e){} }; q.onkeydown=e=>e.stopPropagation();
+  pg.querySelectorAll("[data-df]").forEach(el=>el.onchange=()=>{ const [id,v]=el.dataset.df.split("|"), k={dfCat:"cat",dfLvl:"lvl",dfIn:"eqIn",dfOut:"eqOut"}[id]; DRL[k]=DRL[k].filter(c=>c!==v); if(el.checked) DRL[k].push(v);
+    if(k==="eqIn"&&el.checked) DRL.eqOut=DRL.eqOut.filter(c=>c!==v); if(k==="eqOut"&&el.checked) DRL.eqIn=DRL.eqIn.filter(c=>c!==v); drillRender(); });
+  const rs=$("drlReset"); if(rs) rs.onclick=()=>{ DRL.cat=[]; DRL.lvl=[]; DRL.eqIn=[]; DRL.eqOut=[]; drillRender(); };
+  $("exSugB").onclick=()=>exSugOpen(); const nb=$("drlNew"); if(nb) nb.onclick=()=>drlEdit(null);
+  pg.querySelectorAll("[data-dx]").forEach(b=>b.onclick=()=>drlShow(b.dataset.dx)); }
+document.addEventListener("click",e=>{ if(appMode!=="drills") return; document.querySelectorAll("#drillPage details.drlf[open]").forEach(d=>{ if(!d.contains(e.target)) d.open=false; }); });
+function drlShow(id){ const x=(DRL.list||[]).find(y=>y.id===id); if(!x) return; let d=$("drlDlg"); if(!d){ d=document.createElement("div"); d.id="drlDlg"; d.className="dlg"; document.body.appendChild(d); d.addEventListener("click",e=>{ if(e.target===d) d.hidden=true; }); }
+  const sp=x.sport||sport, cats=exGroups(sp).map(([g,list])=>{ const sel=list.filter(c=>exCatArr(x).includes(c[0])).map(c=>c[1]); return sel.length?`${g}: ${sel.join(", ")}`:""; }).filter(Boolean),
+    lv=exLevels().filter(c=>exArr(x.level).includes(c[0])).map(c=>c[1]), eq=exEquip(sp).filter(c=>exArr(x.equip).includes(c[0])&&c[0]!=="other").map(c=>c[1]).concat(x.equipOther?[x.equipOther]:[]);
+  const sec=(t,v)=>v?`<h4>${t}</h4><p class="drltxt">${esc(v)}</p>`:"", safe=u=>/^https:\/\//.test(u||"")?u:"";
+  d.hidden=false; d.innerHTML=`<div class="dlgbox exbox"><div class="cmhead"><h3 style="margin:0">${esc(x.name)}</h3><button type="button" class="dclose" id="drlX" aria-label="${L("Schließen","Close")}">×</button></div>
+    <p class="hint" style="margin:0 0 8px">${esc(cats.join(" · "))}${lv.length?`<br>${L("Leistungsstufe","Level")}: ${esc(lv.join(", "))}`:""}${eq.length?`<br>${L("Hilfsmittel","Equipment")}: ${esc(eq.join(", "))}`:""}</p>
+    ${sec(L("Ablauf","Procedure"),x.desc)}${sec(L("Ziel","Goal"),x.goal)}${sec(L("Typische Fehler und Korrekturen","Typical errors and corrections"),x.errors)}${sec(L("Varianten und Steigerung","Variations and progression"),x.prog)}${sec(L("Quelle","Source"),x.src)}
+    ${safe(x.link)?`<p><a href="${esc(safe(x.link))}" target="_blank" rel="noopener">▶ ${L("Beispielvideo ansehen","Watch example video")}</a></p>`:""}
+    ${isDev()?`<div class="bugact"><button type="button" class="testbtn ghost" id="drlEd">${L("Bearbeiten","Edit")}</button><button type="button" class="testbtn ghost" id="drlDel" style="color:var(--danger)">${L("Löschen","Delete")}</button></div>`:""}</div>`;
+  $("drlX").onclick=()=>{ d.hidden=true; }; const ed=$("drlEd"); if(ed) ed.onclick=()=>{ d.hidden=true; drlEdit(x); };
+  const dl=$("drlDel"); if(dl) dl.onclick=async()=>{ if(!(await askDlg(L(`„${x.name}“ endgültig aus dem Katalog löschen?`,`Delete “${x.name}” from the catalogue for good?`),L("Löschen","Delete"),L("Abbrechen","Cancel")))) return; try{ await sbReady(); await sbFetch(`/rest/v1/exercises?id=eq.${x.id}`,{method:"DELETE"}); d.hidden=true; await drlLoad(); drillRender(); }catch(e){ toast(L("Löschen fehlgeschlagen: ","Deleting failed: ")+(e.message||e),4000); } }; }
+// Entwicklerkonten: Übung anlegen bzw. bearbeiten (gleiche Felder wie der Vorschlag)
+function drlEdit(src){ let d=$("drlEdDlg"); if(!d){ d=document.createElement("div"); d.id="drlEdDlg"; d.className="dlg"; document.body.appendChild(d); }
+  const x=Object.assign(exNew(), src?JSON.parse(JSON.stringify(src)):{}); x.sport=x.sport||sport; d.hidden=false;
+  const render=()=>{ d.innerHTML=`<form class="dlgbox exbox" novalidate><div class="cmhead"><h3 style="margin:0">${src?L("Übung bearbeiten","Edit exercise"):L("Übung anlegen","Add exercise")}</h3><button type="button" class="dclose" id="deX" aria-label="${L("Schließen","Close")}">×</button></div>
+      ${exItemHTML(x,0,1,true)}<p class="everr" id="deErr" hidden></p><div class="bugact"><button type="submit" class="testbtn" id="deOk">${L("Speichern","Save")}</button><button type="button" class="testbtn ghost" id="deNo">${L("Abbrechen","Cancel")}</button></div></form>`;
+    d.querySelectorAll("[data-ex]").forEach(el=>{ el.addEventListener("keydown",e=>e.stopPropagation()); el.oninput=el.onchange=()=>{ x[el.dataset.ex.split("|")[1]]=el.value; }; });
+    d.querySelectorAll("[data-exm]").forEach(el=>el.onchange=()=>{ const [,key,v]=el.dataset.exm.split("|"), a=exArr(x[key]).filter(c=>c!==v); if(el.checked) a.push(v); x[key]=a; if(key==="equip"){ const open=el.closest(".exdd").open; render(); if(open) d.querySelector(".exdd").open=true; } });
+    $("deX").onclick=$("deNo").onclick=()=>{ d.hidden=true; };
+    d.querySelector("form").onsubmit=async e=>{ e.preventDefault(); const er=$("deErr"); if(!x.name.trim()||!exCatArr(x).length||!x.goal.trim()||!x.desc.trim()){ er.textContent=L("Name, Bereich, Ziel und Ablauf sind Pflicht.","Name, area, goal and procedure are required."); er.hidden=false; return; }
+      const data={cat:exCatArr(x), level:exArr(x.level), desc:x.desc, goal:x.goal, errors:x.errors, equip:exArr(x.equip), equipOther:x.equipOther, prog:x.prog, src:x.src, link:x.link}, body={name:x.name.trim(), sport:x.sport, data, updated_at:new Date().toISOString(), created_by:USER};
+      try{ await sbReady(); if(src) await sbFetch(`/rest/v1/exercises?id=eq.${src.id}`,{method:"PATCH", headers:{Prefer:"return=minimal"}, body}); else await sbFetch("/rest/v1/exercises",{method:"POST", headers:{Prefer:"return=minimal"}, body});
+        d.hidden=true; await drlLoad(); drillRender(); toast(L("Gespeichert.","Saved."),2000); }catch(e2){ er.textContent=(clubMissing(e2)?L("Der Übungskatalog ist in Supabase noch nicht eingerichtet: Entwicklermodus → Supabase-Einrichtung.","The exercise catalogue isn't set up in Supabase yet: developer mode → Supabase setup."):L("Speichern fehlgeschlagen: ","Saving failed: ")+(e2.message||e2)); er.hidden=false; } }; };
+  render(); }
 /* ---------- Übungskatalog: Vorschläge einreichen (mehrere Übungen je Vorschlag), Versand wie das Kontaktformular ---------- */
 const EXS={key:"sprintz-exsug-draft"};
 // Bereiche nach Gruppen; eine Übung kann mehreren Bereichen dienen
@@ -8781,7 +8857,7 @@ function exDraftSet(d){ try{ localStorage.setItem(EXS.key, JSON.stringify(d)); }
 function exSugOpen(){ let dlg=$("exDlg"); if(!dlg){ dlg=document.createElement("div"); dlg.id="exDlg"; dlg.className="dlg"; document.body.appendChild(dlg); dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.hidden=true; }); }
   EXS.d=exDraftGet(); dlg.hidden=false; exRender(); }
 const MULTI=()=>`<small class="exmulti">(${L("Mehrfachauswahl möglich","multiple selection possible")})</small>`;
-function exItemHTML(x,i,n){ x.sport=sport; const f=(k,lab,ph,opt,area)=>`<label class="athf${area?" exwide":""}"><span>${lab}${opt?"":" *"}</span>${area?`<textarea rows="3" data-ex="${i}|${k}" maxlength="2000" placeholder="${esc(ph||"")}">${esc(x[k]||"")}</textarea>`:`<input type="text" data-ex="${i}|${k}" maxlength="300" value="${esc(x[k]||"")}" placeholder="${esc(ph||"")}">`}</label>`;
+function exItemHTML(x,i,n,ed){ x.sport=x.sport||sport; const f=(k,lab,ph,opt,area)=>`<label class="athf${area?" exwide":""}"><span>${lab}${opt?"":" *"}</span>${area?`<textarea rows="3" data-ex="${i}|${k}" maxlength="2000" placeholder="${esc(ph||"")}">${esc(x[k]||"")}</textarea>`:`<input type="text" data-ex="${i}|${k}" maxlength="300" value="${esc(x[k]||"")}" placeholder="${esc(ph||"")}">`}</label>`;
   const box=(key,v,l,on)=>`<label class="excb"><input type="checkbox" data-exm="${i}|${key}|${v}"${on?" checked":""}> <span>${esc(l)}</span></label>`;
   const eq=exArr(x.equip), eqL=exEquip(sport).filter(e=>eq.includes(e[0])).map(e=>e[1]);
   return `<fieldset class="exitem"><legend>${L(`Übung ${i+1}`,`Exercise ${i+1}`)}${n>1?` <button type="button" class="exdel" data-exdel="${i}" aria-label="${L("Übung entfernen","Remove exercise")}">✕</button>`:""}</legend><div class="exgrid">
@@ -8796,10 +8872,10 @@ function exItemHTML(x,i,n){ x.sport=sport; const f=(k,lab,ph,opt,area)=>`<label 
     ${f("prog",L("Varianten und Steigerung","Variations and progression"),"",true,true)}
     ${f("src",L("Quelle – falls vorhanden","Source – if available"),L("z. B. Fachbuch, Verband, Studie","e.g. textbook, federation, study"),true)}
     ${f("link",L("Link zu einem Beispielvideo (optional)","Link to an example video (optional)"),"https://…",true)}
-    <div class="athf exwide"><span>${L("Bilder oder kurze Videos (optional)","Pictures or short videos (optional)")}</span>
+    ${ed?"":`<div class="athf exwide"><span>${L("Bilder oder kurze Videos (optional)","Pictures or short videos (optional)")}</span>
       <div class="exmedia">${exArr(x.media).map((m,j)=>`<span class="exm">${m.type==="video"?"🎬":"🖼"} ${esc(m.name)} <small>${Math.max(0.1,Math.round(m.size/1e5)/10).toString().replace(".",",")} MB</small><button type="button" data-exmd="${i}|${j}" aria-label="${L("Entfernen","Remove")}">✕</button></span>`).join("")}
         <label class="testbtn ghost small exadd">+ ${L("Datei hinzufügen","Add file")}<input type="file" data-exf="${i}" accept="image/*,video/*" multiple hidden></label></div>
-      <small class="hint">${L("Bis zu 5 Dateien, Videos höchstens 50 MB. Die Dateien gehen nur an das Sprintz-Team zur Prüfung des Vorschlags.","Up to 5 files, videos at most 50 MB. The files only go to the Sprintz team to review the suggestion.")}</small></div>
+      <small class="hint">${L("Bis zu 5 Dateien, Videos höchstens 50 MB. Die Dateien gehen nur an das Sprintz-Team zur Prüfung des Vorschlags.","Up to 5 files, videos at most 50 MB. The files only go to the Sprintz team to review the suggestion.")}</small></div>`}
   </div></fieldset>`; }
 function exRender(){ const d=EXS.d, dlg=$("exDlg"), n=d.items.length, w=d.who;
   dlg.innerHTML=`<form class="dlgbox exbox" novalidate><div class="cmhead"><h3 style="margin:0">${L("Übung vorschlagen","Suggest an exercise")}</h3><button type="button" class="dclose" id="exX" aria-label="${L("Schließen","Close")}">×</button></div>

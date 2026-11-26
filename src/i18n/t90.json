@@ -1,0 +1,23 @@
+[
+["Contact / feedback","İletişim / geri bildirim","Контакт / отзыв","Contact / feedback"],
+["Search exercises (name, goal, procedure …)","Alıştırma ara (ad, hedef, uygulama …)","Поиск упражнений (название, цель, выполнение …)","Oefeningen zoeken (naam, doel, uitvoering …)"],
+["With equipment","Ekipmanla","С инвентарём","Met hulpmiddel"],
+["Without equipment","Ekipmansız","Без инвентаря","Zonder hulpmiddel"],
+["Reset filters","Filtreleri sıfırla","Сбросить фильтры","Filters wissen"],
+["{0} of {1} exercises","{1} alıştırmadan {0}","{0} из {1} упражнений","{0} van {1} oefeningen"],
+["Filters: multiple selection possible","Filtreler: birden fazla seçim mümkün","Фильтры: можно выбрать несколько","Filters: meerdere keuzes mogelijk"],
+["Add exercise","Alıştırma ekle","Добавить упражнение","Oefening toevoegen"],
+["The exercise catalogue isn't set up in Supabase yet: developer mode → Supabase setup.","Alıştırma kataloğu Supabase'te henüz kurulmadı: Geliştirici modu → Supabase kurulumu.","Каталог упражнений ещё не настроен в Supabase: режим разработчика → настройка Supabase.","De oefeningencatalogus is nog niet ingericht in Supabase: ontwikkelaarsmodus → Supabase-inrichting."],
+["Offline: showing the last loaded state.","Çevrimdışı: en son yüklenen durum gösteriliyor.","Офлайн: показано последнее загруженное состояние.","Offline: de laatst geladen stand wordt getoond."],
+["The catalogue is being built. Know a good exercise? Suggest it!","Katalog oluşturuluyor. İyi bir alıştırma mı biliyorsun? Öner!","Каталог сейчас наполняется. Знаешь хорошее упражнение? Предложи его!","De catalogus wordt opgebouwd. Ken je een goede oefening? Stel hem voor!"],
+["No exercise matches the search and filters.","Arama ve filtrelere uyan alıştırma yok.","Ни одно упражнение не подходит под поиск и фильтры.","Geen oefening past bij de zoekopdracht en filters."],
+["Goal","Hedef","Цель","Doel"],
+["Watch example video","Örnek videoyu izle","Смотреть пример видео","Voorbeeldvideo bekijken"],
+["Edit","Düzenle","Изменить","Bewerken"],
+["Delete “{0}” from the catalogue for good?","„{0}“ katalogdan kalıcı olarak silinsin mi?","Удалить „{0}“ из каталога навсегда?","„{0}“ definitief uit de catalogus verwijderen?"],
+["Deleting failed: ","Silme başarısız: ","Удаление не удалось: ","Verwijderen mislukt: "],
+["Edit exercise","Alıştırmayı düzenle","Изменить упражнение","Oefening bewerken"],
+["Name, area, goal and procedure are required.","Ad, alan, hedef ve uygulama zorunludur.","Название, область, цель и выполнение обязательны.","Naam, onderdeel, doel en uitvoering zijn verplicht."],
+["Saved.","Kaydedildi.","Сохранено.","Opgeslagen."],
+["Saving failed: ","Kaydetme başarısız: ","Сохранить не удалось: ","Opslaan mislukt: "]
+]
