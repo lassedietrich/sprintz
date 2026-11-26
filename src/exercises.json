@@ -1669,5 +1669,730 @@
   "sport": "swim",
   "equipOther": "",
   "equipOpt": []
+ },
+ {
+  "id": "r-uebertreibungskicks",
+  "name": "Übertreibungskicks (Delfin mit großer Amplitude)",
+  "cat": [
+   "uw",
+   "kick",
+   "body",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "fins"
+  ],
+  "equipOpt": [],
+  "desc": "Du kickst mit Flossen unter Wasser Delfin und machst jede Welle bewusst übertrieben groß: Die Bewegung beginnt schon an Brust und Schultern, läuft über Hüfte und Knie bis in die Flossenspitzen, und die Füße schlagen weit nach oben und unten aus. Das geht in allen Körperlagen: Bauch-, Rücken- und Seitenlage, auch im Wechsel. Die Arme bleiben in enger Streamline.",
+  "goal": "Die ganze Körperwelle spüren und den Rumpf als Ursprung des Delfinbeinschlags nutzen. Die Flossen verstärken die Rückmeldung, ob die Welle sauber bis in die Füße durchläuft. Gleichzeitig kräftigt die große Amplitude Rumpf- und Hüftmuskulatur. Als Übertreibung ist es eine Kontrastübung – im Wettkampf wird mit kleinerer Amplitude und höherer Frequenz gekickt.",
+  "errors": "Die Welle kommt nur aus den Knien, der Oberkörper bleibt steif. – Die Streamline öffnet sich, die Arme wackeln mit. – Der Kopf nickt mit und lenkt die Welle. – Man taucht durch die großen Ausschläge auf und ab statt geradeaus.",
+  "prog": "Bauchlage → Rückenlage → Seitenlage → Lagewechsel (z. B. je 4 Kicks). Danach im Wechsel mit kleinen, schnellen Kicks (siehe Variations- und Übertreibungs-Kicks), zum Schluss ohne Flossen in Wettkampfamplitude.",
+  "src": "Übungssammlung Startsprung + Unterwasserphase (L. Dietrich); Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-hammerhead",
+  "name": "Hammerhead-Kicks",
+  "cat": [
+   "uw",
+   "kick",
+   "body"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du kickst Delfin, die Arme sind über dem Kopf verschränkt: Die Hände liegen hinten auf dem Trapezmuskel, die Unterarme auf dem Hinterkopf. Kopf und Arme bilden so einen breiten „Hammerkopf“ vor dem Körper. Gekickt wird an der Oberfläche oder knapp darunter, Blick nach unten.",
+  "goal": "Weil die Arme nicht als Streamline vorne helfen, musst du Kopf und Oberkörper allein über die Rumpfspannung ruhig und gerade halten, und die Welle muss aus Brust und Hüfte kommen. Die breite Front erzeugt mehr Widerstand, dadurch wird der Beinschlag zusätzlich gekräftigt.",
+  "errors": "Der Kopf nickt bei jedem Kick, die Ellbogen schwanken auf und ab. – Hohlkreuz, die Hüfte sinkt. – Die Welle kommt nur aus den Knien. – Die Hände rutschen vom Nacken nach vorne und die Haltung löst sich.",
+  "prog": "Mit Flossen → ohne. An der Oberfläche → unter Wasser. Bauchlage → Rückenlage. Danach direkt Delfin in enger Streamline, um den Unterschied zu spüren.",
+  "src": "Praxiserfahrung (L. Dietrich)",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-ruecken-einarm",
+  "name": "Einarmiges Rücken",
+  "cat": [
+   "back",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du schwimmst Rücken nur mit einem Arm, der andere macht Pause. Variante A: Der Pausenarm liegt am Oberschenkel. Variante B (schwerer): Der Pausenarm liegt gestreckt über dem Kopf im Wasser. Die Beine kicken gleichmäßig weiter. Nach 25 m oder einigen Zügen wechselst du den Arm.",
+  "goal": "Den Armzug eines Arms bewusst steuern: Eintauchen in Schulterlinie, früh Wasser fassen, mit gebeugtem Ellbogen bis zur Hüfte drücken. Dazu die Drehung um die Längsachse zur Seite des Zugarms.",
+  "errors": "Der Körper schlängelt, weil die Hand hinter dem Kopf eintaucht. – Keine Rotation, der Körper bleibt flach. – Der Zug wird mit gestrecktem Arm tief nach unten geführt. – Die Hüfte sackt ab.",
+  "prog": "Pausenarm am Körper → Pausenarm vorne → 3 Züge links, 3 rechts, 3 ganze Lage → ganze Lage mit demselben Fokus.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-ruecken-doppelarm",
+  "name": "Doppelarm-Rücken",
+  "cat": [
+   "back",
+   "pull",
+   "body"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Beide Arme ziehen gleichzeitig: Sie kommen gemeinsam über Wasser nach hinten, tauchen schulterbreit ein und drücken gemeinsam bis zur Hüfte. Die Beine machen Rückenbeinschlag oder einen Brustbeinschlag pro Zug.",
+  "goal": "Druck und Zugbahn beider Arme spüren, ohne dass die Drehung um die Längsachse dazukommt. Die Übung fordert eine stabile Rumpfspannung, damit die Hüfte oben bleibt.",
+  "errors": "Die Hüfte sinkt beim Vorführen der Arme stark ab. – Die Arme tauchen zu weit innen über dem Kopf ein. – Der Kopf geht beim Zug nach vorne-oben.",
+  "prog": "Mit Brustbeinschlag → mit Rückenbeinschlag → im Wechsel mit einarmigem Rücken.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-ruecken-becher",
+  "name": "Rücken mit Becher auf der Stirn",
+  "cat": [
+   "back",
+   "body",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "other"
+  ],
+  "equipOpt": [],
+  "equipOther": "Becher oder kleine Wasserflasche",
+  "desc": "Du legst einen Becher oder eine kleine Wasserflasche auf die Stirn und schwimmst Rücken. Der Becher darf nicht herunterfallen. Zuerst nur Beinschlag mit den Armen am Körper, dann die ganze Lage.",
+  "goal": "Ein ruhiger Kopf als fester Punkt, um den sich der Körper dreht. Die Rotation soll unterhalb des Kopfes aus Schultern und Hüfte kommen.",
+  "errors": "Der Kopf dreht mit den Schultern mit. – Das Kinn geht zur Brust oder der Kopf in den Nacken. – Man wird so vorsichtig, dass gar keine Rotation mehr stattfindet.",
+  "prog": "Nur Beine → einarmig → ganze Lage → schnelleres Tempo.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-ruecken-seitlage",
+  "name": "Rücken-Seitlage-Wechsel (6-1-6, mit 3er-/5er-Rolle)",
+  "cat": [
+   "back",
+   "body",
+   "kick",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du liegst auf dem Rücken, aber gedreht in Seitenlage: Ein Arm liegt gestreckt über dem Kopf im Wasser, der andere am Oberschenkel, die obere Schulter ist aus dem Wasser. Nach 6 Beinschlägen machst du einen Zug und rollst dabei auf die andere Seite. Erweiterung: 3 bzw. 5 Züge ganze Lage, dann wieder in die Seitenlage.",
+  "goal": "Stabile Seitenlage in Rückenlage, eine Rotation, bei der Schulter und Hüfte zusammen drehen, und ein gleichmäßiger Beinschlag auch in gedrehter Lage.",
+  "errors": "Die Hüfte bleibt flach, nur die Schulter dreht. – Der Kopf dreht mit. – Der vordere Arm sinkt tief ab. – Beim Wechsel entsteht eine Pause im Beinschlag.",
+  "prog": "Mit Flossen → ohne. 6-1-6 → 3er-Rolle → 5er-Rolle → ganze Lage.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-ruecken-schulter-kinn",
+  "name": "Rücken: Schulter zum Kinn",
+  "cat": [
+   "back",
+   "body",
+   "var"
+  ],
+  "level": [
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Rücken und drehst bei jedem Zug so weit, dass die Schulter der Zugseite fast ans Kinn kommt. Der Kopf bleibt dabei ruhig.",
+  "goal": "Die Rotation übertrieben deutlich spüren (Kontrast). Danach findet man leichter das richtige Maß an Drehung für die ganze Lage.",
+  "errors": "Der Kopf kommt zur Schulter statt umgekehrt. – Die Hüfte dreht nicht mit. – Die Frequenz bricht stark ein.",
+  "prog": "Übertrieben → normal im Wechsel, z. B. je 25 m.",
+  "src": "Praxiserfahrung; Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-ruecken-huefte",
+  "name": "Rücken „Halten an der Hüfte“",
+  "cat": [
+   "back",
+   "pull"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du drückst jeden Zug ganz bis zur Hüfte durch, lässt die Hand dort kurz liegen und hebst den Arm dann mit dem Daumen voran aus dem Wasser.",
+  "goal": "Den Druck bis zum Ende des Zugs ausführen und die Hand sauber mit dem Daumen zuerst lösen, damit beim Herausheben wenig Wasser mitgenommen wird.",
+  "errors": "Der Zug endet schon an der Brust. – Die Hand kommt mit dem Handrücken oder dem kleinen Finger zuerst heraus. – Die Pause an der Hüfte wird so lang, dass der Körper absinkt.",
+  "prog": "Mit Pause → ohne Pause, aber gleicher Endposition.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-rueckenwende-teil",
+  "name": "Rückenwende in Teilschritten",
+  "cat": [
+   "back",
+   "turn"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du zählst ab den Rückenfähnchen deine Züge bis zur Wende. Mit dem letzten Zug drehst du auf den Bauch, machst einen Armzug und gleich danach eine Rolle, die Füße setzen an der Wand auf, und du stößt dich in Rückenlage in Streamline ab. Zuerst langsam in Teilen, dann mit Zeitmessung von 5 m vor bis 5 m nach der Wand.",
+  "goal": "Eine flüssige, regelkonforme Rückenwende ohne Gleitpause nach dem Drehen auf den Bauch, mit festem Zählrhythmus ab den Fähnchen.",
+  "errors": "Nach dem Drehen auf den Bauch wird geglitten oder gekickt (Regelverstoß). – Zu nah oder zu weit an der Wand. – Abstoß nicht in Streamline oder zu tief. – Unsicherheit, weil die Zugzahl nicht feststeht.",
+  "prog": "Zugzahl festlegen → Wende langsam → Wettkampftempo → Zeitmessung und Videoauswertung in Sprintz.",
+  "src": "World Aquatics Wettkampfbestimmungen (Schwimmen), Regeln zu Wende und Anschlag; Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-rueckenstart-nudel",
+  "name": "Rückenstart „Brücke über die Nudel“",
+  "cat": [
+   "back",
+   "start"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "blocks",
+   "other"
+  ],
+  "equipOpt": [],
+  "equipOther": "Poolnudel",
+  "desc": "Eine Poolnudel liegt quer vor der Startwand auf dem Wasser, etwa einen halben Meter entfernt. Beim Rückenstart soll die Hüfte darüber fliegen, ohne sie zu berühren. Ein Partner kann die Nudel halten und den Abstand verändern.",
+  "goal": "Den Bogen im Rumpf und das Herausheben der Hüfte aus dem Wasser schulen, damit Gesäß und Oberschenkel nicht flach aufs Wasser schlagen.",
+  "errors": "Die Hüfte bleibt im Wasser und berührt die Nudel. – Kopf und Arme schwingen zu spät nach hinten. – Die Füße rutschen an der Wand ab.",
+  "prog": "Nudel nah → weiter weg. Ohne Signal → mit Startsignal aus Sprintz.",
+  "src": "Technische Ausdifferenzierung Rückenstart (L. Dietrich); Praxiserfahrung",
+  "sport": "swim",
+  "link": ""
+ },
+ {
+  "id": "r-rueckenanschlag",
+  "name": "Rückenanschlag ab den Fähnchen",
+  "cat": [
+   "back",
+   "finish"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst aus verschiedenen Tempi auf die Wand zu und zählst ab den Rückenfähnchen die Züge bis zum Anschlag. Ziel ist, mit gestrecktem Arm hinter dem Kopf anzuschlagen, ohne dich umzudrehen und ohne zu gleiten.",
+  "goal": "Eine feste Zugzahl ab den Fähnchen und ein sicherer, schneller Anschlag ohne Blick zur Wand.",
+  "errors": "Umdrehen zur Wand kostet Zeit. – Kurzzug oder langes Gleiten vor der Wand. – Anschlag mit gebeugtem Arm. – Kopf hebt sich.",
+  "prog": "Langsam → Wettkampftempo → nach Ermüdung am Ende einer Serie.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-einarm-333",
+  "name": "Einarmiger Schmetterling (3-3-3)",
+  "cat": [
+   "fly",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du schwimmst 3 Züge nur mit dem linken Arm, 3 nur mit dem rechten und 3 beidarmig. Der Pausenarm liegt vorne gestreckt (schwerer: am Körper). Geatmet wird nach vorne oder zur Seite des Zugarms. Die Beine machen zwei Delfinkicks pro Zug.",
+  "goal": "Den Armzug und seine Abstimmung mit dem Beinschlag ruhig und ohne die Last des vollen Zyklus lernen, vor allem den kräftigen zweiten Kick beim Herausdrücken der Hand.",
+  "errors": "Nur noch ein Kick pro Zug. – Der Körper dreht stark zur Seite. – Die Hand kommt über Wasser mit gebeugtem Arm nach vorne. – Kopf hebt sich weit zum Atmen.",
+  "prog": "Mit Flossen → ohne. Pausenarm vorne → am Körper. 3-3-3 → 2-2-2 → 1-1-1.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfinspruenge",
+  "name": "Delfinsprünge",
+  "cat": [
+   "fly",
+   "body",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Im brusttiefen Wasser stößt du dich vom Boden schräg nach vorne-oben ab, tauchst mit gestreckten Armen vor dem Kopf schräg ein, gleitest kurz unter Wasser, kommst mit den Füßen wieder auf den Boden und springst gleich wieder ab. So geht es über die Breite des Beckens.",
+  "goal": "Einstieg in die Körperwelle: Kopf und Arme führen, die Hüfte folgt durch das „Loch“. Gut geeignet für Kinder und als Einstimmung auf Schmetterling.",
+  "errors": "Bauchklatscher, weil der Kopf oben bleibt. – Zu steil eintauchen und mit dem Kopf zum Boden. – Die Arme sind nicht geschlossen. – Sicherheit: nur in ausreichend tiefem, aber stehtiefem Wasser.",
+  "prog": "Einzelne Sprünge → mehrere hintereinander → mit einem Delfinkick unter Wasser.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-pause",
+  "name": "Schmetterling mit Pause in der Streckung",
+  "cat": [
+   "fly",
+   "coord",
+   "uw"
+  ],
+  "level": [
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Nach jedem Schmetterlingszug bleibst du mit den Armen in Streamline unter Wasser und machst 2–3 Delfinkicks, bevor der nächste Zug kommt.",
+  "goal": "Zeit für einen sauberen Ansatz jedes Zugs, eine geschlossene Streckung nach dem Eintauchen und die Verbindung von Welle und Armzug.",
+  "errors": "Die Arme gehen beim Eintauchen weit auseinander. – Der Kopf schaut nach vorne statt nach unten. – In der Pause sinken die Beine ab.",
+  "prog": "3 Kicks Pause → 2 → 1 → ganze Lage.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfinarme-kraulbeine",
+  "name": "Delfinarme mit Kraulbeinschlag",
+  "cat": [
+   "fly",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Die Arme schwimmen Schmetterling, die Beine machen durchgehend Kraulbeinschlag.",
+  "goal": "Der Rhythmus wird leichter, sodass du dich ganz auf die Armbewegung konzentrieren kannst: breites Eintauchen, Zug unter dem Körper, flache Rückführung über Wasser.",
+  "errors": "Die Arme werden über Wasser gebeugt nach vorne gezogen. – Der Kopf hebt sich weit. – Die Beine stoppen beim Atmen.",
+  "prog": "Mit Flossen → ohne → Wechsel mit ganzer Lage.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfinarme-brustbeine",
+  "name": "Delfinarme mit Brustbeinschlag",
+  "cat": [
+   "fly",
+   "breast",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Die Arme schwimmen Schmetterling, die Beine machen einen Brustbeinschlag pro Armzug. Der Beinschlag kommt, wenn die Arme über Wasser nach vorne kommen und eintauchen.",
+  "goal": "Für Einsteiger: das Timing „Arme vor – Beine schlagen“ und das Gefühl für den Schwung nach vorne. Gleichzeitig eine Brücke zwischen Brust und Schmetterling.",
+  "errors": "Der Beinschlag kommt während des Zugs. – Die Arme bleiben zu lange hinten. – Der Kopf bleibt oben.",
+  "prog": "Langsam mit Gleiten → flüssig → Delfinbeinschlag statt Brustbeinschlag.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-kick-zug-kick",
+  "name": "Schmetterling: Kick-Zug-Kick betont",
+  "cat": [
+   "fly",
+   "kick",
+   "coord"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du schwimmst ganze Lage und betonst die beiden Kicks bewusst: den ersten Kick, wenn die Hände vorne eintauchen, den zweiten, wenn die Arme hinten herausdrücken. Gerne mit lautem Mitzählen im Kopf („Eins – Zwei“).",
+  "goal": "Das richtige Timing der zwei Kicks pro Zyklus. Vor allem der zweite Kick hebt den Oberkörper zum Atmen und trägt die Arme nach vorne.",
+  "errors": "Nur ein Kick pro Zug. – Der zweite Kick ist schwach oder kommt zu spät. – Beide Kicks gleich groß, obwohl der Rhythmus unterschiedlich ist.",
+  "prog": "Mit Flossen → ohne. Langsam → Wettkampftempo.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-seitatmung",
+  "name": "Schmetterling mit Seitatmung",
+  "cat": [
+   "fly",
+   "breath",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst Schmetterling und atmest zur Seite wie beim Kraul, statt nach vorne. Danach im Wechsel mit normaler Atmung nach vorne.",
+  "goal": "Den Unterschied in der Wasserlage spüren: Bei Seitatmung bleibt der Kopf flacher. Aus dem Vergleich findest du die für dich bessere Atmung (Differenzerfahrung).",
+  "errors": "Der Körper dreht mit dem Kopf zur Seite. – Die Arme werden unsymmetrisch. – Der Kopf dreht zu spät und die Arme warten.",
+  "prog": "Je 25 m eine Variante → innerhalb einer Bahn wechseln.",
+  "src": "Praxiserfahrung; Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-atemmuster",
+  "name": "Schmetterling mit wechselndem Atemmuster",
+  "cat": [
+   "fly",
+   "breath",
+   "var"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "fins"
+  ],
+  "equipOpt": [
+   "fins"
+  ],
+  "desc": "Du schwimmst Schmetterling und änderst, wann du atmest: bei jedem Zug, bei jedem zweiten Zug oder 2 Züge mit Atmung und 1 ohne.",
+  "goal": "Atmung und Körperwelle so koppeln, dass die Welle nicht abreißt, wenn geatmet wird. Gleichzeitig lernst du das Muster, das für dich am wenigsten bremst.",
+  "errors": "Bei Zügen ohne Atmung taucht der Kopf zu tief ein. – Beim Atmen hebt sich der Oberkörper weit. – Der Rhythmus wechselt mit dem Atemmuster.",
+  "prog": "Mit Flossen → ohne. Vorgegebenes Muster → Wechsel auf Zuruf.",
+  "src": "Praxiserfahrung; Differenzielles Lernen nach Schöllhorn; kritisch dazu: Künzell & Hossner (2012), Sportwissenschaft 42, 83–95",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-qualitaet",
+  "name": "Qualitätsserien: 3 Züge Schmetterling + Kraul",
+  "cat": [
+   "fly",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst nach dem Abstoß 3 perfekte Züge Schmetterling und den Rest der Bahn Kraul. Später 4, 5 oder 6 Züge – aber nur so viele, wie du sauber schwimmen kannst.",
+  "goal": "Saubere Technik einschleifen, bevor die Ermüdung sie zerstört. Schmetterling soll nie „gekämpft“ werden.",
+  "errors": "Zu viele Züge, die Technik zerfällt. – Der Übergang zu Kraul ist unruhig.",
+  "prog": "3 Züge → 4 → 6 → halbe Bahn → ganze Bahn.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-delfin-brust-kopplung",
+  "name": "Schmetterling-Brust-Kopplung",
+  "cat": [
+   "fly",
+   "breast",
+   "coord",
+   "body"
+  ],
+  "level": [
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du wechselst Zug um Zug zwischen Schmetterling und Brust: ein Zug Delfin, ein Zug Brust und so weiter. Die Körperwelle soll in beiden Lagen gleich durchlaufen.",
+  "goal": "Die gemeinsame Rumpfwelle beider Lagen bewusst machen und die Umstellung zwischen ihnen schulen.",
+  "errors": "Bei Brust wird die Welle flach und die Hüfte sinkt. – Beim Delfin kommt der Brustbeinschlag mit. – Pausen beim Wechsel.",
+  "prog": "Langsam → flüssig → 2:2-Wechsel.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-kippwende",
+  "name": "Kippwende Brust/Schmetterling",
+  "cat": [
+   "breast",
+   "fly",
+   "turn"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schlägst mit beiden Händen gleichzeitig an. Ein Arm geht sofort unter Wasser nah am Körper nach hinten, die Knie ziehen unter den Körper, die Füße setzen an der Wand auf. Der andere Arm geht über Wasser am Kopf vorbei nach vorne. Dann stößt du dich in Seitenlage ab und drehst in die Bauchlage. Zuerst im Stand an der Wand üben, dann aus dem Schwimmen.",
+  "goal": "Eine schnelle, regelkonforme Wende mit kurzem Wandkontakt und Abstoß in Streamline.",
+  "errors": "Anschlag nicht gleichzeitig mit beiden Händen (Regelverstoß). – Die Knie kommen nicht nah genug an den Körper, die Drehung wird weit. – Abstoß nach oben statt geradeaus. – Zu lange Pause an der Wand.",
+  "prog": "Im Stand → aus langsamen Schwimmen → Wettkampftempo → Zeitmessung über 5 m hin und zurück.",
+  "src": "World Aquatics Wettkampfbestimmungen (Schwimmen), Regeln zu Wende und Anschlag; Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-lagenwechselwenden",
+  "name": "Lagenwechselwenden",
+  "cat": [
+   "im",
+   "turn"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du übst jeden Wechsel einzeln: Schmetterling → Rücken (beidhändiger Anschlag, Abstoß in Rückenlage), Rücken → Brust (Anschlag in Rückenlage, dann als offene Wende, Rollwende rückwärts oder Rückwärtsrolle) und Brust → Kraul (Kippwende, Abstoß in Seitenlage). Jeweils mit Zeitmessung von 5 m vor bis 5 m nach der Wand.",
+  "goal": "Sichere, schnelle Übergänge in der Lagenstaffel und beim Lagenschwimmen und das Finden der schnellsten Rücken-Brust-Wende für dich.",
+  "errors": "Beim Rücken-Brust-Wechsel wird vor dem Anschlag auf den Bauch gedreht (Regelverstoß). – Zu lange Pause beim Umorientieren. – Abstoß in der falschen Lage.",
+  "prog": "Einzeln → im Lagenablauf → im Wettkampftempo → Varianten der Rücken-Brust-Wende vergleichen (Technikvariationstraining).",
+  "src": "World Aquatics Wettkampfbestimmungen (Schwimmen), Regeln zu Wende und Anschlag; Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-anschlag-kommando",
+  "name": "Anschlag auf Kommando",
+  "cat": [
+   "finish",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Du schwimmst im Wettkampftempo auf die Wand zu. Ab etwa 5 m vor der Wand passt du die letzten Züge so an, dass du ohne Gleiten und ohne kurzen Zwischenzug anschlägst. Die letzten Züge schwimmst du ohne Atmung. Ein Partner kann den Startpunkt variieren.",
+  "goal": "Den Anschlag sicher treffen, ohne Zeit durch Gleiten oder Kurzzüge zu verlieren.",
+  "errors": "Gleiten zur Wand. – Kurzer Zwischenzug. – Atmen vor dem Anschlag. – Den Kopf hochnehmen, um die Wand zu sehen.",
+  "prog": "Aus fester Entfernung → aus wechselnden Entfernungen → nach Ermüdung.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-anschlag-langarm",
+  "name": "Kraul-Anschlag mit „langem Arm“",
+  "cat": [
+   "free",
+   "finish"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "Beim letzten Zug streckst du dich maximal zur Wand: Schulter nach vorne schieben, in die Seitenlage drehen, Kopf unten lassen, mit gestrecktem Arm anschlagen. Gut im Video zu vergleichen.",
+  "goal": "Die letzten Zentimeter gewinnen, indem die volle Körperlänge ausgenutzt wird.",
+  "errors": "Kopf hoch beim Anschlag. – Anschlag mit gebeugtem Arm. – Flach liegen statt in die Seitenlage zu drehen.",
+  "prog": "Langsam → Wettkampftempo → Videoauswertung in Sprintz.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-zipper",
+  "name": "Kraul Fingerspitzen-Schleifen (Zipper)",
+  "cat": [
+   "free",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "In der Rückholphase ziehst du den Daumen seitlich am Körper hoch wie einen Reißverschluss und lässt dann die Fingerspitzen locker über die Wasseroberfläche nach vorne schleifen.",
+  "goal": "Eine hohe Ellbogenführung und eine lockere, körpernahe Rückführung des Arms.",
+  "errors": "Der Ellbogen fällt, die Hand kommt weit seitlich nach vorne. – Die Schulter ist verspannt. – Der Körper dreht zu wenig, dadurch klemmt die Schulter.",
+  "prog": "Langsam → normal. Danach ganze Lage ohne Schleifen, aber mit hohem Ellbogen.",
+  "src": "Maglischo, E. W. (2003): Swimming Fastest. Human Kinetics",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-schulter-tippen",
+  "name": "Kraul mit Schulter-Tippen",
+  "cat": [
+   "free",
+   "pull",
+   "coord"
+  ],
+  "level": [
+   "beg",
+   "adv"
+  ],
+  "equip": [
+   "none"
+  ],
+  "equipOpt": [],
+  "desc": "In der Rückholphase tippt die Hand kurz auf die eigene Schulter, bevor sie nach vorne geht und eintaucht.",
+  "goal": "Gebeugter, hoher Ellbogen und kurzer Hebel in der Rückführung. Hilft auch, die Rotation zu spüren.",
+  "errors": "Der Arm schwingt gestreckt seitlich. – Der Kopf hebt sich. – Das Tippen bremst so stark, dass die Beine absinken.",
+  "prog": "Einarmig → beidarmig → ganze Lage ohne Tippen mit derselben Armführung.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
+ },
+ {
+  "id": "r-skull-wechsel",
+  "name": "Skullen im Wechsel mit ganzer Lage",
+  "cat": [
+   "free",
+   "fly",
+   "feel",
+   "pull"
+  ],
+  "level": [
+   "adv",
+   "exp"
+  ],
+  "equip": [
+   "none",
+   "buoy"
+  ],
+  "equipOpt": [
+   "buoy"
+  ],
+  "desc": "Du machst 4 Skullbewegungen vorne (Arme vor dem Kopf, Fingerspitzen leicht nach unten) und schwimmst dann 2 Züge Kraul. Variante: Skullen vorne mit beiden Armen, dann 1 Zug Schmetterling. So abwechselnd über die ganze Bahn.",
+  "goal": "Das Gefühl aus dem Skullen direkt in den Armzug übertragen: Der Zug soll genau dort beginnen, wo man beim Skullen den Druck spürt.",
+  "errors": "Das Skullen wird zu groß und zu schnell. – Der Übergang in den Zug ist ruckartig. – Die Beine sinken beim Skullen ab.",
+  "prog": "Mit Pullbuoy → ohne. 4:2 → 2:2 → ganze Lage.",
+  "src": "Praxiserfahrung",
+  "sport": "swim",
+  "equipOther": "",
+  "link": ""
  }
 ]
