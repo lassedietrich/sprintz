@@ -1,0 +1,11 @@
+[
+["Also analyse the first start?","İlk start da değerlendirilsin mi?","Оценить также первый старт?","Ook de eerste start analyseren?"],
+["Analyse another changeover?","Bir değişim daha değerlendirilsin mi?","Оценить ещё одну смену?","Nog een wissel analyseren?"],
+["Does the video also show the start of the 1st swimmer? Then Sprintz analyses it like a normal start from the start signal, separately from the changeovers.","Videoda 1. yüzücünün startı da görünüyor mu? O zaman Sprintz onu değişimlerden ayrı olarak, start sinyalinden itibaren normal bir start gibi değerlendirir.","Виден ли на видео также старт 1-го пловца? Тогда Sprintz оценит его как обычный старт от стартового сигнала, отдельно от смен.","Is in de video ook de start van de 1e zwemmer te zien? Dan analyseert Sprintz die als een normale start vanaf het startsignaal, los van de wissels."],
+["You have analysed {0} changeovers. Is there another changeover in the video?","{0} değişim değerlendirdin. Videoda başka bir değişim var mı?","Ты оценил смен: {0}. Есть ли на видео ещё одна смена?","Je hebt {0} wissels geanalyseerd. Staat er nog een wissel in de video?"],
+["Yes, include the first start","Evet, ilk startı da değerlendir","Да, оценить первый старт","Ja, eerste start meenemen"],
+["Yes, analyse changeover {0}","Evet, {0}. değişimi değerlendir","Да, оценить {0}-ю смену","Ja, {0}e wissel analyseren"],
+["No, only the changeovers","Hayır, sadece değişimler","Нет, только смены","Nee, alleen de wissels"],
+["No, go to the result","Hayır, sonuca git","Нет, к результату","Nee, naar het resultaat"],
+["Changeover times (s)","Değişim süreleri (s)","Время смен (с)","Wisseltijden (s)"]
+]

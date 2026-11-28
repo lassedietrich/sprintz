@@ -3447,11 +3447,11 @@ function wizRender(){
       ${st.seg && ta!=null && tb!=null && tb>ta ? `<button type="button" class="testbtn wmeasb" id="wSeg">▶ ${L("Abschnitt in Zeitlupe abspielen","Play this section in slow motion")}</button>` : ""}
       <div class="wnum"><input id="wNum" type="number" inputmode="decimal" step="${st.step||(st.unit==="×"?1:0.1)}" min="0" value="${SA.vals[st.id]??""}" placeholder="0"><span>${st.unit}</span></div>
       <button type="button" class="wbig" id="wTake">${L("Übernehmen","Confirm")}</button><button type="button" class="wskip" id="wSkip">${L("Weiß ich nicht – überspringen","Don't know – skip")}</button>`;
-  } else if(st.k==="more"){ h+=xdMoreHTML(); } else h+= SA.mode==="eval" ? evSumHTML() : SA.mode==="train" ? trainSumHTML() : SA.mode==="quick" ? qkSumHTML() : spSumHTML();
-  if(st.k==="more"){} else if(st.k!=="sum") h+=noteUI(st)+(st.k==="time"&&!st.sig?xdPlusHTML():""); else h+=resActHTML()+xdSumHTML()+wtSumHTML()+tagSumHTML()+xdPlusHTML()+notesSumHTML();
+  } else if(st.k==="rask"){ h+=relayAskHTML(st); } else if(st.k==="more"){ h+=xdMoreHTML(); } else h+= SA.mode==="eval" ? evSumHTML() : SA.mode==="train" ? trainSumHTML() : SA.mode==="quick" ? qkSumHTML() : spSumHTML();
+  if(st.k==="more"||st.k==="rask"){} else if(st.k!=="sum") h+=noteUI(st)+(st.k==="time"&&!st.sig?xdPlusHTML():""); else h+=resActHTML()+xdSumHTML()+wtSumHTML()+tagSumHTML()+xdPlusHTML()+notesSumHTML();
   // Hinweis bei unrealistischen Zeiten schon während der Auswertung (Start)
   if((SA.mode==="eval"||SA.mode==="train"||(SA.mode==="quick"&&(qkE(QK.cur)||{}).kind==="start")) && !(SA.mode==="eval"&&isTurn(EV.cur))){ try{ slowAutoFix(); }catch(e){} }
-  c.innerHTML=h; wizProgress(); try{ nlRender(); }catch(e){} if(st.k!=="sum") noteBind(st); else resActBind(); if(st.k==="more") xdMoreBind(); xdPlusBind();
+  c.innerHTML=h; wizProgress(); try{ nlRender(); }catch(e){} if(st.k==="rask") relayAskBind(st); else if(st.k!=="sum") noteBind(st); else resActBind(); if(st.k==="more") xdMoreBind(); xdPlusBind();
   const adv=()=>setTimeout(()=>wizGo(SA.i+1,1),380);
   camRefBind(st);
   const mk=$("wMark"); if(mk) mk.onclick=()=>{ SA.navT=performance.now(); if(st.sig) SA.sigOk=true; SA.marks[st.id]=camMarkT(); if(!st.sig && camN()>1){ SA.markCam=SA.markCam||{}; SA.markCam[st.id]=SA.camRef||0; } if(st.sig) SA.sigAuto="manual"; spDraw(); wizRender(); adv(); };
@@ -5470,8 +5470,9 @@ const relayNow=()=>!!(SA.active && SA.mode==="quick" && SA.trialRef && SA.trialR
 // mehrere Wechsel in einem Video: Teil 0 = erster Start (Startsignal, nur detailliert), Teil k = k. Wechsel mit Marken „xk_…“
 const legPre=k=>k?`x${k}_`:"";
 const legLab=k=>k===0?L("Start (1. Schwimmer*in)","Start (1st swimmer)"):L(`${k}. Wechsel (zur ${k+1}. Schwimmer*in)`,`Changeover ${k} (to swimmer ${k+1})`);
-const relayN=e=>Math.max(1,Math.min(3,+((e||{}).relayN)||1));
-const relayLegs=(e,det)=>{ const a=[]; if(det && e && e.relayFirst) a.push(0); for(let k=1;k<=relayN(e);k++) a.push(k); return a; };
+const RELAY_MAX=7; // bis zur 8er-Staffel
+const relayN=e=>Math.max(1,Math.min(RELAY_MAX,+((e||{}).relayN)||1));
+const relayLegs=(e,det)=>{ const a=[]; if(e && e.relayFirst) a.push(0); for(let k=1;k<=relayN(e);k++) a.push(k); return a; };
 // Präfix des aktuellen Schritts (für die Anzeige „nach dem Anschlag“)
 const curLegPre=()=>{ const st=SA.steps&&SA.steps[SA.i]; const m=st&&/^x\d+_/.exec(st.id); return m?m[0]:""; };
 // Marken und Werte eines Teils so bereitstellen, als wäre es ein einzelner Start (Bezug „sig“ = Startsignal bzw. Anschlag)
@@ -5483,19 +5484,37 @@ const RELAY_TOL=-0.03;
 function relaySteps(e,det){ const touch={id:"sig",k:"time",t:()=>L("Anschlag des ankommenden Schwimmers","Touch of the incoming swimmer"),x:()=>L("Das erste Bild, in dem die Hand des ankommenden Schwimmers die Wand bzw. die Anschlagplatte berührt (bei Brust und Schmetterling: beide Hände). Ab hier zählen alle Zeiten.","The first frame in which the incoming swimmer's hand touches the wall or touch pad (breaststroke and butterfly: both hands). All times count from here.")};
   const off={id:"off",k:"time",t:()=>L("Absprung","Take-off"),x:()=>L("Das letzte Bild, in dem der vordere Fuß des abspringenden Schwimmers den Block noch berührt (letzter Fußkontakt).","The last frame in which the outgoing swimmer's front foot still touches the block (last foot contact).")};
   const sum={id:"sum",k:"sum",t:()=>L("Deine Auswertung","Your analysis"),x:()=>""}, out=[], legs=relayLegs(e,det), multi=legs.length>1;
-  const full=()=>evSteps(qkP(e)).filter(x=>x.k!=="sum" && x.k!=="more");
+  const full=()=>evSteps(qkP(e)).filter(x=>x.k!=="sum" && x.k!=="more"), quickStart=()=>qkSteps({kind:"start",start:"block",uw:e.uw},false).filter(x=>x.k!=="sum");
   const tag=(st,k)=>{ const pre=legPre(k), c=Object.assign({}, st, {id:pre+st.id, leg:k, t:multi?()=>legLab(k)+": "+st.t():st.t}); if(st.meas && st.meas.at) c.meas=Object.assign({}, st.meas, {at:pre+st.meas.at}); return c; };
+  // Frage zu Beginn: ersten Start mit auswerten? (nur solange nicht beantwortet)
+  if(e.relayFirst==null) out.push({id:"rfirst",k:"rask",q:"first",t:()=>L("Ersten Start mit auswerten?","Also analyse the first start?"),x:()=>""});
   legs.forEach(k=>{
-    if(k===0){ full().forEach(st=>out.push(tag(st,0))); return; }
+    if(k===0){ (det?full():quickStart()).forEach(st=>out.push(tag(st,0))); return; }
     let S = det ? full().filter(x=>x.id!=="sig") : []; if(!S.some(x=>x.id==="off")) S.unshift(off); S=[touch].concat(S);
     S.forEach(st=>out.push(tag(Object.assign({}, st, {sig:false}),k))); });
+  // Frage nach dem letzten Wechsel: noch einer?
+  const n=relayN(e); if(n<RELAY_MAX) out.push({id:"rmore",k:"rask",q:"more",leg:n,t:()=>L("Weiteren Wechsel auswerten?","Analyse another changeover?"),x:()=>""});
   out.push(sum); return out; }
+function relayAskHTML(st){ const e=qkE(QK.cur)||{}, n=relayN(e);
+  const txt = st.q==="first" ? L("Ist im Video auch der Start der 1. Schwimmer*in zu sehen? Dann wertet Sprintz ihn wie einen normalen Start ab dem Startsignal aus, getrennt von den Wechseln.","Does the video also show the start of the 1st swimmer? Then Sprintz analyses it like a normal start from the start signal, separately from the changeovers.")
+    : L(`Du hast ${n} Wechsel ausgewertet. Ist im Video noch ein weiterer Wechsel zu sehen?`,`You have analysed ${n} changeovers. Is there another changeover in the video?`);
+  return `<p>${txt}</p><button type="button" class="wbig" id="rYes">${st.q==="first"?L("Ja, ersten Start mit auswerten","Yes, include the first start"):L(`Ja, ${n+1}. Wechsel auswerten`,`Yes, analyse changeover ${n+1}`)}</button>
+    <div class="wrow"><button type="button" class="testbtn" id="rNo">${st.q==="first"?L("Nein, nur die Wechsel","No, only the changeovers"):L("Nein, zum Ergebnis","No, go to the result")}</button></div>`; }
+function relayAskBind(st){ const e=qkE(QK.cur); if(!e) return; const go=id=>{ SA.steps=qkSteps(e,QK.det); const k=SA.steps.findIndex(x=>x.id===id); SA.i=k>=0?k:SA.steps.length-1; spDraw(); wizRender(); };
+  const y=$("rYes"), n=$("rNo");
+  if(st.q==="first"){
+    if(y) y.onclick=async()=>{ e.relayFirst=true; qkSave(); go("sig"); if(SA.marks.sig==null && SA.pcm){ await evFindSig(); if(SA.marks.sig!=null) sSeekTo(SA.marks.sig); spDraw(); wizRender(); } };
+    if(n) n.onclick=()=>{ e.relayFirst=false; qkSave(); go("x1_sig"); }; }
+  else {
+    if(y) y.onclick=()=>{ e.relayN=relayN(e)+1; qkSave(); go(`x${relayN(e)}_sig`); const prev=SA.marks[`x${relayN(e)-1}_off`]; if(prev!=null) sSeekTo(prev); };
+    if(n) n.onclick=()=>{ SA.i=SA.steps.findIndex(x=>x.k==="sum"); wizRender(); }; } }
 function relayMetrics(){ const e=qkE(QK.cur)||{}, legs=relayLegs(e,QK.det).map(k=>withLeg(k,()=>{ const o=evMetrics(); if(k>0){ const m=smoMarks(); o.wt = m.sig!=null && m.off!=null ? m.off-m.sig : null; o.result = o.wt==null ? null : (o.wt>=RELAY_TOL-1e-9 ? "clean" : "early"); } o.leg=k; return o; }));
   const out={legs}; legs.forEach(o=>{ if(o.leg>0 && o.wt!=null) out["wt"+o.leg]=o.wt; }); const f=legs.find(o=>o.leg>0); if(f){ out.wt=f.wt; out.result=f.result; } return out; }
 // Zeilen eines Teils (für Zusammenfassung und PDF)
 function relayLegRows(o,det,p,sel){ const PH=SPPH(), rows=[], add=(ph,k,l,v)=>rows.push({ph,k,l,v}), RC=L("Staffelwechsel","Relay changeover");
   if(o.leg>0){ add(RC,"wt",L("Wechselzeit (Anschlag bis Absprung)","Changeover time (touch to take-off)"),evFmt(o.wt,"s")); add(RC,"result",L("Bewertung","Rating"),relayRes(o)); }
-  else if(o.result) add(PH.block,"result",L("Ergebnis","Result"),{clean:L("Sauber","Clean"),early:L("Zu früh","Too early")}[o.result]||"–");
+  else { if(o.result) add(PH.block,"result",L("Ergebnis","Result"),{clean:L("Sauber","Clean"),early:L("Zu früh","Too early")}[o.result]||"–");
+    if(!det) [["t5",L("Zeit bis 5 m","Time to 5 m")],["t10",L("Zeit bis 10 m","Time to 10 m")],["t15",L("Zeit bis 15 m","Time to 15 m")]].forEach(([k,l])=>{ if(o[k]!=null) add(L("Zeiten ab Startsignal","Times from the start signal"),k,l,evFmt(o[k],"s")); }); }
   if(det && p) METCAT(p).filter(x=>!(o.leg>0 && x.k==="block") && spApplies(x,p,false) && (!sel||sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null || (typeof v==="number" && !isFinite(v))) return; add(PH[x.ph]||"",x.k,x.l,x.u==="n"?String(v):evFmt(v,x.u)); });
   return rows; }
 const relayRes=o=>o.result==null?"–":o.result==="clean"?L("Gültig","Valid"):L("Zu früh","Too early");
@@ -5531,8 +5550,7 @@ function qkKindHTML(e,pre){ const A=e.q, ok=k=>!A||A.includes(k), anim=QK.anim==
   if(e.kind==="start"){ h+=seg("start",[["block",L("Startblock","Starting block")],["back",L("Rückenstart","Backstroke start")]],e.start||"block",L("Welche Startart?","Which start?")); if(ok("start") && e.start!=="back") h+=seg("uw",UW,e.uw||"fly",qUw); }
   if(e.kind==="turn"){ h+=seg("turn",TURNTYPES(!!e.turnDetail),e.turn||"flip",L("Welche Wende?","Which turn?"),`<label class="evsw qksw"><input type="checkbox" data-${pre}="turnDetail"${e.turnDetail?" checked":""}><span></span>${L("Genauer unterscheiden (nach Schwimmart)","Differentiate in more detail (by stroke)")}</label>`);
     if(ok("turn") && e.turn==="open") h+=seg("uw",UW,e.uw||"fly",qUw); }
-  if(e.kind==="relay"){ h+=seg("relayN",[["1","1"],["2","2"],["3","3"]],String(relayN(e)),L("Wie viele Wechsel sind im Video?","How many changeovers are in the video?"),`<label class="evsw qksw"><input type="checkbox" data-${pre}="relayFirst"${e.relayFirst?" checked":""}><span></span>${L("Ersten Start (mit Startsignal) in der detaillierten Auswertung mit auswerten","Also analyse the first start (with start signal) in the detailed analysis")}</label>`);
-    if(ok("relayN")) h+=seg("uw",UW,e.uw||"fly",qUw); }
+  if(e.kind==="relay") h+=seg("uw",UW,e.uw||"fly",qUw);
   if(e.kind==="finish") h+=seg("stroke",FINSTROKES(),e.stroke||"free",L("Welche Schwimmart?","Which stroke?"));
   return h; }
 function qkKindSet(e,k,v){
@@ -5547,7 +5565,7 @@ function qkBindKind(root,pre,getE,after){ root.querySelectorAll(`[data-${pre}]`)
 function qkResHTML(e){ const m=e.m||{}, tm=v=>v!=null&&isFinite(v)?evFmt(v,"s"):"–", sp=(l,v)=>`<span>${l} <b>${tm(v)}</b></span>`;
   if(e.kind==="turn") return sp(L("5 m an","5 m in"),m.tIn5)+sp("5 + 5 m",m.t55)+sp(L("5 m ab","5 m out"),m.tOut5);
   if(e.kind==="finish") return sp(L("letzte 5 m","last 5 m"),m.tF5)+sp(L("letzte 10 m","last 10 m"),m.tF10);
-  if(e.kind==="relay"){ const ks=[1,2,3].filter(k=>m["wt"+k]!=null); return ks.length>1 ? ks.map(k=>sp(L(`${k}. Wechsel`,`Changeover ${k}`),m["wt"+k])).join("") : sp(L("Wechselzeit","Changeover time"),m.wt); }
+  if(e.kind==="relay"){ const ks=[1,2,3,4,5,6,7].filter(k=>m["wt"+k]!=null); return ks.length>1 ? ks.map(k=>sp(L(`${k}. Wechsel`,`Changeover ${k}`),m["wt"+k])).join("") : sp(L("Wechselzeit","Changeover time"),m.wt); }
   if(e.kind==="tech"){ const n=(e.notes||[]).length, d=(e.raw&&e.raw.draw||[]).length; return `<span>${L(`${n} Notizen`,`${n} notes`)}</span><span>${L(`${d} Zeichnungen`,`${d} drawings`)}</span>`; }
   return sp("5 m",m.t5)+sp("10 m",m.t10)+sp("15 m",m.t15); }
 
@@ -5623,8 +5641,8 @@ function qkGroup(p){ const free=p.trials.filter(e=>e.status==="open" && !e.kind 
   return n; }
 function qkCsv(){
   const dec=x=>x==null||!isFinite(x)?"":(LANG==="en"?x.toFixed(2):x.toFixed(2).replace(".",",")), sep=LANG==="en"?",":";";
-  const rows=[[L("Name","Name"),L("Datei","File"),L("Aufnahme","Recorded"),L("Art","Type"),L("Athlet*in","Athlete"),"5 m (s)","10 m (s)","15 m (s)",L("1. Wechsel (s)","Changeover 1 (s)"),L("2. Wechsel (s)","Changeover 2 (s)"),L("3. Wechsel (s)","Changeover 3 (s)"),L("Wende 5 + 5 m (s)","Turn 5 + 5 m (s)"),L("Anschlag letzte 5 m (s)","Finish last 5 m (s)"),L("Status","Status")]];
-  qkOrd().forEach(e=>{ const m=e.m||{}; rows.push([e.label||"", e.vid?e.vid.name:"", e.vid&&e.vid.t?new Date(e.vid.t).toISOString().replace("T"," ").slice(0,19):"", qkKindName(e.kind)+(qkSub(e)?" ("+qkSub(e)+")":""), (e.person&&PERS.name(e.person))||"", dec(m.t5), dec(m.t10), dec(m.t15), dec(m.wt1!=null?m.wt1:m.wt), dec(m.wt2), dec(m.wt3), dec(m.t55), dec(m.tF5), e.status]); });
+  const rows=[[L("Name","Name"),L("Datei","File"),L("Aufnahme","Recorded"),L("Art","Type"),L("Athlet*in","Athlete"),"5 m (s)","10 m (s)","15 m (s)",L("Wechselzeiten (s)","Changeover times (s)"),L("Wende 5 + 5 m (s)","Turn 5 + 5 m (s)"),L("Anschlag letzte 5 m (s)","Finish last 5 m (s)"),L("Status","Status")]];
+  qkOrd().forEach(e=>{ const m=e.m||{}; rows.push([e.label||"", e.vid?e.vid.name:"", e.vid&&e.vid.t?new Date(e.vid.t).toISOString().replace("T"," ").slice(0,19):"", qkKindName(e.kind)+(qkSub(e)?" ("+qkSub(e)+")":""), (e.person&&PERS.name(e.person))||"", dec(m.t5), dec(m.t10), dec(m.t15), [1,2,3,4,5,6,7].map(k=>m["wt"+k]).filter(x=>x!=null).map(dec).join(" / ") || dec(m.wt), dec(m.t55), dec(m.tF5), e.status]); });
   const txt="﻿"+rows.map(r=>r.map(c=>/[;,"\n]/.test(String(c))?`"${String(c).replace(/"/g,'""')}"`:c).join(sep)).join("\n");
   evSaveFile(new Blob([txt],{type:"text/csv"}), "sprintz-technikauswertung.csv", L("Technikauswertung","Technique analysis"));
 }
@@ -5660,7 +5678,7 @@ async function qkAnalyze(e, det){
   if(e.raw){ SA.marks=Object.assign({}, e.raw.marks); SA.vals=Object.assign({spk:SA.vals.spk}, e.raw.vals); SA.sigAuto="manual"; SA.sigOk=SA.marks.sig!=null; SA.notes=(e.raw.notes||[]).slice(); SA.draw=(e.raw.draw||[]).slice(); SA.tags=(e.raw.tags||[]).slice(); SA.vel=e.raw.vel||null; SA.mgeo=e.raw.mgeo||null; if(e.raw.smo){ SA.smo=smoNorm(e.raw.smo); SA.smoChecked=true; } }
   if(e.kind==="relay" && !(e.raw&&e.raw.rv)){ const mv=o=>{ Object.keys(o||{}).forEach(k=>{ if(!/^(x\d+_|w_|px|spk$|xd$|wt$)/.test(k)){ o["x1_"+k]=o[k]; delete o[k]; } }); }; mv(SA.marks); mv(SA.vals); }
   // detailliert: beim ersten noch nicht markierten Schritt beginnen
-  if(QK.det && e.raw){ const k=SA.steps.findIndex(s=>s.k==="time" && !s.sig && SA.marks[s.id]==null); if(k>0) SA.i=k; }
+  if(QK.det && e.raw && !(SA.steps[0] && SA.steps[0].k==="rask")){ const k=SA.steps.findIndex(s=>s.k==="time" && !s.sig && SA.marks[s.id]==null); if(k>0) SA.i=k; }
   SA.markCam=Object.assign({}, (SA.trialRef&&SA.trialRef.raw&&SA.trialRef.raw.mcam)||{}); SA.camRef=0; synApply(false);
   $("setup").hidden=false; $("spPage").hidden=true; $("spAna").hidden=false; $("startbar").hidden=true; document.body.classList.add("reviewing"); scrollTo(0,0);
   if(SA.url) URL.revokeObjectURL(SA.url); SA.url=URL.createObjectURL(blob); SA.vidUrl=null; sVid.src=SA.url;
@@ -5676,7 +5694,7 @@ async function qkAnalyze(e, det){
     .catch(()=>{ if(ss!==SA.sess) return; if(SA.marks.sig==null && qkNeedSig(e)){ SA.marks.sig=0; SA.sigAuto="est"; } wizRender(); });
   wizRender();
 }
-function qkNeedSig(e){ return e.kind==="start" || (e.kind==="relay" && QK.det && !!e.relayFirst); }
+function qkNeedSig(e){ return e.kind==="start" || (e.kind==="relay" && !!e.relayFirst); }
 /* Ergebnis-PDF direkt aus der Videoliste: Auswertung öffnen, zur Zusammenfassung springen, PDF erstellen */
 async function qkPdf(e){ if(!e) return; const ask=await fileAsk(resName(L("Ergebnisblatt","Result sheet"),e)+".pdf","application/pdf","pdf",L("Ergebnisblatt","Result sheet")); if(!ask) return; await qkAnalyze(e, e.kind!=="tech"); if(QK.cur!==e.id || !SA.active) return; const ss=SA.sess;
   SA.i=SA.steps.length-1; wizRender();
