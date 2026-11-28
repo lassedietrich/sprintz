@@ -3342,7 +3342,7 @@ function spDraw(){
   g.fillStyle=dark?"#ffffff":css("--fg"); g.fillRect(X(R.z?sCurT():sVid.currentTime)-dpr/2,0,dpr,H);
 }
 // Zeiten relativ zum Startsignal (Schall Lautsprecher → Handy und Ton-Bild-Versatz berücksichtigt)
-function spRel(t){ if(t==null || SA.marks.sig==null) return null; const off=parseFloat((()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } })())||0;
+function spRel(t){ if(t==null || SA.marks.sig==null) return null; if(relayNow()) return RT(t)-RT(SA.marks.sig); const off=parseFloat((()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } })())||0;
   return t==null||SA.marks.sig==null ? null : (RT(t)-RT(SA.marks.sig)) - off/1000 + (SA.vals.spk||0)/343; }
 const ms3 = v => v==null ? "–" : (LANG==="en" ? v.toFixed(2) : v.toFixed(2).replace(".",","))+" "+U("s");
 const msx = v => v==null ? "–" : Math.round(v*1000)+" "+U("ms");
@@ -3438,7 +3438,7 @@ function wizRender(){
       <button type="button" class="wbig" id="wOk">${L("Passt so","Looks right")}</button>
       <div class="wrow"><button type="button" class="testbtn" id="wMark">${L("Hier setzen","Set here")}</button><button type="button" class="testbtn" id="wAuto">${L("Automatisch finden","Find automatically")}</button></div>`; }
     else { h+=`<p>${st.x()}</p>${camRefHTML(st)}<button type="button" class="wbig" id="wMark">${L("Hier markieren","Mark here")}</button>
-      <div class="wset">${v!=null ? "✓ "+fmtS(v)+(spRel(v)!=null?` · ${ms3(spRel(v))} ${L("nach dem Startsignal","after the start signal")}`:"")+((SA.markCam||{})[st.id]!=null&&camN()>1?` · ${L(`Video ${SA.markCam[st.id]+1}`,`video ${SA.markCam[st.id]+1}`)}`:"")+` <button type="button" class="wgo" id="wGo">${L("Zur Markierung","Go to mark")}</button>` : ""}</div>
+      <div class="wset">${v!=null ? "✓ "+fmtS(v)+(spRel(v)!=null?` · ${ms3(spRel(v))} ${relayNow()?L("nach dem Anschlag","after the touch"):L("nach dem Startsignal","after the start signal")}`:"")+((SA.markCam||{})[st.id]!=null&&camN()>1?` · ${L(`Video ${SA.markCam[st.id]+1}`,`video ${SA.markCam[st.id]+1}`)}`:"")+` <button type="button" class="wgo" id="wGo">${L("Zur Markierung","Go to mark")}</button>` : ""}</div>
       <button type="button" class="wskip" id="wSkip">${L("Nicht zu sehen – überspringen","Not visible – skip")}</button>`; }
   } else if(st.k==="num"){
     const ta=st.seg?mAt(st.seg.a):null, tb=st.seg?mAt(st.seg.b):null;
@@ -5425,7 +5425,7 @@ function realAudio(x, rate){ if(!x) return x; const segs=smoSegs(); if(!segs.len
 function RT(t){ if(t==null) return null; let r=t; for(const g of smoSegs()){ const o=Math.min(Math.max(t-g.s0,0), g.s1-g.s0); r-=o*(1-1/g.f); } return r/(SA.slow||1); }
 const smoAt=t=>smoSegs().find(g=>t>=g.s0 && t<=g.s1)||null;
 function smoMarks(){ const o={}; for(const k in SA.marks) o[k]=SA.marks[k]==null?null:RT(SA.marks[k]); return o; }
-const relR=x=>{ if(x==null || SA.marks.sig==null) return null; const off=parseFloat((()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } })())||0;
+const relR=x=>{ if(x==null || SA.marks.sig==null) return null; if(relayNow()) return x-RT(SA.marks.sig); const off=parseFloat((()=>{ try{ return localStorage.getItem("startz-avoff-cam")||"0"; }catch(e){ return "0"; } })())||0;
   return (x-RT(SA.marks.sig)) - off/1000 + (SA.vals.spk||0)/343; };
 function smoAuto(){ if(SA.raw) setTimeout(anaCheck,0); if(SA.smoChecked || !SA.raw) return; SA.smoChecked=true; if(SA.smo || (SA.fpsKnown && SA.fps>65)) { smoCard(); return; }
   try{ const r=smoDetect(SA.rawHi?SA.rawHi.x:SA.raw, SA.rawHi?SA.rawHi.r:(SA.rawRate||24000)); if(r){ SA.smo=r; const g=r.segs; toast(g.length===1 ? L(`Zeitlupe erkannt (${fmtS(g[0].s0)} bis ${fmtS(g[0].s1)}, ${g[0].f}×). Zeiten darin rechnet Sprintz in Echtzeit um. Prüf Beginn, Ende und Faktor.`,`Slow motion detected (${fmtS(g[0].s0)} to ${fmtS(g[0].s1)}, ${g[0].f}×). Sprintz converts times in it to real time. Check start, end and factor.`) : L(`${g.length} Zeitlupen-Abschnitte erkannt. Zeiten darin rechnet Sprintz in Echtzeit um. Prüf Beginn, Ende und Faktor.`,`${g.length} slow-motion sections detected. Sprintz converts times in them to real time. Check start, end and factor.`),7000); } }catch(e){ console.error(e); }
@@ -5462,20 +5462,32 @@ async function qkLoad(){ const id=qkId(); let p=await STORE.get(id);
   p.trials.forEach(e=>{ if(!e.kind && e.kind!==null) e.kind="start"; if(e.kind==="start" && !e.start) e.start=p.start||"block"; if(e.kind==="start" && !e.uw) e.uw=p.uw||"fly"; });
   QK.p=p; return p; }
 const qkSave=()=>{ if(QK.p) return STORE.put(QK.p); };
-const QKKINDS=()=>[["start",L("Start","Start")],["turn",L("Wende","Turn")],["finish",L("Anschlag","Finish")],["tech",L("Technik allgemein","General technique")]];
+const QKKINDS=()=>[["start",L("Start","Start")],["relay",L("Staffelwechsel","Relay changeover")],["turn",L("Wende","Turn")],["finish",L("Anschlag","Finish")],["tech",L("Technik allgemein","General technique")]];
+// Staffelwechsel: wie ein Start vom Block, aber Bezugspunkt ist der Anschlag des ankommenden Schwimmers (Marke „sig“, ohne Ton)
+const qkStartLike=k=>k==="start"||k==="relay";
+const relayNow=()=>!!(SA.active && SA.mode==="quick" && SA.trialRef && SA.trialRef.kind==="relay");
+// Regel (World Aquatics SW): Fuß am Block, bis angeschlagen wird; elektronische Wechselkontrollanlagen (Herstellervorgabe, z. B. Omega) werten mit −0,03 s Toleranz
+const RELAY_TOL=-0.03;
+function relaySteps(e,det){ const touch={id:"sig",k:"time",t:()=>L("Anschlag des ankommenden Schwimmers","Touch of the incoming swimmer"),x:()=>L("Das erste Bild, in dem die Hand des ankommenden Schwimmers die Wand bzw. die Anschlagplatte berührt (bei Brust und Schmetterling: beide Hände). Ab hier zählen alle Zeiten.","The first frame in which the incoming swimmer's hand touches the wall or touch pad (breaststroke and butterfly: both hands). All times count from here.")};
+  const off={id:"off",k:"time",t:()=>L("Absprung","Take-off"),x:()=>L("Das letzte Bild, in dem der vordere Fuß des abspringenden Schwimmers den Block noch berührt (letzter Fußkontakt).","The last frame in which the outgoing swimmer's front foot still touches the block (last foot contact).")};
+  const sum={id:"sum",k:"sum",t:()=>L("Deine Auswertung","Your analysis"),x:()=>""};
+  if(!det) return [touch, off, sum];
+  const S=evSteps(qkP(e)).filter(x=>x.id!=="sig"); S.unshift(touch); if(!S.some(x=>x.id==="off")) S.splice(1,0,off); return S; }
+function relayMetrics(){ const o=evMetrics(), m=smoMarks(); o.wt = m.sig!=null && m.off!=null ? m.off-m.sig : null; o.result = o.wt==null ? null : (o.wt>=RELAY_TOL-1e-9 ? "clean" : "early"); return o; }
+const relayRes=o=>o.result==null?"–":o.result==="clean"?L("Gültig","Valid"):L("Zu früh","Too early");
 const qkKindName=k=>(QKKINDS().find(x=>x[0]===k)||[0,""])[1];
 const FINSTROKES=()=>[["free",L("Kraul","Freestyle")],["back",L("Rücken","Backstroke")],["breast",L("Brust","Breaststroke")],["fly",L("Schmetterling","Butterfly")]];
 // Pseudo-Projekt eines Eintrags für Schritte, Kennwerte und Kennwert-Auswahl
 function qkP(e){ e=e||qkE(QK.cur)||{kind:QK.metK};
   const tech=e.kind==="turn"?"turn":"start", met=QK.p&&QK.p.met&&QK.p.met[tech];
   if(!QK.mp) QK.mp={_save:()=>{ if(QK.p){ QK.p.met[QK.mp.tech]=QK.mp.metrics; qkSave(); } }};
-  const mp=QK.mp; mp.tech=tech; mp.start=e.start==="back"?"back":"block"; mp.uw=e.uw==="breast"?"breast":"fly"; mp.turn=e.turn||"flip"; mp.turnDetail=!!e.turnDetail;
+  const mp=QK.mp; mp.tech=tech; mp.start=e.start==="back"&&e.kind!=="relay"?"back":"block"; mp.uw=e.uw==="breast"?"breast":"fly"; mp.turn=e.turn||"flip"; mp.turnDetail=!!e.turnDetail;
   mp.metrics=Array.isArray(met)?met:undefined; mp._root=$("qkPage"); return mp; }
 const qkE=id=>QK.p && QK.p.trials.find(e=>e.id===id);
 const qkOrd=()=>(QK.p?QK.p.trials:[]).filter(e=>QK.pf==="all" || (QK.pf==="none" ? !e.person || !PERS.name(e.person) : e.person===QK.pf)).slice().sort((a,b)=>((a.vid&&a.vid.t)||0)-((b.vid&&b.vid.t)||0));
 const qkName=e=>e.label || (e.vid&&e.vid.name) || L("Video","Video");
 const qkHasVid=e=>!!(e.vid && EV.files[e.vid.key]);
-const qkSub=e=> e.kind==="start" ? (e.start==="back"?L("Rückenstart","Backstroke start"):L("Startblock","Starting block")+(e.uw==="breast"?" · "+L("Brust-Tauchzug","Breaststroke pull-out"):""))
+const qkSub=e=> e.kind==="relay" ? (e.uw==="breast"?L("Brust-Tauchzug","Breaststroke pull-out"):L("Delfinbeinschläge","Dolphin kicks")) : e.kind==="start" ? (e.start==="back"?L("Rückenstart","Backstroke start"):L("Startblock","Starting block")+(e.uw==="breast"?" · "+L("Brust-Tauchzug","Breaststroke pull-out"):""))
   : e.kind==="turn" ? turnName({turn:e.turn||"flip"}) : e.kind==="finish" ? ((FINSTROKES().find(x=>x[0]===e.stroke)||[0,""])[1]) : "";
 
 function qkEnter(){
@@ -5495,13 +5507,14 @@ function qkKindHTML(e,pre){ const A=e.q, ok=k=>!A||A.includes(k), anim=QK.anim==
   if(e.kind==="start"){ h+=seg("start",[["block",L("Startblock","Starting block")],["back",L("Rückenstart","Backstroke start")]],e.start||"block",L("Welche Startart?","Which start?")); if(ok("start") && e.start!=="back") h+=seg("uw",UW,e.uw||"fly",qUw); }
   if(e.kind==="turn"){ h+=seg("turn",TURNTYPES(!!e.turnDetail),e.turn||"flip",L("Welche Wende?","Which turn?"),`<label class="evsw qksw"><input type="checkbox" data-${pre}="turnDetail"${e.turnDetail?" checked":""}><span></span>${L("Genauer unterscheiden (nach Schwimmart)","Differentiate in more detail (by stroke)")}</label>`);
     if(ok("turn") && e.turn==="open") h+=seg("uw",UW,e.uw||"fly",qUw); }
+  if(e.kind==="relay") h+=seg("uw",UW,e.uw||"fly",qUw);
   if(e.kind==="finish") h+=seg("stroke",FINSTROKES(),e.stroke||"free",L("Welche Schwimmart?","Which stroke?"));
   return h; }
 function qkKindSet(e,k,v){
   if(k==="turnDetail"){ e.turnDetail=v; if(v){ if(e.turn==="open") e.turn = e.uw==="breast" ? "openBr" : "openFly"; } else if(e.turn==="openBr"||e.turn==="openFly"){ e.uw = e.turn==="openBr" ? "breast" : "fly"; e.turn="open"; } return; }
   QK.anim=e.id; clearTimeout(QK.animT); QK.animT=setTimeout(()=>{ QK.anim=null; },600);
   if(k==="kind"){ if(e.kind!==v) e.q=[]; } else { e.q=e.q||[]; if(!e.q.includes(k)) e.q.push(k); }
-  e[k]=v; if(k==="kind"){ if(v==="start"){ e.start=e.start||"block"; e.uw=e.uw||"fly"; } if(v==="turn") e.turn=e.turn||"flip"; if(v==="finish") e.stroke=e.stroke||"free"; } }
+  e[k]=v; if(k==="kind"){ if(v==="start"){ e.start=e.start||"block"; e.uw=e.uw||"fly"; } if(v==="relay"){ e.start="block"; e.uw=e.uw||"fly"; } if(v==="turn") e.turn=e.turn||"flip"; if(v==="finish") e.stroke=e.stroke||"free"; } }
 function qkBindKind(root,pre,getE,after){ root.querySelectorAll(`[data-${pre}]`).forEach(b=>{ const k=b.dataset[pre];
   if(b.type==="checkbox") b.onchange=()=>{ const e=getE(b); qkKindSet(e,k,b.checked); after(e); };
   else b.onclick=()=>{ const e=getE(b); qkKindSet(e,k,b.dataset.v); after(e); }; }); }
@@ -5509,6 +5522,7 @@ function qkBindKind(root,pre,getE,after){ root.querySelectorAll(`[data-${pre}]`)
 function qkResHTML(e){ const m=e.m||{}, tm=v=>v!=null&&isFinite(v)?evFmt(v,"s"):"–", sp=(l,v)=>`<span>${l} <b>${tm(v)}</b></span>`;
   if(e.kind==="turn") return sp(L("5 m an","5 m in"),m.tIn5)+sp("5 + 5 m",m.t55)+sp(L("5 m ab","5 m out"),m.tOut5);
   if(e.kind==="finish") return sp(L("letzte 5 m","last 5 m"),m.tF5)+sp(L("letzte 10 m","last 10 m"),m.tF10);
+  if(e.kind==="relay") return sp(L("Wechselzeit","Changeover time"),m.wt)+(m.t15!=null?sp("15 m",m.t15):"");
   if(e.kind==="tech"){ const n=(e.notes||[]).length, d=(e.raw&&e.raw.draw||[]).length; return `<span>${L(`${n} Notizen`,`${n} notes`)}</span><span>${L(`${d} Zeichnungen`,`${d} drawings`)}</span>`; }
   return sp("5 m",m.t5)+sp("10 m",m.t10)+sp("15 m",m.t15); }
 
@@ -5584,8 +5598,8 @@ function qkGroup(p){ const free=p.trials.filter(e=>e.status==="open" && !e.kind 
   return n; }
 function qkCsv(){
   const dec=x=>x==null||!isFinite(x)?"":(LANG==="en"?x.toFixed(2):x.toFixed(2).replace(".",",")), sep=LANG==="en"?",":";";
-  const rows=[[L("Name","Name"),L("Datei","File"),L("Aufnahme","Recorded"),L("Art","Type"),L("Athlet*in","Athlete"),"5 m (s)","10 m (s)","15 m (s)",L("Wende 5 + 5 m (s)","Turn 5 + 5 m (s)"),L("Anschlag letzte 5 m (s)","Finish last 5 m (s)"),L("Status","Status")]];
-  qkOrd().forEach(e=>{ const m=e.m||{}; rows.push([e.label||"", e.vid?e.vid.name:"", e.vid&&e.vid.t?new Date(e.vid.t).toISOString().replace("T"," ").slice(0,19):"", qkKindName(e.kind)+(qkSub(e)?" ("+qkSub(e)+")":""), (e.person&&PERS.name(e.person))||"", dec(m.t5), dec(m.t10), dec(m.t15), dec(m.t55), dec(m.tF5), e.status]); });
+  const rows=[[L("Name","Name"),L("Datei","File"),L("Aufnahme","Recorded"),L("Art","Type"),L("Athlet*in","Athlete"),"5 m (s)","10 m (s)","15 m (s)",L("Wechselzeit (s)","Changeover time (s)"),L("Wende 5 + 5 m (s)","Turn 5 + 5 m (s)"),L("Anschlag letzte 5 m (s)","Finish last 5 m (s)"),L("Status","Status")]];
+  qkOrd().forEach(e=>{ const m=e.m||{}; rows.push([e.label||"", e.vid?e.vid.name:"", e.vid&&e.vid.t?new Date(e.vid.t).toISOString().replace("T"," ").slice(0,19):"", qkKindName(e.kind)+(qkSub(e)?" ("+qkSub(e)+")":""), (e.person&&PERS.name(e.person))||"", dec(m.t5), dec(m.t10), dec(m.t15), dec(m.wt), dec(m.t55), dec(m.tF5), e.status]); });
   const txt="﻿"+rows.map(r=>r.map(c=>/[;,"\n]/.test(String(c))?`"${String(c).replace(/"/g,'""')}"`:c).join(sep)).join("\n");
   evSaveFile(new Blob([txt],{type:"text/csv"}), "sprintz-technikauswertung.csv", L("Technikauswertung","Technique analysis"));
 }
@@ -5599,6 +5613,7 @@ function finSteps(det){ const {S1,t}=mkSteps(); S1.length=0;
 function qkSteps(e,det){ e=e||{kind:"start"};
   if(e.kind==="tech") return [{id:"sum",k:"sum",t:()=>L("Notizen und Zeichnungen","Notes and drawings"),x:()=>""}];
   if(e.kind==="finish") return finSteps(det);
+  if(e.kind==="relay") return relaySteps(e,det);
   if(e.kind==="turn"){ const P=qkP(e); return det ? turnSteps(P) : turnSteps(Object.assign({},P,{metrics:["tIn5","t55","tOut5"]})); }
   if(det) return evSteps(qkP(e));
   const {S1,t}=mkSteps();
@@ -5609,7 +5624,7 @@ function qkSteps(e,det){ e=e||{kind:"start"};
 // Kennwerte des Anschlags (Zeiten zwischen Marken, in Echtzeit)
 function finMetrics(){ const m=smoMarks(), d=(a,b)=> m[a]!=null&&m[b]!=null&&m[b]>m[a] ? (m[b]-m[a]) : null, o={};
   o.tF5=d("f5","ftouch"); o.tF10=d("f10","ftouch"); if(o.tF5) o.vF5=5/o.tF5; const a=d("f10","f5"); if(a) o.vF105=5/a; o.lastT=d("lastArm","ftouch"); return o; }
-function qkMetrics(){ const e=qkE(QK.cur)||{}; return e.kind==="finish" ? finMetrics() : e.kind==="tech" ? {} : evMetrics(); }
+function qkMetrics(){ const e=qkE(QK.cur)||{}; return e.kind==="finish" ? finMetrics() : e.kind==="tech" ? {} : e.kind==="relay" ? relayMetrics() : evMetrics(); }
 async function qkAnalyze(e, det){
   if(!e) return; const blob=await evBlob(e);
   if(!blob){ const m=$("qkMsg"); if(m) m.textContent=L("Sprintz speichert keine Videos, nur die Daten daraus. Lade das Video erneut hoch, es wird automatisch wieder diesem Eintrag zugeordnet.","Sprintz doesn't store videos, only the data from them. Upload the video again; it is automatically matched to this entry again."); return; }
@@ -5670,6 +5685,11 @@ function qkSumHTML(){
   if((qkE(QK.cur)||{}).kind==="start") slowAutoFix(); const e=qkE(QK.cur)||{}, o=qkMetrics(), row=spRow, hd=spHd, PH=SPPH(); let h="";
   if(e.kind==="start") h+=slowWarnHTML(o);
   if(e.kind==="tech"){ h+=`<p class="hint" style="margin:0 2px 8px">${L("Notizen schreibst du mit N oder über „✎ Notiz“, zeichnen kannst du im Vollbild über die Leiste am rechten Rand. Beides wird mit dem Eintrag gespeichert.","Write notes with N or via “✎ Note”; in full screen you can draw with the bar on the right edge. Both are saved with the entry.")}</p>`; }
+  else if(e.kind==="relay"){ h+=`<table class="restbl">`+hd(L("Staffelwechsel","Relay changeover"))+row(L("Wechselzeit (Anschlag bis Absprung)","Changeover time (touch to take-off)"),evFmt(o.wt,"s"))+row(L("Bewertung","Rating"),relayRes(o))+`</table>`;
+    h+=`<p class="hint" style="margin:6px 2px 8px">${L("Negativ heißt: Die Füße haben den Block vor dem Anschlag verlassen. Nach den Wettkampfregeln muss der Fuß den Block berühren, bis angeschlagen wird; elektronische Wechselkontrollanlagen werten mit einer Toleranz von −0,03 s. Sprintz bewertet genauso. Die Bildrate des Videos begrenzt die Genauigkeit (bei 30 Bildern pro Sekunde ±0,03 s).","Negative means the feet left the block before the touch. Under the competition rules the foot must touch the block until the touch; electronic relay take-off equipment uses a tolerance of −0.03 s. Sprintz rates the same way. The video's frame rate limits the accuracy (±0.03 s at 30 frames per second).")}</p>`;
+    if(QK.det){ const p=qkP(e), sel=evSel(p); let cur=null; h+=`<p class="hint" style="margin:0 2px 8px">${L("Alle Zeiten zählen ab dem Anschlag. Die Reaktionszeit ist die erste Bewegung bezogen auf den Anschlag (negativ = vor dem Anschlag).","All times count from the touch. The reaction time is the first movement relative to the touch (negative = before the touch).")}</p><table class="restbl">`;
+      METCAT(p).filter(x=>x.k!=="block" && spApplies(x,p,false) && (!sel||sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null) return; if(x.ph!==cur){ cur=x.ph; h+=hd(PH[x.ph]||""); } h+=row(x.l, x.u==="n" ? (v!=null?String(v):"–") : evFmt(v,x.u)); });
+      h+=`</table>`; } }
   else if(e.kind==="finish"){ h+=`<table class="restbl">`+hd(L("Anschlag","Finish"))+row(L("Zeit letzte 5 m","Time last 5 m"),evFmt(o.tF5,"s"))+row(L("Zeit letzte 10 m","Time last 10 m"),evFmt(o.tF10,"s"))+row(L("Geschwindigkeit letzte 5 m","Velocity last 5 m"),evFmt(o.vF5,"m/s"))+row(L("Geschwindigkeit 10–5 m","Velocity 10–5 m"),evFmt(o.vF105,"m/s"))+(QK.det?row(L("Letzter Armzug bis Anschlag","Last arm pull to touch"),evFmt(o.lastT,"s")):"")+`</table>`; }
   else if(QK.det || e.kind==="turn"){ const p=qkP(e), sel=QK.det?evSel(p):new Set(["tIn5","t55","tOut5"]); let cur=null;
     h+=`<table class="restbl">`;
@@ -6979,7 +6999,7 @@ if(window.sprintzDesktop) $("dlMenu").hidden=true;
 
 /* ---------- Ergebnis nach der Auswertung: Ergebnis-PDF und Kino-Video ---------- */
 function resCtx(){ const e=SA.mode==="quick"?qkE(QK.cur):null, kind=e?e.kind:null;
-  const p = SA.mode==="eval" ? EV.cur : SA.mode==="train" ? trainP() : (kind==="start"||kind==="turn") ? qkP(e) : null;
+  const p = SA.mode==="eval" ? EV.cur : SA.mode==="train" ? trainP() : (qkStartLike(kind)||kind==="turn") ? qkP(e) : null;
   const o = SA.mode==="quick" ? qkMetrics() : evMetrics();
   const name = SA.mode==="eval" && SA.trialRef ? `${EV.cur.name} · ${L(`Versuch ${evPos(EV.cur,SA.trialRef)}`,`Attempt ${evPos(EV.cur,SA.trialRef)}`)}` : e ? qkName(e) : L("Training","Training");
   const pid = SA.mode==="eval" ? EV.cur&&EV.cur.person : e ? e.person : null, ath = pid && PERS.name(pid);
@@ -6988,8 +7008,9 @@ function resCtx(){ const e=SA.mode==="quick"?qkE(QK.cur):null, kind=e?e.kind:nul
 // Kennwerte als Zeilen [Phase, Bezeichnung, Wert]
 function resRows(C){ const PH=SPPH(), rows=[], o=C.o||{};
   if(C.kind==="finish"){ [["tF5",L("Zeit letzte 5 m","Time last 5 m"),"s"],["tF10",L("Zeit letzte 10 m","Time last 10 m"),"s"],["vF5",L("Geschwindigkeit letzte 5 m","Velocity last 5 m"),"m/s"],["vF105",L("Geschwindigkeit 10–5 m","Velocity 10–5 m"),"m/s"],["lastT",L("Letzter Armzug bis Anschlag","Last arm pull to touch"),"s"]].forEach(([k,l,u])=>{ if(o[k]!=null) rows.push({ph:L("Anschlag","Finish"), k, l, v:evFmt(o[k],u)}); }); return rows; }
+  if(C.kind==="relay"){ const ph=L("Staffelwechsel","Relay changeover"); if(o.wt!=null) rows.push({ph, k:"wt", l:L("Wechselzeit (Anschlag bis Absprung)","Changeover time (touch to take-off)"), v:evFmt(o.wt,"s")}); if(o.result) rows.push({ph, k:"result", l:L("Bewertung","Rating"), v:relayRes(o)}); }
   if(!C.p) return rows; const sel=evSel(C.p);
-  METCAT(C.p).filter(x=>spApplies(x,C.p,!!(SA.trialRef&&SA.trialRef.vm)) && (!sel||sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null || (typeof v==="number" && !isFinite(v))) return; rows.push({ph:PH[x.ph]||"", k:x.k, l:x.l, v: x.u==="n" ? String(v) : evFmt(v,x.u)}); });
+  METCAT(C.p).filter(x=>!(C.kind==="relay" && x.k==="block") && spApplies(x,C.p,!!(SA.trialRef&&SA.trialRef.vm)) && (!sel||sel.has(x.k))).forEach(x=>{ const v=o[x.k]; if(v==null || (typeof v==="number" && !isFinite(v))) return; rows.push({ph:PH[x.ph]||"", k:x.k, l:x.l, v: x.u==="n" ? String(v) : evFmt(v,x.u)}); });
   return rows; }
 // ein Videobild als Bild (JPEG) inkl. Zeichnungen
 function resCrop(){ const cv=$("sDraw"), W=cv.clientWidth||sVid.clientWidth, H=cv.clientHeight||sVid.clientHeight, vw=sVid.videoWidth, vh=sVid.videoHeight;
@@ -7003,7 +7024,7 @@ async function resFrame(t,mw){ const back=sVid.currentTime; if(t!=null) await re
   if(t!=null) await resSeek(back); return {bytes:Uint8Array.from(atob(b64),ch=>ch.charCodeAt(0)), w:c.width, h:c.height}; }
 /* Ergebnis-PDF: oben das Bild „Vorderer Fuß löst sich“, alle Kennwerte, alle Notizen, auf einer eigenen Seite die Erklärung der Kennwerte */
 /* Bilderreihe des Starts für das Ergebnisblatt: Startsignal, Hände lösen, hinterer Fuß, vorderer Fuß, Mitte der Flugphase, erster Wasserkontakt */
-function resStrip(C){ const isStart = C.kind==="start" || (!C.kind && C.p && C.p.tech==="start"), isT = C.kind==="turn" || (!C.kind && C.p && isTurn(C.p)), M=SA.marks||{}, fps=sFps(), st=id=>(SA.steps||[]).find(s=>s.id===id);
+function resStrip(C){ const isStart = qkStartLike(C.kind) || (!C.kind && C.p && C.p.tech==="start"), isT = C.kind==="turn" || (!C.kind && C.p && isTurn(C.p)), M=SA.marks||{}, fps=sFps(), st=id=>(SA.steps||[]).find(s=>s.id===id);
   if(isT){ const open=C.p?turnOpen(C.p):false; return ["in5", open?"touch":"rot", "feetOn", "off", "kick1", "brk"].filter(id=>M[id]!=null).map(id=>({t:M[id], lab:(st(id)||{t:()=>id}).t(), time:""})); }
   if(!isStart) return [];
   const out=[]; [["sig"],["hands"],["rear"],["off"],["mid"],["entry"]].forEach(([id])=>{ let t, lab;
@@ -7168,7 +7189,7 @@ async function resPdf(pre){
 /* Kino-Video: das Original läuft ab 2 s vor dem Startsignal; an jedem Ereignis hält es kurz an und zeigt den Kennwert, Notizen und Zeichnungen */
 const KINO={on:false, stop:false};
 function kinoEvents(C){ const M=SA.marks||{}, o=C.o||{}, cat=C.p?METCAT(C.p):[], out=[], f=sFps(), near=(a,b)=>Math.abs(a-b)<=0.6/f;
-  const after=t=>{ if(M.sig==null) return ""; const r=relR(RT(t)); return r!=null?L(`${evFmt(r,"s")} nach dem Startsignal`,`${evFmt(r,"s")} after the start signal`):""; };
+  const after=t=>{ if(M.sig==null) return ""; const r=relR(RT(t)); return r==null?"":relayNow()?L(`${evFmt(r,"s")} nach dem Anschlag`,`${evFmt(r,"s")} after the touch`):L(`${evFmt(r,"s")} nach dem Startsignal`,`${evFmt(r,"s")} after the start signal`); };
   (SA.steps||[]).filter(s=>s.k==="time" && M[s.id]!=null).forEach(s=>{ const t=M[s.id]; let lab=s.t(), val="";
     if(!s.sig){ const tg=noteTarget(s), x=cat.find(c=>c.k===tg.k), v=o[tg.k]; if(x && v!=null && isFinite(v)){ lab=x.l; val=x.u==="n"?String(v):evFmt(v,x.u); } else val=after(t); }
     const ns=(SA.notes||[]).filter(n=>n.step===s.id); out.push({t, step:s.t(), lab, val, notes:ns.filter(n=>!n.pos).map(n=>n.txt), pn:ns.filter(n=>n.pos), geo:[], sub:[]}); });
@@ -7228,7 +7249,7 @@ async function kinoExport(){
   const done=new Promise(r=>rec.onstop=r); const wasMuted=sVid.muted, back=sVid.currentTime; sVid.muted=!dst;
   let raf=0; const loop=()=>{ draw(); raf=requestAnimationFrame(loop); };
   // Start: Ton ab 2 s nach dem Startsignal über 0,5 s ausblenden; ab der 15-m-Marke normale Geschwindigkeit und Ton wieder einblenden
-  const MK=SA.marks, isStart=C.kind==="start" || (!C.kind && C.p && C.p.tech==="start"), gn=dst&&dst._g, fast=()=>isStart && MK.p15!=null && sVid.currentTime>=MK.p15-0.5/f;
+  const MK=SA.marks, isStart=qkStartLike(C.kind) || (!C.kind && C.p && C.p.tech==="start"), gn=dst&&dst._g, fast=()=>isStart && MK.p15!=null && sVid.currentTime>=MK.p15-0.5/f;
   const baseAt=()=>fast() || (MK.sig!=null && sVid.currentTime<MK.sig-0.5/f) ? 1 : base;
   const audio=()=>{ if(!gn) return; let v=1; if(MK.sig!=null && isStart){ if(fast()) v=Math.min(1,Math.max(0,(RT(sVid.currentTime)-RT(MK.p15))/0.5)); else { const r=relR(RT(sVid.currentTime)); if(r!=null && r>2) v=Math.max(0,1-(r-2)/0.5); } } try{ gn.gain.setTargetAtTime(v,KAUD.ac.currentTime,0.03); }catch(e){} };
   try{
@@ -7816,7 +7837,7 @@ function velSumDraw(){ const c=$("velSumCv"); if(!c) return; const r=velRes(); i
 /* --- Notizen zur Technik während der Auswertung: werden dem Kennwert des aktuellen Schritts zugeordnet und im Ergebnis gesammelt --- */
 const NUMK={jump:"jump",entryD:"entryD",kick1D:"kick1D",diveD:"dive",kicks:"kicks",rotD:"rotD",hipD:"hipD"};
 function noteTarget(st){
-  const p = SA.mode==="train" ? trainP() : SA.mode==="quick" ? ((qkE(QK.cur)||{}).kind==="start"||(qkE(QK.cur)||{}).kind==="turn" ? qkP() : null) : SA.mode==="eval" ? EV.cur : null;
+  const p = SA.mode==="train" ? trainP() : SA.mode==="quick" ? (qkStartLike((qkE(QK.cur)||{}).kind)||(qkE(QK.cur)||{}).kind==="turn" ? qkP() : null) : SA.mode==="eval" ? EV.cur : null;
   if(p && (p.tech==="start"||p.tech==="turn")){ const sel=evSel(p), cat=METCAT(p).filter(x=>spApplies(x,p) && (!sel||sel.has(x.k)));
     const hit = NUMK[st.id] ? cat.find(x=>x.k===NUMK[st.id]) : cat.find(x=>(x.m||[]).includes(st.id) && (x.m||[]).length===1) || cat.find(x=>(x.m||[]).includes(st.id));
     if(hit) return {k:hit.k, lab:hit.l}; }
