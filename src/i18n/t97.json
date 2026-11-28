@@ -1,0 +1,11 @@
+[
+["Start (1st swimmer)","Start (1. yüzücü)","Старт (1-й пловец)","Start (1e zwemmer)"],
+["Changeover {0} (to swimmer {1})","{0}. değişim ({1}. yüzücüye)","{0}-я смена (к {1}-му пловцу)","{0}e wissel (naar zwemmer {1})"],
+["How many changeovers are in the video?","Videoda kaç değişim var?","Сколько смен этапов на видео?","Hoeveel wissels staan er in de video?"],
+["Also analyse the first start (with start signal) in the detailed analysis","Ayrıntılı analizde ilk startı da (start sinyaliyle) değerlendir","В подробном анализе оценить также первый старт (со стартовым сигналом)","In de gedetailleerde analyse ook de eerste start (met startsignaal) analyseren"],
+["Changeover {0}","{0}. değişim","{0}-я смена","{0}e wissel"],
+["Changeover 1 (s)","1. değişim (s)","1-я смена (с)","1e wissel (s)"],
+["Changeover 2 (s)","2. değişim (s)","2-я смена (с)","2e wissel (s)"],
+["Changeover 3 (s)","3. değişim (s)","3-я смена (с)","3e wissel (s)"],
+["For each changeover all times count from the touch. The reaction time is the first movement relative to the touch (negative = before the touch).","Her değişimde tüm süreler dokunuştan itibaren sayılır. Reaksiyon süresi, dokunuşa göre ilk harekettir (negatif = dokunuştan önce).","При каждой смене все времена отсчитываются от касания. Время реакции — первое движение относительно касания (отрицательное = до касания).","Bij elke wissel tellen alle tijden vanaf het aantikken. De reactietijd is de eerste beweging ten opzichte van het aantikken (negatief = vóór het aantikken)."]
+]
